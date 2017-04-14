@@ -1,6 +1,6 @@
 # 14 April 2017
 
-```{r setup, echo=FALSE}
+```{r setup, echo=FALSE, cache=FALSE}
 ### This chunk can be deleted from any entry that lacks R code
 
 # Knitr options. Note that these mean:
@@ -10,6 +10,10 @@
 #   - R code will run in the project root directory
 knitr::opts_chunk$set(comment = '', cache = TRUE)
 knitr::opts_knit$set(root.dir = "..")
+```
+```{r setup2, echo=FALSE, message=FALSE}
+library(ProjectTemplate)
+load.project()
 ```
 
 ## Project setup
@@ -47,3 +51,15 @@ This is documented in `~/Dropbox/Arabidopsis/protocols/Exp1`.
 I have created two data objects. popLer_cm records position along the runway to the nearest centimeter for newly colonized pots (it looks like in gen 2 it was recorded for all pots but that did not recur). popLer simply records number by pot.
 
 As far as I can tell/recall, there was no separate dispersal experiment for Ler. So the dispersal kernels come from the first generation of continuous runways.
+
+## Ler fecundity
+Let's look again at Ler seed production, using generation one data.
+
+First, extract those data for the relevant treatments:
+```{r Lerdata}
+Ler1BC <- subset(popLer, Gap=="0p" & Generation == 1 & Treatment != "A")
+Ler1BC$Density <- 1
+Ler1BC$Density[Ler1BC$Treatment == "C"] <- 50
+```
+
+Next step: figure out how to use dplyr to get the effective seed number.
