@@ -4,7 +4,7 @@
 # Raw data consists of one file per generation
 # Final column is named inconsistently, so needs to be corrected before merge
 
-data_dir <- "~/Documents/Dropbox/Arabidopsis/Data/Exp1"
+data_dir <- "~/Dropbox/Arabidopsis/Data/Exp1"
 data_fname <- list.files(data_dir, "seedposition")
 
 popLer_cm <- NULL
@@ -29,3 +29,10 @@ popLer <- ddply(popLer_cm, .(ID, Gap, Rep, Treatment, Generation, Pot), summariz
                 Seedlings = sum(Seedlings))
 ord <- with(popLer, order(Treatment, Gap, Rep, Generation, Pot))
 popLer <- popLer[ord,]
+
+# Clean up the workspace
+rm(data_dir, data_fname, i, ord)
+
+# Auto-cache the data
+ProjectTemplate::cache("popLer")
+ProjectTemplate::cache("popLer_cm")
