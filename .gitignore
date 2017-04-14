@@ -4,3 +4,4 @@
 .Ruserdata
 cache/*.Rdata
 notebook/_book
+notebook/_main.rds
