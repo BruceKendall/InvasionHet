@@ -1,0 +1,33 @@
+# (PART) 11 April 2017 {-}
+
+# Getting data in via ProjectTemplate
+
+First, here is a draft of the R header chunk that I will want to include in every post that uses R (silently):
+
+```{r setup}
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = "..")
+```
+I'm sure I'll come up with some more.
+
+Now, on to how to load the Arabidopsis data using ProjectTemplate. I started with the Ler population data, which is in multiple xlsx files, with one sheet having data, one having metadata, and potentially some blank sheets as well. If I follow the standard protocol for ProjectTemplate and drop them into the `data` directory, then when I execute `load.project()` I get a data object for every sheet of every file (because there is no way to pass options to `read.xlsx()`. In addition, now that they are loaded as data objects, it is hard to access them in a loop to build a the combined datasets. Finally, the workspace is cluttered with all of these objects; if I delete them as part of the data munging, then they will get reloaded the next time I use `load.project()`, which is time consuming!
+
+So instead I took the data files out of the project directory, and used the option to have a `.R` file in the `data` directory. Using this, I can re-use my existing code to read the files in from the Dropbox directory and manipulate them as I want, deleting the intermediate objects and just keeping the final objects. Furthermore, if I then cache the objects, then subsequent loads are fast!
+
+So here's the file:
+```{r popLer.R}
+cat(readLines('data/popLer.R'), sep = '\n')
+```
+
+
+Now let's look at what we get:
+```{r viewenv}
+ProjectTemplate::load.project()
+ls()
+head(popLer)
+head(popLer_cm)
+```
+
+Looking good!
+
+This has the added advantage that any changes in the data that Jenn makes can be easily loaded by deleting the cache; and that I can share the project on a public github directory (and Jenn can use it as long as we have our Dropbox in the same place).
