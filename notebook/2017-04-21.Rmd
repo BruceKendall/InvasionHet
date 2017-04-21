@@ -24,3 +24,32 @@ Realizing that I need to re-use the `seedlings1` data from last time, I see that
 
 The code for doing this is in `munge/01-Ler-seed-gen1.R`
 
+## Ler fecundity
+In the process of doing this I discovered that last time I failed to double the dispersing seeds in the effective seed number calculation. So let's redo the graph and table.
+
+Plot the distributions:
+```{r sdlgHist1}
+ggplot(Ler_seed_gen1, aes(x = eff_sd_no, fill = as.factor(Density))) + 
+  geom_histogram(binwidth = 50)
+```
+
+(of course, stacked histograms aren't great, but it gives the general idea).
+
+Now look at the mean and variance across pots:
+```{r sdlgTable1}
+kable(group_by(Ler_seed_gen1, Density) %>% 
+        summarise(Mean = mean(eff_sd_no), Variance = var(eff_sd_no)),
+      caption = paste("Mean and variance across pots of effective seed number",
+                      "in treatments B and C of Ler generation 1")
+      )
+```
+
+This changes the quantitative mean:variance ratios:
+
+- For isolated plants, the variance is about `r round(3443/134)` times the mean. Compared with Poisson, this is huge!
+- As we go from a density of 1 to 50, the seeds per plant drops by a factor of `r round(134/(348/50))`, from 134 to about `r round(348/50)`.
+- If the among-pot variance at high density was caused by iid variation in individual seed production, the among individual variance would need to be 21363/50, or about `r round(21363/50)`. 
+    - This is a `r round((21363/348) / (3443/134))`-fold increase in the variance:mean ratio
+    - It seems that, to acheive this among-individual variance, almost all the seeds in the high density plots would need to come from one or two individuals--and whether the among-successful-individual variance required is consistent with what we see in isolated pots remains an open question. We would need to assume something like a lognormal distribution among individuals to get at this.
+
+`r var(c(134, rep(0, 49)))`
