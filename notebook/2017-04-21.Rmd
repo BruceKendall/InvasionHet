@@ -20,7 +20,7 @@ load.project()
 ```
 
 ## Data munging
-Realizing that I need to re-use the `seedlings1` data from last time, I see that I should start to use the `munge` directory for key derived data. I therefore ned to give it a more meaningful name; how about `Ler_eff_seeds_gen1`.
+Realizing that I need to re-use the `seedlings1` data from last time, I see that I should start to use the `munge` directory for key derived data. I therefore ned to give it a more meaningful name; how about `Ler_seeds_gen1`. I'll also add some more information about home and away
 
-The code for doing this is in `munge/01-Ler-eff-seed-gen1.R`
+The code for doing this is in `munge/01-Ler-seed-gen1.R`
 
