@@ -25,6 +25,8 @@ Realizing that I need to re-use the `seedlings1` data from last time, I see that
 The code for doing this is in `munge/01-Ler-seed-gen1.R`
 
 ## Ler fecundity
+### Reanalyze effective seed number
+
 In the process of doing this I discovered that last time I failed to double the dispersing seeds in the effective seed number calculation. So let's redo the graph and table.
 
 Plot the distributions:
@@ -52,4 +54,26 @@ This changes the quantitative mean:variance ratios:
     - This is a `r round((21363/348) / (3443/134))`-fold increase in the variance:mean ratio
     - It seems that, to acheive this among-individual variance, almost all the seeds in the high density plots would need to come from one or two individuals--and whether the among-successful-individual variance required is consistent with what we see in isolated pots remains an open question. We would need to assume something like a lognormal distribution among individuals to get at this.
 
-`r var(c(134, rep(0, 49)))`
+### Home seeds as proxy
+Now lets look at how well home seeds predicts total effective seeds:
+```{r plot_home_eff}
+qplot(home, eff_sd_no, data = Ler_seed_gen1, 
+      group = as.factor(Density), colour = as.factor(Density),
+      xlab = "Number of seedlings in home pot", 
+      ylab = "Effective seed number"
+      ) + 
+  geom_smooth(method = "lm")
+summary(lm(eff_sd_no ~ home * as.factor(Density), data = Ler_seed_gen1))
+```
+
+There's no evidence for differences among the two pots, so fortunately we can merge them:
+```{r plot_home_eff2}
+qplot(home, eff_sd_no, data = Ler_seed_gen1, 
+      xlab = "Number of seedlings in home pot", 
+      ylab = "Effective seed number"
+      ) + 
+  geom_smooth(method = "lm")
+summary(lm(eff_sd_no ~ home, data = Ler_seed_gen1))
+```
+
+Fortunately the relationship is linear and independent of density (although with only two density treatments these conclustions are not super robust). And while we explain 78% of the variance there is still some scatter: the home pot seeds represents "measurement error" relative to the effective seed number (although the effective seed number itself seems pretty stochastic, as the fraction of seeds dispersing is pretty stochastic). However, it's the best we have.
