@@ -1,0 +1,26 @@
+# 21 April 2017
+
+```{r setup, echo=FALSE, cache=FALSE}
+### This chunk can be deleted from any entry that lacks R code
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = "..")
+```
+```{r setup2, echo=FALSE, message=FALSE, cache=FALSE}
+### This chunk can be deleted from any entry that lacks R code
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate)
+load.project()
+```
+
+## Data munging
+Realizing that I need to re-use the `seedlings1` data from last time, I see that I should start to use the `munge` directory for key derived data. I therefore ned to give it a more meaningful name; how about `Ler_eff_seeds_gen1`.
+
+The code for doing this is in `munge/01-Ler-eff-seed-gen1.R`
+
