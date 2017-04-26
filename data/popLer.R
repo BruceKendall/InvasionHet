@@ -20,11 +20,12 @@ for (i in 1:length(data_fname)) {
 popLer_cm <- popLer_cm[-1]
 names(popLer_cm) <- c("ID", "Treatment", "Rep", "Gap", "Generation", "Pot", "Distance",
                       "Seedlings")
+popLer_cm <- popLer_cm[!is.na(popLer_cm$ID),]
+
 ord <- with(popLer_cm, order(Treatment, Gap, Rep, Generation, Pot, Distance))
 popLer_cm <- popLer_cm[ord,]
 
 # Make a version that just has pot totals
-require(plyr)
 popLer <- ddply(popLer_cm, .(ID, Gap, Rep, Treatment, Generation, Pot), summarize,
                 Seedlings = sum(Seedlings))
 ord <- with(popLer, order(Treatment, Gap, Rep, Generation, Pot))
