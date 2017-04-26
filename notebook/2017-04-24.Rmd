@@ -1,0 +1,65 @@
+# 24 April 2017
+
+```{r setup, echo=FALSE, cache=FALSE}
+### This chunk can be deleted from any entry that lacks R code
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = "..")
+```
+```{r setup2, echo=FALSE, message=FALSE, cache=FALSE}
+### This chunk can be deleted from any entry that lacks R code
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate)
+load.project()
+```
+
+## DD Ler fecundity
+We use the 3-pot gaps, looking at seeds in the home pot. The rationale is that a trivial number of seeds will be arriving from other pots.
+
+```{r DDler}
+Ler3pBC <- filter(popLer, Gap == "3p", Treatment != "A")
+Ler3pBC <- group_by(Ler3pBC, Treatment, Pot, Rep) %>%
+  mutate(Adults = lag(Seedlings)) 
+Ler3pBC <- within(Ler3pBC,
+                  {
+                    Adults[Treatment == "B" & !is.na(Adults)] <- 1
+                    Adults[Pot == 0 & Generation == 1] <- 1
+                    Adults[Treatment == "C" & Pot == 0 & Generation == 1] <- 50
+                  })
+```
+
+I couldn't figure out how to do it all in dplyr!
+
+I think there's something wierd going on in generation 6, let's look at treatment B:
+
+```{r Btimeseries}
+filter(Ler3pBC, Treatment == "B") %>%
+  ggplot(aes(x = as.factor(Generation), y = Seedlings)) + geom_boxplot(notch = TRUE) 
+```
+
+Actually, it's the first and last generations that are odd: Gen 1 is unusually productive, and Gen 6 is unusually underproductive.
+
+Let's look at the density dependence:
+```{r LerDD_all}
+qplot(data=Ler3pBC, x = Adults, y = Seedlings/Adults, 
+      colour = as.factor(Generation), log = "xy") + 
+  geom_smooth(method = "lm")
+```
+Generation 6 looks really different.
+
+It's a bit less pronounced if we leave out treatment B, but it's still there:
+```{r LerDD}
+qplot(data=filter(Ler3pBC, Treatment == "C"), x = Adults, y = Seedlings/Adults, 
+      colour = as.factor(Generation), log = "xy") + 
+  geom_smooth(method = "lm")
+```
+
+So I think we want to leave out gen 6. 
+
+Note that there looks to be some curvature in the log-log plot, suggesting that the log tramsform of Adults is too strong. Need to estimate a power transform instead, or the Wilkinson model.
