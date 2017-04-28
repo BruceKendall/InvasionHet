@@ -11,9 +11,9 @@
 knitr::opts_chunk$set(comment = '', cache = TRUE)
 knitr::opts_knit$set(root.dir = "..")
 ```
-```{r setup2, echo=FALSE, message=FALSE, cache=FALSE}
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
 ### This chunk can be deleted from any entry that lacks R code
-
+ 
 # Load the project. For some reason it has to be in a separate chunck.
 library(ProjectTemplate)
 load.project()
