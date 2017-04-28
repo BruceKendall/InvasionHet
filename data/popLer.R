@@ -26,7 +26,7 @@ ord <- with(popLer_cm, order(Treatment, Gap, Rep, Generation, Pot, Distance))
 popLer_cm <- popLer_cm[ord,]
 
 # Make a version that just has pot totals
-popLer <- ddply(popLer_cm, .(ID, Gap, Rep, Treatment, Generation, Pot), summarize,
+popLer <- plyr::ddply(popLer_cm, .(ID, Gap, Rep, Treatment, Generation, Pot), summarize,
                 Seedlings = sum(Seedlings))
 ord <- with(popLer, order(Treatment, Gap, Rep, Generation, Pot))
 popLer <- popLer[ord,]
