@@ -1,0 +1,83 @@
+# 1 May 2017
+
+## Sanity check 
+I've been farting around with data for a few weeks now. I think it has been useful, both in terms of getting me back into the data and code, and figuring out how to work in the bookdown/ProjectTemplate world, but I can easily get lost in here indefinitely. 
+
+So now it's time to take stock. I also have to think about the talk I'm going to give in Bren in 2 (!) weeks.
+
+So recall the central question: *What are the drivers of variation in spread rate, and are they predictable?*
+
+There are two components:
+
+1. Variation and/or heterogeneity among pots in per-capita seed production
+2. Variation and/or heterogeneity among pots in dispersal
+
+
+## What we know from the analyses so far
+- In the single-plant pots, average home seed production is consistent across generations 2-5, but is high in gen 1 and low in gen 6.
+- In the single-plant pots, the variance in home seed production seems lowest in gens 1, 3, and 6, and highest in gen 2 (this is based on looking at the IQR from the boxplots; I haven't actually calculated the variances yet). 
+- In the population runs, the density-dependent pattern of seed production looks, in expectation, the same across all generations except 6, which runs low. I can't actually measure the density-dependent curve in gen 1, but the observations at $N=50$ are consistent with the curves from gens 2-5. I have not looked at whether the residual variance differs among generations.
+
+## Some remaining empirical questions
+1. The model for effective seed number vs home seed number is eff_sds = 4 + 1.5*home_sds, which is not quite a proportionality. What do we find if:
+    a. We force the intercept to zero?
+    b. We do a power law regression to see if the exponent is one?
+2. What is the among-generation pattern in residual seed production variance?
+3. What is the relationship between silique number and seed number?
+3. What is the relationship between the fraction dispersing and silique/seed number?
+3. What is the relationship between the fraction dispersing and the dispersal statistics (mean, variance, extreme of distances) of the dispersers?
+4. What is the relationship between height and silique/seed number?
+5. What is the relationship between height and dispersal? This will require some sort of model fitting, as we only have height in a late generation.
+6. Can we get useful estimates of size asymmetries by comparing tallest individual and "height of crowd"? If so, does this depend on density?
+7. Can we get a more general view of size hierarchies and the relationship between height and silique production from the RIL density experiments? Can these be easily translated to Ler?
+8. Is there any autocorrelation or temporal trend in spread rate?
+9. How does the variance in cumulative spread increase through time?
+10. Does spread depend on abundance/seed production/siliques in leading pot? In leading several pots?
+
+
+I need to distinguish between the empirical patterns that I need to build into the model vs. those that I want the model to predict. The primary one of the latter is the variance in cumulative spread. 
+
+I also need to keep in mind that the goal is not necessarily to generate proximal explanations for all of the sources of variability, but to show how each of the sources of variability contributes to the variability in spread. In general, the types of variability are:
+
+- Among-individual variation in seed production, which can be divided into iid variation ("demographic stochasticity") and heterogeneity
+- Among-pot variation in seed production, between reps, between pots within a rep, and between generations ("environmental stochasticity")
+- Sampling variation in the fraction dispersing
+- Among-pot variation in the fraction dispersing (is there any way to get at this outside of the first generation?)
+- Sampling variation in the realized dispersal kernel
+- Among-pot variation in the estimated dispersal kernel
+
+## Some theory
+It's straightforward to show that, if the spread increment is iid, then the theoretical variance in cumulative spread grows linearly with time. **Has this been noted in the literature?** In finite realizations, there will be autocorrelation. A replicate that is ahead of the pack this year will tend to be ahead of the pack next year; and a collection of replicates that has higher than expected variance this year will tend to have higher than expected variance next year.
+
+Two key questions are then: 
+
+- To what extent are the growth increments iid? 
+    - Temporal positive (negative) autocorrelation would increase (decrease) the rate of increase in variance; 
+    - correlations among "replicates" (e.g., if they are at neighboring points on a front) also could be important. 
+    - Finally, the spread rate might not be stationary: Evolution could lead to trends in spread rate, and deviations from the asymptotic spatial structure would, in many cases, affect the expected spread rate.
+- How much of the variation in annual spread be explained by current characteristics of the population, and do those characteristics themselves have predictable dynamics (the latter is actually the feedback mechanism by which we might get autocorrelation)
+
+Again, the key questions for prediction spread are: How much of the variation in annual spread is "inherently stochastic"? How large is that variance relative to the mean rate of spread? The CV of cumulative spread will grow with the square root of time, but that will be proportional to the CV of one-generation spread.
+
+## Preparing for my seminar
+I want to do the first section on variability in spread, and second section on evolution
+
+For the first section:
+
+- Elaborate on the theory above. **TO DO: look for prior literature on this. Start with Melbourne & Hastings**
+- Describe the Arabidopsis experiments . **TO DO: ask Jenn if she has more pictures**
+- Show patterns of spread in Ler treatment C. **TO DO: calculated statistics of annual and cumulative spread; make pictures of populations through time**
+- Show extent to which Ler fits simple model. **TO DO: Calculate var vs. time; work out sampling statistics to show plausibility**
+- Show which processes contribute to the variance in per-generation spread. **TO DO: re-run my analyses from July 2015; maybe apply them to fragmented landscapes**
+
+For the second section:
+
+- Motivate with cane toad example
+- Explain spatial sorting vs. natural selection. **TO DO: Make sure I understand the spatial sorting model**
+- Show the Science paper results. **TO DO: ask Jenn for code so I can remake Fig. 2 in something that's visible on slides**
+- Show patterns of variance in annual/cumulative spread. **TO DO: calculate spread statistics for evolution experiment**
+- Compare/contrast with other spread evolution experiments. **TO DO: read and understand the competing experiments**
+- Discuss future work:
+    - Does genetic diversity and evolution affect predictability and variance components?
+    - Can we use models to explain patterns of repeatability in evolution?
+    - Can we use models to show how fast the evolution happened?
