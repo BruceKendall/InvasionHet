@@ -81,3 +81,7 @@ For the second section:
     - Does genetic diversity and evolution affect predictability and variance components?
     - Can we use models to explain patterns of repeatability in evolution?
     - Can we use models to show how fast the evolution happened?
+
+## Updates
+- The script for fig. 2 of the Science paper is in `~/Dropbox/Arabidopsis/analysls/Science_Scripts&Data`.
+- I've just emailed Jenn to ask for photos/slides.
