@@ -1,0 +1,83 @@
+# 5 May 2017
+
+```{r setup, echo=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+#######################################################################################
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = "..")
+```
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate)
+load.project()
+```
+
+## Calculate Ler spread rates
+First we look at furthest distance reached.
+```{r furthest}
+Ler_furthest_C <- filter(popLer, Treatment == "C") %>%
+  group_by(Gap, Rep, Generation) %>%
+  summarise(Furthest = max(Pot))
+```
+
+Now calculate per-generation spread rates
+```{r spread}
+# The "default" argument to lag() replaces the leading NA with the specified value
+gen_spread <- group_by(Ler_furthest_C, Gap, Rep) %>%
+  mutate(speed =  Furthest - lag(Furthest, default = 0),
+         speed_m1 = lag(speed))
+```
+
+Hmm, there is one case (rep 8, 3p gap) where the forward pot seems to go extinct, resulting in a negative speed. Need to check the original data, but for now let's just set that to zero.
+
+```{r spread_fix}
+gen_spread <- within(gen_spread, speed[speed < 0] <- 0)
+gen_spread <- within(gen_spread, speed_m1[speed_m1 < 0] <- 0)
+```
+
+Look at autocorrelation:
+```{r AR1, warning=FALSE}
+spread_AR <- group_by(gen_spread, Gap, Rep) %>% 
+  summarise(AR1 = cor(speed, speed_m1, use = "complete"))
+ggplot(spread_AR, aes(x = AR1)) + geom_histogram(aes(fill = Gap))
+```
+ALthough it looks like a bias towards negative values, I think that's mostly from the 3p gaps, where the pattern 0-4-0 will be common.
+
+Look at trends by rep:
+```{r speed_trends, message=FALSE}
+ggplot(gen_spread, aes(x = Generation, y = speed, color = as.factor(Rep))) +
+  geom_point(position = "jitter") + 
+  geom_smooth(method = "lm", se = FALSE) + 
+  facet_wrap(~Gap)
+ggplot(gen_spread, aes(x = Generation, y = speed)) +
+  geom_point(position = "jitter") + 
+  geom_smooth() + 
+  facet_wrap(~Gap)
+ggplot(gen_spread, aes(x = Generation, y = speed)) +
+  geom_point(position = "jitter") + 
+  geom_smooth(method = "gam", method.args = list(k = 4)) + 
+  facet_wrap(~Gap)
+summary(lm(speed ~ Generation, data = filter(gen_spread, Gap == "0p")))
+library(mgcv)
+summary(gam(speed ~ s(Generation, k = 4), data = filter(gen_spread, Gap == "0p")))
+plot(gam(speed ~ s(Generation, k = 4), data = filter(gen_spread, Gap == "0p")))
+anova(gam(speed ~ s(Generation, k = 4), data = filter(gen_spread, Gap == "0p")), 
+      gam(speed ~ Generation, data = filter(gen_spread, Gap == "0p")),
+      test = "Chisq") 
+```
+
+So there looks to be some nonstationarity in the continuous runways, with the speed peaking in generation 3. The initial increase makes sense, but the decline does not.
