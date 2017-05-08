@@ -18,15 +18,19 @@ for (i in 1:length(data_fname)) {
 
 # Clean up column names and get a useful order
 popLer_cm <- popLer_cm[-1]
-names(popLer_cm) <- c("ID", "Treatment", "Rep", "Gap", "Generation", "Pot", "Distance",
+names(popLer_cm) <- c("ID", "Treatment", "Replicate", "Gap", "Generation", "Pot", "Distance",
                       "Seedlings")
 popLer_cm <- popLer_cm[!is.na(popLer_cm$ID),]
 
-ord <- with(popLer_cm, order(Treatment, Gap, Rep, Generation, Pot, Distance))
+ord <- with(popLer_cm, order(Treatment, Gap, Replicate, Generation, Pot, Distance))
 popLer_cm <- popLer_cm[ord,]
 
+# Make some factor variables
+popLer_cm$Rep <- as.factor(popLer_cm$Replicate)
+popLer_cm$Gen <- as.factor(popLer_cm$Generation)
+
 # Make a version that just has pot totals
-popLer <- plyr::ddply(popLer_cm, .(ID, Gap, Rep, Treatment, Generation, Pot), summarize,
+popLer <- plyr::ddply(popLer_cm, plyr::.(ID, Gap, Replicate, Rep, Treatment, Generation, Gen, Pot), summarize,
                 Seedlings = sum(Seedlings))
 ord <- with(popLer, order(Treatment, Gap, Rep, Generation, Pot))
 popLer <- popLer[ord,]

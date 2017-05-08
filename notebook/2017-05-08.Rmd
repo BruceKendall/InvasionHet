@@ -13,3 +13,6 @@ So a couple of things to do (both for Ler and the evolution experiments):
 
 - Plot mean and variance of cumulative spread against time
 - Fit the bean beetle model (as a first approximation to be quick I can treat rep as a fixed effect).
+
+## Ler cumulative spread
+To facilitate the above analyses, I have modified the script for popLer to make categorical versions of Generation and Replicate (Gen and Rep, respectively), and put the guts of last time's data manipulation into a munge script, which creates `LerC_spread` containing cumulative and per-generation spread for the C treatment replicates.
