@@ -1,4 +1,29 @@
 # 8 May 2027
+```{r setup, echo=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+#######################################################################################
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = "..")
+```
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate)
+load.project()
+```
 
 ## Dispersal evolution in beetle experiments
 Just read the papers from Brett's and TEX's labs. As Jen said, their "no evolution" treatment was spatial shuffling, so didn't maintain the original genetic composition.
@@ -16,3 +41,100 @@ So a couple of things to do (both for Ler and the evolution experiments):
 
 ## Ler cumulative spread
 To facilitate the above analyses, I have modified the script for popLer to make categorical versions of Generation and Replicate (Gen and Rep, respectively), and put the guts of last time's data manipulation into a munge script, which creates `LerC_spread` containing cumulative and per-generation spread for the C treatment replicates.
+
+Let's calculate the means and variances of cumulative spread:
+```{r cum_spread_stats}
+cum_spread_stats <- group_by(LerC_spread, Gap, Gen, Generation) %>%
+  summarise(mean_spread = mean(Furthest),
+            var_spread = var(Furthest),
+            CV_spread = sqrt(var_spread)/mean_spread
+  )
+```
+
+And now plot the results:
+```{r plot_spread_stats}
+ggplot(aes(x = Generation, y = mean_spread, color = Gap), data = cum_spread_stats) +
+  geom_point() + geom_smooth(method = "lm")
+ggplot(aes(x = Generation, y = var_spread, color = Gap), data = cum_spread_stats) +
+  geom_point() + geom_line()
+ggplot(aes(x = Generation, y = CV_spread, color = Gap), data = cum_spread_stats) +
+  geom_point() + geom_line()
+```
+
+The linear approximation to mean spread is pretty good, although we see a dip in generation 6, as expected from the reduced seed production, and even without gen 6, the continuous runways seem to be decelerating. The ranking between landscapes makes sense. The variances are rather more over the map, although we don't have confidence intervals on them. But exept for 1-pot gaps, we can squint and imagine that the variances are linear in time. Note, however, that with only 6 generations we're not going to easily detect nonlinearities. I don't know that the CVs tell us much.
+
+Probably the best way to get CIs is to bootstrap replicates.
+
+Let's try fitting a model. We'll need to add a lag of cumulative spread.
+```{r Ler_spread_mod}
+LerC_spread <- mutate(LerC_spread, 
+                      Furthestm1 = lag(Furthest, default = 0))
+m1 <- lm(Furthest ~ Generation + Rep + Generation:Rep + Furthestm1, 
+         data = filter(LerC_spread, Gap == "0p"))
+summary(m1)
+car::Anova(m1)
+```
+This is a little curious-- I wasn't expecting the reps to have different speeds, except as a side effect of autocorrelation. Let's try a few other models:
+```{r more_models}
+m2 <- lm(Furthest ~ Generation + Rep + Generation:Rep, 
+         data = filter(LerC_spread, Gap == "0p"))
+m3 <- lm(Furthest ~ Generation + Furthestm1, data = filter(LerC_spread, Gap == "0p"))
+anova(m1, m2, m3)
+```
+Hmm, they really do seem to have different slopes. But we have not yet accounted for time-varying speeds. I don't see how to do that in this context; let's look at per-generation speeds instead:
+```{r Ler_speed_mod}
+m11 <- lm(speed ~ Gen + Rep, data = filter(LerC_spread, Gap == "0p"))
+summary(m11)
+car::Anova(m11)
+```
+Well this is confusing! If the per-generation speeds don't differ among reps, how can the slopes of cumulative spread do so? Let's look at some plots:
+```{r plot_spread}
+ggplot(aes(x = Generation, y = Furthest, color = Rep), 
+       data = filter(LerC_spread, Gap == "0p")) +
+  geom_point() + geom_smooth(method = "lm")
+ggplot(aes(x = Generation, y = speed, color = Rep), 
+       data = filter(LerC_spread, Gap == "0p")) +
+  geom_line()
+```
+Let's look for autocorrelation in speed.
+```{r Ler_speed_mod2}
+m12 <- lm(speed ~ Gen + Rep + speed_m1, data = filter(LerC_spread, Gap == "0p"))
+summary(m12)
+car::Anova(m12)
+```
+Aha! there is negative autocorrelation in speed (evidently it was obscured by the time-dependent patterns in the univariate analysis I did last week). A potential explanation for this could be partial "pushing" by older pots, so that a replicate that gets extra far this generation has less pushing next generation. Alternatively, it could reflect a correlation between distance spread and the number of plants in the furthest pot.
+
+Let's do one more analysis with a quadratic of time, so we can interact it with Rep:
+```{r Ler_speed_mod3}
+m13 <- lm(speed ~ poly(Generation, 2) * Rep + speed_m1, 
+          data = filter(LerC_spread, Gap == "0p"))
+summary(m13)
+car::Anova(m13)
+```
+Drop the interaction:
+```{r Ler_speed_mod4}
+m14 <- lm(speed ~ poly(Generation, 2) + Rep + speed_m1, 
+          data = filter(LerC_spread, Gap == "0p"))
+summary(m14)
+car::Anova(m14)
+```
+So, in conclusion: weak evidence for among-Rep differences in means, but strong evidence for negative autocorrelation. Note that this autocorrelation should act to slow the rate at which the variance in cumulative spread increases with time.
+
+Let's check out the other landscapes:
+```{r Ler_speed_gaps}
+m24 <- lm(speed ~ Gen + Rep + speed_m1, 
+          data = filter(LerC_spread, Gap == "1p"))
+m34 <- lm(speed ~ Gen + Rep + speed_m1, 
+          data = filter(LerC_spread, Gap == "2p"))
+m44 <- lm(speed ~ Gen + Rep + speed_m1, 
+          data = filter(LerC_spread, Gap == "3p"))
+summary(m24)
+summary(m34)
+summary(m44)
+car::Anova(m24)
+car::Anova(m34)
+car::Anova(m44)
+```
+Nothing to see here, folks!
+
+The pattern of autocorrelation should, I think, fall into the category of something that we want the model to reproduce.
