@@ -1,0 +1,15 @@
+# 8 May 2027
+
+## Dispersal evolution in beetle experiments
+Just read the papers from Brett's and TEX's labs. As Jen said, their "no evolution" treatment was spatial shuffling, so didn't maintain the original genetic composition.
+
+They both found increased mean and increased variance with evolution. Both found increased dispersal ability at the edge of the evolving populations; the flour beetle experiment also found a *reduction* in low-density growth rate.
+
+The effects on dispersal are explained as spatial sorting; the growth rate effects are hypothesized to represent "gene surfing", whereby deleterious alleles exposed by founder effects at the leading edge are carried forward by the fact that next generation's leading edge is primarily founded by this generation's leading edge.
+
+The flour beetle experiment found that the among-replicate variance in cumulative spread grew faster than linearly. This is consistent with among-replicate differences in mean speeds (which would generate a quadratic growth in variance through time). This pattern was found in both treatments, suggesting that it's not just a consequence of founder effects at the leading edge. Perhaps it represents founder effects in the initial establishment from the stock population (each replicate was founded by 20 individuals). The bean beetle experiment doesn't show this graph but found strong support for a random effect for replicate speed in their model for cumulative spread.
+
+So a couple of things to do (both for Ler and the evolution experiments):
+
+- Plot mean and variance of cumulative spread against time
+- Fit the bean beetle model (as a first approximation to be quick I can treat rep as a fixed effect).
