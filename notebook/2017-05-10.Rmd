@@ -1,0 +1,209 @@
+# 10 May 2027
+```{r setup, echo=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+#######################################################################################
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = "..")
+```
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate)
+load.project()
+```
+
+## Spread patterns in evolution experiments
+We'll repeat the analysis with the newly loaded RIL data.
+Let's calculate the means and variances of cumulative spread:
+```{r cum_spread_stats}
+cum_spread_stats <- group_by(RIL_spread, Treatment, Gap, Gen, Generation) %>%
+  summarise(mean_spread = mean(Furthest),
+            var_spread = var(Furthest),
+            CV_spread = sqrt(var_spread)/mean_spread
+  )
+```
+
+And now plot the results:
+```{r plot_spread_stats}
+ggplot(aes(x = Generation, y = mean_spread, color = Treatment), data = cum_spread_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+ggplot(aes(x = Generation, y = var_spread, color = Treatment), data = cum_spread_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+ggplot(aes(x = Generation, y = CV_spread, color = Treatment), data = cum_spread_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+```
+
+The patterns in the mean are probably not overly distinguishable from linear, although I'd want to see CIs.
+
+Let's look at per-generation spread.
+
+```{r speed_stats}
+speed_stats <- group_by(RIL_spread, Treatment, Gap, Gen, Generation) %>%
+  summarise(mean_spread = mean(speed),
+            var_spread = var(speed),
+            CV_spread = sqrt(var_spread)/mean_spread
+  )
+```
+
+And now plot the results:
+```{r plot_speed_stats}
+ggplot(aes(x = Generation, y = mean_spread, color = Treatment), data = speed_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+ggplot(aes(x = Generation, y = var_spread, color = Treatment), data = speed_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+ggplot(aes(x = Generation, y = CV_spread, color = Treatment), data = speed_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+```
+
+In 0p and 1p, the treatments look very similar. But I bet there will be differences in the autocorrelation structure. Let's fit some models.
+
+```{r RILL_speed_mod}
+m1_0NO <- lm(speed ~ Gen + Rep + speed_m1, data = filter(RIL_spread, Gap == "0p", Treatment == "NO"))
+summary(m1_0NO)
+car::Anova(m1_0NO)
+m1_0YES <- lm(speed ~ Gen + Rep + speed_m1, data = filter(RIL_spread, Gap == "0p", Treatment == "YES"))
+summary(m1_0YES)
+car::Anova(m1_0YES)
+```
+
+Nothing here, really, except for a generation effect in the evolution treatment, which is in turn driven by the high mean in generation 5. We don't have enough df to look at an interaction, let's look at the distribution of values to see if it's a single outlier:
+```{r gen5}
+filter(RIL_spread, Treatment == "YES", Gap == "0p", Generation == 5)$speed
+```
+It's rep 1 with a crazy jump. Could that be a data error? Let's look at the time series:
+```{r rep1}
+filter(RIL_spread, Treatment == "YES", Gap == "0p", Rep == "1")$speed
+popRIL %>% filter(Treatment == "YES", Gap == "0p", Rep == "1") %>%
+  select(Generation, Pot, Seedlings) %>%
+  reshape(timevar = "Generation", direction = "wide", idvar = "Pot")
+```
+
+There is clearly missing data in generations 2-4! This also appears to have been fixed in the Science paper, as there is no replicate sitting at pot 2 for several generations.
+
+I've emailed Jenn, but for now let's look at it without Rep1
+
+
+Let's calculate the means and variances of cumulative spread:
+```{r cum_spread_stats1}
+cum_spread_stats <- filter(RIL_spread, !(Rep == "1" & Treatment == "YES" & Gap == "0p")) %>%
+  group_by(Treatment, Gap, Gen, Generation) %>%
+  summarise(mean_spread = mean(Furthest),
+            var_spread = var(Furthest),
+            CV_spread = sqrt(var_spread)/mean_spread
+  )
+```
+
+And now plot the results:
+```{r plot_spread_stats1}
+ggplot(aes(x = Generation, y = mean_spread, color = Treatment), data = cum_spread_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+ggplot(aes(x = Generation, y = var_spread, color = Treatment), data = cum_spread_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+ggplot(aes(x = Generation, y = CV_spread, color = Treatment), data = cum_spread_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+```
+
+The patterns in the mean are probably not overly distinguishable from linear, although I'd want to see CIs.
+
+Let's look at per-generation spread.
+
+```{r speed_stats2}
+speed_stats <- filter(RIL_spread, !(Rep == "1" & Treatment == "YES" & Gap == "0p")) %>%
+  group_by(Treatment, Gap, Gen, Generation) %>%
+  summarise(mean_spread = mean(speed),
+            var_spread = var(speed),
+            CV_spread = sqrt(var_spread)/mean_spread
+  )
+```
+
+And now plot the results:
+```{r plot_speed_stats2}
+ggplot(aes(x = Generation, y = mean_spread, color = Treatment), data = speed_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+ggplot(aes(x = Generation, y = var_spread, color = Treatment), data = speed_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+ggplot(aes(x = Generation, y = CV_spread, color = Treatment), data = speed_stats) +
+  geom_point() + geom_line() + facet_wrap(~ Gap)
+```
+
+In 0p and 1p, the treatments look very similar. But I bet there will be differences in the autocorrelation structure. Let's fit some models.
+
+```{r RILL_speed_mod2}
+m1_0NO <- lm(speed ~ Gen + Rep + speed_m1, 
+             data = filter(RIL_spread, Gap == "0p", Treatment == "NO"))
+summary(m1_0NO)
+car::Anova(m1_0NO)
+m1_0YES <- lm(speed ~ Gen + Rep + speed_m1, 
+              data = filter(RIL_spread, Gap == "0p", Treatment == "YES", Rep != "1"))
+summary(m1_0YES)
+car::Anova(m1_0YES)
+```
+There's still an effect of Gen 5, but now it looks like just the peak of a quadratic pattern:
+```{r RILL_speed_mod2a}
+m2_0NO <- lm(speed ~ poly(Generation, 2) + Rep + speed_m1, 
+             data = filter(RIL_spread, Gap == "0p", Treatment == "NO"))
+summary(m2_0NO)
+car::Anova(m2_0NO)
+m2_0YES <- lm(speed ~ poly(Generation, 2) + Rep + speed_m1, 
+              data = filter(RIL_spread, Gap == "0p", Treatment == "YES", Rep != "1"))
+summary(m2_0YES)
+car::Anova(m2_0YES)
+```
+In the evolution treatment, strong quadratic effect of generation and negative autocorrelation. Nothing in the no evolution treatment!
+
+Let's look at the rest of the landscapes.
+
+```{r RILL_speed_mod1p}
+m2_0NO <- lm(speed ~ poly(Generation, 2) + Rep + speed_m1, 
+             data = filter(RIL_spread, Gap == "1p", Treatment == "NO"))
+summary(m2_0NO)
+car::Anova(m2_0NO)
+m2_0YES <- lm(speed ~ poly(Generation, 2) + Rep + speed_m1, 
+              data = filter(RIL_spread, Gap == "1p", Treatment == "YES", Rep != "1"))
+summary(m2_0YES)
+car::Anova(m2_0YES)
+```
+
+```{r RILL_speed_mod2p}
+m2_0NO <- lm(speed ~ poly(Generation, 2) + Rep + speed_m1, 
+             data = filter(RIL_spread, Gap == "2p", Treatment == "NO"))
+summary(m2_0NO)
+car::Anova(m2_0NO)
+m2_0YES <- lm(speed ~ poly(Generation, 2) + Rep + speed_m1, 
+              data = filter(RIL_spread, Gap == "2p", Treatment == "YES", Rep != "1"))
+summary(m2_0YES)
+car::Anova(m2_0YES)
+```
+
+
+```{r RILL_speed_mod3p}
+m2_0NO <- lm(speed ~ poly(Generation, 2) + Rep + speed_m1, 
+             data = filter(RIL_spread, Gap == "3p", Treatment == "NO"))
+summary(m2_0NO)
+car::Anova(m2_0NO)
+m2_0YES <- lm(speed ~ poly(Generation, 2) + Rep + speed_m1, 
+              data = filter(RIL_spread, Gap == "3p", Treatment == "YES", Rep != "1"))
+summary(m2_0YES)
+car::Anova(m2_0YES)
+```
+
+It's a very mixed bag here. In summary, polynomial time and negative autocorrelation are found in:
+
+- 0p, evo YES
+- 1p, evo NO
+- 3p, evo YES
+
+I'm not sure how to interpret this.... Maybe it's random artifacts???
