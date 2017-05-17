@@ -1,0 +1,265 @@
+# 17 May 2027
+```{r setup, echo=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+#######################################################################################
+# Note that the cache = FALSE is needed to prevent ProjectTemplate errors in the next 
+#   chunk. This is unfortunate as it slows build of the full notebook.
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = "..")
+```
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate)
+load.project()
+```
+
+## Updates
+### Data issues
+I've had some email exchanges with Jenn about data---basically, I was mistaken in using the Excel files from the data directory. In particular, she said about the RIL data (on May 10):
+
+> The data that we used to make figure 2 came from this file (in the analysis folder): 
+
+> `seedlingsALL<-read.csv('2016_03_04_seedlingsALL_corrected.csv', header=T)`
+
+This data file does not include the Ler data. She said, in addition:
+
+> For the Exp 1 data, use the script `00_ArabiDD_ImportTransformData.R` (in my github, I hope!) to read in the corrected files.
+
+It is not in the Dropbox directory; rather it is at https://github.com/jennwilliamsubc/ArabiDD_analyses/blob/master/00_ArabiDD_ImportTransformData.R.
+
+The file is displayed below; it does a lot more than import seedling data! It seems to pull in all the other ancillary data for Ler, so will be a good guide for that.
+
+One thing I will need to ask about is the ancillary data for RILs.
+
+### Presentation at Bren
+The Arabidopsis work was to have been the centerpiece of my presentation to the faculty & PhD students at Bren yesterday, but as it turned out I didn't even get to that section. In the meeting with the students a few questions came up but they were generally clarifying questions---nothing about the actual results!
+
+## Jenn's Ler script
+
+Here it is, as found on github with a date of Aug 24, 2016:
+```{r JennsScript, eval=FALSE}
+##June 21, 2016
+
+#Use this source file for all of the scripts for the Arabidopsis Density Project
+#It doesn't need to be in MarkDown.
+
+#Idea is to pull all data to here, and then to source these Data when you run the other files.
+
+setwd("~/Dropbox/Arabidopsis/analysis")
+
+#libraries used in the projects
+#can you rewrite these as require?
+library(plyr)
+library(lattice)
+library(Hmisc)
+
+#import files that are siliques
+gen0sil<-read.csv('2013_11_11_Exp1_Gen0_siliques.csv', header=T)
+names(gen0sil)<-c("gen", "ID", "trt","gap_size","pot","siliques")
+gen1sil<-read.csv("2014_04_15_Exp1_Gen1_siliques.csv", header=T)
+names(gen1sil)<-c("gen", "ID", "trt","gap_size","pot","siliques")
+gen2sil<-read.csv("2014_06_12_Exp1_Gen2_siliques.csv", header=T)
+#note, I deleted the column called 'rep' from the csv. I'm not sure what it means, and the other data files don't have it
+names(gen2sil)<-c("gen", "ID", "trt","gap_size","pot","siliques")
+gen3sil<-read.csv("2014_11_27_Exp1_Gen3_siliques.csv", header=T)
+names(gen3sil)<-c("gen", "ID", "trt","gap_size","pot","siliques")
+gen4sil<-read.csv("2015_03_13_Exp1_Gen4_siliques.csv", header=T)
+names(gen4sil)<-c("gen", "ID", "trt","gap_size","pot","siliques")
+gen5sil<-read.csv("2015_08_25_Exp1_Gen5_siliques.csv", header=T)
+names(gen5sil)<-c("gen", "ID", "trt","gap_size","pot","siliques")
+
+allsil<-rbind(gen0sil, gen1sil, gen2sil, gen3sil, gen4sil, gen5sil)
+
+#since we used the counts from trtA plants for trtB, we can only analyze variation from trtA plants
+allsilA<-subset(allsil, trt=="A")
+
+#we could also merge these data (very carefully!) with the runway data from the next generation
+#that would allow us to say something about how silique number affects dispersal/spread in the two treatments
+
+#HOWEVER, this will only include a subset of the data, because the silique numbers we have are not necessarily for the leading edge of the solitary plants (should be of the clipped, though!)
+
+#I collected height data in October 2015
+#I did not enter the data, and there are some funny things that I should have noticed earlier!
+#for example, every record should have a chamber number, but those are missing
+#do the raw data sheets exist anywhere?
+gen5heights<-read.csv("2015_10_26_Exp1_Gen5_Height.csv", header=T)
+
+########-----------
+###import the side experiment data here (and anything else you think might be helpful)
+disp_spray<-read.csv("2013_08_08_Exp1_Spray.csv", header=T)
+#names(disp_spray)<-c("ecot","trt","mom_pot","pot","d","sdlgs","mom_sil")
+
+#import Frankenstein data here (all data that are relevant to effects of density on height & siliques)
+frank_traits<-read.csv("2016_06_24_LerTraitsxDensity_ALLexperiments.csv", header=T)
+frank_traits_ring<-subset(frank_traits, exp=="ring")
+
+testply<-ddply(frank_traits, .(ID), summarise, 
+                meansil=mean(siliques, na.rm=T), 
+                meanht=mean(height, na.rm=T)) 
+meantraits<-join(testply, frank_traits, by="ID",type="left",match="first")
+meantraits$totsil<-meantraits$meansil*meantraits$final_density
+
+########-----------
+###ALL SEEDLING DATA
+
+seedlings_gen1<-read.csv("2014_02_18_Exp1_Gen1_seedposition.csv", header=T)
+names(seedlings_gen1)<-c("ecot","ID","trt","Rep","gap_size","gen","pot","d","sdlgs")
+
+seedlings_gen2<-read.csv("2014_06_12_Exp1_Gen2_seedposition.csv", header=T)
+names(seedlings_gen2)<-c("ecot","ID","trt","Rep","gap_size","gen","pot","d","sdlgs")
+
+seedlings_gen3<-read.csv("2014_11_11_Exp1_Gen3_seedposition.csv", header=T) #Gen3
+names(seedlings_gen3)<-c("ecot","ID","trt","Rep","gap_size","gen","pot","d","sdlgs")
+
+seedlings_gen4<-read.csv("2015_03_11_Exp1_Gen4_seedposition.csv", header=T) #Gen4
+names(seedlings_gen4)<-c("ecot","ID","trt","Rep","gap_size","gen","pot","d","sdlgs")
+
+seedlings_gen5<-read.csv("2015_08_11_Exp1_Gen5_seedposition.csv", header=T) #Gen5
+names(seedlings_gen5)<-c("ecot","ID","trt","Rep","gap_size","gen","pot","d","sdlgs")
+
+seedlings_gen6<-read.csv("2015_11_10_Exp1_Gen6_seedposition.csv", header=T) #Gen6
+names(seedlings_gen6)<-c("ecot","ID","trt","Rep","gap_size","gen","pot","d","sdlgs")
+
+seedlings_gen6<- seedlings_gen6[-140,] #drop ID 27 record of jumping 8 pots
+seedlings_gen6<- seedlings_gen6[-c(163:169),] #drop ID 32 record of jumping 6 pots and being super dense
+
+seedlingsALL<-rbind(seedlings_gen1,seedlings_gen2, seedlings_gen3, seedlings_gen4, seedlings_gen5, seedlings_gen6)
+
+#drop runways with problems
+# 35 & 60: a pot went missing (so it looks like the runway shrank)
+# 45: different data on spreadsheet as on data sheets and can't figure it out. also, HUGE leap
+seedlingsALL<-subset(seedlingsALL,!(ID %in% c(35, 60)))
+
+############CALCULATE MAXD FOR EACH GENERATION AND MAKE FILE OF SPEEDS
+
+#calculate max distance and number of plants/pot in all generations
+maxd_ply<-ddply(seedlingsALL, .(ID,gen), summarise, 
+                lastpot=max(pot, na.rm=T), 
+                farseed=max(d,na.rm=T),
+                lastsdlgs=sum(sdlgs[pot==max(pot)])) #this selects number of sdlgs in the last pot
+maxd<-join(maxd_ply, seedlingsALL, by=c("ID","gen"),type="left",match="first")
+maxd<-maxd[,1:9]
+
+#now, move dense pots to the furthest right they could be
+maxd$farseed<-ifelse(maxd$lastpot==0,7,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==2 & maxd$lastsdlgs>=10,22,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==3 & maxd$lastsdlgs>=10,29,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==4 & maxd$lastsdlgs>=10,36,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==5 & maxd$lastsdlgs>=10,44,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==6 & maxd$lastsdlgs>=10,51,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==7 & maxd$lastsdlgs>=10,58,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==8 & maxd$lastsdlgs>=10,66,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==9 & maxd$lastsdlgs>=10,73,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==10 & maxd$lastsdlgs>=10,80,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==11 & maxd$lastsdlgs>=10,88,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==12 & maxd$lastsdlgs>=10,95,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==13 & maxd$lastsdlgs>=10,102,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==16 & maxd$lastsdlgs>=10,124,maxd$farseed)
+maxd$farseed <-ifelse(maxd$lastpot==17 & maxd$lastsdlgs>=10,132,maxd$farseed)
+
+#rescale so pot 0 is at 0
+maxd$farseed<-maxd$farseed - 7
+
+#create some variables so we can look at speed from different time points.
+#Goal: I want to be able to say something about distance traveled between gen. 1 and gen. 6 and between gen. 1 and gen. 5
+
+speeds<-ddply(maxd, .(ID), summarise, 
+              dist1to6 = farseed[6] - farseed[1],
+              dist1to5 = farseed[5] - farseed[1],
+              farseed6 = farseed[6],
+              farseed5 = farseed[5],
+              dist1to3 = farseed[3] - farseed[1])
+
+speeds<-join(speeds, maxd, by=c("ID"),type="left",match="first")
+speeds<-speeds[,c(1:6, 12:14)]
+
+##ADD gap size as a continuous variable to the dataframe with Bruce's function.
+
+# Function to add gap size as a continuous variable in units of mean dispersal distance
+#   (1 pot is 2x mean dispersal) to a data frame. 
+
+#The estimate of 1 pot = 2 x MDD is stil an estimate, but better than what we had before. 
+#updata again, when you calculate it more precisely out the mean dispersal distance of Ler
+# Argument must be a data frame with a column named "gap_size"
+# Relies on the fact that the levels of the variable (1, 2, 3, 4) correspond to gap sizes
+#   (0, 1, 2, 3) pots
+add_gapnumber <- function(x) {
+    x$gapnumber <- (as.numeric(x$gap_size) - 1) * 2
+    return(x)
+}
+
+maxd<-add_gapnumber(maxd)
+speeds<-add_gapnumber(speeds)
+
+####*********************************************************************************
+########HEIGHT DATA FROM GEN. 5
+gen5heights<-read.csv("2015_10_26_Exp1_Gen5_Height.csv", header=T)
+
+#a few more transformations and joining
+maxd_gen5<-subset(maxd, gen==5)
+maxd_gen5<-join(maxd_gen5, gen5heights, by=c("ID"),type="left",match="first")
+
+maxd_gen6<-subset(maxd, gen==6)
+#this might be dangerous (but I don't think I will be sorting the data)
+maxd_gen5$farseedT1<-maxd_gen6$farseed
+maxd_gen5$laspotT1<-maxd_gen6$lastpot
+maxd_gen5$distTravel<-maxd_gen5$farseedT1-maxd_gen5$farseed
+
+
+####*********************************************************************************
+###CAN YOU COMBINE SILIQUES AT FRONT IN PREV. GEN WITH DISTANCE IN NEXT GEN?
+##NOTE that you can only do this for treatments A and B
+
+#here are the siliques for each ID in the furthest pot where they were counted
+sil_ply<-ddply(allsil, .(ID,gen), summarise, 
+                lastpot_sil=max(pot, na.rm=T), 
+                lastsil= siliques[which.max(pot)])
+
+sil_tomerge<-join(sil_ply, maxd, by=c("ID","gen"),type="left",match="first")
+sil_tomerge<-sil_tomerge[,c(1:5)]
+
+#now we need a test if these are actually the furthest pot.
+#they don't match 16 times in total (these silique numbers now get NA)
+sil_tomerge$lastsil<-ifelse(sil_tomerge$lastpot_sil==0, sil_tomerge$lastsil, 
+              ifelse(sil_tomerge$lastpot_sil==sil_tomerge$lastpot,sil_tomerge$lastsil,NA))
+
+sil_tomerge<-sil_tomerge[,c(1,2,4)]
+sil_tomerge$gen<-sil_tomerge$gen+1
+
+#maxd<-join(maxd, sil_tomerge, by=c("ID","gen"),type="left",match="first")
+
+#but this is not quite what I want, because what I'd really like to know is how many cm did the invasion move between generations to run this analysis. It's not going to be that helpful to know what the very furthest seed is.
+
+maxdT0<-maxd
+names(maxdT0)<-sub("farseed","farseedT0",names(maxdT0))
+maxdT0$gen<-maxdT0$gen+1
+maxdT0<-maxdT0[,c(1,2,4)]
+
+distbygen<-merge(maxd,maxdT0, by=c("ID","gen"),all.x=T)
+distbygen$farseedT0<-ifelse(is.na(distbygen$farseedT0),0,distbygen$farseedT0)
+
+distbygen$cm_travel=distbygen$farseed-distbygen$farseedT0
+distbygen<-distbygen[,c(1,2,5,7,9,10,12)]
+
+#NOW, MERGE WITH SILIQUES! (now from the current generation)
+distbygen_sil<-join(sil_tomerge, distbygen, by=c("ID","gen"),type="left",match="first")
+```
+
+In the short run I can use the *ALL SEEDLING DATA* section to replace the data import part of `popLer.R`.
+
+## Data reboot
+I've revised `popLer.R` and `popRIL.R` in the `data` directory to use Jenn's cleaned up data. Note, however, that this loses generation 7 from both experiments. I have a query in to Jenn about this.

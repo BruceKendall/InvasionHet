@@ -1,22 +1,10 @@
 ### Creates the data objects popRIL and popRIL_cm, representing the RIL populations
 ###     experiments
 
-# Raw data consists of one file per generation
-# Final column is named inconsistently, so needs to be corrected before merge
-
-data_dir <- "~/Dropbox/Arabidopsis/Data/Exp2"
-data_fname <- list.files(data_dir, "EVONO&YES.xls")
-
-popRIL_cm <- NULL
-for (i in 1:length(data_fname)) {
-  tempdata <- xlsx::read.xlsx(file.path(data_dir, data_fname[i]), sheetIndex = 1, 
-                              colIndex = 1:9, header = TRUE)
-  names(tempdata)[9] <- "seedlings"
-  names(tempdata)[4] <- "Replicate"
-  popRIL_cm <- rbind(popRIL_cm, tempdata)
-  rm(tempdata)
-}
-
+# Get data from Jenn's cleaned up file
+data_dir <- "~/Dropbox/Arabidopsis/analysis"
+popRIL_cm <- read.csv(file.path(data_dir, '2016_03_04_seedlingsALL_corrected.csv'), 
+                      header = TRUE)
 # Clean up column names and get a useful order
 popRIL_cm <- popRIL_cm[-1]
 names(popRIL_cm) <- c("ID", "Treatment", "Replicate", "Gap", "Generation", "Pot", "Distance",
@@ -39,7 +27,7 @@ ord <- with(popRIL, order(Treatment, Gap, Rep, Generation, Pot))
 popRIL <- popRIL[ord,]
 
 # Clean up the workspace
-rm(data_dir, data_fname, i, ord)
+rm(data_dir, ord)
 
 # Auto-cache the data
 ProjectTemplate::cache("popRIL")
