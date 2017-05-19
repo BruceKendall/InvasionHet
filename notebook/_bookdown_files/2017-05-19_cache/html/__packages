@@ -1,0 +1,10 @@
+base
+datasets
+utils
+grDevices
+graphics
+stats
+ProjectTemplate
+dplyr
+ggplot2
+knitr

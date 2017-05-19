@@ -1,0 +1,34 @@
+# 19 May 2027
+```{r setup, echo=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+#######################################################################################
+# Note that the cache = FALSE is needed to prevent ProjectTemplate errors in the next 
+#   chunk. This is unfortunate as it slows build of the full notebook.
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = "..")
+```
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate)
+load.project()
+```
+
+## Evolution data: Gen 7 = no
+
+Jenn has this to say about generation 7 of the evolution experiment (email of 19 May):
+
+> Gen7 was the mystery one... it had tons of contaminants in the genetic data, seedlings went weird distances (strangely far and/or not at all), and that’s when Sara was really having a ton of trouble. We didn’t include Gen7 in the Science paper because of all these potential challenges with it (although did analyze it to make sure the results didn’t all just go away!). So I think also better to leave it out of your analyses.
