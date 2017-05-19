@@ -32,3 +32,119 @@ load.project()
 Jenn has this to say about generation 7 of the evolution experiment (email of 19 May):
 
 > Gen7 was the mystery one... it had tons of contaminants in the genetic data, seedlings went weird distances (strangely far and/or not at all), and that’s when Sara was really having a ton of trouble. We didn’t include Gen7 in the Science paper because of all these potential challenges with it (although did analyze it to make sure the results didn’t all just go away!). So I think also better to leave it out of your analyses.
+
+## Reboot Ler fecundity
+Need to check if the data have changed!
+
+### Generation 1 fecundity
+(Update of original analysis of 21 April 2017)
+
+```{r sdlgHist1}
+ggplot(Ler_seed_gen1, aes(x = eff_sd_no, fill = as.factor(Density))) + 
+  geom_histogram(binwidth = 50)
+```
+
+```{r sdlgTable1}
+kable(group_by(Ler_seed_gen1, Density) %>% 
+        summarise(Mean = mean(eff_sd_no), Variance = var(eff_sd_no)),
+      caption = paste("Mean and variance across pots of effective seed number",
+                      "in treatments B and C of Ler generation 1")
+      )
+```
+
+This is identical to the original analysis.
+
+### Time variation in fecundity
+This is the part of the 24 April analysis that looked at treatment B:
+```{r DDler}
+Ler3pBC <- filter(popLer, Gap == "3p", Treatment != "A")
+Ler3pBC <- group_by(Ler3pBC, Treatment, Pot, Rep) %>%
+  mutate(Adults = lag(Seedlings)) 
+Ler3pBC <- within(Ler3pBC,
+                  {
+                    Adults[Treatment == "B" & !is.na(Adults)] <- 1
+                    Adults[Pot == 0 & Generation == 1] <- 1
+                    Adults[Treatment == "C" & Pot == 0 & Generation == 1] <- 50
+                  })
+```
+```{r Btimeseries}
+filter(Ler3pBC, Treatment == "B") %>%
+  ggplot(aes(x = Gen, y = Seedlings)) + xlab("Generation") + geom_boxplot(notch = TRUE) 
+```
+
+By eye, this looks unchanged. Let's try a log scale:
+```{r BtimeseriesLog}
+filter(Ler3pBC, Treatment == "B") %>%
+  ggplot(aes(x = Gen, y = Seedlings)) + xlab("Generation") + geom_boxplot(notch = TRUE) +
+  scale_y_log10()
+```
+
+That looks to mostly skew things in the other direction. Perhaps a square root transform?
+```{r BtimeseriesSqrt}
+filter(Ler3pBC, Treatment == "B") %>%
+  ggplot(aes(x = Gen, y = Seedlings)) + xlab("Generation") + geom_boxplot(notch = TRUE) +
+  scale_y_sqrt()
+```
+
+That's nice. Now let's do a linear model:
+```{r BanovaSqrt}
+summary(lm(sqrt(Seedlings) ~ Gen, data = filter(Ler3pBC, Treatment == "B")))
+```
+
+It actually looks like it might be linear!
+```{r BlmSqrt}
+summary(lm(sqrt(Seedlings) ~ Generation, data = filter(Ler3pBC, Treatment == "B")))
+```
+
+This definitely seems like a more parsimonious model. However, it's not clear how we should interpret it! Certainly it doesn't accord with fluctuating effects of season or insect outbreaks. It could be that the team got better at inducing dispersal... one thing to look at would be to see whether there is a similar trend in the other landscapes, or a trend in the number of seeds jumping the gap.
+
+OK, back to the reboot:
+
+### Density dependent fecundity
+(also based on April 24)
+```{r LerDD_all}
+qplot(data=Ler3pBC, x = Adults, y = Seedlings/Adults, 
+      colour = Gen, log = "xy") + 
+  geom_smooth(method = "lm")
+```
+Generation 6 looks really different.
+
+It's a bit less pronounced if we leave out treatment B, but it's still there:
+```{r LerDD}
+qplot(data=filter(Ler3pBC, Treatment == "C"), x = Adults, y = Seedlings/Adults, 
+      colour = Gen, log = "xy") + 
+  geom_smooth(method = "lm")
+```
+
+Is it just Gen 6, or is there still a linear trend in the intercept?
+```{r LerDDmodels}
+m1 <- lm(log(Seedlings/Adults) ~ Adults + Gen, data = Ler3pBC)
+m2 <- lm(log(Seedlings/Adults) ~ Adults + Generation, data = Ler3pBC)
+AIC(m1)
+AIC(m2)
+summary(m1)
+anova(m1)
+summary(m2)
+```
+
+Here, if anything, it looks quadratic:
+```{r LerDDmodels3}
+m3 <- lm(log(Seedlings/Adults) ~ Adults + poly(Generation,2), data = Ler3pBC)
+AIC(m3)
+anova(m3)
+summary(m3)
+```
+
+Maybe. We can also try dropping Gen 6:
+```{r LerDDmodels5}
+m4 <- lm(log(Seedlings/Adults) ~ Adults + Gen, data = filter(Ler3pBC, Generation < 6))
+m5 <- lm(log(Seedlings/Adults) ~ Adults + poly(Generation, 2), 
+         data = filter(Ler3pBC, Generation < 6))
+AIC(m4)
+AIC(m5)
+summary(m4)
+anova(m4)
+summary(m5)
+anova(m5)
+```
+Yeah, that pretty much eliminates it all.
