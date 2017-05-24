@@ -238,3 +238,13 @@ For evolution NO, we have:
 
 Well, so what? This will require a bit of puzzling.
 
+One thing to notice: the per-generation variance in spread is, on average, higher in the evolution treatment across all landscapes. However, this translates to a higher variance in cumulative variance only in landscapes 1p and 3p (and I'm guessing the CI on 3p is large). 1p is the landscape with no significant autocorrelation in the evolution treatment. However, 3p has a large negative AC.
+
+## Modeling
+OK, here's the part I've been dreading: reconstructing the models from almost 2 years ago...
+
+Well, the first thing I found noodling around is some models of Ler DD fecundity in `LerSims`. But then I got distracted thinking about sources of stochasticity. First, we actually have estimates of demographic stochasticity in the RIL density experiments, as siliques are counted on multiple plants per pot. See `fecundity_variability`. I can't remember whether any of the silique counts in the populations actually account for them by individual---I suspect not.
+
+Second, there are two aspects of "environmental stochasticity." The first is location of the pot within the greenhouse, which could affect both temperature/light and exposure to pests. In this case, we would expect nearby pots to have similar residuals. We don't have a map of where pots were, but we do know that pots in the same runway were close to one another---thus we'd expect, within a given generation, less variability among pots in a runway than overall across all runways.
+
+However, another source is inconsistency in the watering treatment, which affects both the total number of seeds released per silique (effective fecundity) as well as the dispersal kernel (in addition to creating heterogeneous disperpersal, this will create extra variabiity in the number of seeds staying in the home pot, which is our measure of fecundity in many cases). This could easily vary from pot to pot within a runway.
