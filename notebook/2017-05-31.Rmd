@@ -1,0 +1,57 @@
+# 31 May 2027
+```{r setup, echo=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+#######################################################################################
+# Note that the cache = FALSE is needed to prevent ProjectTemplate errors in the next 
+#   chunk. This is unfortunate as it slows build of the full notebook.
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = "..")
+```
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate)
+load.project()
+```
+
+## Silique counts in the Ler population data
+I've loaded in the silique count data from ~Arabidopsis/analysis/*_siliques.csv. I'm not actually sure how "clean" these are; I had to add the gap treatments to generation zero, and in the process found one error in generation 1; I didn't look at the other generations.
+
+The script is in `data/popLer_sil.R` and the data frame is `popLer_sil`. 
+
+## Patterns of silique variation
+Let's look at silique production in treatment B as a function of replicate (here labeled "ID") and generation. If my speculations last week hold, then ID:Gen should be significant, but probably not the main effect of ID.
+
+In order to have enough replication to get at the interaction, I'll look only at the continuous runways and not at generation zero.
+
+```{r silique_aov}
+sil_data <- subset(popLer_sil, Treatment == "B" & Generation > 0 & Gap == "0p")
+summary(aov(Siliques ~ Gen * ID, data = sil_data)) 
+```
+So I'm not sure how to interpret the main effect of ID. Let's look at the coefficients of a regression to see.
+```{r silique_lm}
+summary(lm(Siliques ~ Gen * ID, data = sil_data)) 
+anova(lm(Siliques ~ Gen * ID, data = sil_data))
+```
+Oh, I see - aov still uses the default contrasts.
+```{r silique_aov2}
+## Set orthogonal contrasts.
+op <- options(contrasts = c("contr.helmert", "contr.poly"))
+summary(aov(Siliques ~ Gen * ID, data = sil_data)) 
+options(op)  # reset to previous
+```
+Nope, that didn't do it either.
+
