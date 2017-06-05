@@ -1,0 +1,102 @@
+# 5 June 2017
+```{r setup, echo=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+#######################################################################################
+# Note that the cache = FALSE is needed to prevent ProjectTemplate errors in the next 
+#   chunk. This is unfortunate as it slows build of the full notebook.
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = "..")
+```
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate)
+load.project()
+```
+
+## More on stochasticity in Ler seed production
+Some observations on stochasticity in Ler seed production:
+
+1. Seed number is uncorrelated with silique number, so the latter is not a useful measure
+2. Variability in seed production is hierarchically structured:
+    a. Among generations (reflecting, perhaps, season or other greenhouse-wide effects)
+    b. Among runways within a generation (reflecting, perhaps, spatial variation in greenhouse conditions; this is the best we can do without a map of runway locations)
+    c. Among pots within a runway (this remains to be parsed between differences among pots and differences among individuals)
+    
+Some things that I still need to do:
+
+1. Re-analyze treatment B using log(seedling number) as the response variable
+2. Re-run the DD model using random effects for generation and rep within generation
+3. Regress residuals on $1/N$; the intercept should give the amount of the among-pot variation that is due to "environmental stochasticity." However, maybe this should be residuals from a model of $\lambda$ rather than $\log \lambda$?
+
+
+Let's start by just adding treatment B into the density dependence analysis. In order to get a good sample size we'll use both landscapes 1p and 2p.
+```{r seed_lm}
+seed_data <- group_by(popLer, ID, Pot) %>%
+  mutate(Nm1 = 1 + (Treatment == "C") * (lag(Seedlings) - 1))
+#seed_data$Nm1 <- lag(popLer$Seedlings)
+seed_data <- subset(seed_data, 
+                    Treatment %in% c("B", "C") & Generation > 1 & Gap %in% c("1p", "2p"))
+seed_data$GenID <- with(seed_data, interaction(Gen, ID))
+seed_data$Nm1[is.na(seed_data$Nm1)] <- 1
+seed_data$ID <- as.factor(seed_data$ID) 
+DD.lm <- lm(log(Seedlings/Nm1) ~ log(Nm1) + Gen * ID, data = seed_data) 
+anova(DD.lm)
+summary(DD.lm)
+ggplot(aes(log(Nm1), log(Seedlings/Nm1), group = GenID, color = Gen), data = seed_data) +
+  geom_point() + geom_smooth(method = "lm", se = FALSE)
+```
+
+All right, now let's try with glm and quasi-poisson:
+```{r seed_glm}
+DD.glm <- glm(Seedlings ~ log(Nm1) + Gen * ID, data = seed_data, family = quasipoisson) 
+car::Anova(DD.glm) 
+summary(DD.glm)
+```
+
+
+Let's look at the residuals:
+```{r resid}
+seed_data$Fitted <- fitted(DD.glm)
+seed_data <- mutate(seed_data,
+                           resid2 = ((Seedlings/Nm1) - (Fitted/Nm1))^2)
+ggplot(aes(1/Nm1, resid2), data = seed_data) + geom_point() + scale_y_log10() + 
+  geom_smooth()
+summary(lm(resid2 ~ I(1/Nm1), data = seed_data))
+```
+
+The regression has an intercept of zero, suggesting that none of the among-pot variation is due to "environmental stochastisity." However, the log plot reveals a bunch of cases with a residual of zero; inspection of the dataset reveals that these are cases with only a single pot (i.e., singular values of GenID). I need to figure out how to drop those from the dataset before the analysis!
+
+```{r take2}
+GenID_counts <- table(seed_data$GenID)
+singletons <- rownames(GenID_counts)[GenID_counts == 1]
+seed_data <- droplevels(seed_data[-match(singletons, seed_data$GenID), ])
+DD.lm <- lm(log(Seedlings/Nm1) ~ log(Nm1) + Gen * ID, data = seed_data) 
+anova(DD.lm)
+summary(DD.lm)
+ggplot(aes(log(Nm1), log(Seedlings/Nm1), group = GenID, color = Gen), data = seed_data) +
+  geom_point() + geom_smooth(method = "lm", se = FALSE)
+DD.glm <- glm(Seedlings ~ log(Nm1) + Gen * ID, data = seed_data, family = quasipoisson) 
+car::Anova(DD.glm) 
+summary(DD.glm)
+seed_data$Fitted <- fitted(DD.glm)
+seed_data <- mutate(seed_data,
+                           resid2 = ((Seedlings/Nm1) - (Fitted/Nm1))^2)
+ggplot(aes(1/Nm1, resid2), data = seed_data) + geom_point() + scale_y_log10() + 
+  geom_smooth()
+summary(lm(resid2 ~ I(1/Nm1), data = seed_data))
+```
+This does the trick. We still have a zero intercept. There appears to be one singleton remaining. The construction of `seed_data` is now complex enough that it should be in a munge script. And I still need to work out how to do the random effects model!
