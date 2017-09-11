@@ -5,3 +5,5 @@
 cache/*.Rdata
 notebook/_book
 notebook/_main.rds
+notebook/_bookdown_files/*_cache/latex
+notebook/_bookdown_files/*_files/figure-latex
