@@ -14,7 +14,7 @@
 knitr::opts_chunk$set(comment = '', cache = TRUE)
 knitr::opts_knit$set(root.dir = "..")
 ```
-```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+```{r setup2, echo=FALSE, message=FALSE, cache=FALSE}
 #######################################################################################
 ### This chunk can be deleted from any entry that lacks R code                      ###
 ### Set cache=FALSE during the day if you are changing the project environment;     ###
@@ -72,7 +72,7 @@ disperseLer <- read.csv(file.path(data_dir, '2013_08_08_Exp1_Spray.csv'),
 disperseLer <- droplevels(subset(disperseLer, new_trt != "clipped", drop = TRUE))
 
 # Drop the columns with the (irrelevant) info about where the mom pots came from
-disperseLer <- disperseLer[, -c(1, 3:6)]
+disperseLer <- disperseLer[, -c(1:4, 6)]
 
 # Clean up column names 
 names(disperseLer) <- c("ID", "Pot", "Distance", "Seedlings", "Siliques", "Density",
@@ -88,3 +88,223 @@ rm(data_dir)
 ProjectTemplate::cache("disperseLer")
 ```
 
+## Summarizing Ler dispersal data
+Here is a file to summarize the data by replicate, in `lib/helpers.R`:
+```{r calc_dispersal_stats, eval=FALSE}
+calc_dispersal_stats <- function(dispersal_data) {
+  dispersal_stats <- group_by(dispersal_data, ID, Density, Siliques) %>%
+    summarise(
+      Total_seeds = sum(Seedlings),
+      Home_seeds = Seedlings[1],
+      Dispersing_seeds = Total_seeds - Home_seeds,
+      Dispersal_fraction = Dispersing_seeds / Total_seeds,
+      # Dispersal stats including all seeds
+      Mean_dispersal_all = sum(Seedlings * (Distance - 4)) / Total_seeds,
+      RMS_dispersal_all = sqrt(sum(Seedlings * (Distance - 4)^2) / Total_seeds),
+      # Dispersal stats including just dispersing seeds
+      Mean_dispersal = sum(Seedlings * (Distance - 4)) / Dispersing_seeds,
+      RMS_dispersal = sqrt(sum(Seedlings * (Distance - 4)^2) / Dispersing_seeds)
+    )
+  return (dispersal_stats)
+}
+```
+
+Let's look at how the total seed number, the fraction dispersing, and the dispersal distances scale with density:
+```{r disperse_density}
+Ler_dispersal_stats <- calc_dispersal_stats(disperseLer)
+qplot(Density, Total_seeds, data = Ler_dispersal_stats)
+qplot(Density, Dispersal_fraction, data = Ler_dispersal_stats)
+qplot(Density, Mean_dispersal_all, data = Ler_dispersal_stats)
+qplot(Density, Mean_dispersal, data = Ler_dispersal_stats)
+qplot(Density, RMS_dispersal_all, data = Ler_dispersal_stats)
+qplot(Density, RMS_dispersal, data = Ler_dispersal_stats)
+```
+
+Except for total seed number, there don't seem to be any patterns here. For the single plants, let's look at whether silique number (which might be correlated with plant size) can predict anything:
+```{r disperse_siliques}
+qplot(Siliques, Total_seeds, data = subset(Ler_dispersal_stats, !is.na(Siliques)))
+qplot(Siliques, Dispersal_fraction, data = subset(Ler_dispersal_stats, !is.na(Siliques)))
+qplot(Siliques, Mean_dispersal_all, data = subset(Ler_dispersal_stats, !is.na(Siliques)))
+qplot(Siliques, Mean_dispersal, data = subset(Ler_dispersal_stats, !is.na(Siliques)))
+qplot(Siliques, RMS_dispersal_all, data = subset(Ler_dispersal_stats, !is.na(Siliques)))
+qplot(Siliques, RMS_dispersal, data = subset(Ler_dispersal_stats, !is.na(Siliques)))
+```
+
+Again, no patterns. This makes modeling simpler!
+
+One more thing to look at: are the mean dispersal distances correlated with either the fraction dispersing or the number of dispersing seeds?
+
+```{r disperse_number}
+qplot(Dispersing_seeds, Mean_dispersal, data = Ler_dispersal_stats)
+qplot(Dispersing_seeds, RMS_dispersal, data = Ler_dispersal_stats)
+qplot(Dispersal_fraction, Mean_dispersal, data = Ler_dispersal_stats)
+qplot(Dispersal_fraction, RMS_dispersal, data = Ler_dispersal_stats)
+```
+Here we see a correlation with both. This could just be a sampling effect; once we fit kernel parameters we'll have to see if they have correlations as well. If so, that suggests that the same variables (such as canopy height and structure, and intensity of simulated rainfall) that affect whether seeds leave the home pot also affect how far they go.
+
+Here's a multiple regression just to tease out the two variables:
+```{r disperse_regression}
+summary(lm(Mean_dispersal ~ Dispersal_fraction + Dispersing_seeds, data = Ler_dispersal_stats))
+summary(lm(RMS_dispersal ~ Dispersal_fraction + Dispersing_seeds, data = Ler_dispersal_stats))
+```
+
+It appears that both are playing a role. But the dispersal fraction is a stronger predictor, which suggests that there is real mechanism here, and not just sampling getting further into the kernel.
+
+## Kernel fitting issues
+Our data are actually interval-censored, and we need to ensure that we are taking that into account. I believe that the likelihood functions I wrote previously take that into account, but they lack the rigor of fitdistrplus. Unfortunately, the data have another issue: the seeds in pot zero are a mixture of "non-dispersers" (i.e., seeds that fall straight down and aren't part of the kernel) and "short-distance dispersers" (seeds moving according to a dispersal kernel, but traveling less than 3 cm). To account for this either requires writing a zero-inflated distribution (which will require custom functions for everything) or telling the objective function to truncate the distribution. Again I believe that my prior functions do the latter, but I'm not truly confident of that. Unfortunately, there doesn't seem to be an obvious way to account this in fitdistrplus using out-of-the-box distributions. 
+
+Actually, I take that back---the issue of truncation is addressed in the FAQs. It does require writing new distribution functions, but they are pretty straightforward. Here is their example for a (doubly) truncated exponential distribution:
+```{r dtexp_example, eval=FALSE}
+dtexp <- function(x, rate, low, upp)
+{
+  PU <- pexp(upp, rate=rate)
+  PL <- pexp(low, rate=rate)
+  dexp(x, rate) / (PU-PL) * (x >= low) * (x <= upp) 
+}
+ptexp <- function(q, rate, low, upp)
+{
+  PU <- pexp(upp, rate=rate)
+  PL <- pexp(low, rate=rate)
+  (pexp(q, rate)-PL) / (PU-PL) * (q >= low) * (q <= upp) + 1 * (q > upp)
+}
+```
+
+## Looking at the dispersal patterns
+Let's start by just plotting the raw data. The first plot is just the empirical kernels; the second puts the vertical axis on a log scale (so exponential distributions should look linear and normal distributions should look quadratic) and the third puts both axes on a log scale (so lognormal distributions should look quadratic).
+```{r plot_all}
+ggplot(aes(x = Distance, y = Seedlings), data = subset(disperseLer, Distance > 4)) +
+  geom_line() + facet_wrap(~ID, scales = "free_y") 
+ggplot(aes(x = Distance, y = Seedlings), data = subset(disperseLer, Distance > 4)) +
+  geom_line() + facet_wrap(~ID, scales = "free_y") + scale_y_log10()
+ggplot(aes(x = Distance, y = Seedlings), data = subset(disperseLer, Distance > 4)) +
+  geom_line() + facet_wrap(~ID, scales = "free_y") + scale_y_log10() + scale_x_log10()
+```
+
+In many cases, it seems like a (truncated) normal distribution might be best! Rep 87_1 is going to be particularly problematic, as it is strongly sigmoid.
+
+## Trial fitting
+I'll start by selecting a single rep with a large number of seeds and a well-behaved distribution. Let's use 87_0.
+
+Pull out the data and convert into the format required by fitdistrplus:
+```{r makedata_87_0}
+data_87_0 <- subset(disperseLer, ID == "87_0" & Distance > 4)
+data_vec <- rep(data_87_0$Distance, data_87_0$Seedlings)
+cens_data_tble <- data.frame(left = data_vec - 4.5, right = data_vec - 3.5)
+```
+
+Now construct the distribution functions for a truncated normal. I code in the "standard" truncation level.
+```{r tnorm_funcs}
+dtnorm <- function(x, mean, sd, low = 3.5)
+{
+  PU <- 1
+  PL <- pnorm(low, mean = mean, sd = sd)
+  dnorm(x, mean, sd) / (PU-PL) * (x >= low) 
+}
+ptnorm <- function(q, mean, sd, low = 3.5)
+{
+  PU <- 1
+  PL <- pnorm(low, mean = mean, sd = sd)
+  (pnorm(q, mean, sd)-PL) / (PU-PL) * (q >= low)
+}
+```
+
+So now let's give it a try:
+```{r fit_trial}
+library(fitdistrplus)
+fit_tnorm <- fitdistcens(cens_data_tble, "tnorm", start = list(mean = 6, sd = 10))
+summary(fit_tnorm)
+cdfcompcens(fit_tnorm, Turnbull.confint = TRUE)
+```
+This looks like a pretty darn good fit!
+
+Interestingly, using the non-censored method gives almost identical parameter estimates and CDF:
+```{r fit_trial2}
+fit3<-fitdist(data_vec - 4, "tnorm", start = list(mean = 6, sd = 10))
+summary(fit3)
+cdfcomp(fit3)
+```
+
+Thus, we can use some of the other diagnostic plots for non-censored data:
+```{r fit_trial_plots}
+denscomp(fit3, breaks = 3:23+0.5, plotstyle = "ggplot", xlim = c(3, 24))
+# qqcomp(fit3) # This one requires defining a quantile function!
+ppcomp(fit3)
+```
+Unfortunately, we need additional work to get qqcomp working; and denscomp only gives a sensible looking histogram with tweaking (and even there, the bins are not centered appropriately, so the histogram is shifted).
+
+Here's a rough draft of a better figure:
+```{r alt_denscomp}
+xx = seq(3.3, max(fit3$data) + 0.7, 0.1)
+plot(xx, (dtnorm(xx, fit3$estimate[1], fit3$estimate[2])), type = "l", col="red")
+points(table(fit3$data)/length(fit3$data))
+```
+
+We can make analagous functions for the log normal distribution:
+```{r tlnorm_funcs}
+dtlnorm <- function(x, meanlog, sdlog, low = 3.5)
+{
+  PU <- 1
+  PL <- plnorm(low, meanlog = meanlog, sdlog = sdlog)
+  dlnorm(x, meanlog, sdlog) / (PU-PL) * (x >= low) 
+}
+ptlnorm <- function(q, meanlog, sdlog, low = 3.5)
+{
+  PU <- 1
+  PL <- plnorm(low, meanlog = meanlog, sdlog = sdlog)
+  (plnorm(q, meanlog, sdlog)-PL) / (PU-PL) * (q >= low)
+}
+```
+Now fit to the censored data and compare with our normal fit
+
+```{r fit_trial_lnorm}
+fit_tlnorm <- fitdistcens(cens_data_tble, "tlnorm", start = list(meanlog = log(6), sdlog = log(10)))
+summary(fit_tlnorm)
+cdfcompcens(list(fit_tnorm, fit_tlnorm), Turnbull.confint = TRUE, 
+            legendtext = c("truncated normal", "truncated lognormal"))
+```
+
+The CDF of the log-normal is not as good, and the AIC is about 24 units worse.
+
+## Fit all the replicates
+Start by writing a function that takes a single replicate's data and does the analysis
+```{r fitfunc}
+fit_dispersal_models <- function(dispersal_data) {
+  data_loc <- subset(dispersal_data, Distance > 4)
+  data_vec <- rep(data_loc$Distance, data_loc$Seedlings)
+  cens_data_tble <- data.frame(left = data_vec - 4.5, right = data_vec - 3.5)
+  fit_tnorm <- fitdistcens(cens_data_tble, "tnorm", start = list(mean = 6, sd = 10))
+  fit_tlnorm <- fitdistcens(cens_data_tble, "tlnorm", start = list(meanlog = log(6), sdlog = log(10)))
+  cdfcompcens(list(fit_tnorm, fit_tlnorm), Turnbull.confint = TRUE, main = dispersal_data$ID[1],
+              legendtext = c("truncated normal", "truncated lognormal"))
+  stnorm <- summary(fit_tnorm)
+  stlnorm <- summary(fit_tlnorm)
+  data.frame(ID = dispersal_data$ID[1], AICnorm = stnorm$aic, AIClnorm = stlnorm$aic, 
+             mu = stnorm$est[1], sd = stnorm$est[2],
+             mulog = stlnorm$est[1], sdlog = stlnorm$est[2])
+}
+```
+
+Test it out:
+```{r test1}
+fit_dispersal_models(subset(disperseLer, ID == "87_0"))  
+```
+
+```{r test2}
+ddply(subset(disperseLer, ID == "87_0" | ID == "128_1"), "ID",  
+  fit_dispersal_models)
+```
+
+Full run
+```{r fitall}
+all_Ler_fits <- ddply(disperseLer, "ID", fit_dispersal_models) 
+all_Ler_fits
+```
+
+Some AIC stats
+```{r AIC}
+sum(all_Ler_fits$AICnorm)
+sum(all_Ler_fits$AIClnorm)
+cbind(all_Ler_fits$ID, all_Ler_fits$AICnorm - all_Ler_fits$AIClnorm)
+```
+
+So there's variation among reps on which model fits better. In sum, the normal distribution is better. However, the parameter estimates are much more variable, in ways that really don't make sense biologically, unless there is directionally biased dispersal that varies from rep to rep.

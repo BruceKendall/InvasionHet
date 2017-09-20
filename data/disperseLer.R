@@ -9,7 +9,7 @@ disperseLer <- read.csv(file.path(data_dir, '2013_08_08_Exp1_Spray.csv'),
 disperseLer <- droplevels(subset(disperseLer, new_trt != "clipped", drop = TRUE))
 
 # Drop the columns with the (irrelevant) info about where the mom pots came from
-disperseLer <- disperseLer[, -c(1, 3:6)]
+disperseLer <- disperseLer[, -c(1:4, 6)]
 
 # Clean up column names 
 names(disperseLer) <- c("ID", "Pot", "Distance", "Seedlings", "Siliques", "Density",
