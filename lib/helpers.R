@@ -72,5 +72,7 @@ fit_dispersal_models <- function(dispersal_data, plot.it = TRUE) {
   stlnorm <- summary(fit_tlnorm)
   data.frame(ID = dispersal_data$ID[1], AICnorm = stnorm$aic, AIClnorm = stlnorm$aic, 
              mu = stnorm$est[1], sd = stnorm$est[2],
-             mulog = stlnorm$est[1], sdlog = stlnorm$est[2])
+             mulog = stlnorm$est[1], sdlog = stlnorm$est[2], 
+             se_mu = stnorm$sd[1], se_sd = stnorm$sd[2],
+             se_mulog = stlnorm$sd[1], se_sdlog = stlnorm$sd[2])
 }
