@@ -1,0 +1,12 @@
+base
+datasets
+utils
+grDevices
+graphics
+stats
+ProjectTemplate
+plyr
+dplyr
+ggplot2
+knitr
+bindrcpp
