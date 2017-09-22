@@ -56,14 +56,18 @@ ptlnorm <- function(q, meanlog, sdlog, low = 3.5)
 #   ID, Density, Siliques, Seedlings, Distance
 # All data in dispersal_data are used, so if only a single rep is to be analyzed, it
 #   should be subset outside this function
-fit_dispersal_models <- function(dispersal_data) {
+fit_dispersal_models <- function(dispersal_data, plot.it = TRUE) {
   data_loc <- subset(dispersal_data, Distance > 4)
   data_vec <- rep(data_loc$Distance, data_loc$Seedlings)
   cens_data_tble <- data.frame(left = data_vec - 4.5, right = data_vec - 3.5)
   fit_tnorm <- fitdistcens(cens_data_tble, "tnorm", start = list(mean = 6, sd = 10))
-  fit_tlnorm <- fitdistcens(cens_data_tble, "tlnorm", start = list(meanlog = log(6), sdlog = log(10)))
-  cdfcompcens(list(fit_tnorm, fit_tlnorm), Turnbull.confint = TRUE, main = dispersal_data$ID[1],
-              legendtext = c("truncated normal", "truncated lognormal"))
+  fit_tlnorm <- fitdistcens(cens_data_tble, "tlnorm", 
+                            start = list(meanlog = log(6), sdlog = log(10)))
+  if (plot.it) {
+    cdfcompcens(list(fit_tnorm, fit_tlnorm), Turnbull.confint = TRUE, 
+                main = dispersal_data$ID[1],
+                legendtext = c("truncated normal", "truncated lognormal"))
+  }
   stnorm <- summary(fit_tnorm)
   stlnorm <- summary(fit_tlnorm)
   data.frame(ID = dispersal_data$ID[1], AICnorm = stnorm$aic, AIClnorm = stlnorm$aic, 
