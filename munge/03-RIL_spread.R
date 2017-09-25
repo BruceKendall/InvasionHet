@@ -10,4 +10,4 @@ RIL_spread <- group_by(RIL_spread, Treatment, Gap, Rep) %>%
   mutate(speed =  Furthest - lag(Furthest, default = 0),
          speed_m1 = lag(speed))
 
-
+ProjectTemplate::cache("RIL_spread")

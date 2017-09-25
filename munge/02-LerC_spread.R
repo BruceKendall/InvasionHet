@@ -15,3 +15,4 @@ LerC_spread <- group_by(LerC_spread, Gap, Rep) %>%
 
 LerC_spread <- within(LerC_spread, speed[speed < 0] <- 0)
 LerC_spread <- within(LerC_spread, speed_m1[speed_m1 < 0] <- 0)
+ProjectTemplate::cache("LerC_spread")

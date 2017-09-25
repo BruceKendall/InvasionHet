@@ -2,7 +2,7 @@ version: 0.8
 data_loading: TRUE
 cache_loading: TRUE
 recursive_loading: FALSE
-munging: TRUE
+munging: FALSE
 logging: FALSE
 load_libraries: TRUE
 libraries: plyr, dplyr, ggplot2, knitr, fitdistrplus

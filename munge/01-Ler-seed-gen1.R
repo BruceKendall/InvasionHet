@@ -21,3 +21,4 @@ Ler_seed_gen1 <- group_by(Ler1BC, ID, Density) %>%
 
 # Clean up
 rm("Ler1BC")
+ProjectTemplate::cache("Ler_seed_gen1")
