@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Customizing blogdown - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Customizing blogdown - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">Customizing blogdown</h1>
+
+    
+    <span class="article-date">2017/09/30</span>
+    
+
+    <div class="article-content">
+      
+
+<p>I am now on my computer at home; after updating packages and rstudio, and installing <strong>blogdown</strong> and <strong>hugo</strong>, everything is running fine (although I still need to update my <code>~/.Rprofile</code>).</p>
+
+<h1 id="tags-and-categories">Tags and categories</h1>
+
+<p>Getting links to tags and categories was as simple as editing the menu section of <code>config.toml</code>; the one trick is to add <code>weight</code> variables to get the order I want (the default is alphabetical). Here is the relevant bit of code:</p>
+
+<pre><code>[[menu.main]]
+    name = &quot;About&quot;
+    url = &quot;/about/&quot;
+    weight = 1
+[[menu.main]]
+    name = &quot;Categories&quot;
+    url = &quot;/categories/&quot;
+    weight = 2
+[[menu.main]]
+    name = &quot;Tags&quot;
+    url = &quot;/tags/&quot;
+    weight = 3
+[[menu.main]]
+    name = &quot;GitHub&quot;
+    url = &quot;https://github.com/BruceKendall/InvasionHet&quot;
+    weight = 4
+</code></pre>
+
+<p>The one bit that is incomplete is that hugo is not building <code>index.html</code> files for the <code>categories</code> and <code>tags</code> directories.</p>
+
+<p>One thing to try is to explictly set the <code>taxonomies</code> section of the config file, although it should be using these values by default (see <a href="https://gohugo.io/getting-started/configuration/">https://gohugo.io/getting-started/configuration/</a>).</p>
+
+<p>Nope, that didn&rsquo;t do anything. Of note: the <code>index.xml</code> files <em>are</em> being updated; and the <code>index.html</code> files <em>within</em> each of the category and tag directories are being updated. I found a sample file at <a href="https://bwaycer.github.io/hugo_tutorial.hugo/templates/terms/">https://bwaycer.github.io/hugo_tutorial.hugo/templates/terms/</a>; I had to take out the <code>{{ .Site.LanguagePrefix }}</code> from the alphabetical example to get it to work. Now I have category and tag lists, although the formatting is inconsistent with the rest of template.</p>
+
+<p>The code in <code>terms.html</code> is:</p>
+
+<pre><code>{{ partial &quot;header.html&quot; . }}
+
+&lt;section id=&quot;main&quot;&gt;
+  &lt;div&gt;
+    &lt;h1 id=&quot;title&quot;&gt;{{ .Title }}&lt;/h1&gt;
+    &lt;ul&gt;
+    {{ $data := .Data }}
+    {{ range $key, $value := .Data.Terms.Alphabetical }}
+      &lt;li&gt;&lt;a href=&quot;/{{ $data.Plural }}/{{ $value.Name | urlize }}&quot;&gt;{{ $value.Name }}&lt;/a&gt; {{ $value.Count }}&lt;/li&gt;
+    {{ end }}
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+{{ partial &quot;footer.html&quot; . }}
+</code></pre>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

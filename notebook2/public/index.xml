@@ -6,10 +6,20 @@
     <description>Recent content on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 29 Sep 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 30 Sep 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Customizing blogdown</title>
+      <link>/2017/09/30/customizing-blogdown/</link>
+      <pubDate>Sat, 30 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/09/30/customizing-blogdown/</guid>
+      <description>I am now on my computer at home; after updating packages and rstudio, and installing blogdown and hugo, everything is running fine (although I still need to update my ~/.Rprofile).
+Tags and categories Getting links to tags and categories was as simple as editing the menu section of config.toml; the one trick is to add weight variables to get the order I want (the default is alphabetical). Here is the relevant bit of code:</description>
+    </item>
     
     <item>
       <title>Directional dispersal in Ler</title>
