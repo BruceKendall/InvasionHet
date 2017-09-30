@@ -1,0 +1,86 @@
+---
+title: Directional dispersal in Ler
+author: Bruce Kendall
+date: '2017-09-29'
+categories:
+  - Conceptual model evaluation
+tags:
+  - Ler
+  - dispersal
+slug: directional-dispersal-in-ler
+---
+
+```{r setup, echo=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+#######################################################################################
+# Note that the cache = FALSE is needed to prevent ProjectTemplate errors in the next 
+#   chunk. This is unfortunate as it slows build of the full notebook.
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = "../../..")
+```
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate)
+load.project()
+```
+
+The correlation between the fraction dispersing and the mean dispersal distance of the dispersers could be mean one of two things:  
+
+1. Simulated rain that makes more seeds go makes them go further in all directions
+2. Simulated rain that makes more seeds go is pushing them in the direction of the receiving runway
+
+This matters because in case 2, the dispersal kernel in the negative direction will, presumably, have its absolute mean *reduced*.
+
+If case 2 is true, then replicates with low mean dispersal fraction and mean dispersal distance should have "lost" proportionally more seeds to the backward direction (which weren't counted). Thus, we would expect that replicates with positive residuals around the density-dependent seed production function should have higher-than-average dispersal fractions (and the converse).
+
+First, lets look at density-dependence in the dispersal data:
+```{r LerDD}
+ggplot(aes(y = Total_seeds/Density, x = Density, colour = Dispersal_fraction),
+      data = Ler_dispersal_stats) +
+  geom_smooth(method = "lm") + geom_point() + scale_x_log10() + scale_y_log10()
+```
+
+There is certainly no obvious pattern there. Let's look at a linear model:
+```{r LerDD2}
+summary(lm(log(Total_seeds / Density) ~ log(Density) + Dispersal_fraction, 
+           data = Ler_dispersal_stats))
+```
+
+So there is a weak effect in the direction of case 2. Let's try the mean dispersal distance instead:
+```{r LerDD3}
+summary(lm(log(Total_seeds / Density) ~ log(Density) + mulog, 
+           data = Ler_dispersal_stats))
+```
+Oh wow, that's a strong effect! Look at a plot:
+```{r LerDD4}
+ggplot(aes(y = Total_seeds/Density, x = Density, colour = mulog),
+      data = Ler_dispersal_stats) + scale_color_distiller(palette = "YlOrRd") + 
+  geom_smooth(method = "lm") + geom_point() + scale_x_log10() + scale_y_log10()
+```
+
+The plot is not hugely convincing to me though. And what we really want is the score on the principal axis:
+```{r LerDD5}
+Ler_dispersal_stats$PCA1 <- princomp(~ Dispersal_fraction + mulog, 
+                                     data = Ler_dispersal_stats)$scores[,1]
+ggplot(aes(y = Total_seeds/Density, x = Density, colour = PCA1),
+      data = Ler_dispersal_stats) + scale_color_distiller(palette = "YlOrRd") + 
+  geom_smooth(method = "lm") + geom_point() + scale_x_log10() + scale_y_log10()
+summary(lm(log(Total_seeds / Density) ~ log(Density) + PCA1, 
+           data = Ler_dispersal_stats))
+```
+
+Yeah, I dunno. It sure looks like there's a lot of noise, and it doesn't improve the $R^2$ much. Furthermore, the backward dispersal is unlikely to be all that important (a robust sensitivity check would be to set it to zero!). So I'm inclined to ignore it.

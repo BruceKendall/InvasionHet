@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Directional dispersal in Ler - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Directional dispersal in Ler - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">Directional dispersal in Ler</h1>
+
+    
+    <span class="article-date">2017/09/29</span>
+    
+
+    <div class="article-content">
+      <p>The correlation between the fraction dispersing and the mean dispersal distance of the dispersers could be mean one of two things:</p>
+<ol style="list-style-type: decimal">
+<li>Simulated rain that makes more seeds go makes them go further in all directions</li>
+<li>Simulated rain that makes more seeds go is pushing them in the direction of the receiving runway</li>
+</ol>
+<p>This matters because in case 2, the dispersal kernel in the negative direction will, presumably, have its absolute mean <em>reduced</em>.</p>
+<p>If case 2 is true, then replicates with low mean dispersal fraction and mean dispersal distance should have “lost” proportionally more seeds to the backward direction (which weren’t counted). Thus, we would expect that replicates with positive residuals around the density-dependent seed production function should have higher-than-average dispersal fractions (and the converse).</p>
+<p>First, lets look at density-dependence in the dispersal data:</p>
+<pre class="r"><code>ggplot(aes(y = Total_seeds/Density, x = Density, colour = Dispersal_fraction),
+      data = Ler_dispersal_stats) +
+  geom_smooth(method = &quot;lm&quot;) + geom_point() + scale_x_log10() + scale_y_log10()</code></pre>
+<p><img src="/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD-1.png" width="672" /></p>
+<p>There is certainly no obvious pattern there. Let’s look at a linear model:</p>
+<pre class="r"><code>summary(lm(log(Total_seeds / Density) ~ log(Density) + Dispersal_fraction, 
+           data = Ler_dispersal_stats))</code></pre>
+<pre><code>
+Call:
+lm(formula = log(Total_seeds/Density) ~ log(Density) + Dispersal_fraction, 
+    data = Ler_dispersal_stats)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.77595 -0.27330  0.07538  0.37723  1.10417 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)         5.02941    0.32197  15.621   &lt;2e-16 ***
+log(Density)       -0.71999    0.04811 -14.965   &lt;2e-16 ***
+Dispersal_fraction  0.96664    0.55644   1.737   0.0911 .  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.6433 on 35 degrees of freedom
+Multiple R-squared:  0.8774,    Adjusted R-squared:  0.8704 
+F-statistic: 125.3 on 2 and 35 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>So there is a weak effect in the direction of case 2. Let’s try the mean dispersal distance instead:</p>
+<pre class="r"><code>summary(lm(log(Total_seeds / Density) ~ log(Density) + mulog, 
+           data = Ler_dispersal_stats))</code></pre>
+<pre><code>
+Call:
+lm(formula = log(Total_seeds/Density) ~ log(Density) + mulog, 
+    data = Ler_dispersal_stats)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.56341 -0.34943  0.03147  0.39377  1.05593 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   2.67123    0.80143   3.333 0.002038 ** 
+log(Density) -0.71075    0.04251 -16.719  &lt; 2e-16 ***
+mulog         1.49835    0.41713   3.592 0.000998 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.5731 on 35 degrees of freedom
+Multiple R-squared:  0.9027,    Adjusted R-squared:  0.8972 
+F-statistic: 162.4 on 2 and 35 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Oh wow, that’s a strong effect! Look at a plot:</p>
+<pre class="r"><code>ggplot(aes(y = Total_seeds/Density, x = Density, colour = mulog),
+      data = Ler_dispersal_stats) + scale_color_distiller(palette = &quot;YlOrRd&quot;) + 
+  geom_smooth(method = &quot;lm&quot;) + geom_point() + scale_x_log10() + scale_y_log10()</code></pre>
+<p><img src="/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD4-1.png" width="672" /></p>
+<p>The plot is not hugely convincing to me though. And what we really want is the score on the principal axis:</p>
+<pre class="r"><code>Ler_dispersal_stats$PCA1 &lt;- princomp(~ Dispersal_fraction + mulog, 
+                                     data = Ler_dispersal_stats)$scores[,1]
+ggplot(aes(y = Total_seeds/Density, x = Density, colour = PCA1),
+      data = Ler_dispersal_stats) + scale_color_distiller(palette = &quot;YlOrRd&quot;) + 
+  geom_smooth(method = &quot;lm&quot;) + geom_point() + scale_x_log10() + scale_y_log10()</code></pre>
+<p><img src="/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD5-1.png" width="672" /></p>
+<pre class="r"><code>summary(lm(log(Total_seeds / Density) ~ log(Density) + PCA1, 
+           data = Ler_dispersal_stats))</code></pre>
+<pre><code>
+Call:
+lm(formula = log(Total_seeds/Density) ~ log(Density) + PCA1, 
+    data = Ler_dispersal_stats)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.68288 -0.36527  0.04046  0.35219  1.15619 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   5.38924    0.16948  31.799  &lt; 2e-16 ***
+log(Density) -0.70679    0.04391 -16.095  &lt; 2e-16 ***
+PCA1          1.20744    0.37008   3.263  0.00247 ** 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.5871 on 35 degrees of freedom
+Multiple R-squared:  0.8979,    Adjusted R-squared:  0.8921 
+F-statistic: 153.9 on 2 and 35 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Yeah, I dunno. It sure looks like there’s a lot of noise, and it doesn’t improve the <span class="math inline">\(R^2\)</span> much. Furthermore, the backward dispersal is unlikely to be all that important (a robust sensitivity check would be to set it to zero!). So I’m inclined to ignore it.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
