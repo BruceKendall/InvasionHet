@@ -2,29 +2,29 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Project notebook for the Invasion Heterogeneity project</title>
-    <link>/categories/</link>
+    <link>https://brucekendall.github.io/InvasionHet/categories/</link>
     <description>Recent content in Categories on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
-	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://brucekendall.github.io/InvasionHet/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Conceptual Model Evaluation</title>
-      <link>/categories/conceptual-model-evaluation/</link>
+      <link>https://brucekendall.github.io/InvasionHet/categories/conceptual-model-evaluation/</link>
       <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/categories/conceptual-model-evaluation/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/categories/conceptual-model-evaluation/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Housekeeping</title>
-      <link>/categories/housekeeping/</link>
+      <link>https://brucekendall.github.io/InvasionHet/categories/housekeeping/</link>
       <pubDate>Sat, 30 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/categories/housekeeping/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/categories/housekeeping/</guid>
       <description></description>
     </item>
     

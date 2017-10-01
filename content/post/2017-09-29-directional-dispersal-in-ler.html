@@ -23,7 +23,7 @@ slug: directional-dispersal-in-ler
 <pre class="r"><code>ggplot(aes(y = Total_seeds/Density, x = Density, colour = Dispersal_fraction),
       data = Ler_dispersal_stats) +
   geom_smooth(method = &quot;lm&quot;) + geom_point() + scale_x_log10() + scale_y_log10()</code></pre>
-<p><img src="/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD-1.png" width="672" /></p>
+<p><img src="/InvasionHet/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD-1.png" width="672" /></p>
 <p>There is certainly no obvious pattern there. Let’s look at a linear model:</p>
 <pre class="r"><code>summary(lm(log(Total_seeds / Density) ~ log(Density) + Dispersal_fraction, 
            data = Ler_dispersal_stats))</code></pre>
@@ -74,14 +74,14 @@ F-statistic: 162.4 on 2 and 35 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code>ggplot(aes(y = Total_seeds/Density, x = Density, colour = mulog),
       data = Ler_dispersal_stats) + scale_color_distiller(palette = &quot;YlOrRd&quot;) + 
   geom_smooth(method = &quot;lm&quot;) + geom_point() + scale_x_log10() + scale_y_log10()</code></pre>
-<p><img src="/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD4-1.png" width="672" /></p>
+<p><img src="/InvasionHet/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD4-1.png" width="672" /></p>
 <p>The plot is not hugely convincing to me though. And what we really want is the score on the principal axis:</p>
 <pre class="r"><code>Ler_dispersal_stats$PCA1 &lt;- princomp(~ Dispersal_fraction + mulog, 
                                      data = Ler_dispersal_stats)$scores[,1]
 ggplot(aes(y = Total_seeds/Density, x = Density, colour = PCA1),
       data = Ler_dispersal_stats) + scale_color_distiller(palette = &quot;YlOrRd&quot;) + 
   geom_smooth(method = &quot;lm&quot;) + geom_point() + scale_x_log10() + scale_y_log10()</code></pre>
-<p><img src="/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD5-1.png" width="672" /></p>
+<p><img src="/InvasionHet/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD5-1.png" width="672" /></p>
 <pre class="r"><code>summary(lm(log(Total_seeds / Density) ~ log(Density) + PCA1, 
            data = Ler_dispersal_stats)) </code></pre>
 <pre><code>

@@ -1,4 +1,4 @@
-baseurl = "/"
+baseurl = "https://brucekendall.github.io/InvasionHet/"
 languageCode = "en-us"
 title = "Project notebook for the Invasion Heterogeneity project"
 theme = "hugo-lithium-theme"

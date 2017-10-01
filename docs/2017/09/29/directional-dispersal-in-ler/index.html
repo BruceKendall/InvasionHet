@@ -24,8 +24,8 @@
 
 
 
-<link rel="stylesheet" href="/css/fonts.css" media="all">
-<link rel="stylesheet" href="/css/main.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
 
 
 
@@ -34,8 +34,8 @@
     <div class="wrapper">
       <header class="header">
         <nav class="nav">
-  <a href="/" class="nav-logo">
-    <img src="/images/Runway.png"
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
          width="50"
          height="50"
          alt="Logo">
@@ -43,11 +43,11 @@
 
   <ul class="nav-links">
     
-    <li><a href="/about/">About</a></li>
+    <li><a href="/InvasionHet/about/">About</a></li>
     
-    <li><a href="/categories/">Categories</a></li>
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
     
-    <li><a href="/tags/">Tags</a></li>
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
     
     <li><a href="https://github.com/BruceKendall/InvasionHet">GitHub</a></li>
     
@@ -82,7 +82,7 @@
 <pre class="r"><code>ggplot(aes(y = Total_seeds/Density, x = Density, colour = Dispersal_fraction),
       data = Ler_dispersal_stats) +
   geom_smooth(method = &quot;lm&quot;) + geom_point() + scale_x_log10() + scale_y_log10()</code></pre>
-<p><img src="/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD-1.png" width="672" /></p>
+<p><img src="/InvasionHet/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD-1.png" width="672" /></p>
 <p>There is certainly no obvious pattern there. Let’s look at a linear model:</p>
 <pre class="r"><code>summary(lm(log(Total_seeds / Density) ~ log(Density) + Dispersal_fraction, 
            data = Ler_dispersal_stats))</code></pre>
@@ -133,14 +133,14 @@ F-statistic: 162.4 on 2 and 35 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code>ggplot(aes(y = Total_seeds/Density, x = Density, colour = mulog),
       data = Ler_dispersal_stats) + scale_color_distiller(palette = &quot;YlOrRd&quot;) + 
   geom_smooth(method = &quot;lm&quot;) + geom_point() + scale_x_log10() + scale_y_log10()</code></pre>
-<p><img src="/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD4-1.png" width="672" /></p>
+<p><img src="/InvasionHet/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD4-1.png" width="672" /></p>
 <p>The plot is not hugely convincing to me though. And what we really want is the score on the principal axis:</p>
 <pre class="r"><code>Ler_dispersal_stats$PCA1 &lt;- princomp(~ Dispersal_fraction + mulog, 
                                      data = Ler_dispersal_stats)$scores[,1]
 ggplot(aes(y = Total_seeds/Density, x = Density, colour = PCA1),
       data = Ler_dispersal_stats) + scale_color_distiller(palette = &quot;YlOrRd&quot;) + 
   geom_smooth(method = &quot;lm&quot;) + geom_point() + scale_x_log10() + scale_y_log10()</code></pre>
-<p><img src="/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD5-1.png" width="672" /></p>
+<p><img src="/InvasionHet/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD5-1.png" width="672" /></p>
 <pre class="r"><code>summary(lm(log(Total_seeds / Density) ~ log(Density) + PCA1, 
            data = Ler_dispersal_stats)) </code></pre>
 <pre><code>
@@ -176,10 +176,10 @@ F-statistic: 153.9 on 2 and 35 DF,  p-value: &lt; 2.2e-16</code></pre>
       <footer class="footer">
         <ul class="footer-links">
           <li>
-            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
           </li>
           <li>
-            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" width="22" height="22"></a>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
           </li>
         </ul>
       </footer>
@@ -200,7 +200,7 @@ F-statistic: 153.9 on 2 and 35 DF,  p-value: &lt; 2.2e-16</code></pre>
 
 
     
-<script src="/js/math-code.js"></script>
+<script src="/InvasionHet/js/math-code.js"></script>
 <script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 
