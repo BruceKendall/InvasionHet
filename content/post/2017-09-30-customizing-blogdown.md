@@ -99,5 +99,5 @@ I confirm that this works for the local build.
 
 I set `publishDir = "docs/"` in `config.toml`. This sends the local build there, which is perhaps not what I want.
 
-When I pushed this, and activated the website feature on github, I did have a home page at https://brucekendall.github.io/InvasionHet/. But it didn't have any styling, and the links didn't work. I've now changed the `baseurl` in `config.toml` to point to this site. Let's see how that works...
+When I pushed this, and activated the website feature on github, I did have a home page at https://brucekendall.github.io/InvasionHet/. But it didn't have any styling, and the links didn't work. I've now changed the `baseurl` in `config.toml` to point to this site. Let's see how that works... It didn't, but I left the trailing slash off. Let's add that and try...
 

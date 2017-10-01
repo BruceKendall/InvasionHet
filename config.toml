@@ -24,7 +24,7 @@ publishDir = "docs/"
     weight = 3
 [[menu.main]]
     name = "GitHub"
-    url = "https://github.com/BruceKendall/InvasionHet"
+    url = "https://github.com/BruceKendall/InvasionHet/"
     weight = 4
 
 [taxonomies]
