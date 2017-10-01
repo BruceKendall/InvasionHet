@@ -101,5 +101,12 @@ I set `publishDir = "docs/"` in `config.toml`. This sends the local build there,
 
 When I pushed this, and activated the website feature on github, I did have a home page at https://brucekendall.github.io/InvasionHet/. But it didn't have any styling, and the links didn't work. I've now changed the `baseurl` in `config.toml` to point to this site. Let's see how that works... It didn't, but I left the trailing slash off. Let's add that and try...
 
-Success! But the runway image got lost in the transition, I just moved that from `public` to `docs`.
+Success! But the runway image got lost in the transition, I just moved that from `public` to `docs`. All is now good.
+
+# More tweaks
+I adjusted the line width in `main.css`, and borrowed material from `lists.html` to make `terms.html` look more like the rest of the theme. I think that's good enough on the look and feel. 
+
+I also figured out that setting `weight: 1` in the yaml header of a post will push it below unweighted posts with the same date. (This was to get the ordering right from yesterday).
+
+I do still need to write an "about" page (and for that matter a project readme), and make a pre-dated post that links to the bookdown version of the previous notebook (converting the individual posts would be more work than is warranted).
 

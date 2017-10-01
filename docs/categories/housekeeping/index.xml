@@ -2,34 +2,34 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Housekeeping on Project notebook for the Invasion Heterogeneity project</title>
-    <link>https://brucekendall.github.io/InvasionHet/categories/housekeeping/</link>
+    <link>/InvasionHet/categories/housekeeping/</link>
     <description>Recent content in Housekeeping on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 30 Sep 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 29 Sep 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://brucekendall.github.io/InvasionHet/categories/housekeeping/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/InvasionHet/categories/housekeeping/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Customizing blogdown</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</link>
-      <pubDate>Sat, 30 Sep 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</guid>
-      <description>I am now on my computer at home; after updating packages and rstudio, and installing blogdown and hugo, everything is running fine (although I still need to update my ~/.Rprofile).
-Tags and categories Getting links to tags and categories was as simple as editing the menu section of config.toml; the one trick is to add weight variables to get the order I want (the default is alphabetical). Here is the relevant bit of code:</description>
-    </item>
     
     <item>
       <title>Trying out BlogDown</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/29/trying-out-blogdown/</link>
+      <link>/InvasionHet/2017/09/29/trying-out-blogdown/</link>
       <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/29/trying-out-blogdown/</guid>
+      <guid>/InvasionHet/2017/09/29/trying-out-blogdown/</guid>
       <description>I&amp;rsquo;m trying out blogdown (https://bookdown.org/yihui/blogdown/) for serving up the project notebook. Advantages:
  Rebuilds only update changed files Dialog box for creating new posts Automatically shows posts in date order, presumably even if they&amp;rsquo;ve been edited Might be possible to automate serving it up on the github page, so Jenn can just look at it in a web browser  (Potential) Disadvantages:
  Whole new file structure to figure out (in particular, I may have to modify the knitr option for setting the working directory, which was based on a relative path) Presumably I can set up the post creation script to include my ProjectTemplate preamble, but that will take work/trial and error I will have to figure out how caching works with this.</description>
+    </item>
+    
+    <item>
+      <title>Customizing blogdown</title>
+      <link>/InvasionHet/2017/09/30/customizing-blogdown/</link>
+      <pubDate>Sat, 30 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2017/09/30/customizing-blogdown/</guid>
+      <description>I am now on my computer at home; after updating packages and rstudio, and installing blogdown and hugo, everything is running fine (although I still need to update my ~/.Rprofile).
+Tags and categories Getting links to tags and categories was as simple as editing the menu section of config.toml; the one trick is to add weight variables to get the order I want (the default is alphabetical). Here is the relevant bit of code:</description>
     </item>
     
   </channel>

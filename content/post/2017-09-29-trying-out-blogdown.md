@@ -2,10 +2,12 @@
 title: Trying out BlogDown
 author: Bruce
 date: '2017-09-29'
-slug: trying-out-blogdown
+weight: 1
 categories:
   - Housekeeping
-tags: []
+tags:
+  - blogdown
+slug: trying-out-blogdown
 ---
 
 I'm trying out blogdown (https://bookdown.org/yihui/blogdown/) for serving up the project notebook. Advantages:

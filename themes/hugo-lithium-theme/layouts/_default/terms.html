@@ -1,14 +1,16 @@
 {{ partial "header.html" . }}
 
-<section id="main">
+<main class="content" role="main">
   <div>
     <h1 id="title">{{ .Title }}</h1>
     <ul>
     {{ $data := .Data }}
     {{ range $key, $value := .Data.Terms.Alphabetical }}
-      <li><a href="/{{ $data.Plural }}/{{ $value.Name | urlize }}">{{ $value.Name }}</a> {{ $value.Count }}</li>
+    <article class="archive-item">
+      <a href="/{{ $data.Plural }}/{{ $value.Name | urlize }}">{{ $value.Name }}</a> {{ $value.Count }}
+    </article>
     {{ end }}
     </ul>
   </div>
-</section>
+</main>
 {{ partial "footer.html" . }}
