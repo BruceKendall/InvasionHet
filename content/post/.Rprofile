@@ -13,4 +13,4 @@ knitr::opts_chunk$set(comment = '', cache = TRUE)
 knitr::opts_knit$set(root.dir = project_root)
 
 # Clean up
-rm(project_root, local_dir)
+rm(project_root)
