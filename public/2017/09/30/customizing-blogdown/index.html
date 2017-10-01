@@ -61,7 +61,7 @@
 
   <article class="article">
     
-    <span class="article-duration">3 min read</span>
+    <span class="article-duration">4 min read</span>
     
 
     <h1 class="article-title">Customizing blogdown</h1>
@@ -153,6 +153,18 @@ rm(project_root, local_dir)
 </code></pre>
 
 <p>However, I still need to start each Rmarkdown file with <code>ProjectTemplate::load.project()</code>.</p>
+
+<h1 id="setting-up-to-use-the-blogdown-notebook-as-a-project-webpage">Setting up to use the blogdown notebook as a project webpage</h1>
+
+<p>We can serve up the notebook as a githob project webpage if the html is published to the <code>/docs/</code> directory of the project. The easiest way to do this will be to move the <strong>blogdown</strong> directories to the top level of the project, and set Hugo to publish to <code>/docs/</code> instead of <code>/public/</code>. We may also want the local (preview) version of the html to go somewhere that is not under version control, to avoid delays with Rstudio&rsquo;s version control (although at the moment I can&rsquo;t find the place where I read that tip).</p>
+
+<p>One benefit is that I can then launch the webserver without changing directory first.</p>
+
+<p>So the first step is to move all the contents of <code>/notebook2/</code> to the root directory &hellip;. Done.</p>
+
+<p>Then I need to reduce the upward movement in the local <code>.Rprofile</code> by one level &hellip; Done.</p>
+
+<p>I confirm that this works for the local build.</p>
 
     </div>
   </article>

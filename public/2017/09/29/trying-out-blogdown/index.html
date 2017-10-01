@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Trying out BlogDown - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Trying out BlogDown - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">Trying out BlogDown</h1>
+
+    
+    <span class="article-date">2017/09/29</span>
+    
+
+    <div class="article-content">
+      
+
+<p>I&rsquo;m trying out blogdown (<a href="https://bookdown.org/yihui/blogdown/">https://bookdown.org/yihui/blogdown/</a>) for serving up the project notebook. Advantages:</p>
+
+<ul>
+<li>Rebuilds only update changed files</li>
+<li>Dialog box for creating new posts</li>
+<li>Automatically shows posts in date order, presumably even if they&rsquo;ve been edited</li>
+<li><em>Might</em> be possible to automate serving it up on the github page, so Jenn can just look at it in a web browser</li>
+</ul>
+
+<p>(Potential) Disadvantages:</p>
+
+<ul>
+<li>Whole new file structure to figure out (in particular, I may have to modify the knitr option for setting the working directory, which was based on a relative path)</li>
+<li>Presumably I can set up the post creation script to include my ProjectTemplate preamble, but that will take work/trial and error</li>
+<li>I will have to figure out how caching works with this.</li>
+<li>Out of the box, doesn&rsquo;t seem to have any way to do universal search (like bookdown has) or easy way to complile all the pages to pdf</li>
+<li>The default theme doesn&rsquo;t inlude any links to allow filtering by categories from within the website (however, there is a <code>find_tags()</code> and similar functions within the package)</li>
+<li>The index file is rebuilt every time, which might get slow as the number of posts gets large (unless there&rsquo;s a way to have static archives)</li>
+</ul>
+
+<h1 id="installation">Installation</h1>
+
+<p>After installing the <strong>blogdown</strong> package from CRAN, I:</p>
+
+<ul>
+<li>Installed Hugo using <code>blogdown::install_hugo()</code></li>
+<li>Created a new site using <code>blogdown::new_site()</code></li>
+<li>Deleted the preexisting posts (after looking at them) from the <code>content/</code> subdirectory</li>
+<li>In <code>config.toml</code>:
+
+<ul>
+<li>Changed the title (although this doesn&rsquo;t appear anywhere in the server window)</li>
+<li>Switched the GitHub link to the InvasionHet page</li>
+<li>Got rid of the Twitter link</li>
+<li>Stole a runway picture from one of Jenn&rsquo;s talks, putting it in <code>public/images/Runway.png</code>, and set it as the icon</li>
+</ul></li>
+<li>In my first file with the ProjectTemplate header, I found that the <code>root.dir</code> has to be set to <code>../../..</code> (knitr is running from within the <code>content/posts/</code> directory)<br /></li>
+</ul>
+
+<h1 id="issues">Issues</h1>
+
+<ul>
+<li>There is a mismatch between line length used by knitr to output data and the page width in the html file (which is actually rather narrow, given the font size). I think the solution is to make the html with larger, somehow.</li>
+</ul>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+    
+
+    
+  </body>
+</html>
+

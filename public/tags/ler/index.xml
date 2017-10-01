@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ler on Project notebook for the Invasion Heterogeneity project</title>
+    <link>/tags/ler/</link>
+    <description>Recent content in Ler on Project notebook for the Invasion Heterogeneity project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 29 Sep 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/ler/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Directional dispersal in Ler</title>
+      <link>/2017/09/29/directional-dispersal-in-ler/</link>
+      <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/09/29/directional-dispersal-in-ler/</guid>
+      <description>The correlation between the fraction dispersing and the mean dispersal distance of the dispersers could be mean one of two things:
+Simulated rain that makes more seeds go makes them go further in all directions Simulated rain that makes more seeds go is pushing them in the direction of the receiving runway  This matters because in case 2, the dispersal kernel in the negative direction will, presumably, have its absolute mean reduced.</description>
+    </item>
+    
+  </channel>
+</rss>

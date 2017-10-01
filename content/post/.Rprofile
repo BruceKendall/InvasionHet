@@ -8,7 +8,7 @@ if (file.exists("~/.Rprofile")) {
 #     future; but it means that all chunks should be labeled for reliable behavior. 
 #     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
 #   - R code will run in the project root directory
-project_root <- normalizePath("../../..")
+project_root <- normalizePath("../..")
 knitr::opts_chunk$set(comment = '', cache = TRUE)
 knitr::opts_knit$set(root.dir = project_root)
 

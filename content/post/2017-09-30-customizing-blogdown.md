@@ -85,3 +85,17 @@ knitr::opts_knit$set(root.dir = project_root)
 rm(project_root, local_dir)
 ```
 However, I still need to start each Rmarkdown file with `ProjectTemplate::load.project()`.
+
+# Setting up to use the blogdown notebook as a project webpage
+We can serve up the notebook as a githob project webpage if the html is published to the `/docs/` directory of the project. The easiest way to do this will be to move the **blogdown** directories to the top level of the project, and set Hugo to publish to `/docs/` instead of `/public/`. We may also want the local (preview) version of the html to go somewhere that is not under version control, to avoid delays with Rstudio's version control (although at the moment I can't find the place where I read that tip).
+
+One benefit is that I can then launch the webserver without changing directory first.
+
+So the first step is to move all the contents of `/notebook2/` to the root directory .... Done.
+
+Then I need to reduce the upward movement in the local `.Rprofile` by one level ... Done.
+
+I confirm that this works for the local build.
+
+I set `publishDir = "docs/"` in `config.toml`. This sends the local build there, which is perhaps not what I want.
+
