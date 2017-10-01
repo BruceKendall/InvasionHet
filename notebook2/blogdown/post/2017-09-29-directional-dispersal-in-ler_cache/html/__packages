@@ -7,3 +7,4 @@ knitr
 MASS
 survival
 fitdistrplus
+bindrcpp

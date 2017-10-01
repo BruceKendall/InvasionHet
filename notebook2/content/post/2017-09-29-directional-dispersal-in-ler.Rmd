@@ -21,9 +21,9 @@ slug: directional-dispersal-in-ler
 #   - All output will be cached. This is desireable in case code/data changes in the 
 #     future; but it means that all chunks should be labeled for reliable behavior. 
 #     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
-#   - R code will run in the project root directory
-knitr::opts_chunk$set(comment = '', cache = TRUE)
-knitr::opts_knit$set(root.dir = "../../..")
+#   - R code will run in the project root directory 
+#knitr::opts_chunk$set(comment = '', cache = TRUE)
+#knitr::opts_knit$set(root.dir = "../../..")
 ```
 ```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
 #######################################################################################
@@ -34,8 +34,9 @@ knitr::opts_knit$set(root.dir = "../../..")
 #######################################################################################
 
 # Load the project. For some reason it has to be in a separate chunck.
-library(ProjectTemplate)
-load.project()
+#library(ProjectTemplate)
+ProjectTemplate::load.project() 
+#print(parent.frame())
 ```
 
 The correlation between the fraction dispersing and the mean dispersal distance of the dispersers could be mean one of two things:  
@@ -80,7 +81,7 @@ ggplot(aes(y = Total_seeds/Density, x = Density, colour = PCA1),
       data = Ler_dispersal_stats) + scale_color_distiller(palette = "YlOrRd") + 
   geom_smooth(method = "lm") + geom_point() + scale_x_log10() + scale_y_log10()
 summary(lm(log(Total_seeds / Density) ~ log(Density) + PCA1, 
-           data = Ler_dispersal_stats))
+           data = Ler_dispersal_stats)) 
 ```
 
 Yeah, I dunno. It sure looks like there's a lot of noise, and it doesn't improve the $R^2$ much. Furthermore, the backward dispersal is unlikely to be all that important (a robust sensitivity check would be to set it to zero!). So I'm inclined to ignore it.

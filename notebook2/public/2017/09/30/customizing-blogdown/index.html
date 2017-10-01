@@ -61,7 +61,7 @@
 
   <article class="article">
     
-    <span class="article-duration">2 min read</span>
+    <span class="article-duration">3 min read</span>
     
 
     <h1 class="article-title">Customizing blogdown</h1>
@@ -120,6 +120,39 @@
 &lt;/section&gt;
 {{ partial &quot;footer.html&quot; . }}
 </code></pre>
+
+<h1 id="setting-up-rprofile">Setting up <code>.Rprofile</code></h1>
+
+<p>There are a number of blogdown options that can be set in <code>.Rprofile</code>, including the default page author, the default file type, and whether to deamonize the server. I have set the following in my global <code>~/.Rprofile</code>:</p>
+
+<pre><code class="language-r global_Rprofile, eval = FALSE"># Blogdown options
+options(blogdown.author = &quot;Bruce Kendall&quot;,
+        blogdown.ext = &quot;.Rmd&quot;)
+</code></pre>
+
+<p>I tried moving the knitr options and the <strong>ProjectTemplate</strong> loading into a local <code>.Rprofile</code>. The first thing I found is that the <code>.Rprofile</code> needs ot be in the same directory as the <code>.Rmd</code> files (<code>content/posts/</code>). The second thing I found was that, while the knitr options from, e.g., <code>knitr::opts_knit$set()</code> work that way, the call to <code>ProjectTemplate::load.project()</code> didn&rsquo;t make the datasets and functions available to the chunks in the <code>.Rmd</code> file.</p>
+
+<p>So I can use the following local <code>.Rprofile</code>:</p>
+
+<pre><code class="language-r local_Rprofile, eval=FALSE"># Load global .Rprofile
+if (file.exists(&quot;~/.Rprofile&quot;)) {
+  base::sys.source(&quot;~/.Rprofile&quot;, envir = environment())
+}
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+project_root &lt;- normalizePath(&quot;../../..&quot;)
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = project_root)
+
+# Clean up
+rm(project_root, local_dir)
+</code></pre>
+
+<p>However, I still need to start each Rmarkdown file with <code>ProjectTemplate::load.project()</code>.</p>
 
     </div>
   </article>

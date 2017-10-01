@@ -83,7 +83,7 @@ ggplot(aes(y = Total_seeds/Density, x = Density, colour = PCA1),
   geom_smooth(method = &quot;lm&quot;) + geom_point() + scale_x_log10() + scale_y_log10()</code></pre>
 <p><img src="/post/2017-09-29-directional-dispersal-in-ler_files/figure-html/LerDD5-1.png" width="672" /></p>
 <pre class="r"><code>summary(lm(log(Total_seeds / Density) ~ log(Density) + PCA1, 
-           data = Ler_dispersal_stats))</code></pre>
+           data = Ler_dispersal_stats)) </code></pre>
 <pre><code>
 Call:
 lm(formula = log(Total_seeds/Density) ~ log(Density) + PCA1, 

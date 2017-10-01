@@ -54,3 +54,34 @@ The code in `terms.html` is:
 </section>
 {{ partial "footer.html" . }}
 ```
+
+# Setting up `.Rprofile`
+There are a number of blogdown options that can be set in `.Rprofile`, including the default page author, the default file type, and whether to deamonize the server. I have set the following in my global `~/.Rprofile`:
+```{r global_Rprofile, eval = FALSE}
+# Blogdown options
+options(blogdown.author = "Bruce Kendall",
+        blogdown.ext = ".Rmd")
+```
+
+I tried moving the knitr options and the **ProjectTemplate** loading into a local `.Rprofile`. The first thing I found is that the `.Rprofile` needs ot be in the same directory as the `.Rmd` files (`content/posts/`). The second thing I found was that, while the knitr options from, e.g., `knitr::opts_knit$set()` work that way, the call to `ProjectTemplate::load.project()` didn't make the datasets and functions available to the chunks in the `.Rmd` file.
+
+So I can use the following local `.Rprofile`:
+```{r local_Rprofile, eval=FALSE}
+# Load global .Rprofile
+if (file.exists("~/.Rprofile")) {
+  base::sys.source("~/.Rprofile", envir = environment())
+}
+
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+project_root <- normalizePath("../../..")
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = project_root)
+
+# Clean up
+rm(project_root, local_dir)
+```
+However, I still need to start each Rmarkdown file with `ProjectTemplate::load.project()`.
