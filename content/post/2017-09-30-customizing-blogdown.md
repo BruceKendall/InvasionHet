@@ -108,5 +108,7 @@ I adjusted the line width in `main.css`, and borrowed material from `lists.html`
 
 I also figured out that setting `weight: 1` in the yaml header of a post will push it below unweighted posts with the same date. (This was to get the ordering right from yesterday).
 
+Finally, I discovered that I needed to make some more tweaks in `terms.html` to make the links within the term lists work on github. But it appears to break things for the local server!
+
 I do still need to write an "about" page (and for that matter a project readme), and make a pre-dated post that links to the bookdown version of the previous notebook (converting the individual posts would be more work than is warranted).
 

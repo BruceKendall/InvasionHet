@@ -7,7 +7,7 @@
     {{ $data := .Data }}
     {{ range $key, $value := .Data.Terms.Alphabetical }}
     <article class="archive-item">
-      <a href="/{{ $data.Plural }}/{{ $value.Name | urlize }}">{{ $value.Name }}</a> {{ $value.Count }}
+      <a href="{{ $data.Plural | relURL }}/{{ $value.Name | urlize }}">{{ $value.Name }}</a> {{ $value.Count }}
     </article>
     {{ end }}
     </ul>
