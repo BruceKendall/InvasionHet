@@ -1,0 +1,45 @@
+---
+title: Model planning
+author: Bruce Kendall
+date: '2017-10-02'
+slug: model-planning
+categories:
+  - Model description
+tags:
+  - Ler
+---
+
+
+
+<div id="conceptual-overview" class="section level1">
+<h1>Conceptual overview</h1>
+<p>The model has two fundamental steps:</p>
+<ol style="list-style-type: decimal">
+<li>Seed production</li>
+<li>Seed dispersal</li>
+</ol>
+Seed production is density dependent, with a Gompertz deterministic skeleton:
+<span class="math display">\[\begin{equation}
+\log(S_{g,t,x}) = a_g + b_g \log(N_{g,t,x}),
+\end{equation}\]</span>
+<p>where <span class="math inline">\(S\)</span> is seed number and <span class="math inline">\(N\)</span> is adult number; <span class="math inline">\(g\)</span> is genotype, <span class="math inline">\(t\)</span> is generation and <span class="math inline">\(x\)</span> is location. In addition, there is demographic stochasticity (probably Poisson, but need to check); temporal environmental stochasticity; and among-replicate environmental stochasticity. Need to check how well correlated the latter are among RILs.</p>
+<p>Dispersal has two components: a fraction that stay in the maternal pot, and for the remainder, a left-truncated lognormal dispersal distance. There may be sampling stochasticity in the fraction dispersing, as well as in a finite number of seeds sampling the dispersal kernel. There may also be environmental stochasticity in the three dispersal parameters. In the data they are correlated, so we will look at them jointly and separately (and with or without correlations). We have no basis on which to assess whether the kernel stochasticity is independent among pots within a replicate, so we will try both with and without (I don’t expect it will make a lot of difference).</p>
+</div>
+<div id="data-structures" class="section level1">
+<h1>Data structures</h1>
+<p>A generation’s adult and seed distributions will be a <span class="math inline">\(R \times X \times G\)</span> array, where <span class="math inline">\(R\)</span> is the number of replicate simulations, <span class="math inline">\(X\)</span> is the number of spatial locations, and <span class="math inline">\(G\)</span> is the number of genotypes. We want to use the same code for Ler, where <span class="math inline">\(G=1\)</span>. For scalar parameters, which will generically be a vector across genotypes, this will not be a problem: if <code>par</code> is a scalar, <code>par[1] == par</code> is TRUE. However, for non-scalar parameters (such as the covariance matrix of the disperal parameters) we will have to make sure to add a dimension with length 1.</p>
+<p>The model parameters will be in a list. Ultimately we should just have two lists, one for Ler and one for the RILs. We also will have a list that has “control” settings, primarily to turn off or on various sources of stochasticity, but also to set things like simulation duration and number of replicates. The model will also need a switch for turning off evolution in the RIL runs.</p>
+<p>We will want to have the landscape as a separate parameter, so it can easily be varied without messing around with the parameter and structure lists.</p>
+</div>
+<div id="practicalities" class="section level1">
+<h1>Practicalities</h1>
+<p>We will want to pre-allocate the arrays, for the sake of speed; but since many of the pots will be empty, we may want to apply a mask to only operate on the non-zero pots.</p>
+<p>Thinking about dispersal, in my trial model I had a really complicated algorithm to ensure no dispersal beyond the ends of the arena. This was really error-prone; I think a safer way to proceed will be to simply make sure that the size in the positive direction is more than long enough, and indeed perhaps to truncate the dispersal distribution at some maximum distance. Furthermore, we can add a buffer of “negative” pots that have their densities set to zero after dispersal, rather than figuring out on a pot-by-pot basis which seeds to throw away.</p>
+</div>
+<div id="things-to-check-in-past-or-new-data-analyses" class="section level1">
+<h1>Things to check in past or new data analyses</h1>
+<ul>
+<li>Is the residual demographic stochasticity Poisson, or does the variance still need to be inflated?</li>
+<li>How correlated is environmental stochasticity among RILs?</li>
+</ul>
+</div>

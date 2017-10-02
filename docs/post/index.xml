@@ -23,6 +23,16 @@
     </item>
     
     <item>
+      <title>Model planning</title>
+      <link>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</link>
+      <pubDate>Mon, 02 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</guid>
+      <description>Conceptual overview The model has two fundamental steps:
+Seed production Seed dispersal  Seed production is density dependent, with a Gompertz deterministic skeleton: \[\begin{equation} \log(S_{g,t,x}) = a_g + b_g \log(N_{g,t,x}), \end{equation}\] where \(S\) is seed number and \(N\) is adult number; \(g\) is genotype, \(t\) is generation and \(x\) is location. In addition, there is demographic stochasticity (probably Poisson, but need to check); temporal environmental stochasticity; and among-replicate environmental stochasticity. Need to check how well correlated the latter are among RILs.</description>
+    </item>
+    
+    <item>
       <title>Customizing blogdown</title>
       <link>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</link>
       <pubDate>Sat, 30 Sep 2017 00:00:00 +0000</pubDate>

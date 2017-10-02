@@ -1,0 +1,41 @@
+---
+title: Model planning
+author: Bruce Kendall
+date: '2017-10-02'
+slug: model-planning
+categories:
+  - Model description
+tags:
+  - Ler
+---
+
+# Conceptual overview
+The model has two fundamental steps:
+
+1. Seed production
+2. Seed dispersal
+
+Seed production is density dependent, with a Gompertz deterministic skeleton:
+\begin{equation}
+\log(S_{g,t,x}) = a_g + b_g \log(N_{g,t,x}),
+\end{equation}
+where $S$ is seed number and $N$ is adult number; $g$ is genotype, $t$ is generation and $x$ is location. In addition, there is demographic stochasticity (probably Poisson, but need to check); temporal environmental stochasticity; and among-replicate environmental stochasticity. Need to check how well correlated the latter are among RILs.
+
+Dispersal has two components: a fraction that stay in the maternal pot, and for the remainder, a left-truncated lognormal dispersal distance. There may be sampling stochasticity in the fraction dispersing, as well as in a finite number of seeds sampling the dispersal kernel. There may also be environmental stochasticity in the three dispersal parameters. In the data they are correlated, so we will look at them jointly and separately (and with or without correlations). We have no basis on which to assess whether the kernel stochasticity is independent among pots within a replicate, so we will try both with and without (I don't expect it will make a lot of difference).
+
+# Data structures
+A generation's adult and seed distributions will be a $R \times X \times G$ array, where $R$ is the number of replicate simulations, $X$ is the number of spatial locations, and $G$ is the number of genotypes. We want to use the same code for Ler, where $G=1$. For scalar parameters, which will generically be a vector across genotypes, this will not be a problem: if `par` is a scalar, `par[1] == par` is `r par <- 10; par[1] == par`. However, for non-scalar parameters (such as the covariance matrix of the disperal parameters) we will have to make sure to add a dimension with length 1.
+
+The model parameters will be in a list. Ultimately we should just have two lists, one for Ler and one for the RILs. We also will have a list that has "control" settings, primarily to turn off or on various sources of stochasticity, but also to set things like simulation duration and number of replicates. The model will also need a switch for turning off evolution in the RIL runs.
+
+We will want to have the landscape as a separate parameter, so it can easily be varied without messing around with the parameter and structure lists.
+
+# Practicalities
+We will want to pre-allocate the arrays, for the sake of speed; but since many of the pots will be empty, we may want to apply a mask to only operate on the non-zero pots.
+
+Thinking about dispersal, in my trial model I had a really complicated algorithm to ensure no dispersal beyond the ends of the arena. This was really error-prone; I think a safer way to proceed will be to simply make sure that the size in the positive direction is more than long enough, and indeed perhaps to truncate the dispersal distribution at some maximum distance. Furthermore, we can add a buffer of "negative" pots that have their densities set to zero after dispersal, rather than figuring out on a pot-by-pot basis which seeds to throw away.
+
+
+# Things to check in past or new data analyses
+- Is the residual demographic stochasticity Poisson, or does the variance still need to be inflated?
+- How correlated is environmental stochasticity  among RILs?

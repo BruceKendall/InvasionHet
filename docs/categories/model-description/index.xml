@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Ler on Project notebook for the Invasion Heterogeneity project</title>
-    <link>https://brucekendall.github.io/InvasionHet/tags/ler/</link>
-    <description>Recent content in Ler on Project notebook for the Invasion Heterogeneity project</description>
+    <title>Model Description on Project notebook for the Invasion Heterogeneity project</title>
+    <link>https://brucekendall.github.io/InvasionHet/categories/model-description/</link>
+    <description>Recent content in Model Description on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 02 Oct 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://brucekendall.github.io/InvasionHet/tags/ler/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://brucekendall.github.io/InvasionHet/categories/model-description/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,16 +19,6 @@
       <guid>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</guid>
       <description>Conceptual overview The model has two fundamental steps:
 Seed production Seed dispersal  Seed production is density dependent, with a Gompertz deterministic skeleton: \[\begin{equation} \log(S_{g,t,x}) = a_g + b_g \log(N_{g,t,x}), \end{equation}\] where \(S\) is seed number and \(N\) is adult number; \(g\) is genotype, \(t\) is generation and \(x\) is location. In addition, there is demographic stochasticity (probably Poisson, but need to check); temporal environmental stochasticity; and among-replicate environmental stochasticity. Need to check how well correlated the latter are among RILs.</description>
-    </item>
-    
-    <item>
-      <title>Directional dispersal in Ler</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/29/directional-dispersal-in-ler/</link>
-      <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/29/directional-dispersal-in-ler/</guid>
-      <description>The correlation between the fraction dispersing and the mean dispersal distance of the dispersers could be mean one of two things:
-Simulated rain that makes more seeds go makes them go further in all directions Simulated rain that makes more seeds go is pushing them in the direction of the receiving runway  This matters because in case 2, the dispersal kernel in the negative direction will, presumably, have its absolute mean reduced.</description>
     </item>
     
   </channel>

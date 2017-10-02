@@ -8,6 +8,11 @@
   </url>
   
   <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</loc>
+    <lastmod>2017-10-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</loc>
     <lastmod>2017-09-30T00:00:00+00:00</lastmod>
   </url>
@@ -53,7 +58,13 @@
   
   <url>
     <loc>https://brucekendall.github.io/InvasionHet/tags/ler/</loc>
-    <lastmod>2017-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2017-10-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/model-description/</loc>
+    <lastmod>2017-10-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
