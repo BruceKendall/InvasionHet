@@ -28,6 +28,41 @@
   </url>
   
   <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/25/housekeeping/</loc>
+    <lastmod>2017-09-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</loc>
+    <lastmod>2017-09-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/19/dispersal-data/</loc>
+    <lastmod>2017-09-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</loc>
+    <lastmod>2017-09-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/13/fitting-dispersal-kernels/</loc>
+    <lastmod>2017-09-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/11/relevant-material-from-lewis-s-book/</loc>
+    <lastmod>2017-09-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/01/older-journal-entries/</loc>
+    <lastmod>2017-09-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://brucekendall.github.io/InvasionHet/about/</loc>
     <lastmod>2016-05-05T21:48:51-07:00</lastmod>
   </url>
@@ -50,6 +85,12 @@
   </url>
   
   <url>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/data-evaluation/</loc>
+    <lastmod>2017-09-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://brucekendall.github.io/InvasionHet/tags/dispersal/</loc>
     <lastmod>2017-09-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -68,8 +109,20 @@
   </url>
   
   <url>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/literature/</loc>
+    <lastmod>2017-09-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://brucekendall.github.io/InvasionHet/categories/model-description/</loc>
     <lastmod>2017-10-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/parameter-estimation/</loc>
+    <lastmod>2017-09-22T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

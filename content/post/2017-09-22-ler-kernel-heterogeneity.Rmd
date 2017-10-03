@@ -1,0 +1,116 @@
+---
+title: Ler kernel heterogeneity
+author: Bruce Kendall
+date: '2017-09-22'
+slug: ler-kernel-heterogeneity
+categories:
+  - Conceptual model evaluation
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate)
+load.project()
+```
+
+The next steps in the Ler dispersal analysis are to confirm statistical support for among-rep heterogeneity and see if the kernel parameters are correlated with the fraction dispersing.
+
+## Housekeeping
+Added the functions for the truncated distributions and to fit the models to lib/helpers.R.
+
+## Kernel heterogeneity
+The total AIC for the rep-specific fits was 58230.28 and 58366.17 for the normal and lognormal models, respectively.
+
+I *think* that if I pass the whole data set to the analysis function it will combine all the data. Let's look at this:
+```{r test_combine}
+sum(disperseLer$Seedlings[disperseLer$Distance > 4])
+data_loc <- subset(disperseLer, Distance > 4)
+data_vec <- rep(data_loc$Distance, data_loc$Seedlings)
+length(data_vec)
+```
+That's a match!
+
+```{r fit_all}
+fit_dispersal_models(disperseLer)
+```
+
+Ignore the ID on the graphical and text output.
+
+What we see are good fits overall. Again, the normal is somewhat better than the lognormal ($\Delta_{\text{AIC}} =$ `r 59799.07 - 59772.17`). But the rep-specific fits have AIC's that are more than 1400 AIC units lower!
+
+## Correlations with fraction dispersing
+
+Regenerate the datsets, without the plots (may want to put this into a munge script):
+```{r fitall}
+all_Ler_fits <- ddply(disperseLer, "ID", fit_dispersal_models, plot.it = FALSE) 
+Ler_dispersal_stats <- calc_dispersal_stats(disperseLer)
+Ler_dispersal_stats <- merge(Ler_dispersal_stats, all_Ler_fits, by = "ID")
+head(Ler_dispersal_stats)  
+```
+
+Now look at some plots
+```{r disp_corrs}
+qplot(Dispersal_fraction, mulog, data = Ler_dispersal_stats) 
+qplot(Dispersal_fraction, sdlog, data = Ler_dispersal_stats) 
+qplot(Dispersal_fraction, mu, data = Ler_dispersal_stats) 
+qplot(Dispersal_fraction, sd, data = Ler_dispersal_stats) 
+```
+
+There is a clear pattern with mulog, but nothing else. This is another reason to favor the lognormal distribution, as it indicates a mechanistic interconnection between the two components of the dispersal kernel. Here's the actual relationship:
+```{r disp_corrs2}
+cor(Ler_dispersal_stats$mulog, Ler_dispersal_stats$Dispersal_fraction) 
+summary(lm(mulog ~ Dispersal_fraction, data = Ler_dispersal_stats))
+```
+
+## Implications for modeling
+A simple-minded approach would be to draw a random dispersal fraction, and then use the regression (including the residuals) to get a value for mulog. But really, we should be doing draws from a multivariate distribution. The challenge, then, is taking into account the (presumably) beta distribution for the dispersal fraction. We can use Morris & Doak's approach of simulating multivariate normals and then matching quantiles to get the beta distribution; since the latter is pretty symmetric (looks like the mean is around 0.4) it should recover the correlation coefficient pretty closely.
+
+A bigger conceptual issue is that the points in the scatterplots above are each measured with error, in both directions (binomial sampling for the dispersal fraction, MLE standard errors in mulog). This is another reason to avoid OLS regression; but does it introduce bias into the estimate of the correlation? There may be a solution to this at https://www.rasch.org/rmt/rmt101g.htm
+
+Third, is sdlog independent of mulog (we have already seen that it's independent of dispersal fraction)? What about its relationship to the major and minor axes of the mulog-dispersal fraction distribution?
+
+Finally, when we are working with the populations, do we assume that all pots in a replicate at a particular generation experience the same dispersal kernel? Or that *each pot* gets an independent sample of the kernel? If most of the spread is driven by seeds coming from the front pot, then it won't matter much.
+
+## Disattenuated correlation coefficient
+Actually, I've convinced myself that I don't need to do this. We will be using the covariance rather than the correlation, and some calculations reveal that the covariance is not biased by measurement error. The disattenuation calculation is to correct for the inflated variances caused by measurement error that are used in calculating the correlation from the covariance.
+
+Of course, I *will* need to get those corrected variances for population the VC matrix to use in simulation. The way to do this is to subtract the mean squared standard error from the raw variance estimates.
+
+I've modified the kernel fitting routine to return the standard errors of the parameter estimates. So now for the corrections:
+```{r var_corr}
+var(Ler_dispersal_stats$mulog)
+var(Ler_dispersal_stats$mulog) - mean((Ler_dispersal_stats$se_mulog)^2)
+Ler_dispersal_stats <- mutate(Ler_dispersal_stats,
+                              binom_var = Dispersal_fraction * (1 - Dispersal_fraction) /
+                                Total_seeds)
+var(Ler_dispersal_stats$Dispersal_fraction)
+var(Ler_dispersal_stats$Dispersal_fraction) - mean(Ler_dispersal_stats$binom_var)
+
+```
+The first correction is substantial, the second one minor.
+
+## Patterns of sdlog
+```{r sdlog_plots}
+qplot(mulog, sdlog, data = Ler_dispersal_stats) 
+disp_pca <- princomp(~ mulog + Dispersal_fraction, data = Ler_dispersal_stats)
+screeplot(disp_pca)
+biplot(disp_pca)
+qplot(disp_pca$scores[,1], Ler_dispersal_stats$sdlog)
+qplot(disp_pca$scores[,2], Ler_dispersal_stats$sdlog)
+summary(lm(Ler_dispersal_stats$sdlog ~ disp_pca$scores[,2]))
+cov(subset(Ler_dispersal_stats, select = c(mulog, sdlog, Dispersal_fraction)))
+cor(subset(Ler_dispersal_stats, select = c(mulog, sdlog, Dispersal_fraction)))
+```
+
+It looks like there is heteroskedasity (sdlog is larger for high values of PC1, which is low values of mulog), and a weak negative association with PC2.

@@ -1,5 +1,5 @@
 ---
-title: Feedback from Jenn
+title: Feedback from Jenn on June notebook
 author: Bruce Kendall
 date: '2017-10-03'
 slug: feedback-from-jenn

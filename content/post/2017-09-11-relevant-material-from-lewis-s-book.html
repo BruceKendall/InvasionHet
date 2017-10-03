@@ -1,0 +1,43 @@
+---
+title: Relevant material from Lewis’s book
+author: Bruce Kendall
+date: '2017-09-11'
+slug: relevant-material-from-lewis-s-book
+categories:
+  - Literature
+tags: []
+---
+
+
+
+<p>Mark Lewis’s new book has a whole chapter on “stochastic spread:”</p>
+<blockquote>
+<p>Our focus is on the rate at which such processes spread spatially. We first examine the effects of environmental stochasticity on spatial spread by means of stochastic integrodifference and reaction–diffusion models. Here, we analyze both the wave solution for the expected density of individuals and the wave solution for a given realization of the stochastic process, as well as the variability that this can exhibit. Then we turn our analysis to the effects of demographic stochasticity on spatial spread. This can be described by its effects on the expected density and also by its effects on the velocity of the furthest-forward location for the population. Finally, we consider nonlinear stochastic models for patchy spread of invasive species, showing how patchiness in the leading edge of an invasion process can dramatically slow the invasive spreading speed. (p. 233)</p>
+</blockquote>
+<div id="environmental-stochasticity" class="section level2">
+<h2>Environmental stochasticity</h2>
+<p>The stochastic integrodifference model has a time varying population growth function and a time-varying dispersal kernel–but both are assumed to be spatially uniform. Here’s a useful commentary on stochastic kernels:</p>
+<blockquote>
+<p>A dispersal kernel is a probability density function of a random variable, that random variable being the location of a dispersed offspring. In other words, a dispersal kernel is a guide, or template, prescribing how likely an offspring is to fall in a given infinitesimal location. As such, it is typically an ordinary function and is not usually a random variable itself. What, then, do we mean by referring to the kt as “random dispersal kernels”? We mean that the function kt is not known in advance but rather is defined randomly. For example, it could be that <span class="math inline">\(k_t = N(0,\nu)\)</span> where <span class="math inline">\(\nu\)</span> is a random variable. Thus, even the template for dispersal, and not just dispersal itself, is stochastic.</p>
+</blockquote>
+<p>If growth and dispersal variability are uncorrelated, then the “average population” spreads at rate given by the average environment. They call this the speed of the “expectation wave.” Positive autocorrelation between growth and dispersal will speed things up.</p>
+<p>They then turn to the “stochastic wave,” which has location <span class="math inline">\(X_t\)</span> and “average” speed (i.e., averaged from time 0 to time <span class="math inline">\(t\)</span>) <span class="math inline">\(\bar{C_t}\)</span>. Assuming an exponential spatial distribution at time 0, They derive values for the expectation and variance of <span class="math inline">\(\bar{C_t}\)</span> that depends on steepness of the initial condition and the moment generating function of the “representative” kernel (they don’t really say how this is defined; it’s actually introduced in the previous analysis). They then show that, whereas <span class="math inline">\(\bar{C_t}\)</span> converges to its expectation as <span class="math inline">\(t\)</span> gets large, the variance of <span class="math inline">\(X_t\)</span> increases linearly with time (p. 239; fig. 8.1). This is the “simple model” that I was going to develop; here it’s already been done for me!</p>
+<p>One thing they note is that (at least with iid/independence between dispersal and growth) the speed of the stochastic wave will be less than the speed of the expectation wave. Thus, stochasticity slows spread, on average.</p>
+<p>A key reference for this work seems to be Neubert, M.G., Kot, M., Lewis, M.A.: Invasion speeds in fluctuating environments. Proc. R. Soc. B 267, 1603–1610 (2000). <a href="doi:10.1098/rspb.2000.1185" class="uri">doi:10.1098/rspb.2000.1185</a></p>
+<p>In fact, fig. 8.1 above is fig 4 in Neubert et al (2000), which also has the observation about the linear growth in <span class="math inline">\(var(X_t)\)</span> at the bottom of p. 1606. This is what we should actually cite!</p>
+<p>They point out that it has been extended to structured populations by Schreiber, S.J., Ryan, M.E.: Invasion speeds for structured populations in fluctuating environments. Theor. Ecol. 4, 423–434 (2011). <a href="doi:10.1007/s12080-010-0098-5" class="uri">doi:10.1007/s12080-010-0098-5</a></p>
+<p>They also briefly consider a stochastic reaction-diffusion equation. There, spatial autocorrelation in the temporally-varying growth environment leads to speeding up of spread.</p>
+</div>
+<div id="demographic-stochasticity" class="section level2">
+<h2>Demographic stochasticity</h2>
+<p>Starts with two lab examples: Tribolium from Melbourne and Hastings (2009), and ciliates from Giometto, A., Rinaldo, A., Carrara, F., Altermatt, F.: Emerging predictable features of replicated biological invasion fronts. Proc. Natl. Acad. Sci. U. S. A. 111(1), 297–301 (2014). <a href="doi:10.1073/pnas.1321167110" class="uri">doi:10.1073/pnas.1321167110</a> [this paper uses a stochastic PDE to fit the dynamics]. They accept the authors’ respective claims that Tribolium spread “could not be predicted precisely” but ciliate spread could be “predicted well.” But the former claim refers to a <em>single realization</em> whereas the latter refers to the mean and variance across replicates.</p>
+<p>Models henceforth focus on furthest-forward individual. Brief treatment of continuous-time linear branching process, which I don’t think is too relevant here. Then an extended treatment of Clark et al’s “invasion by extremes” paper. They use a 1-paremter simplification of the 2Dt kernel: <span class="math display">\[
+k(x) = \frac{1}{2\sqrt{2\beta} \left(1 + \frac{x^2}{2\beta}\right)^{3/2}};
+\]</span> not sure if this was Clark’s original choice. The section doesn’t treat variance in spread but instead focus on mean spread, with lower and upper bounds depending on assumptions about contributions from individuals behind the front.</p>
+<p>They finish the chapter by talking about “patchy spread,” but here they mean something like stratified diffusion rather than a patchy environment. There’s probably some interesting stuff here but not needed for our current work.</p>
+</div>
+<div id="neubert-et-al-2000" class="section level2">
+<h2>Neubert et al 2000</h2>
+<p>Confirmed that fig. 8.1 above is fig 4 in Neubert et al (2000), which also has the observation about the linear growth in <span class="math inline">\(var(X_t)\)</span> at the bottom of p. 1606. This is what we should actually cite!</p>
+<p>Looked through the list of papers citign this work, and nothing new jumped out at me. In fact, it seems that none of the experimental spread papers cite this work!</p>
+</div>

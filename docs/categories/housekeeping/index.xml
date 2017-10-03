@@ -32,5 +32,24 @@
 Tags and categories Getting links to tags and categories was as simple as editing the menu section of config.toml; the one trick is to add weight variables to get the order I want (the default is alphabetical). Here is the relevant bit of code:</description>
     </item>
     
+    <item>
+      <title>Housekeeping</title>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/25/housekeeping/</link>
+      <pubDate>Mon, 25 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/25/housekeeping/</guid>
+      <description>After repeated nagging from ProjectTemplate, I ran the script to update the project structure to v. 0.8. This changed the doc directory to docs, and added some new variables to global.dcf. Unfortunately the latter don&amp;rsquo;t seem to be documented&amp;hellip;. I&amp;rsquo;ll also need to make sure that I update the package on my computer at home.
+I added a new munge script to calculate the dispersal stats and fits. To prevent this calculating every time, I cached the result; but now I need to add caching to all the munge scripts, and, after running once, turn off caching&amp;hellip; Done!</description>
+    </item>
+    
+    <item>
+      <title>Older journal entries</title>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/01/older-journal-entries/</link>
+      <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/01/older-journal-entries/</guid>
+      <description>Before September 2017, the notebook was managed as a bookdown project. The source files are in the /notebook directory; the compiled notebook is here.</description>
+    </item>
+    
   </channel>
 </rss>

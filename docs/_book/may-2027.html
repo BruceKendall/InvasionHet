@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Invasion Heterogeneity Project Notebook</title>
+  <meta name="description" content="Invasion Heterogeneity Project Notebook">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Invasion Heterogeneity Project Notebook" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Invasion Heterogeneity Project Notebook" />
+  
+  
+  
+
+<meta name="author" content="Bruce E. Kendall">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="may-2017-2.html">
+<link rel="next" href="may-2027-1.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#usage"><i class="fa fa-check"></i>Usage</a></li>
+</ul></li>
+<li class="part"><span><b>I 7 April 2017</b></span></li>
+<li class="chapter" data-level="1" data-path="conversation-with-jennifer-williams.html"><a href="conversation-with-jennifer-williams.html"><i class="fa fa-check"></i><b>1</b> Conversation with Jennifer Williams</a><ul>
+<li class="chapter" data-level="1.1" data-path="conversation-with-jennifer-williams.html"><a href="conversation-with-jennifer-williams.html#ler-populations"><i class="fa fa-check"></i><b>1.1</b> Ler populations</a></li>
+<li class="chapter" data-level="1.2" data-path="conversation-with-jennifer-williams.html"><a href="conversation-with-jennifer-williams.html#evolution-experiment"><i class="fa fa-check"></i><b>1.2</b> Evolution experiment</a></li>
+<li class="chapter" data-level="1.3" data-path="conversation-with-jennifer-williams.html"><a href="conversation-with-jennifer-williams.html#predictions-and-hypotheses"><i class="fa fa-check"></i><b>1.3</b> Predictions and hypotheses</a></li>
+<li class="chapter" data-level="1.4" data-path="conversation-with-jennifer-williams.html"><a href="conversation-with-jennifer-williams.html#data"><i class="fa fa-check"></i><b>1.4</b> Data</a></li>
+</ul></li>
+<li class="part"><span><b>II 10 April 2017</b></span></li>
+<li class="chapter" data-level="2" data-path="computing-setup.html"><a href="computing-setup.html"><i class="fa fa-check"></i><b>2</b> Computing setup</a><ul>
+<li class="chapter" data-level="2.1" data-path="computing-setup.html"><a href="computing-setup.html#bookdown"><i class="fa fa-check"></i><b>2.1</b> Bookdown</a></li>
+<li class="chapter" data-level="2.2" data-path="computing-setup.html"><a href="computing-setup.html#projecttemplate"><i class="fa fa-check"></i><b>2.2</b> ProjectTemplate</a></li>
+</ul></li>
+<li class="part"><span><b>III 11 April 2017</b></span></li>
+<li class="chapter" data-level="3" data-path="getting-data-in-via-projecttemplate.html"><a href="getting-data-in-via-projecttemplate.html"><i class="fa fa-check"></i><b>3</b> Getting data in via ProjectTemplate</a></li>
+<li class="chapter" data-level="4" data-path="april-2017.html"><a href="april-2017.html"><i class="fa fa-check"></i><b>4</b> 14 April 2017</a><ul>
+<li class="chapter" data-level="4.1" data-path="april-2017.html"><a href="april-2017.html#project-setup"><i class="fa fa-check"></i><b>4.1</b> Project setup</a></li>
+<li class="chapter" data-level="4.2" data-path="april-2017.html"><a href="april-2017.html#ler-population-data"><i class="fa fa-check"></i><b>4.2</b> Ler population data</a></li>
+<li class="chapter" data-level="4.3" data-path="april-2017.html"><a href="april-2017.html#ler-fecundity"><i class="fa fa-check"></i><b>4.3</b> Ler fecundity</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="april-2017-1.html"><a href="april-2017-1.html"><i class="fa fa-check"></i><b>5</b> 17 April 2017</a><ul>
+<li class="chapter" data-level="5.1" data-path="april-2017-1.html"><a href="april-2017-1.html#project-stuff"><i class="fa fa-check"></i><b>5.1</b> Project stuff</a></li>
+<li class="chapter" data-level="5.2" data-path="april-2017-1.html"><a href="april-2017-1.html#ler-fecundity-1"><i class="fa fa-check"></i><b>5.2</b> Ler fecundity</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="april-2017-2.html"><a href="april-2017-2.html"><i class="fa fa-check"></i><b>6</b> 21 April 2017</a><ul>
+<li class="chapter" data-level="6.1" data-path="april-2017-2.html"><a href="april-2017-2.html#data-munging"><i class="fa fa-check"></i><b>6.1</b> Data munging</a></li>
+<li class="chapter" data-level="6.2" data-path="april-2017-2.html"><a href="april-2017-2.html#ler-fecundity-2"><i class="fa fa-check"></i><b>6.2</b> Ler fecundity</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="april-2017-2.html"><a href="april-2017-2.html#reanalyze-effective-seed-number"><i class="fa fa-check"></i><b>6.2.1</b> Reanalyze effective seed number</a></li>
+<li class="chapter" data-level="6.2.2" data-path="april-2017-2.html"><a href="april-2017-2.html#home-seeds-as-proxy"><i class="fa fa-check"></i><b>6.2.2</b> Home seeds as proxy</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="april-2017-3.html"><a href="april-2017-3.html"><i class="fa fa-check"></i><b>7</b> 24 April 2017</a><ul>
+<li class="chapter" data-level="7.1" data-path="april-2017-3.html"><a href="april-2017-3.html#dd-ler-fecundity"><i class="fa fa-check"></i><b>7.1</b> DD Ler fecundity</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="april-2017-4.html"><a href="april-2017-4.html"><i class="fa fa-check"></i><b>8</b> 26 April 2017</a><ul>
+<li class="chapter" data-level="8.1" data-path="april-2017-4.html"><a href="april-2017-4.html#calculate-ler-spread-rates"><i class="fa fa-check"></i><b>8.1</b> Calculate Ler spread rates</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="may-2017.html"><a href="may-2017.html"><i class="fa fa-check"></i><b>9</b> 1 May 2017</a><ul>
+<li class="chapter" data-level="9.1" data-path="may-2017.html"><a href="may-2017.html#sanity-check"><i class="fa fa-check"></i><b>9.1</b> Sanity check</a></li>
+<li class="chapter" data-level="9.2" data-path="may-2017.html"><a href="may-2017.html#what-we-know-from-the-analyses-so-far"><i class="fa fa-check"></i><b>9.2</b> What we know from the analyses so far</a></li>
+<li class="chapter" data-level="9.3" data-path="may-2017.html"><a href="may-2017.html#some-remaining-empirical-questions"><i class="fa fa-check"></i><b>9.3</b> Some remaining empirical questions</a></li>
+<li class="chapter" data-level="9.4" data-path="may-2017.html"><a href="may-2017.html#some-theory"><i class="fa fa-check"></i><b>9.4</b> Some theory</a></li>
+<li class="chapter" data-level="9.5" data-path="may-2017.html"><a href="may-2017.html#preparing-for-my-seminar"><i class="fa fa-check"></i><b>9.5</b> Preparing for my seminar</a></li>
+<li class="chapter" data-level="9.6" data-path="may-2017.html"><a href="may-2017.html#updates"><i class="fa fa-check"></i><b>9.6</b> Updates</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="may-2017-1.html"><a href="may-2017-1.html"><i class="fa fa-check"></i>3 May 2017</a><ul>
+<li class="chapter" data-level="" data-path="may-2017-1.html"><a href="may-2017-1.html#literature-on-theory-on-stochastic-spread"><i class="fa fa-check"></i>Literature on theory on stochastic spread</a><ul>
+<li class="chapter" data-level="" data-path="may-2017-1.html"><a href="may-2017-1.html#melbourne-hastings-2009"><i class="fa fa-check"></i>Melbourne &amp; Hastings (2009)</a></li>
+<li class="chapter" data-level="" data-path="may-2017-1.html"><a href="may-2017-1.html#skellam-1951"><i class="fa fa-check"></i>Skellam (1951)</a></li>
+<li class="chapter" data-level="" data-path="may-2017-1.html"><a href="may-2017-1.html#lewis-2000"><i class="fa fa-check"></i>Lewis (2000)</a></li>
+<li class="chapter" data-level="" data-path="may-2017-1.html"><a href="may-2017-1.html#mollison-1991"><i class="fa fa-check"></i>Mollison (1991)</a></li>
+<li class="chapter" data-level="" data-path="may-2017-1.html"><a href="may-2017-1.html#clark-et-al-2003"><i class="fa fa-check"></i>Clark et al (2003)</a></li>
+<li class="chapter" data-level="" data-path="may-2017-1.html"><a href="may-2017-1.html#lewis-pacala-2000"><i class="fa fa-check"></i>Lewis &amp; Pacala (2000)</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="may-2017-1.html"><a href="may-2017-1.html#summary"><i class="fa fa-check"></i><b>9.7</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="may-2017-2.html"><a href="may-2017-2.html"><i class="fa fa-check"></i><b>10</b> 5 May 2017</a><ul>
+<li class="chapter" data-level="10.1" data-path="may-2017-2.html"><a href="may-2017-2.html#calculate-ler-spread-rates-1"><i class="fa fa-check"></i><b>10.1</b> Calculate Ler spread rates</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="may-2027.html"><a href="may-2027.html"><i class="fa fa-check"></i><b>11</b> 8 May 2027</a><ul>
+<li class="chapter" data-level="11.1" data-path="may-2027.html"><a href="may-2027.html#dispersal-evolution-in-beetle-experiments"><i class="fa fa-check"></i><b>11.1</b> Dispersal evolution in beetle experiments</a></li>
+<li class="chapter" data-level="11.2" data-path="may-2027.html"><a href="may-2027.html#ler-cumulative-spread"><i class="fa fa-check"></i><b>11.2</b> Ler cumulative spread</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="may-2027-1.html"><a href="may-2027-1.html"><i class="fa fa-check"></i><b>12</b> 10 May 2027</a><ul>
+<li class="chapter" data-level="12.1" data-path="may-2027-1.html"><a href="may-2027-1.html#spread-patterns-in-evolution-experiments"><i class="fa fa-check"></i><b>12.1</b> Spread patterns in evolution experiments</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="may-2027-2.html"><a href="may-2027-2.html"><i class="fa fa-check"></i><b>13</b> 17 May 2027</a><ul>
+<li class="chapter" data-level="13.1" data-path="may-2027-2.html"><a href="may-2027-2.html#updates-1"><i class="fa fa-check"></i><b>13.1</b> Updates</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="may-2027-2.html"><a href="may-2027-2.html#data-issues"><i class="fa fa-check"></i><b>13.1.1</b> Data issues</a></li>
+<li class="chapter" data-level="13.1.2" data-path="may-2027-2.html"><a href="may-2027-2.html#presentation-at-bren"><i class="fa fa-check"></i><b>13.1.2</b> Presentation at Bren</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="may-2027-2.html"><a href="may-2027-2.html#jenns-ler-script"><i class="fa fa-check"></i><b>13.2</b> Jenn’s Ler script</a></li>
+<li class="chapter" data-level="13.3" data-path="may-2027-2.html"><a href="may-2027-2.html#data-reboot"><i class="fa fa-check"></i><b>13.3</b> Data reboot</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="may-2027-3.html"><a href="may-2027-3.html"><i class="fa fa-check"></i><b>14</b> 19 May 2027</a><ul>
+<li class="chapter" data-level="14.1" data-path="may-2027-3.html"><a href="may-2027-3.html#evolution-data-gen-7-no"><i class="fa fa-check"></i><b>14.1</b> Evolution data: Gen 7 = no</a></li>
+<li class="chapter" data-level="14.2" data-path="may-2027-3.html"><a href="may-2027-3.html#reboot-ler-fecundity"><i class="fa fa-check"></i><b>14.2</b> Reboot Ler fecundity</a><ul>
+<li class="chapter" data-level="14.2.1" data-path="may-2027-3.html"><a href="may-2027-3.html#generation-1-fecundity"><i class="fa fa-check"></i><b>14.2.1</b> Generation 1 fecundity</a></li>
+<li class="chapter" data-level="14.2.2" data-path="may-2027-3.html"><a href="may-2027-3.html#time-variation-in-fecundity"><i class="fa fa-check"></i><b>14.2.2</b> Time variation in fecundity</a></li>
+<li class="chapter" data-level="14.2.3" data-path="may-2027-3.html"><a href="may-2027-3.html#density-dependent-fecundity"><i class="fa fa-check"></i><b>14.2.3</b> Density dependent fecundity</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="may-2027-4.html"><a href="may-2027-4.html"><i class="fa fa-check"></i><b>15</b> 24 May 2027</a><ul>
+<li class="chapter" data-level="15.1" data-path="may-2027-4.html"><a href="may-2027-4.html#reboot-ler-spread-rates"><i class="fa fa-check"></i><b>15.1</b> Reboot Ler spread rates</a><ul>
+<li class="chapter" data-level="15.1.1" data-path="may-2027-4.html"><a href="may-2027-4.html#ler-cumulative-spread-1"><i class="fa fa-check"></i><b>15.1.1</b> Ler Cumulative spread</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="may-2027-4.html"><a href="may-2027-4.html#reboot-spread-analysis-of-evolution-experiments"><i class="fa fa-check"></i><b>15.2</b> Reboot spread analysis of evolution experiments</a></li>
+<li class="chapter" data-level="15.3" data-path="may-2027-4.html"><a href="may-2027-4.html#modeling"><i class="fa fa-check"></i><b>15.3</b> Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="may-2027-5.html"><a href="may-2027-5.html"><i class="fa fa-check"></i><b>16</b> 31 May 2027</a><ul>
+<li class="chapter" data-level="16.1" data-path="may-2027-5.html"><a href="may-2027-5.html#silique-counts-in-the-ler-population-data"><i class="fa fa-check"></i><b>16.1</b> Silique counts in the Ler population data</a></li>
+<li class="chapter" data-level="16.2" data-path="may-2027-5.html"><a href="may-2027-5.html#patterns-of-silique-variation"><i class="fa fa-check"></i><b>16.2</b> Patterns of silique variation</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="june-2017.html"><a href="june-2017.html"><i class="fa fa-check"></i><b>17</b> 2 June 2017</a><ul>
+<li class="chapter" data-level="17.1" data-path="june-2017.html"><a href="june-2017.html#patterns-of-silique-variation-continued"><i class="fa fa-check"></i><b>17.1</b> Patterns of silique variation, continued</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="june-2017-1.html"><a href="june-2017-1.html"><i class="fa fa-check"></i><b>18</b> 5 June 2017</a><ul>
+<li class="chapter" data-level="18.1" data-path="june-2017-1.html"><a href="june-2017-1.html#more-on-stochasticity-in-ler-seed-production"><i class="fa fa-check"></i><b>18.1</b> More on stochasticity in Ler seed production</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="june-2017-2.html"><a href="june-2017-2.html"><i class="fa fa-check"></i><b>19</b> 7 June 2017</a><ul>
+<li class="chapter" data-level="19.1" data-path="june-2017-2.html"><a href="june-2017-2.html#taking-stock"><i class="fa fa-check"></i><b>19.1</b> Taking stock</a></li>
+<li class="chapter" data-level="19.2" data-path="june-2017-2.html"><a href="june-2017-2.html#strategy-for-a-paper"><i class="fa fa-check"></i><b>19.2</b> Strategy for a paper</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="sep-2017.html"><a href="sep-2017.html"><i class="fa fa-check"></i><b>20</b> 11 Sep 2017</a><ul>
+<li class="chapter" data-level="20.1" data-path="sep-2017.html"><a href="sep-2017.html#lewis-et-al-2016"><i class="fa fa-check"></i><b>20.1</b> Lewis et al (2016)</a></li>
+<li class="chapter" data-level="20.2" data-path="sep-2017.html"><a href="sep-2017.html#environmental-stochasticity"><i class="fa fa-check"></i><b>20.2</b> Environmental stochasticity</a></li>
+<li class="chapter" data-level="20.3" data-path="sep-2017.html"><a href="sep-2017.html#demographic-stochasticity"><i class="fa fa-check"></i><b>20.3</b> Demographic stochasticity</a></li>
+<li class="chapter" data-level="20.4" data-path="sep-2017.html"><a href="sep-2017.html#neubert-et-al-2000"><i class="fa fa-check"></i><b>20.4</b> Neubert et al 2000</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="sep-2017-1.html"><a href="sep-2017-1.html"><i class="fa fa-check"></i><b>21</b> 13 Sep 2017</a><ul>
+<li class="chapter" data-level="21.1" data-path="sep-2017-1.html"><a href="sep-2017-1.html#dispersal-kernels"><i class="fa fa-check"></i><b>21.1</b> Dispersal kernels</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Invasion Heterogeneity Project Notebook</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="may-2027" class="section level1">
+<h1><span class="header-section-number">11</span> 8 May 2027</h1>
+<div id="dispersal-evolution-in-beetle-experiments" class="section level2">
+<h2><span class="header-section-number">11.1</span> Dispersal evolution in beetle experiments</h2>
+<p>Just read the papers from Brett’s and TEX’s labs. As Jen said, their “no evolution” treatment was spatial shuffling, so didn’t maintain the original genetic composition.</p>
+<p>They both found increased mean and increased variance with evolution. Both found increased dispersal ability at the edge of the evolving populations; the flour beetle experiment also found a <em>reduction</em> in low-density growth rate.</p>
+<p>The effects on dispersal are explained as spatial sorting; the growth rate effects are hypothesized to represent “gene surfing”, whereby deleterious alleles exposed by founder effects at the leading edge are carried forward by the fact that next generation’s leading edge is primarily founded by this generation’s leading edge.</p>
+<p>The flour beetle experiment found that the among-replicate variance in cumulative spread grew faster than linearly. This is consistent with among-replicate differences in mean speeds (which would generate a quadratic growth in variance through time). This pattern was found in both treatments, suggesting that it’s not just a consequence of founder effects at the leading edge. Perhaps it represents founder effects in the initial establishment from the stock population (each replicate was founded by 20 individuals). The bean beetle experiment doesn’t show this graph but found strong support for a random effect for replicate speed in their model for cumulative spread.</p>
+<p>So a couple of things to do (both for Ler and the evolution experiments):</p>
+<ul>
+<li>Plot mean and variance of cumulative spread against time</li>
+<li>Fit the bean beetle model (as a first approximation to be quick I can treat rep as a fixed effect).</li>
+</ul>
+</div>
+<div id="ler-cumulative-spread" class="section level2">
+<h2><span class="header-section-number">11.2</span> Ler cumulative spread</h2>
+<p>To facilitate the above analyses, I have modified the script for popLer to make categorical versions of Generation and Replicate (Gen and Rep, respectively), and put the guts of last time’s data manipulation into a munge script, which creates <code>LerC_spread</code> containing cumulative and per-generation spread for the C treatment replicates.</p>
+<p>Let’s calculate the means and variances of cumulative spread:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cum_spread_stats &lt;-<span class="st"> </span><span class="kw">group_by</span>(LerC_spread, Gap, Gen, Generation) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean_spread =</span> <span class="kw">mean</span>(Furthest),
+            <span class="dt">var_spread =</span> <span class="kw">var</span>(Furthest),
+            <span class="dt">CV_spread =</span> <span class="kw">sqrt</span>(var_spread)/mean_spread
+  )</code></pre></div>
+<p>And now plot the results:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Generation, <span class="dt">y =</span> mean_spread, <span class="dt">color =</span> Gap), <span class="dt">data =</span> cum_spread_stats) +
+<span class="st">  </span><span class="kw">geom_point</span>() +<span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre></div>
+<p><img src="2017-05-08_files/figure-html/plot_spread_stats-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Generation, <span class="dt">y =</span> var_spread, <span class="dt">color =</span> Gap), <span class="dt">data =</span> cum_spread_stats) +
+<span class="st">  </span><span class="kw">geom_point</span>() +<span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
+<p><img src="2017-05-08_files/figure-html/plot_spread_stats-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Generation, <span class="dt">y =</span> CV_spread, <span class="dt">color =</span> Gap), <span class="dt">data =</span> cum_spread_stats) +
+<span class="st">  </span><span class="kw">geom_point</span>() +<span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
+<pre><code>Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<pre><code>Warning: Removed 1 rows containing missing values (geom_path).</code></pre>
+<p><img src="2017-05-08_files/figure-html/plot_spread_stats-3.png" width="672" /></p>
+<p>The linear approximation to mean spread is pretty good, although we see a dip in generation 6, as expected from the reduced seed production, and even without gen 6, the continuous runways seem to be decelerating. The ranking between landscapes makes sense. The variances are rather more over the map, although we don’t have confidence intervals on them. But exept for 1-pot gaps, we can squint and imagine that the variances are linear in time. Note, however, that with only 6 generations we’re not going to easily detect nonlinearities. I don’t know that the CVs tell us much.</p>
+<p>Probably the best way to get CIs is to bootstrap replicates.</p>
+<p>Let’s try fitting a model. We’ll need to add a lag of cumulative spread.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LerC_spread &lt;-<span class="st"> </span><span class="kw">mutate</span>(LerC_spread, 
+                      <span class="dt">Furthestm1 =</span> <span class="kw">lag</span>(Furthest, <span class="dt">default =</span> <span class="dv">0</span>))
+m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(Furthest ~<span class="st"> </span>Generation +<span class="st"> </span>Rep +<span class="st"> </span>Generation:Rep +<span class="st"> </span>Furthestm1, 
+         <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;0p&quot;</span>))
+<span class="kw">summary</span>(m1)</code></pre></div>
+<pre><code>
+Call:
+lm(formula = Furthest ~ Generation + Rep + Generation:Rep + Furthestm1, 
+    data = filter(LerC_spread, Gap == &quot;0p&quot;))
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.08017 -0.73937  0.03383  0.78409  2.54087 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      -0.26479    1.38823  -0.191 0.849720    
+Generation        2.22470    0.58884   3.778 0.000528 ***
+Rep2              0.42109    1.81056   0.233 0.817308    
+Rep3              1.70697    1.81500   0.940 0.352762    
+Rep4             -0.36309    1.82680  -0.199 0.843484    
+Rep5              1.94739    1.80616   1.078 0.287571    
+Rep6              0.91400    1.80930   0.505 0.616284    
+Rep7              0.73685    1.80286   0.409 0.684987    
+Rep8             -1.47533    1.86173  -0.792 0.432890    
+Rep9              1.19824    1.80269   0.665 0.510156    
+Rep10             0.63691    1.82680   0.349 0.729229    
+Furthestm1        0.02636    0.21151   0.125 0.901446    
+Generation:Rep2   0.15787    0.47548   0.332 0.741652    
+Generation:Rep3  -0.81727    0.47167  -1.733 0.091045 .  
+Generation:Rep4   1.08491    0.51942   2.089 0.043312 *  
+Generation:Rep5   0.51499    0.51405   1.002 0.322606    
+Generation:Rep6  -0.58945    0.47054  -1.253 0.217770    
+Generation:Rep7  -0.25940    0.46323  -0.560 0.578691    
+Generation:Rep8   1.45031    0.54307   2.671 0.010986 *  
+Generation:Rep9  -0.20452    0.46429  -0.440 0.662009    
+Generation:Rep10  0.65634    0.51942   1.264 0.213878    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.369 on 39 degrees of freedom
+Multiple R-squared:  0.9503,    Adjusted R-squared:  0.9248 
+F-statistic: 37.25 on 20 and 39 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">Anova</span>(m1)</code></pre></div>
+<pre><code>Anova Table (Type II tests)
+
+Response: Furthest
+               Sum Sq Df F value  Pr(&gt;F)  
+Generation      5.178  1  2.7619 0.10455  
+Rep            32.986  9  1.9550 0.07214 .
+Furthestm1      0.029  1  0.0155 0.90145  
+Generation:Rep 35.750  9  2.1188 0.05125 .
+Residuals      73.114 39                  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>This is a little curious– I wasn’t expecting the reps to have different speeds, except as a side effect of autocorrelation. Let’s try a few other models:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m2 &lt;-<span class="st"> </span><span class="kw">lm</span>(Furthest ~<span class="st"> </span>Generation +<span class="st"> </span>Rep +<span class="st"> </span>Generation:Rep, 
+         <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;0p&quot;</span>))
+m3 &lt;-<span class="st"> </span><span class="kw">lm</span>(Furthest ~<span class="st"> </span>Generation +<span class="st"> </span>Furthestm1, <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;0p&quot;</span>))
+<span class="kw">anova</span>(m1, m2, m3)</code></pre></div>
+<pre><code>Analysis of Variance Table
+
+Model 1: Furthest ~ Generation + Rep + Generation:Rep + Furthestm1
+Model 2: Furthest ~ Generation + Rep + Generation:Rep
+Model 3: Furthest ~ Generation + Furthestm1
+  Res.Df     RSS  Df Sum of Sq      F  Pr(&gt;F)  
+1     39  73.114                               
+2     40  73.143  -1    -0.029 0.0155 0.90145  
+3     57 141.849 -17   -68.707 2.1558 0.02383 *
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Hmm, they really do seem to have different slopes. But we have not yet accounted for time-varying speeds. I don’t see how to do that in this context; let’s look at per-generation speeds instead:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m11 &lt;-<span class="st"> </span><span class="kw">lm</span>(speed ~<span class="st"> </span>Gen +<span class="st"> </span>Rep, <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;0p&quot;</span>))
+<span class="kw">summary</span>(m11)</code></pre></div>
+<pre><code>
+Call:
+lm(formula = speed ~ Gen + Rep, data = filter(LerC_spread, Gap == 
+    &quot;0p&quot;))
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.0333 -0.7083 -0.0500  0.8667  2.5333 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)  1.733e+00  6.973e-01   2.486   0.0167 *
+Gen2         1.400e+00  6.237e-01   2.245   0.0298 *
+Gen3         1.300e+00  6.237e-01   2.084   0.0428 *
+Gen4         7.000e-01  6.237e-01   1.122   0.2677  
+Gen5         4.000e-01  6.237e-01   0.641   0.5246  
+Gen6        -1.200e+00  6.237e-01  -1.924   0.0607 .
+Rep2         7.525e-16  8.052e-01   0.000   1.0000  
+Rep3        -6.667e-01  8.052e-01  -0.828   0.4121  
+Rep4         1.000e+00  8.052e-01   1.242   0.2207  
+Rep5         6.667e-01  8.052e-01   0.828   0.4121  
+Rep6        -5.000e-01  8.052e-01  -0.621   0.5378  
+Rep7        -3.333e-01  8.052e-01  -0.414   0.6809  
+Rep8         1.167e+00  8.052e-01   1.449   0.1543  
+Rep9        -1.667e-01  8.052e-01  -0.207   0.8370  
+Rep10        5.000e-01  8.052e-01   0.621   0.5378  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.395 on 45 degrees of freedom
+Multiple R-squared:  0.4365,    Adjusted R-squared:  0.2612 
+F-statistic:  2.49 on 14 and 45 DF,  p-value: 0.01046</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">Anova</span>(m11)</code></pre></div>
+<pre><code>Anova Table (Type II tests)
+
+Response: speed
+          Sum Sq Df F value   Pr(&gt;F)   
+Gen       46.133  5  4.7433 0.001451 **
+Rep       21.667  9  1.2376 0.297021   
+Residuals 87.533 45                    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Well this is confusing! If the per-generation speeds don’t differ among reps, how can the slopes of cumulative spread do so? Let’s look at some plots:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Generation, <span class="dt">y =</span> Furthest, <span class="dt">color =</span> Rep), 
+       <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;0p&quot;</span>)) +
+<span class="st">  </span><span class="kw">geom_point</span>() +<span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre></div>
+<p><img src="2017-05-08_files/figure-html/plot_spread-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Generation, <span class="dt">y =</span> speed, <span class="dt">color =</span> Rep), 
+       <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;0p&quot;</span>)) +
+<span class="st">  </span><span class="kw">geom_line</span>()</code></pre></div>
+<p><img src="2017-05-08_files/figure-html/plot_spread-2.png" width="672" /> Let’s look for autocorrelation in speed.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m12 &lt;-<span class="st"> </span><span class="kw">lm</span>(speed ~<span class="st"> </span>Gen +<span class="st"> </span>Rep +<span class="st"> </span>speed_m1, <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;0p&quot;</span>))
+<span class="kw">summary</span>(m12)</code></pre></div>
+<pre><code>
+Call:
+lm(formula = speed ~ Gen + Rep + speed_m1, data = filter(LerC_spread, 
+    Gap == &quot;0p&quot;))
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.9931 -0.5869 -0.0863  0.7257  2.5069 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   3.6162     0.7801   4.635  4.8e-05 ***
+Gen3          0.3577     0.6601   0.542 0.591277    
+Gen4         -0.2750     0.6549  -0.420 0.677148    
+Gen5         -0.7711     0.6313  -1.222 0.230033    
+Gen6         -2.4692     0.6246  -3.953 0.000357 ***
+Rep2          0.2654     0.8793   0.302 0.764579    
+Rep3         -0.7962     0.8839  -0.901 0.373882    
+Rep4          1.5962     0.8839   1.806 0.079554 .  
+Rep5          0.7270     0.8930   0.814 0.421127    
+Rep6         -0.7308     0.8810  -0.829 0.412469    
+Rep7         -0.2654     0.8793  -0.302 0.764579    
+Rep8          1.7923     0.8992   1.993 0.054082 .  
+Rep9         -0.4000     0.8787  -0.455 0.651778    
+Rep10         0.8616     0.8879   0.970 0.338540    
+speed_m1     -0.3270     0.1591  -2.055 0.047378 *  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.389 on 35 degrees of freedom
+  (10 observations deleted due to missingness)
+Multiple R-squared:  0.5314,    Adjusted R-squared:  0.3439 
+F-statistic: 2.835 on 14 and 35 DF,  p-value: 0.006219</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">Anova</span>(m12)</code></pre></div>
+<pre><code>Anova Table (Type II tests)
+
+Response: speed
+          Sum Sq Df F value    Pr(&gt;F)    
+Gen       47.871  4  6.1995 0.0007015 ***
+Rep       32.146  9  1.8502 0.0935244 .  
+speed_m1   8.154  1  4.2240 0.0473783 *  
+Residuals 67.566 35                      
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Aha! there is negative autocorrelation in speed (evidently it was obscured by the time-dependent patterns in the univariate analysis I did last week). A potential explanation for this could be partial “pushing” by older pots, so that a replicate that gets extra far this generation has less pushing next generation. Alternatively, it could reflect a correlation between distance spread and the number of plants in the furthest pot.</p>
+<p>Let’s do one more analysis with a quadratic of time, so we can interact it with Rep:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m13 &lt;-<span class="st"> </span><span class="kw">lm</span>(speed ~<span class="st"> </span><span class="kw">poly</span>(Generation, <span class="dv">2</span>) *<span class="st"> </span>Rep +<span class="st"> </span>speed_m1, 
+          <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;0p&quot;</span>))
+<span class="kw">summary</span>(m13)</code></pre></div>
+<pre><code>
+Call:
+lm(formula = speed ~ poly(Generation, 2) * Rep + speed_m1, data = filter(LerC_spread, 
+    Gap == &quot;0p&quot;))
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.14668 -0.47051  0.02562  0.52439  2.46495 
+
+Coefficients:
+                             Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)                 3.054e+00  9.512e-01   3.211   0.0046 **
+poly(Generation, 2)1        1.990e+00  7.837e+00   0.254   0.8023   
+poly(Generation, 2)2       -2.395e+00  7.431e+00  -0.322   0.7507   
+Rep2                        4.945e-01  1.154e+00   0.429   0.6730   
+Rep3                        1.295e-01  1.159e+00   0.112   0.9122   
+Rep4                        2.280e+00  1.154e+00   1.976   0.0629 . 
+Rep5                        6.689e-01  1.166e+00   0.574   0.5730   
+Rep6                       -6.265e-01  1.150e+00  -0.545   0.5922   
+Rep7                        1.540e-02  1.160e+00   0.013   0.9895   
+Rep8                        1.467e+00  1.155e+00   1.270   0.2194   
+Rep9                       -9.598e-01  1.150e+00  -0.835   0.4142   
+Rep10                       8.141e-01  1.148e+00   0.709   0.4869   
+speed_m1                   -4.215e-01  1.982e-01  -2.126   0.0468 * 
+poly(Generation, 2)1:Rep2  -1.014e+01  1.115e+01  -0.910   0.3745   
+poly(Generation, 2)2:Rep2  -5.019e+00  1.087e+01  -0.462   0.6495   
+poly(Generation, 2)1:Rep3  -1.910e+01  1.109e+01  -1.722   0.1012   
+poly(Generation, 2)2:Rep3   7.551e+00  1.057e+01   0.714   0.4838   
+poly(Generation, 2)1:Rep4  -1.356e+01  1.122e+01  -1.208   0.2417   
+poly(Generation, 2)2:Rep4   3.330e+00  1.155e+01   0.288   0.7762   
+poly(Generation, 2)1:Rep5  -3.324e+00  1.110e+01  -0.299   0.7678   
+poly(Generation, 2)2:Rep5  -8.064e+00  1.046e+01  -0.771   0.4502   
+poly(Generation, 2)1:Rep6  -3.761e+00  1.109e+01  -0.339   0.7382   
+poly(Generation, 2)2:Rep6   5.375e-14  1.044e+01   0.000   1.0000   
+poly(Generation, 2)1:Rep7  -1.072e+01  1.111e+01  -0.965   0.3467   
+poly(Generation, 2)2:Rep7  -3.057e+00  1.080e+01  -0.283   0.7801   
+poly(Generation, 2)1:Rep8   5.176e+00  1.121e+01   0.462   0.6496   
+poly(Generation, 2)2:Rep8  -7.049e+00  1.053e+01  -0.669   0.5114   
+poly(Generation, 2)1:Rep9   2.805e+00  1.108e+01   0.253   0.8028   
+poly(Generation, 2)2:Rep9  -1.315e+01  1.057e+01  -1.244   0.2287   
+poly(Generation, 2)1:Rep10 -6.363e+00  1.115e+01  -0.571   0.5750   
+poly(Generation, 2)2:Rep10 -1.054e+01  1.087e+01  -0.970   0.3444   
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.43 on 19 degrees of freedom
+  (10 observations deleted due to missingness)
+Multiple R-squared:  0.7304,    Adjusted R-squared:  0.3048 
+F-statistic: 1.716 on 30 and 19 DF,  p-value: 0.1102</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">Anova</span>(m13)</code></pre></div>
+<pre><code>Anova Table (Type II tests)
+
+Response: speed
+                        Sum Sq Df F value    Pr(&gt;F)    
+poly(Generation, 2)     46.959  2 11.4785 0.0005389 ***
+Rep                     32.487  9  1.7646 0.1422649    
+speed_m1                 9.249  1  4.5217 0.0467938 *  
+poly(Generation, 2):Rep 29.613 18  0.8043 0.6761230    
+Residuals               38.865 19                      
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Drop the interaction:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m14 &lt;-<span class="st"> </span><span class="kw">lm</span>(speed ~<span class="st"> </span><span class="kw">poly</span>(Generation, <span class="dv">2</span>) +<span class="st"> </span>Rep +<span class="st"> </span>speed_m1, 
+          <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;0p&quot;</span>))
+<span class="kw">summary</span>(m14)</code></pre></div>
+<pre><code>
+Call:
+lm(formula = speed ~ poly(Generation, 2) + Rep + speed_m1, data = filter(LerC_spread, 
+    Gap == &quot;0p&quot;))
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.89320 -0.68615 -0.06304  0.68486  2.49198 
+
+Coefficients:
+                     Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)            2.9649     0.7018   4.225  0.00015 ***
+poly(Generation, 2)1  -4.2553     2.4272  -1.753  0.08786 .  
+poly(Generation, 2)2  -5.5072     2.3684  -2.325  0.02565 *  
+Rep2                   0.2662     0.8609   0.309  0.75893    
+Rep3                  -0.7985     0.8653  -0.923  0.36206    
+Rep4                   1.5985     0.8653   1.847  0.07269 .  
+Rep5                   0.7309     0.8738   0.836  0.40831    
+Rep6                  -0.7323     0.8626  -0.849  0.40133    
+Rep7                  -0.2662     0.8609  -0.309  0.75893    
+Rep8                   1.7970     0.8797   2.043  0.04824 *  
+Rep9                  -0.4000     0.8604  -0.465  0.64473    
+Rep10                  0.8647     0.8690   0.995  0.32619    
+speed_m1              -0.3309     0.1526  -2.169  0.03660 *  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.36 on 37 degrees of freedom
+  (10 observations deleted due to missingness)
+Multiple R-squared:  0.5251,    Adjusted R-squared:  0.371 
+F-statistic: 3.409 on 12 and 37 DF,  p-value: 0.002013</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">Anova</span>(m14)</code></pre></div>
+<pre><code>Anova Table (Type II tests)
+
+Response: speed
+                    Sum Sq Df F value    Pr(&gt;F)    
+poly(Generation, 2) 46.959  2 12.6865 6.372e-05 ***
+Rep                 32.487  9  1.9504   0.07456 .  
+speed_m1             8.705  1  4.7036   0.03660 *  
+Residuals           68.478 37                      
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>So, in conclusion: weak evidence for among-Rep differences in means, but strong evidence for negative autocorrelation. Note that this autocorrelation should act to slow the rate at which the variance in cumulative spread increases with time.</p>
+<p>Let’s check out the other landscapes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m24 &lt;-<span class="st"> </span><span class="kw">lm</span>(speed ~<span class="st"> </span>Gen +<span class="st"> </span>Rep +<span class="st"> </span>speed_m1, 
+          <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;1p&quot;</span>))
+m34 &lt;-<span class="st"> </span><span class="kw">lm</span>(speed ~<span class="st"> </span>Gen +<span class="st"> </span>Rep +<span class="st"> </span>speed_m1, 
+          <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;2p&quot;</span>))
+m44 &lt;-<span class="st"> </span><span class="kw">lm</span>(speed ~<span class="st"> </span>Gen +<span class="st"> </span>Rep +<span class="st"> </span>speed_m1, 
+          <span class="dt">data =</span> <span class="kw">filter</span>(LerC_spread, Gap ==<span class="st"> &quot;3p&quot;</span>))
+<span class="kw">summary</span>(m24)</code></pre></div>
+<pre><code>
+Call:
+lm(formula = speed ~ Gen + Rep + speed_m1, data = filter(LerC_spread, 
+    Gap == &quot;1p&quot;))
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.9393 -1.0203 -0.2807  0.7435  3.0813 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)  1.939e+00  8.046e-01   2.410   0.0213 *
+Gen3        -6.966e-01  6.728e-01  -1.035   0.3076  
+Gen4        -6.345e-01  6.671e-01  -0.951   0.3481  
+Gen5        -2.000e-01  6.664e-01  -0.300   0.7658  
+Gen6        -1.131e+00  6.692e-01  -1.690   0.0999 .
+Rep2         1.379e-01  9.504e-01   0.145   0.8855  
+Rep3        -1.100e-15  9.424e-01   0.000   1.0000  
+Rep4        -1.008e-15  9.424e-01   0.000   1.0000  
+Rep5         9.379e-01  9.504e-01   0.987   0.3305  
+Rep6         4.000e-01  9.424e-01   0.424   0.6738  
+Rep7        -3.310e-01  9.444e-01  -0.351   0.7280  
+Rep8         4.690e-01  9.444e-01   0.497   0.6226  
+Rep9         4.000e-01  9.424e-01   0.424   0.6738  
+Rep10        1.007e+00  9.604e-01   1.048   0.3017  
+speed_m1    -1.724e-01  1.543e-01  -1.117   0.2715  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.49 on 35 degrees of freedom
+  (10 observations deleted due to missingness)
+Multiple R-squared:  0.1932,    Adjusted R-squared:  -0.1295 
+F-statistic: 0.5988 on 14 and 35 DF,  p-value: 0.8474</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(m34)</code></pre></div>
+<pre><code>
+Call:
+lm(formula = speed ~ Gen + Rep + speed_m1, data = filter(LerC_spread, 
+    Gap == &quot;2p&quot;))
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.9139 -0.8927 -0.3292  0.9515  3.3861 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)  2.206e+00  8.573e-01   2.573   0.0145 *
+Gen3        -3.000e-01  7.061e-01  -0.425   0.6736  
+Gen4        -5.386e-02  7.076e-01  -0.076   0.9398  
+Gen5         3.010e-16  7.061e-01   0.000   1.0000  
+Gen6        -6.000e-01  7.061e-01  -0.850   0.4013  
+Rep2         1.077e-01  1.003e+00   0.107   0.9151  
+Rep3        -1.200e+00  9.986e-01  -1.202   0.2376  
+Rep4        -1.200e+00  9.986e-01  -1.202   0.2376  
+Rep5        -1.308e+00  1.003e+00  -1.304   0.2007  
+Rep6        -1.308e+00  1.003e+00  -1.304   0.2007  
+Rep7         7.077e-01  1.003e+00   0.706   0.4850  
+Rep8        -1.200e+00  9.986e-01  -1.202   0.2376  
+Rep9        -2.015e+00  1.015e+00  -1.985   0.0550 .
+Rep10       -4.923e-01  1.003e+00  -0.491   0.6266  
+speed_m1    -1.795e-01  1.524e-01  -1.178   0.2469  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.579 on 35 degrees of freedom
+  (10 observations deleted due to missingness)
+Multiple R-squared:  0.2666,    Adjusted R-squared:  -0.02679 
+F-statistic: 0.9087 on 14 and 35 DF,  p-value: 0.558</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(m44)</code></pre></div>
+<pre><code>
+Call:
+lm(formula = speed ~ Gen + Rep + speed_m1, data = filter(LerC_spread, 
+    Gap == &quot;3p&quot;))
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.8047 -0.8358 -0.5528  0.2732  3.5512 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -3.150e-03  8.867e-01  -0.004    0.997
+Gen3        -2.961e-01  7.572e-01  -0.391    0.698
+Gen4         8.520e-01  7.464e-01   1.141    0.261
+Gen5        -1.921e-01  7.991e-01  -0.240    0.811
+Gen6        -3.480e-01  7.464e-01  -0.466    0.644
+Rep2         9.039e-01  1.061e+00   0.852    0.400
+Rep3         9.039e-01  1.061e+00   0.852    0.400
+Rep4         1.808e+00  1.091e+00   1.657    0.106
+Rep5         9.039e-01  1.061e+00   0.852    0.400
+Rep6         9.039e-01  1.061e+00   0.852    0.400
+Rep7         8.000e-01  1.050e+00   0.762    0.451
+Rep8         9.039e-01  1.061e+00   0.852    0.400
+Rep9         9.039e-01  1.061e+00   0.852    0.400
+Rep10       -7.436e-17  1.050e+00   0.000    1.000
+speed_m1    -1.299e-01  1.842e-01  -0.705    0.485
+
+Residual standard error: 1.661 on 35 degrees of freedom
+  (10 observations deleted due to missingness)
+Multiple R-squared:  0.1824,    Adjusted R-squared:  -0.1447 
+F-statistic: 0.5575 on 14 and 35 DF,  p-value: 0.879</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">Anova</span>(m24)</code></pre></div>
+<pre><code>Anova Table (Type II tests)
+
+Response: speed
+          Sum Sq Df F value Pr(&gt;F)
+Gen        7.794  4  0.8776 0.4873
+Rep        7.984  9  0.3996 0.9268
+speed_m1   2.772  1  1.2485 0.2715
+Residuals 77.708 35               </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">Anova</span>(m34)</code></pre></div>
+<pre><code>Anova Table (Type II tests)
+
+Response: speed
+          Sum Sq Df F value Pr(&gt;F)
+Gen        2.708  4  0.2715 0.8943
+Rep       28.733  9  1.2805 0.2819
+speed_m1   3.458  1  1.3869 0.2469
+Residuals 87.262 35               </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">Anova</span>(m44)</code></pre></div>
+<pre><code>Anova Table (Type II tests)
+
+Response: speed
+          Sum Sq Df F value Pr(&gt;F)
+Gen        9.585  4  0.8687 0.4924
+Rep       10.624  9  0.4279 0.9109
+speed_m1   1.372  1  0.4974 0.4853
+Residuals 96.548 35               </code></pre>
+<p>Nothing to see here, folks!</p>
+<p>The pattern of autocorrelation should, I think, fall into the category of something that we want the model to reproduce.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="may-2017-2.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="may-2027-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
