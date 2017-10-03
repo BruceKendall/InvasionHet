@@ -8,4 +8,4 @@ categories:
 tags: []
 ---
 
-Before September 2017, the notebook was managed as a **bookdown** project. The source files are in the `/notebook` directory; the compiled notebook is [here](/_Book).
+Before September 2017, the notebook was managed as a **bookdown** project. The source files are in the `/notebook` directory; the compiled notebook is [here](/InvasionHet/book/).
