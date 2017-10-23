@@ -1,0 +1,51 @@
+---
+title: Revisiting plans, and wrestling with seed stochasticity
+author: Bruce Kendall
+date: '2017-10-23'
+slug: revisiting-plans-and-wrestling-with-seed-stochasticity
+categories:
+  - Model description
+  - Parameter estimation
+  - Planning
+tags:
+  - Ler
+---
+
+# Focus on Ler?
+As I look at various pieces of the model (which I've started to assemble in `lib/model.R`), I realize that there are a sufficient number of ways in which the RIL data are different (and not yet analyzed) that I may find it challenging to exactly mirror the Ler model. In particular, I'm going to find it rather challenging (I think) to estimate the environmental stochasticity in seed production among generations and replicates.
+
+So I think I should follow Jenn's advice and focus in on a Ler model for now. That will simplify things as I will only have one genotype. But maybe I should go ahead and build in that extra array dimension anyway?
+
+# Ler seed stochasticity
+## Prior analysis
+Back in June, I did some analysis on the Ler population data, using treatment C (unmanipulated) and B (solitary plants each generation), and using the 1p and 2p gaps. The idea was to look at seedling production in the home pot as a function of adult number, generation, and runway; the selection of landscapes was to get populations that were advancing (so that multiple pots were occupied and I could look at variation among pots within a runway), while having a numerically small effect of seed immigration on local seedling number. It took a bit of work to reconstruct my logic, so here it is in more detail:
+
+There is a Gompertz relatinship between adult number ($A$) and seedling number ($S$):
+$$
+\log(S_t / A_{t-1}) = a + b \log A_{t-1} + \epsilon_t,
+$$
+where $\epsilon_t$ includes both environmental and demographic stochasticity.
+
+This can be re-written as
+$$
+\log S_t = a + (1+b) \log A_{t-1} + \epsilon_t.
+$$
+The RHS is what would go into a GLM with a log link function.
+
+I ran a quasi-Poisson GLM including generation, runway, and their interaction as controls (to soak up putative environmental stochasticity), and found significant effects of those (as well as for the density dependence). The dispersion parameter was very large (75). The question was, is the residual variance plausibly demographic stochasticity alone, or is there additional  variation among pots within a runway? I reasoned that, under a model of of demographic stochasticity, the variance of $S/A$ should be proportional to $1/A$. In order to do this analysis I had to remove the instances with a single pot in the runway (including all of the first generation), because the residual was, naturally, zero for those pots.
+
+I ended that post saying that I needed to create the relevant data in a munge script, which I still haven't done.
+
+## Quasi-Poisson RV
+Thinking about modeling, I needed to get a way to simulate a quasi-Poisson random number. A couple of posts on R-bloggers (https://www.r-bloggers.com/generating-a-quasi-poisson-distribution-version-2/ and https://www.r-bloggers.com/generate-quasi-poisson-distribution-random-variable/) give the following solution:
+```{r eval=FALSE}
+rqpois <- function(n, mu, theta) {
+  rnbinom(n = n, mu = mu, size = mu/(theta-1))
+}
+```
+This creates a RV with the right mean-variance relationship; but I'm not sure what the shape looks like.
+
+While doing that web research, I found a paper that notes that negative binomial is also commonly used for overdispersed count data; but the variance is a quadratic function of the mean. This can result in very different parameter estimates. Plotting an estimate of the variance against the mean can help decide which model to use.
+
+Ver Hoef, J. M., and P. L. Boveng. 2007. Quasi-Poisson vs. negative binomial regression: how should we model overdispersed count data. Ecology 88:2766-2772.
+
