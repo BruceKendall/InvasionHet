@@ -8,7 +8,7 @@
 #' The functions all use elements of lists called `params` and `controls`. 
 #' The elements of these lists are:
 #' 
-#' # Elements of `params``
+#' # Elements of `params`
 #'  
 #' `n_types` (integer)
 #' :    Number of genotypes
@@ -21,7 +21,7 @@
 #' :    Slope of the Gompertz model of density dependence. Should be between -1 and zero
 #' 
 #' 
-#' # Elements of `params``
+#' # Elements of `controls`
 #' 
 #' `n_pots` (integer; calculated by model)
 #' :    Number of pots in the array
