@@ -11,6 +11,20 @@ tags:
   - Ler
 ---
 
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+library(ProjectTemplate) 
+load.project()
+```
+
+
 # Focus on Ler?
 As I look at various pieces of the model (which I've started to assemble in `lib/model.R`), I realize that there are a sufficient number of ways in which the RIL data are different (and not yet analyzed) that I may find it challenging to exactly mirror the Ler model. In particular, I'm going to find it rather challenging (I think) to estimate the environmental stochasticity in seed production among generations and replicates.
 
@@ -38,7 +52,7 @@ I ended that post saying that I needed to create the relevant data in a munge sc
 
 ## Quasi-Poisson RV
 Thinking about modeling, I needed to get a way to simulate a quasi-Poisson random number. A couple of posts on R-bloggers (https://www.r-bloggers.com/generating-a-quasi-poisson-distribution-version-2/ and https://www.r-bloggers.com/generate-quasi-poisson-distribution-random-variable/) give the following solution:
-```{r eval=FALSE}
+```{r show_rqpois, eval=FALSE}
 rqpois <- function(n, mu, theta) {
   rnbinom(n = n, mu = mu, size = mu/(theta-1))
 }
@@ -49,3 +63,85 @@ While doing that web research, I found a paper that notes that negative binomial
 
 Ver Hoef, J. M., and P. L. Boveng. 2007. Quasi-Poisson vs. negative binomial regression: how should we model overdispersed count data. Ecology 88:2766-2772.
 
+## Updated Ler fecundity data
+I've created a script `munge/Ler_fecundity.R` to make and process the data (formerly called `seed_data`, but now called `Ler_fecundity`). Here is the current version of the code:
+```{r show_Lerfec, eval=FALSE}
+# Select the treatments
+Ler_fecundity <- subset(popLer, Treatment %in% c("B", "C"))
+
+# Create the lagged variable. For treatment B it is always 1
+Ler_fecundity <- group_by(Ler_fecundity, ID, Pot) %>%
+  mutate(Nm1 = 1 + (Treatment == "C") * (lag(Seedlings) - 1))
+
+# Select the desired records
+Ler_fecundity <- subset(Ler_fecundity, 
+                          Generation > 1 & 
+                          Gap %in% c("1p", "2p") &
+                          !is.na(Nm1)
+                        )
+
+# Make the interaction variable
+Ler_fecundity$GenID <- with(Ler_fecundity, interaction(Gen, ID))
+
+# Drop cases where there is only one pot in a GenID level
+GenID_counts <- table(Ler_fecundity$GenID)
+singletons <- rownames(GenID_counts)[GenID_counts == 1]
+Ler_fecundity <- droplevels(Ler_fecundity[-match(singletons, Ler_fecundity$GenID), ])
+
+# Clean up and auto-cache the result
+rm(singletons, GenID_counts)
+ProjectTemplate::cache("Ler_fecundity")
+```
+
+I found that my previous analysis may have had some extraneous records where pots were newly colonized, so don't be surprised if the results qualitatively change.
+
+Also, because this does lots of subsetting, there may be situations where I want to use more of the data, in which case I'll need to make two versions.
+
+## Re-run old analysis
+Now let's repeat the analysis from June 5.
+```{r DD.glm}
+DD.glm <- glm(Seedlings ~ log(Nm1) + Gen * ID, data = Ler_fecundity, family = quasipoisson) 
+car::Anova(DD.glm) 
+summary(DD.glm) 
+```
+I still don't understand the singularities (resulting in NAs in the coefficients); there is replication in all those cases. Maybe it's because of a lack of balance---not all IDs have the same number of Gens. We can test that by using the interaction term directly:
+
+```{r DD.glm2}
+DD.glm2 <- glm(Seedlings ~ log(Nm1) + GenID, data = Ler_fecundity, family = quasipoisson) 
+car::Anova(DD.glm2) 
+summary(DD.glm2) 
+```
+Yes, that's it. The model fit is the same, but the NAs have gone away.
+
+Now let's look again at the evidence for demographic stochasticity.
+```{r DS}
+Ler_fecundity$Fitted <- fitted(DD.glm)
+Ler_fecundity <- mutate(Ler_fecundity,
+                           resid2 = ((Seedlings/Nm1) - (Fitted/Nm1))^2)
+ggplot(aes(1/Nm1, resid2), data = Ler_fecundity) + geom_point() + scale_y_log10() + 
+  geom_smooth()
+summary(lm(resid2 ~ I(1/Nm1), data = Ler_fecundity))
+ggplot(aes(1/Nm1, resid2), data = subset(Ler_fecundity, resid2 < 10000)) + geom_point() + 
+  geom_smooth() + geom_smooth(method = "lm")
+```
+
+There is a bit of extra variance inflation around Nm1 = 2, it appears---I'm not sure what to do with that.
+
+## Mean-variance relationship
+So if we plot the variance against the fitted values, what is the pattern?
+```{r mu-var}
+ggplot(aes(Fitted, resid2), data = subset(Ler_fecundity, resid2 < 10000)) + geom_point() + 
+  geom_smooth() + geom_smooth(method = "lm")
+```
+
+Hmm, there's something very odd here. Let's try binning the data, using a trick from http://data.princeton.edu/wws509/r/overdispersion.html.
+```{r mu-var2}
+xb <- Ler_fecundity$Fitted
+g <- cut(xb, breaks=quantile(xb,seq(0,100,5)/100))
+m <- tapply(Ler_fecundity$Seedlings, g, mean)
+v <- tapply(Ler_fecundity$Seedlings, g, var)
+qplot(m, v, xlab="Mean", ylab="Variance", main="Mean-Variance Relationship") +
+  geom_smooth() + geom_smooth(method = "lm")
+```
+
+That's pretty darn close to linear!
