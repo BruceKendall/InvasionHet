@@ -3,7 +3,9 @@
 #' author: Bruce Kendall
 #' ---
 #' 
-#' Contains functions for simulating the *Arabidopsis* model.
+#' Contains functions for simulating the *Arabidopsis* model. To generate a version 
+#' with more easily readable documentation, compile the document using
+#' `rmarkdown::render("model.R")`
 #' 
 #' The functions all use elements of lists called `params` and `controls`. 
 #' The elements of these lists are:
@@ -20,6 +22,14 @@
 #' `b_Gompertz` (scalar, or vector of length `n_types`)
 #' :    Slope of the Gompertz model of density dependence. Should be between -1 and zero
 #' 
+#' `sigma_seed_time` (positive scalar)
+#' :    Standard deviation of temporal stochasticity in log seed production
+#' 
+#' `sigma_seed_rep` (positive scalar)
+#' :    Standard deviation of among-rep stochasticity in log seed production
+#' 
+#' `theta_seed` (positive scalar)
+#' :    Variance inflation factor for quasi-Poisson demographic stochasticity
 #' 
 #' ### Elements of `controls`
 #' 
@@ -29,6 +39,16 @@
 #' `n_sims` (integer)
 #' :    Number of replicate simulations
 #' 
+#' `ES_seeds` (logical)
+#' :    Set to `TRUE` to include environmental stochasticity in seed production
+#' 
+#' `DS_seeds` (logical)
+#' :    Set to `TRUE` to include demographic stochasticity in seed production. If `FALSE`,
+#' then seed number is simply rounded to the nearest integer.
+#' 
+#' ### State variables
+#' The state variables are `Adults` and (internally) `Seeds`. These are structured as
+#' a matrix with each row being a replicate and each column a pot. 
 #' 
 #' <!-- ############################################################################# --> 
 #' # `iterate_model()`
@@ -40,7 +60,7 @@ iterate_model <- function(Adults, params, controls) {
   
   # Environmental stochasticicy in seed production?
   if (controls$ES_seeds) {
-    Seeds <- ES_seeds(Seeds, params)
+    Seeds <- ES_seeds(Seeds, params, controls$n_sims)
   }
   
   # Demographic stochasticity in seed production?
@@ -90,6 +110,28 @@ Gompertz_seeds <- function(Adults, params) {
 }
 
 #' <!-- ############################################################################# --> 
+#' # `ES_seeds()`
+#' Add environmental stochasticity to the seed production. There are two components: a
+#' temporal component (with standarad deviation `sigma_seed_time`) that applies equally
+#' to all reps, and an among-rep component (with standarad deviation `sigma_seed_rep`)
+#' that applies equally to all pots within each rep.
+#' 
+#' The variation is assumed to be log-normal; the sigma parameters are on the 
+#' log-transformed scale.
+ES_seeds <- function(Seeds, params, n_rep) {
+  with(params, {
+    ## Log-transform and apply temporal ES equally to all reps
+    lseeds <- log(Seeds) + rnorm(1, 0, sigma_seed_time)
+    
+    ## Apply inter-rep ES equally to all pots within each rep
+    lseeds <- lseeds + rnorm(n_rep, 0, sigma_seed_rep)
+    
+    ## Return anti-log-transformed result
+    return(exp(lseeds))
+  })
+}
+
+#' <!-- ############################################################################# --> 
 #' # `rqpois()`
 #' Generate random numbers from a quasi-Poisson "distribution," following logic and code
 #' from https://www.r-bloggers.com/generate-quasi-poisson-distribution-random-variable/
@@ -113,4 +155,13 @@ Gompertz_seeds <- function(Adults, params) {
 #' 
 rqpois <- function(n, mu, theta) {
   rnbinom(n = n, mu = mu, size = mu/(theta-1))
+}
+
+#' <!-- ############################################################################# --> 
+#' # `DS_seeds()`
+#' Add demographic stochasticity to the seed production, using the negative binomial
+#' approximation to the quasi-Poisson.
+DS_seeds <- function(Seeds, params) {
+  n <- prod(dim(Seeds))
+  rqpois(n, Seeds, params$theta)
 }
