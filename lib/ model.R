@@ -8,7 +8,7 @@
 #' The functions all use elements of lists called `params` and `controls`. 
 #' The elements of these lists are:
 #' 
-#' # Elements of `params`
+#' ### Elements of `params`
 #'  
 #' `n_types` (integer)
 #' :    Number of genotypes
@@ -21,7 +21,7 @@
 #' :    Slope of the Gompertz model of density dependence. Should be between -1 and zero
 #' 
 #' 
-#' # Elements of `controls`
+#' ### Elements of `controls`
 #' 
 #' `n_pots` (integer; calculated by model)
 #' :    Number of pots in the array
@@ -87,4 +87,30 @@ Gompertz_seeds <- function(Adults, params) {
     expected_seeds <- exp(a_Gompertz + (1 + b_Gompertz) * log(Adults))
     return(expected_seeds)
   })
+}
+
+#' <!-- ############################################################################# --> 
+#' # `rqpois()`
+#' Generate random numbers from a quasi-Poisson "distribution," following logic and code
+#' from https://www.r-bloggers.com/generate-quasi-poisson-distribution-random-variable/
+#' and https://www.r-bloggers.com/generating-a-quasi-poisson-distribution-version-2/.
+#' The basic idea is to use a negative binomial distribution with mean $\mu$ and size
+#' parameter $\mu/(\theta - 1)$ to generate variates with mean $\mu$ and variance 
+#' $\theta \mu$, where $\theta$ is the variance inflation parameter from the GLM.
+#' 
+#' ### Parameters
+#' `n` (integer)
+#' :    Number of random numbers to be drawn
+#' 
+#' `mu` (positive scalar)
+#' :    Mean of the distribution
+#' 
+#' `theta` (positive scalar)
+#' :    Variance inflation factor
+#' 
+#' It is conceivable that this will work with vectors of `mu` and `theta`, but this
+#' has not been tested.
+#' 
+rqpois <- function(n, mu, theta) {
+  rnbinom(n = n, mu = mu, size = mu/(theta-1))
 }
