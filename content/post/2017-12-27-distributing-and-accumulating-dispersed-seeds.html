@@ -1,0 +1,36 @@
+---
+title: Distributing and accumulating dispersed seeds
+author: Bruce Kendall
+date: '2017-12-27'
+slug: distributing-and-accumulating-dispersed-seeds
+categories:
+  - Model description
+tags:
+  - dispersal
+---
+
+
+
+<p>Here is what I think will be an efficient way of putting the dispersed seeds in the right place. Let <code>relDseeds</code> be a <span class="math inline">\((2 D_{max}+1)\times n_{pots}\)</span> matrix giving dispersal relative to the home pot (with row <code>Dmax + 1</code> being retention and rows above that being backwards dispersal). Then we can create an absolute dispersal matrix:</p>
+<pre class="r"><code># Lowest index of each column of relDseeds to include in Dseeds
+lower &lt;- pmax(1, Dmax - (1:npots) + 2) 
+
+# Add an index row, available in the applied function as x[1]
+relDseeds&lt;-rbind(1:npots, relDseeds)
+
+# Function to construct a column of Dseeds from a column of relDseeds
+padCol &lt;- function(x, lower, Dmax, npots) {
+  leading_zeros &lt;- rep(0, max(0, x[1] - Dmax - 1))
+  dispersed_seeds &lt;- x[-(1:lower[x[1]])]
+  trailing_zeros &lt;- rep(0, npots-x[1])
+  c(leading_zeros, dispersed_seeds, trailing_zeros)
+}
+
+# Make a list of vectors for each column of Dseeds
+Dseeds &lt;- apply(relDseeds, 2, padCol, lower=lower, Dmax=Dmax, npots=npots)
+
+# Convert the list to a matrix
+Dseeds &lt;- matrix(unlist(Dseeds), npots + Dmax, npots)</code></pre>
+<p>Finally, we can get the total number of seeds dispersed to each pot using apply:</p>
+<pre class="r"><code>apply(Dseeds, 1, sum)</code></pre>
+<p>I think that, if <code>relDseeds</code> is actually the 3rd and 4th dimension of an array (with genotypes and reps being the first two), then we can <code>apply</code> all of the above to efficiently do this calculation for all g and r.</p>

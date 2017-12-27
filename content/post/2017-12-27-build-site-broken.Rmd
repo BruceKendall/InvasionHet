@@ -1,0 +1,34 @@
+---
+title: Build site broken
+author: Bruce Kendall
+date: '2017-12-27'
+slug: build-site-broken
+categories:
+  - Housekeeping
+tags:
+  - blogdown
+---
+
+Yesterday I updated **blogdown**, from v. 0.1 to 0.4. This broke `build.site()`, because when it tries to compile an Rmd file that calls `projecttemplate`, the working directory is no longer being set to the project root, which presently is "/Users/kendall/Documents/Github/InvasionHet". This was acheived by setting the knitr parameter `root.dir` in `.Rprofile` in the post directory. 
+
+Here's what the knitr option currently is:
+```{r project.root, cache=FALSE}
+knitr::opts_knit$get()$root.dir
+# Originally gave NULL
+```
+and here's what is being viewed as the working directory:
+```{r pwd, cache=FALSE}
+getwd()
+# Originally gave post subdirectory
+```
+So it appears that the local `.Rprofile` is no longer being read in.
+
+When I move the `.Rprofile` to the project root (and update the relative path to point to that same directory) then it *does* get read in (see updated values above).
+
+Well, that didn't fix the problem. The call to `ProjectTemplate::load.project()` (which is first encountered in `content/post/2017-09-19-fit-ler-dispersal-kernels.Rmd`) still sees the current directory as `post`. In fact, it's not even clear why the chunk was executing, as cache was set to TRUE!
+
+Maybe the cache location has been moved?
+
+What's even wierder is that, having modified 2017-09-19-fit-ler-dispersal-kernels.Rmd (just turning caching on and off), it re-rendered under serve.site just fine!
+
+I don't know why things aren't recompling fine under build_site. But the workaround for creating a publishable version without rebuilding the Rmd files is to use `blogdown::hugo_build()` instead.

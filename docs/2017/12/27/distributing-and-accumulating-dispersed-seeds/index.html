@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Distributing and accumulating dispersed seeds - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Distributing and accumulating dispersed seeds - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">Distributing and accumulating dispersed seeds</h1>
+
+    
+    <span class="article-date">2017/12/27</span>
+    
+
+    <div class="article-content">
+      <p>Here is what I think will be an efficient way of putting the dispersed seeds in the right place. Let <code>relDseeds</code> be a <span class="math inline">\((2 D_{max}+1)\times n_{pots}\)</span> matrix giving dispersal relative to the home pot (with row <code>Dmax + 1</code> being retention and rows above that being backwards dispersal). Then we can create an absolute dispersal matrix:</p>
+<pre class="r"><code># Lowest index of each column of relDseeds to include in Dseeds
+lower &lt;- pmax(1, Dmax - (1:npots) + 2) 
+
+# Add an index row, available in the applied function as x[1]
+relDseeds&lt;-rbind(1:npots, relDseeds)
+
+# Function to construct a column of Dseeds from a column of relDseeds
+padCol &lt;- function(x, lower, Dmax, npots) {
+  leading_zeros &lt;- rep(0, max(0, x[1] - Dmax - 1))
+  dispersed_seeds &lt;- x[-(1:lower[x[1]])]
+  trailing_zeros &lt;- rep(0, npots-x[1])
+  c(leading_zeros, dispersed_seeds, trailing_zeros)
+}
+
+# Make a list of vectors for each column of Dseeds
+Dseeds &lt;- apply(relDseeds, 2, padCol, lower=lower, Dmax=Dmax, npots=npots)
+
+# Convert the list to a matrix
+Dseeds &lt;- matrix(unlist(Dseeds), npots + Dmax, npots)</code></pre>
+<p>Finally, we can get the total number of seeds dispersed to each pot using apply:</p>
+<pre class="r"><code>apply(Dseeds, 1, sum)</code></pre>
+<p>I think that, if <code>relDseeds</code> is actually the 3rd and 4th dimension of an array (with genotypes and reps being the first two), then we can <code>apply</code> all of the above to efficiently do this calculation for all g and r.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

@@ -23,6 +23,17 @@
     </item>
     
     <item>
+      <title>Build site broken</title>
+      <link>https://brucekendall.github.io/InvasionHet/2017/12/27/build-site-broken/</link>
+      <pubDate>Wed, 27 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/2017/12/27/build-site-broken/</guid>
+      <description>Yesterday I updated blogdown, from v. 0.1 to 0.4. This broke build.site(), because when it tries to compile an Rmd file that calls projecttemplate, the working directory is no longer being set to the project root, which presently is “/Users/kendall/Documents/Github/InvasionHet”. This was acheived by setting the knitr parameter root.dir in .Rprofile in the post directory.
+Here’s what the knitr option currently is:
+knitr::opts_knit$get()$root.dir [1] &amp;quot;/Users/kendall/Documents/Github/InvasionHet&amp;quot; # Originally gave NULL and here’s what is being viewed as the working directory:</description>
+    </item>
+    
+    <item>
       <title>Customizing blogdown</title>
       <link>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</link>
       <pubDate>Sat, 30 Sep 2017 00:00:00 +0000</pubDate>

@@ -1,0 +1,26 @@
+---
+title: Array dimensions
+author: Bruce Kendall
+date: '2017-12-26'
+slug: array-dimensions
+categories: [model-description]
+tags: []
+---
+
+
+
+<p>In a previous post, I said that</p>
+<blockquote>
+<p>A generation’s adult and seed distributions will be a <span class="math inline">\(R \times X \times G\)</span> array, where <span class="math inline">\(R\)</span> is the number of replicate simulations, <span class="math inline">\(X\)</span> is the number of spatial locations, and <span class="math inline">\(G\)</span> is the number of genotypes.</p>
+</blockquote>
+<p>However, the easiest way to multiply the array by a vector of genotype-specific parameters (of length <span class="math inline">\(G\)</span>) is to have the genotype be in the <em>first</em> dimension. This works for scalar operations, as in <code>Gompertz_seeds()</code>.</p>
+<p>Now, what if I want to apply a value to all pots within a rep, but with rep-specific values (as in the second line of <code>ES_seeds()</code>)? If the values vary by genotype as well as rep, then automatic recycling doesn’t happen and we have to use the <code>sweep()</code> function (see, e.g., <a href="https://stackoverflow.com/questions/42893238/recycling-higher-dimensional-arrays" class="uri">https://stackoverflow.com/questions/42893238/recycling-higher-dimensional-arrays</a>). If all genotypes are to recieve the same treatment (e.g., if all genotypes respond identically to the environment), then automatic recycling would only work if replicate was the first dimension. To avoid reconforming the array, we would again need to use <code>sweep</code>.</p>
+<p>Following examples in <a href="http://grokbase.com/t/r/r-help/043zwg3tff/r-array-addition-doesnt-recycle#20040331fb9a680p0ek4kragmzvrs26y14" class="uri">http://grokbase.com/t/r/r-help/043zwg3tff/r-array-addition-doesnt-recycle#20040331fb9a680p0ek4kragmzvrs26y14</a>, we can create helper macros that make the notation more compact and easier to follow:</p>
+<pre class="r"><code>&quot;%+gr%&quot; &lt;- function(a, x) sweep(a, c(1, 2), x, &quot;+&quot;)
+&quot;%+r%&quot; &lt;- function(a, x) sweep(a, 2, x, &quot;+&quot;)</code></pre>
+<p>for the two cases in the previous paragraph. The array is the first argument. The pattern is that “g,” “r,” and “p” indicate that the x is being applied over genotypes, replicates, and pots, respectively. Additional operators and array dimension combos can be created as needed.</p>
+<p>Before making a final decision about how to order the array dimensions, I should think about how dispersal is going to work. There, we potentially have a different kernel for each genotype within each pot within each rep. Thus, the kernel will be a 4-dimensional array, with the 4th dimension being dx (the change in location). Actually, the math will be easier if the the seed disposition can be a 4-D array with the 4th dimension being the target pot. So if <code>K[g, r, p, ]</code> is a vector (of length <code>2 * Dmax +1</code>, representing disperal distances ranging from <span class="math inline">\(-D_{max}\)</span> to <span class="math inline">\(+D_{max}\)</span>, including zero), and normalized to sum to one, then we want the dispersed seeds to look something like</p>
+<pre class="r"><code>Dseeds[g, r, p, (p - Dmax):(p + Dmax)] &lt;- f(seeds[g, r, p], K[g, r, p, ])</code></pre>
+<p>where <code>f(x, y)</code> is, say, <code>rmultinom(1, x, y)</code> (for seed sampling) or <code>round(x * y)</code> (for deterministic dispersal).</p>
+<p>The easiest way to conststruct this for a given <span class="math inline">\((r, g)\)</span> would be to use <code>bandSparse()</code> in the <code>Matrix</code> library. This can be converted to a regular matrix using <code>as.matrix</code>; what remains to be seen is if this can be accomplished within a call to sweep or apply so that we don’t have step through the g and r. One drawback of <code>bandSparse</code> is that it truncates the values at the <em>end</em> of each subdiagonal. Also, now that I’ve looked at the code, it is doing element-wise assignment in R, so is probably slow. Maybe there is a faster way to do things using <code>lag</code>. Though lag itself has wierd behavior—it doesn’t simply return the lagged vector.</p>
+<p>At any rate, it seems like there are benefits to having pot as the third dimension.</p>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Build site broken - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Build site broken - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">Build site broken</h1>
+
+    
+    <span class="article-date">2017/12/27</span>
+    
+
+    <div class="article-content">
+      <p>Yesterday I updated <strong>blogdown</strong>, from v. 0.1 to 0.4. This broke <code>build.site()</code>, because when it tries to compile an Rmd file that calls <code>projecttemplate</code>, the working directory is no longer being set to the project root, which presently is “/Users/kendall/Documents/Github/InvasionHet”. This was acheived by setting the knitr parameter <code>root.dir</code> in <code>.Rprofile</code> in the post directory.</p>
+<p>Here’s what the knitr option currently is:</p>
+<pre class="r"><code>knitr::opts_knit$get()$root.dir</code></pre>
+<pre><code>[1] &quot;/Users/kendall/Documents/Github/InvasionHet&quot;</code></pre>
+<pre class="r"><code># Originally gave NULL</code></pre>
+<p>and here’s what is being viewed as the working directory:</p>
+<pre class="r"><code>getwd()</code></pre>
+<pre><code>[1] &quot;/Users/kendall/Documents/Github/InvasionHet&quot;</code></pre>
+<pre class="r"><code># Originally gave post subdirectory</code></pre>
+<p>So it appears that the local <code>.Rprofile</code> is no longer being read in.</p>
+<p>When I move the <code>.Rprofile</code> to the project root (and update the relative path to point to that same directory) then it <em>does</em> get read in (see updated values above).</p>
+<p>Well, that didn’t fix the problem. The call to <code>ProjectTemplate::load.project()</code> (which is first encountered in <code>content/post/2017-09-19-fit-ler-dispersal-kernels.Rmd</code>) still sees the current directory as <code>post</code>. In fact, it’s not even clear why the chunk was executing, as cache was set to TRUE!</p>
+<p>Maybe the cache location has been moved?</p>
+<p>What’s even wierder is that, having modified 2017-09-19-fit-ler-dispersal-kernels.Rmd (just turning caching on and off), it re-rendered under serve.site just fine!</p>
+<p>I don’t know why things aren’t recompling fine under build_site. But the workaround for creating a publishable version without rebuilding the Rmd files is to use <code>blogdown::hugo_build()</code> instead.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

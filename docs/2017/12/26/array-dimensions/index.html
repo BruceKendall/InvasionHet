@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Array dimensions - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Array dimensions - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">Array dimensions</h1>
+
+    
+    <span class="article-date">2017/12/26</span>
+    
+
+    <div class="article-content">
+      <p>In a previous post, I said that</p>
+<blockquote>
+<p>A generation’s adult and seed distributions will be a <span class="math inline">\(R \times X \times G\)</span> array, where <span class="math inline">\(R\)</span> is the number of replicate simulations, <span class="math inline">\(X\)</span> is the number of spatial locations, and <span class="math inline">\(G\)</span> is the number of genotypes.</p>
+</blockquote>
+<p>However, the easiest way to multiply the array by a vector of genotype-specific parameters (of length <span class="math inline">\(G\)</span>) is to have the genotype be in the <em>first</em> dimension. This works for scalar operations, as in <code>Gompertz_seeds()</code>.</p>
+<p>Now, what if I want to apply a value to all pots within a rep, but with rep-specific values (as in the second line of <code>ES_seeds()</code>)? If the values vary by genotype as well as rep, then automatic recycling doesn’t happen and we have to use the <code>sweep()</code> function (see, e.g., <a href="https://stackoverflow.com/questions/42893238/recycling-higher-dimensional-arrays" class="uri">https://stackoverflow.com/questions/42893238/recycling-higher-dimensional-arrays</a>). If all genotypes are to recieve the same treatment (e.g., if all genotypes respond identically to the environment), then automatic recycling would only work if replicate was the first dimension. To avoid reconforming the array, we would again need to use <code>sweep</code>.</p>
+<p>Following examples in <a href="http://grokbase.com/t/r/r-help/043zwg3tff/r-array-addition-doesnt-recycle#20040331fb9a680p0ek4kragmzvrs26y14" class="uri">http://grokbase.com/t/r/r-help/043zwg3tff/r-array-addition-doesnt-recycle#20040331fb9a680p0ek4kragmzvrs26y14</a>, we can create helper macros that make the notation more compact and easier to follow:</p>
+<pre class="r"><code>&quot;%+gr%&quot; &lt;- function(a, x) sweep(a, c(1, 2), x, &quot;+&quot;)
+&quot;%+r%&quot; &lt;- function(a, x) sweep(a, 2, x, &quot;+&quot;)</code></pre>
+<p>for the two cases in the previous paragraph. The array is the first argument. The pattern is that “g,” “r,” and “p” indicate that the x is being applied over genotypes, replicates, and pots, respectively. Additional operators and array dimension combos can be created as needed.</p>
+<p>Before making a final decision about how to order the array dimensions, I should think about how dispersal is going to work. There, we potentially have a different kernel for each genotype within each pot within each rep. Thus, the kernel will be a 4-dimensional array, with the 4th dimension being dx (the change in location). Actually, the math will be easier if the the seed disposition can be a 4-D array with the 4th dimension being the target pot. So if <code>K[g, r, p, ]</code> is a vector (of length <code>2 * Dmax +1</code>, representing disperal distances ranging from <span class="math inline">\(-D_{max}\)</span> to <span class="math inline">\(+D_{max}\)</span>, including zero), and normalized to sum to one, then we want the dispersed seeds to look something like</p>
+<pre class="r"><code>Dseeds[g, r, p, (p - Dmax):(p + Dmax)] &lt;- f(seeds[g, r, p], K[g, r, p, ])</code></pre>
+<p>where <code>f(x, y)</code> is, say, <code>rmultinom(1, x, y)</code> (for seed sampling) or <code>round(x * y)</code> (for deterministic dispersal).</p>
+<p>The easiest way to conststruct this for a given <span class="math inline">\((r, g)\)</span> would be to use <code>bandSparse()</code> in the <code>Matrix</code> library. This can be converted to a regular matrix using <code>as.matrix</code>; what remains to be seen is if this can be accomplished within a call to sweep or apply so that we don’t have step through the g and r. One drawback of <code>bandSparse</code> is that it truncates the values at the <em>end</em> of each subdiagonal. Also, now that I’ve looked at the code, it is doing element-wise assignment in R, so is probably slow. Maybe there is a faster way to do things using <code>lag</code>. Though lag itself has wierd behavior—it doesn’t simply return the lagged vector.</p>
+<p>At any rate, it seems like there are benefits to having pot as the third dimension.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,38 @@
+---
+title: Distributing and accumulating dispersed seeds
+author: Bruce Kendall
+date: '2017-12-27'
+slug: distributing-and-accumulating-dispersed-seeds
+categories:
+  - Model description
+tags:
+  - dispersal
+---
+
+Here is what I think will be an efficient way of putting the dispersed seeds in the right place. Let `relDseeds` be a $(2 D_{max}+1)\times n_{pots}$ matrix giving dispersal relative to the home pot (with row `Dmax + 1` being retention and rows above that being backwards dispersal). Then we can create an absolute dispersal matrix:
+```r
+# Lowest index of each column of relDseeds to include in Dseeds
+lower <- pmax(1, Dmax - (1:npots) + 2) 
+
+# Add an index row, available in the applied function as x[1]
+relDseeds<-rbind(1:npots, relDseeds)
+
+# Function to construct a column of Dseeds from a column of relDseeds
+padCol <- function(x, lower, Dmax, npots) {
+  leading_zeros <- rep(0, max(0, x[1] - Dmax - 1))
+  dispersed_seeds <- x[-(1:lower[x[1]])]
+  trailing_zeros <- rep(0, npots-x[1])
+  c(leading_zeros, dispersed_seeds, trailing_zeros)
+}
+
+# Make a list of vectors for each column of Dseeds
+Dseeds <- apply(relDseeds, 2, padCol, lower=lower, Dmax=Dmax, npots=npots)
+
+# Convert the list to a matrix
+Dseeds <- matrix(unlist(Dseeds), npots + Dmax, npots)
+```
+Finally, we can get the total number of seeds dispersed to each pot using apply:
+```r
+apply(Dseeds, 1, sum)
+```
+I think that, if `relDseeds` is actually the 3rd and 4th dimension of an array (with genotypes and reps being the first two), then we can `apply` all of the above to efficiently do this calculation for all g and r.

@@ -1,0 +1,28 @@
+---
+title: Build site broken
+author: Bruce Kendall
+date: '2017-12-27'
+slug: build-site-broken
+categories:
+  - Housekeeping
+tags:
+  - blogdown
+---
+
+
+
+<p>Yesterday I updated <strong>blogdown</strong>, from v. 0.1 to 0.4. This broke <code>build.site()</code>, because when it tries to compile an Rmd file that calls <code>projecttemplate</code>, the working directory is no longer being set to the project root, which presently is “/Users/kendall/Documents/Github/InvasionHet”. This was acheived by setting the knitr parameter <code>root.dir</code> in <code>.Rprofile</code> in the post directory.</p>
+<p>Here’s what the knitr option currently is:</p>
+<pre class="r"><code>knitr::opts_knit$get()$root.dir</code></pre>
+<pre><code>[1] &quot;/Users/kendall/Documents/Github/InvasionHet&quot;</code></pre>
+<pre class="r"><code># Originally gave NULL</code></pre>
+<p>and here’s what is being viewed as the working directory:</p>
+<pre class="r"><code>getwd()</code></pre>
+<pre><code>[1] &quot;/Users/kendall/Documents/Github/InvasionHet&quot;</code></pre>
+<pre class="r"><code># Originally gave post subdirectory</code></pre>
+<p>So it appears that the local <code>.Rprofile</code> is no longer being read in.</p>
+<p>When I move the <code>.Rprofile</code> to the project root (and update the relative path to point to that same directory) then it <em>does</em> get read in (see updated values above).</p>
+<p>Well, that didn’t fix the problem. The call to <code>ProjectTemplate::load.project()</code> (which is first encountered in <code>content/post/2017-09-19-fit-ler-dispersal-kernels.Rmd</code>) still sees the current directory as <code>post</code>. In fact, it’s not even clear why the chunk was executing, as cache was set to TRUE!</p>
+<p>Maybe the cache location has been moved?</p>
+<p>What’s even wierder is that, having modified 2017-09-19-fit-ler-dispersal-kernels.Rmd (just turning caching on and off), it re-rendered under serve.site just fine!</p>
+<p>I don’t know why things aren’t recompling fine under build_site. But the workaround for creating a publishable version without rebuilding the Rmd files is to use <code>blogdown::hugo_build()</code> instead.</p>

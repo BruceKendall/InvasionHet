@@ -1,0 +1,33 @@
+---
+title: Array dimensions
+author: Bruce Kendall
+date: '2017-12-26'
+slug: array-dimensions
+categories: [model-description]
+tags: []
+---
+
+In a previous post, I said that 
+
+> A generation's adult and seed distributions will be a $R \times X \times G$ array, where $R$ is the number of replicate simulations, $X$ is the number of spatial locations, and $G$ is the number of genotypes.
+
+However, the easiest way to multiply the array by a vector of genotype-specific parameters (of length $G$) is to have the genotype be in the *first* dimension. This works for scalar operations, as in `Gompertz_seeds()`.
+
+Now, what if I want to apply a value to all pots within a rep, but with rep-specific values (as in the second line of `ES_seeds()`)? If the values vary by genotype as well as rep, then automatic recycling doesn't happen and we have to use the `sweep()` function (see, e.g., https://stackoverflow.com/questions/42893238/recycling-higher-dimensional-arrays). If all genotypes are to recieve the same treatment (e.g., if all genotypes respond identically to the environment), then automatic recycling would only work if replicate was the first dimension. To avoid reconforming the array, we would again need to use `sweep`. 
+
+Following examples in http://grokbase.com/t/r/r-help/043zwg3tff/r-array-addition-doesnt-recycle#20040331fb9a680p0ek4kragmzvrs26y14, we can create helper macros that make the notation more compact and easier to follow:
+```r
+"%+gr%" <- function(a, x) sweep(a, c(1, 2), x, "+")
+"%+r%" <- function(a, x) sweep(a, 2, x, "+")
+```
+for the two cases in the previous paragraph. The array is the first argument. The pattern is that "g," "r," and "p" indicate that the x is being applied over genotypes, replicates, and pots, respectively. Additional operators and array dimension combos can be created as needed.
+
+Before making a final decision about how to order the array dimensions, I should think about how dispersal is going to work. There, we potentially have a different kernel for each genotype within each pot within each rep. Thus, the kernel will be a 4-dimensional array, with the 4th dimension being dx (the change in location). Actually, the math will be easier if the the seed disposition can be a 4-D array with the 4th dimension being the target pot. So if `K[g, r, p, ]` is a vector (of length `2 * Dmax +1`, representing disperal distances ranging from $-D_{max}$ to $+D_{max}$, including zero), and normalized to sum to one, then we want the dispersed seeds to look something like 
+```r
+Dseeds[g, r, p, (p - Dmax):(p + Dmax)] <- f(seeds[g, r, p], K[g, r, p, ])
+```
+where `f(x, y)` is, say, `rmultinom(1, x, y)` (for seed sampling) or `round(x * y)` (for deterministic dispersal).
+
+The easiest way to conststruct this for a given $(r, g)$ would be to use `bandSparse()` in the `Matrix` library. This can be converted to a regular matrix using `as.matrix`; what remains to be seen is if this can be accomplished within a call to sweep or apply so that we don't have step through the g and r. One drawback of `bandSparse` is that it truncates the values at the *end* of each subdiagonal. Also, now that I've looked at the code, it is doing element-wise assignment in R, so is probably slow. Maybe there is a faster way to do things using `lag`. Though lag itself has wierd behavior---it doesn't simply return the lagged vector.
+
+At any rate, it seems like there are benefits to having pot as the third dimension.
