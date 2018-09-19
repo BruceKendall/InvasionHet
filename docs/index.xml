@@ -2,32 +2,52 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Project notebook for the Invasion Heterogeneity project</title>
-    <link>https://brucekendall.github.io/InvasionHet/</link>
+    <link>/InvasionHet/</link>
     <description>Recent content on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 29 Sep 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://brucekendall.github.io/InvasionHet/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/InvasionHet/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Trying out BlogDown</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/29/trying-out-blogdown/</link>
+      <link>/InvasionHet/2017/09/29/trying-out-blogdown/</link>
       <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/29/trying-out-blogdown/</guid>
+      <guid>/InvasionHet/2017/09/29/trying-out-blogdown/</guid>
       <description>I&amp;rsquo;m trying out blogdown (https://bookdown.org/yihui/blogdown/) for serving up the project notebook. Advantages:
  Rebuilds only update changed files Dialog box for creating new posts Automatically shows posts in date order, presumably even if they&amp;rsquo;ve been edited Might be possible to automate serving it up on the github page, so Jenn can just look at it in a web browser  (Potential) Disadvantages:
  Whole new file structure to figure out (in particular, I may have to modify the knitr option for setting the working directory, which was based on a relative path) Presumably I can set up the post creation script to include my ProjectTemplate preamble, but that will take work/trial and error I will have to figure out how caching works with this.</description>
     </item>
     
     <item>
+      <title>Getting back to work</title>
+      <link>/InvasionHet/2018/09/19/getting-back-to-work/</link>
+      <pubDate>Wed, 19 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/09/19/getting-back-to-work/</guid>
+      <description>Blogdown My last post from 9 months ago said that blogdown wasn’t working properly. I’m not sure if that’s still true, but my version of R at home is rather old, so I just updated to 3.5.1.
+This requires reinstalling libraries, which is probably a good idea as there are a number of helper libraries that need to be rebuilt even when they don’t have an update (and hence can’t get reinstalled automatically):</description>
+    </item>
+    
+    <item>
+      <title>Project goals</title>
+      <link>/InvasionHet/2018/09/19/project-goals/</link>
+      <pubDate>Wed, 19 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/09/19/project-goals/</guid>
+      <description>Here are the goals of this project, as I see them currently:
+ Understand how variation in spread rate is affected by demographic and environmental stochasticity affecting demography; finite draws and kernel sampling affecting dispersal; and genetically driven heterogeneity in mean demography and dispersal. Understand how these contributions change as habitat becomes more fragmented. Understand how drift and selection lead to increases or decreases in spread variability.  </description>
+    </item>
+    
+    <item>
       <title>Build site broken</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/12/27/build-site-broken/</link>
+      <link>/InvasionHet/2017/12/27/build-site-broken/</link>
       <pubDate>Wed, 27 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/12/27/build-site-broken/</guid>
+      <guid>/InvasionHet/2017/12/27/build-site-broken/</guid>
       <description>Yesterday I updated blogdown, from v. 0.1 to 0.4. This broke build.site(), because when it tries to compile an Rmd file that calls projecttemplate, the working directory is no longer being set to the project root, which presently is “/Users/kendall/Documents/Github/InvasionHet”. This was acheived by setting the knitr parameter root.dir in .Rprofile in the post directory.
 Here’s what the knitr option currently is:
 knitr::opts_knit$get()$root.dir [1] &amp;quot;/Users/kendall/Documents/Github/InvasionHet&amp;quot; # Originally gave NULL and here’s what is being viewed as the working directory:</description>
@@ -35,20 +55,20 @@ knitr::opts_knit$get()$root.dir [1] &amp;quot;/Users/kendall/Documents/Github/In
     
     <item>
       <title>Distributing and accumulating dispersed seeds</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</link>
+      <link>/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</link>
       <pubDate>Wed, 27 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</guid>
+      <guid>/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</guid>
       <description>Here is what I think will be an efficient way of putting the dispersed seeds in the right place. Let relDseeds be a \((2 D_{max}+1)\times n_{pots}\) matrix giving dispersal relative to the home pot (with row Dmax + 1 being retention and rows above that being backwards dispersal). Then we can create an absolute dispersal matrix:
 # Lowest index of each column of relDseeds to include in Dseeds lower &amp;lt;- pmax(1, Dmax - (1:npots) + 2) # Add an index row, available in the applied function as x[1] relDseeds&amp;lt;-rbind(1:npots, relDseeds) # Function to construct a column of Dseeds from a column of relDseeds padCol &amp;lt;- function(x, lower, Dmax, npots) { leading_zeros &amp;lt;- rep(0, max(0, x[1] - Dmax - 1)) dispersed_seeds &amp;lt;- x[-(1:lower[x[1]])] trailing_zeros &amp;lt;- rep(0, npots-x[1]) c(leading_zeros, dispersed_seeds, trailing_zeros) } # Make a list of vectors for each column of Dseeds Dseeds &amp;lt;- apply(relDseeds, 2, padCol, lower=lower, Dmax=Dmax, npots=npots) # Convert the list to a matrix Dseeds &amp;lt;- matrix(unlist(Dseeds), npots + Dmax, npots) Finally, we can get the total number of seeds dispersed to each pot using apply:</description>
     </item>
     
     <item>
       <title>Array dimensions</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/12/26/array-dimensions/</link>
+      <link>/InvasionHet/2017/12/26/array-dimensions/</link>
       <pubDate>Tue, 26 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/12/26/array-dimensions/</guid>
+      <guid>/InvasionHet/2017/12/26/array-dimensions/</guid>
       <description>In a previous post, I said that
  A generation’s adult and seed distributions will be a \(R \times X \times G\) array, where \(R\) is the number of replicate simulations, \(X\) is the number of spatial locations, and \(G\) is the number of genotypes.
  However, the easiest way to multiply the array by a vector of genotype-specific parameters (of length \(G\)) is to have the genotype be in the first dimension.</description>
@@ -56,19 +76,19 @@ knitr::opts_knit$get()$root.dir [1] &amp;quot;/Users/kendall/Documents/Github/In
     
     <item>
       <title>Revisiting plans, and wrestling with seed stochasticity</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</link>
+      <link>/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</link>
       <pubDate>Mon, 23 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</guid>
+      <guid>/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</guid>
       <description>Focus on Ler? As I look at various pieces of the model (which I’ve started to assemble in lib/model.R), I realize that there are a sufficient number of ways in which the RIL data are different (and not yet analyzed) that I may find it challenging to exactly mirror the Ler model. In particular, I’m going to find it rather challenging (I think) to estimate the environmental stochasticity in seed production among generations and replicates.</description>
     </item>
     
     <item>
       <title>Feedback from Jenn on June notebook</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/10/03/feedback-from-jenn/</link>
+      <link>/InvasionHet/2017/10/03/feedback-from-jenn/</link>
       <pubDate>Tue, 03 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/10/03/feedback-from-jenn/</guid>
+      <guid>/InvasionHet/2017/10/03/feedback-from-jenn/</guid>
       <description>Jenn has sent a couple of emails in response to last spring’s work:
 September 29 Here’s some feedback on thhe Key Results (from June). More on Monday!
  Silique number does not seem to be a good proxy for the number of seeds actually released (e.g., p. 153)
@@ -77,50 +97,50 @@ September 29 Here’s some feedback on thhe Key Results (from June). More on Mon
     
     <item>
       <title>Model planning</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</link>
+      <link>/InvasionHet/2017/10/02/model-planning/</link>
       <pubDate>Mon, 02 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</guid>
+      <guid>/InvasionHet/2017/10/02/model-planning/</guid>
       <description>Conceptual overview The model has two fundamental steps:
 Seed production Seed dispersal  Seed production is density dependent, with a Gompertz deterministic skeleton: \[\begin{equation} \log(S_{g,t,x}) = a_g + b_g \log(N_{g,t,x}), \end{equation}\] where \(S\) is seed number and \(N\) is adult number; \(g\) is genotype, \(t\) is generation and \(x\) is location. In addition, there is demographic stochasticity (probably Poisson, but need to check); temporal environmental stochasticity; and among-replicate environmental stochasticity. Need to check how well correlated the latter are among RILs.</description>
     </item>
     
     <item>
       <title>Customizing blogdown</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</link>
+      <link>/InvasionHet/2017/09/30/customizing-blogdown/</link>
       <pubDate>Sat, 30 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</guid>
+      <guid>/InvasionHet/2017/09/30/customizing-blogdown/</guid>
       <description>I am now on my computer at home; after updating packages and rstudio, and installing blogdown and hugo, everything is running fine (although I still need to update my ~/.Rprofile).
 Tags and categories Getting links to tags and categories was as simple as editing the menu section of config.toml; the one trick is to add weight variables to get the order I want (the default is alphabetical). Here is the relevant bit of code:</description>
     </item>
     
     <item>
       <title>Directional dispersal in Ler</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/29/directional-dispersal-in-ler/</link>
+      <link>/InvasionHet/2017/09/29/directional-dispersal-in-ler/</link>
       <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/29/directional-dispersal-in-ler/</guid>
+      <guid>/InvasionHet/2017/09/29/directional-dispersal-in-ler/</guid>
       <description>The correlation between the fraction dispersing and the mean dispersal distance of the dispersers could be mean one of two things:
 Simulated rain that makes more seeds go makes them go further in all directions Simulated rain that makes more seeds go is pushing them in the direction of the receiving runway  This matters because in case 2, the dispersal kernel in the negative direction will, presumably, have its absolute mean reduced.</description>
     </item>
     
     <item>
       <title>Housekeeping</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/25/housekeeping/</link>
+      <link>/InvasionHet/2017/09/25/housekeeping/</link>
       <pubDate>Mon, 25 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/25/housekeeping/</guid>
+      <guid>/InvasionHet/2017/09/25/housekeeping/</guid>
       <description>After repeated nagging from ProjectTemplate, I ran the script to update the project structure to v. 0.8. This changed the doc directory to docs, and added some new variables to global.dcf. Unfortunately the latter don&amp;rsquo;t seem to be documented&amp;hellip;. I&amp;rsquo;ll also need to make sure that I update the package on my computer at home.
 I added a new munge script to calculate the dispersal stats and fits. To prevent this calculating every time, I cached the result; but now I need to add caching to all the munge scripts, and, after running once, turn off caching&amp;hellip; Done!</description>
     </item>
     
     <item>
       <title>Ler kernel heterogeneity</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</link>
+      <link>/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</link>
       <pubDate>Fri, 22 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</guid>
+      <guid>/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</guid>
       <description>The next steps in the Ler dispersal analysis are to confirm statistical support for among-rep heterogeneity and see if the kernel parameters are correlated with the fraction dispersing.
 Housekeeping Added the functions for the truncated distributions and to fit the models to lib/helpers.R.
  Kernel heterogeneity The total AIC for the rep-specific fits was 58230.28 and 58366.17 for the normal and lognormal models, respectively.
@@ -129,10 +149,10 @@ I think that if I pass the whole data set to the analysis function it will combi
     
     <item>
       <title>Dispersal data</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/19/dispersal-data/</link>
+      <link>/InvasionHet/2017/09/19/dispersal-data/</link>
       <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/19/dispersal-data/</guid>
+      <guid>/InvasionHet/2017/09/19/dispersal-data/</guid>
       <description>Jenn sent info about the Ler and RIL dispersal data.
 Ler  The data from the sticky paper kernels for Ler are called 2013_08_08_Exp1_Spray.csv. And I&amp;rsquo;m attaching the script I used to analyze them [FitKernels_Exp1_SPRAY_aug2013.R (in Arabidopsis/analysis)].
 I fit negative exponential kernels, which I know isn&amp;rsquo;t necessarily the best fit, but is what I needed for the simulations I ran (for the density dependence paper). For reasons I don&amp;rsquo;t know, the mean dispersal distance on sticky paper was further than in Generation 1.</description>
@@ -140,49 +160,49 @@ I fit negative exponential kernels, which I know isn&amp;rsquo;t necessarily the
     
     <item>
       <title>Fit Ler dispersal kernels</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</link>
+      <link>/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</link>
       <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</guid>
+      <guid>/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</guid>
       <description>File to load Ler dispersal data Here is the new file data/disperseLer.R:
 ### Creates the data object disperseLer, representing the Ler dispersal experiment # Get data from Jenn&amp;#39;s file data_dir &amp;lt;- &amp;quot;~/Dropbox/Arabidopsis/analysis&amp;quot; disperseLer &amp;lt;- read.csv(file.path(data_dir, &amp;#39;2013_08_08_Exp1_Spray.csv&amp;#39;), header = TRUE) # Drop the &amp;quot;clipped&amp;quot; treatment disperseLer &amp;lt;- droplevels(subset(disperseLer, new_trt != &amp;quot;clipped&amp;quot;, drop = TRUE)) # Drop the columns with the (irrelevant) info about where the mom pots came from disperseLer &amp;lt;- disperseLer[, -c(1:4, 6)] # Clean up column names names(disperseLer) &amp;lt;- c(&amp;quot;ID&amp;quot;, &amp;quot;Pot&amp;quot;, &amp;quot;Distance&amp;quot;, &amp;quot;Seedlings&amp;quot;, &amp;quot;Siliques&amp;quot;, &amp;quot;Density&amp;quot;, &amp;quot;Treatment&amp;quot;) # Make some factor variables disperseLer$ID &amp;lt;- as.</description>
     </item>
     
     <item>
       <title>Fitting dispersal kernels</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/13/fitting-dispersal-kernels/</link>
+      <link>/InvasionHet/2017/09/13/fitting-dispersal-kernels/</link>
       <pubDate>Wed, 13 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/13/fitting-dispersal-kernels/</guid>
+      <guid>/InvasionHet/2017/09/13/fitting-dispersal-kernels/</guid>
       <description>Quick looks at dispersal. Lewis et al 2008 show how to calculate empirical moment generating functions, but I’m not sure how useful that is for us. Nathan et al. 2012 has a good review of kernels, but not much statistical info. I found Viana et al. 2016 which suggests fitting the CDF is better than fitting the PDF.
 Viana also led my to the fitdistrplus package, which fits standard distributions. I think this is what we need–I was increasinglyl unconfident im my home-rolled fitting routines.</description>
     </item>
     
     <item>
       <title>Relevant material from Lewis’s book</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/11/relevant-material-from-lewis-s-book/</link>
+      <link>/InvasionHet/2017/09/11/relevant-material-from-lewis-s-book/</link>
       <pubDate>Mon, 11 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/11/relevant-material-from-lewis-s-book/</guid>
+      <guid>/InvasionHet/2017/09/11/relevant-material-from-lewis-s-book/</guid>
       <description>Mark Lewis’s new book has a whole chapter on “stochastic spread:”
  Our focus is on the rate at which such processes spread spatially. We first examine the effects of environmental stochasticity on spatial spread by means of stochastic integrodifference and reaction–diffusion models. Here, we analyze both the wave solution for the expected density of individuals and the wave solution for a given realization of the stochastic process, as well as the variability that this can exhibit.</description>
     </item>
     
     <item>
       <title>Older journal entries</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/01/older-journal-entries/</link>
+      <link>/InvasionHet/2017/09/01/older-journal-entries/</link>
       <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/01/older-journal-entries/</guid>
+      <guid>/InvasionHet/2017/09/01/older-journal-entries/</guid>
       <description>Before September 2017, the notebook was managed as a bookdown project. The source files are in the /notebook directory; the compiled notebook is here.</description>
     </item>
     
     <item>
       <title>About</title>
-      <link>https://brucekendall.github.io/InvasionHet/about/</link>
+      <link>/InvasionHet/about/</link>
       <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/about/</guid>
+      <guid>/InvasionHet/about/</guid>
       <description>This is a &amp;ldquo;hello world&amp;rdquo; example website for the blogdown package. The theme was forked from @jrutheiser/hugo-lithium-theme and modified by Yihui Xie.</description>
     </item>
     

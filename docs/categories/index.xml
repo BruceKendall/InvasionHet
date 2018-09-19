@@ -2,74 +2,74 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Project notebook for the Invasion Heterogeneity project</title>
-    <link>https://brucekendall.github.io/InvasionHet/categories/</link>
+    <link>/InvasionHet/categories/</link>
     <description>Recent content in Categories on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
-	<atom:link href="https://brucekendall.github.io/InvasionHet/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/InvasionHet/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Conceptual Model Evaluation</title>
-      <link>https://brucekendall.github.io/InvasionHet/categories/conceptual-model-evaluation/</link>
+      <link>/InvasionHet/categories/conceptual-model-evaluation/</link>
       <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/categories/conceptual-model-evaluation/</guid>
+      <guid>/InvasionHet/categories/conceptual-model-evaluation/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Data Evaluation</title>
-      <link>https://brucekendall.github.io/InvasionHet/categories/data-evaluation/</link>
+      <link>/InvasionHet/categories/data-evaluation/</link>
       <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/categories/data-evaluation/</guid>
+      <guid>/InvasionHet/categories/data-evaluation/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Housekeeping</title>
-      <link>https://brucekendall.github.io/InvasionHet/categories/housekeeping/</link>
+      <link>/InvasionHet/categories/housekeeping/</link>
       <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/categories/housekeeping/</guid>
+      <guid>/InvasionHet/categories/housekeeping/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Literature</title>
-      <link>https://brucekendall.github.io/InvasionHet/categories/literature/</link>
+      <link>/InvasionHet/categories/literature/</link>
       <pubDate>Mon, 11 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/categories/literature/</guid>
+      <guid>/InvasionHet/categories/literature/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Model Description</title>
-      <link>https://brucekendall.github.io/InvasionHet/categories/model-description/</link>
+      <link>/InvasionHet/categories/model-description/</link>
       <pubDate>Wed, 27 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/categories/model-description/</guid>
+      <guid>/InvasionHet/categories/model-description/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Parameter Estimation</title>
-      <link>https://brucekendall.github.io/InvasionHet/categories/parameter-estimation/</link>
+      <link>/InvasionHet/categories/parameter-estimation/</link>
       <pubDate>Mon, 23 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/categories/parameter-estimation/</guid>
+      <guid>/InvasionHet/categories/parameter-estimation/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Planning</title>
-      <link>https://brucekendall.github.io/InvasionHet/categories/planning/</link>
-      <pubDate>Mon, 23 Oct 2017 00:00:00 +0000</pubDate>
+      <link>/InvasionHet/categories/planning/</link>
+      <pubDate>Wed, 19 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/categories/planning/</guid>
+      <guid>/InvasionHet/categories/planning/</guid>
       <description></description>
     </item>
     

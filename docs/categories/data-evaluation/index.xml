@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Data Evaluation on Project notebook for the Invasion Heterogeneity project</title>
-    <link>https://brucekendall.github.io/InvasionHet/categories/data-evaluation/</link>
+    <link>/InvasionHet/categories/data-evaluation/</link>
     <description>Recent content in Data Evaluation on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 19 Sep 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://brucekendall.github.io/InvasionHet/categories/data-evaluation/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/InvasionHet/categories/data-evaluation/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Dispersal data</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/19/dispersal-data/</link>
+      <link>/InvasionHet/2017/09/19/dispersal-data/</link>
       <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/19/dispersal-data/</guid>
+      <guid>/InvasionHet/2017/09/19/dispersal-data/</guid>
       <description>Jenn sent info about the Ler and RIL dispersal data.
 Ler  The data from the sticky paper kernels for Ler are called 2013_08_08_Exp1_Spray.csv. And I&amp;rsquo;m attaching the script I used to analyze them [FitKernels_Exp1_SPRAY_aug2013.R (in Arabidopsis/analysis)].
 I fit negative exponential kernels, which I know isn&amp;rsquo;t necessarily the best fit, but is what I needed for the simulations I ran (for the density dependence paper). For reasons I don&amp;rsquo;t know, the mean dispersal distance on sticky paper was further than in Generation 1.</description>

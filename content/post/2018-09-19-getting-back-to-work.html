@@ -1,0 +1,35 @@
+---
+title: Getting back to work
+author: Bruce Kendall
+date: '2018-09-19'
+slug: getting-back-to-work
+categories:
+  - Housekeeping
+tags:
+  - blogdown
+---
+
+
+
+<div id="blogdown" class="section level1">
+<h1>Blogdown</h1>
+<p>My last post from 9 months ago said that blogdown wasn’t working properly. I’m not sure if that’s still true, but my version of R at home is rather old, so I just updated to 3.5.1.</p>
+<p>This requires reinstalling libraries, which is probably a good idea as there are a number of helper libraries that need to be rebuilt even when they don’t have an update (and hence can’t get reinstalled automatically):</p>
+<ul>
+<li>knitr (and dependencies)</li>
+<li>rmarkdown (and dependencies)</li>
+<li>ProjectTemplate</li>
+<li>blogdown (and dependencies)</li>
+<li>packages needed by serve.site() (downloaded automatically - thanks, Hadley!)</li>
+<li>tidyverse</li>
+<li>fitdistrplus</li>
+</ul>
+<p>OK, both <code>serve_site</code> and <code>build_site</code> seem to work just fine. But where is the <code>.Rprofile</code> file? There are two: one in content/post (the original one) and one in the project root (which I had added as a workaround). Let me take out the one in the project root and restart R to see if things still work…</p>
+<p>Now it fails in the same way that it did before. It appears that the hyper-local .Rprofile is not read when rmarkdown processes the file. Putting the file back in the project root seems to do the trick.</p>
+</div>
+<div id="goals-and-plans" class="section level1">
+<h1>Goals and plans</h1>
+<p>I reviewed the original proposal to SNF, and wrote down, perhaps more clearly than before, a list of project goals (see separate post).</p>
+<p>I also think it would be worthwhile to start generating a manuscript, using the proposal as the basis for the Introduction—it is quite well written!</p>
+<p>And I do think that starting a TRACE document is a good way for me to figure out where I am in the project.</p>
+</div>

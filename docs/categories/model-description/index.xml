@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Model Description on Project notebook for the Invasion Heterogeneity project</title>
-    <link>https://brucekendall.github.io/InvasionHet/categories/model-description/</link>
+    <link>/InvasionHet/categories/model-description/</link>
     <description>Recent content in Model Description on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 27 Dec 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://brucekendall.github.io/InvasionHet/categories/model-description/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/InvasionHet/categories/model-description/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Distributing and accumulating dispersed seeds</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</link>
+      <link>/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</link>
       <pubDate>Wed, 27 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</guid>
+      <guid>/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</guid>
       <description>Here is what I think will be an efficient way of putting the dispersed seeds in the right place. Let relDseeds be a \((2 D_{max}+1)\times n_{pots}\) matrix giving dispersal relative to the home pot (with row Dmax + 1 being retention and rows above that being backwards dispersal). Then we can create an absolute dispersal matrix:
 # Lowest index of each column of relDseeds to include in Dseeds lower &amp;lt;- pmax(1, Dmax - (1:npots) + 2) # Add an index row, available in the applied function as x[1] relDseeds&amp;lt;-rbind(1:npots, relDseeds) # Function to construct a column of Dseeds from a column of relDseeds padCol &amp;lt;- function(x, lower, Dmax, npots) { leading_zeros &amp;lt;- rep(0, max(0, x[1] - Dmax - 1)) dispersed_seeds &amp;lt;- x[-(1:lower[x[1]])] trailing_zeros &amp;lt;- rep(0, npots-x[1]) c(leading_zeros, dispersed_seeds, trailing_zeros) } # Make a list of vectors for each column of Dseeds Dseeds &amp;lt;- apply(relDseeds, 2, padCol, lower=lower, Dmax=Dmax, npots=npots) # Convert the list to a matrix Dseeds &amp;lt;- matrix(unlist(Dseeds), npots + Dmax, npots) Finally, we can get the total number of seeds dispersed to each pot using apply:</description>
     </item>
     
     <item>
       <title>Array dimensions</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/12/26/array-dimensions/</link>
+      <link>/InvasionHet/2017/12/26/array-dimensions/</link>
       <pubDate>Tue, 26 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/12/26/array-dimensions/</guid>
+      <guid>/InvasionHet/2017/12/26/array-dimensions/</guid>
       <description>In a previous post, I said that
  A generation’s adult and seed distributions will be a \(R \times X \times G\) array, where \(R\) is the number of replicate simulations, \(X\) is the number of spatial locations, and \(G\) is the number of genotypes.
  However, the easiest way to multiply the array by a vector of genotype-specific parameters (of length \(G\)) is to have the genotype be in the first dimension.</description>
@@ -34,19 +34,19 @@
     
     <item>
       <title>Revisiting plans, and wrestling with seed stochasticity</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</link>
+      <link>/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</link>
       <pubDate>Mon, 23 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</guid>
+      <guid>/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</guid>
       <description>Focus on Ler? As I look at various pieces of the model (which I’ve started to assemble in lib/model.R), I realize that there are a sufficient number of ways in which the RIL data are different (and not yet analyzed) that I may find it challenging to exactly mirror the Ler model. In particular, I’m going to find it rather challenging (I think) to estimate the environmental stochasticity in seed production among generations and replicates.</description>
     </item>
     
     <item>
       <title>Model planning</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</link>
+      <link>/InvasionHet/2017/10/02/model-planning/</link>
       <pubDate>Mon, 02 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</guid>
+      <guid>/InvasionHet/2017/10/02/model-planning/</guid>
       <description>Conceptual overview The model has two fundamental steps:
 Seed production Seed dispersal  Seed production is density dependent, with a Gompertz deterministic skeleton: \[\begin{equation} \log(S_{g,t,x}) = a_g + b_g \log(N_{g,t,x}), \end{equation}\] where \(S\) is seed number and \(N\) is adult number; \(g\) is genotype, \(t\) is generation and \(x\) is location. In addition, there is demographic stochasticity (probably Poisson, but need to check); temporal environmental stochasticity; and among-replicate environmental stochasticity. Need to check how well correlated the latter are among RILs.</description>
     </item>

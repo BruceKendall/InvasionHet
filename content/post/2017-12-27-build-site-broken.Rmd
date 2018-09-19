@@ -32,3 +32,5 @@ Maybe the cache location has been moved?
 What's even wierder is that, having modified 2017-09-19-fit-ler-dispersal-kernels.Rmd (just turning caching on and off), it re-rendered under serve.site just fine!
 
 I don't know why things aren't recompling fine under build_site. But the workaround for creating a publishable version without rebuilding the Rmd files is to use `blogdown::hugo_build()` instead.
+
+But the problem with this is that the new pages are not being added to the main index!

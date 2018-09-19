@@ -2,50 +2,50 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ler on Project notebook for the Invasion Heterogeneity project</title>
-    <link>https://brucekendall.github.io/InvasionHet/tags/ler/</link>
+    <link>/InvasionHet/tags/ler/</link>
     <description>Recent content in Ler on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 23 Oct 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://brucekendall.github.io/InvasionHet/tags/ler/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/InvasionHet/tags/ler/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Revisiting plans, and wrestling with seed stochasticity</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</link>
+      <link>/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</link>
       <pubDate>Mon, 23 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</guid>
+      <guid>/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</guid>
       <description>Focus on Ler? As I look at various pieces of the model (which I’ve started to assemble in lib/model.R), I realize that there are a sufficient number of ways in which the RIL data are different (and not yet analyzed) that I may find it challenging to exactly mirror the Ler model. In particular, I’m going to find it rather challenging (I think) to estimate the environmental stochasticity in seed production among generations and replicates.</description>
     </item>
     
     <item>
       <title>Model planning</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</link>
+      <link>/InvasionHet/2017/10/02/model-planning/</link>
       <pubDate>Mon, 02 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</guid>
+      <guid>/InvasionHet/2017/10/02/model-planning/</guid>
       <description>Conceptual overview The model has two fundamental steps:
 Seed production Seed dispersal  Seed production is density dependent, with a Gompertz deterministic skeleton: \[\begin{equation} \log(S_{g,t,x}) = a_g + b_g \log(N_{g,t,x}), \end{equation}\] where \(S\) is seed number and \(N\) is adult number; \(g\) is genotype, \(t\) is generation and \(x\) is location. In addition, there is demographic stochasticity (probably Poisson, but need to check); temporal environmental stochasticity; and among-replicate environmental stochasticity. Need to check how well correlated the latter are among RILs.</description>
     </item>
     
     <item>
       <title>Directional dispersal in Ler</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/29/directional-dispersal-in-ler/</link>
+      <link>/InvasionHet/2017/09/29/directional-dispersal-in-ler/</link>
       <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/29/directional-dispersal-in-ler/</guid>
+      <guid>/InvasionHet/2017/09/29/directional-dispersal-in-ler/</guid>
       <description>The correlation between the fraction dispersing and the mean dispersal distance of the dispersers could be mean one of two things:
 Simulated rain that makes more seeds go makes them go further in all directions Simulated rain that makes more seeds go is pushing them in the direction of the receiving runway  This matters because in case 2, the dispersal kernel in the negative direction will, presumably, have its absolute mean reduced.</description>
     </item>
     
     <item>
       <title>Ler kernel heterogeneity</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</link>
+      <link>/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</link>
       <pubDate>Fri, 22 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</guid>
+      <guid>/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</guid>
       <description>The next steps in the Ler dispersal analysis are to confirm statistical support for among-rep heterogeneity and see if the kernel parameters are correlated with the fraction dispersing.
 Housekeeping Added the functions for the truncated distributions and to fit the models to lib/helpers.R.
  Kernel heterogeneity The total AIC for the rep-specific fits was 58230.28 and 58366.17 for the normal and lognormal models, respectively.
@@ -54,10 +54,10 @@ I think that if I pass the whole data set to the analysis function it will combi
     
     <item>
       <title>Dispersal data</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/19/dispersal-data/</link>
+      <link>/InvasionHet/2017/09/19/dispersal-data/</link>
       <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/19/dispersal-data/</guid>
+      <guid>/InvasionHet/2017/09/19/dispersal-data/</guid>
       <description>Jenn sent info about the Ler and RIL dispersal data.
 Ler  The data from the sticky paper kernels for Ler are called 2013_08_08_Exp1_Spray.csv. And I&amp;rsquo;m attaching the script I used to analyze them [FitKernels_Exp1_SPRAY_aug2013.R (in Arabidopsis/analysis)].
 I fit negative exponential kernels, which I know isn&amp;rsquo;t necessarily the best fit, but is what I needed for the simulations I ran (for the density dependence paper). For reasons I don&amp;rsquo;t know, the mean dispersal distance on sticky paper was further than in Generation 1.</description>
@@ -65,10 +65,10 @@ I fit negative exponential kernels, which I know isn&amp;rsquo;t necessarily the
     
     <item>
       <title>Fit Ler dispersal kernels</title>
-      <link>https://brucekendall.github.io/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</link>
+      <link>/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</link>
       <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://brucekendall.github.io/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</guid>
+      <guid>/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</guid>
       <description>File to load Ler dispersal data Here is the new file data/disperseLer.R:
 ### Creates the data object disperseLer, representing the Ler dispersal experiment # Get data from Jenn&amp;#39;s file data_dir &amp;lt;- &amp;quot;~/Dropbox/Arabidopsis/analysis&amp;quot; disperseLer &amp;lt;- read.csv(file.path(data_dir, &amp;#39;2013_08_08_Exp1_Spray.csv&amp;#39;), header = TRUE) # Drop the &amp;quot;clipped&amp;quot; treatment disperseLer &amp;lt;- droplevels(subset(disperseLer, new_trt != &amp;quot;clipped&amp;quot;, drop = TRUE)) # Drop the columns with the (irrelevant) info about where the mom pots came from disperseLer &amp;lt;- disperseLer[, -c(1:4, 6)] # Clean up column names names(disperseLer) &amp;lt;- c(&amp;quot;ID&amp;quot;, &amp;quot;Pot&amp;quot;, &amp;quot;Distance&amp;quot;, &amp;quot;Seedlings&amp;quot;, &amp;quot;Siliques&amp;quot;, &amp;quot;Density&amp;quot;, &amp;quot;Treatment&amp;quot;) # Make some factor variables disperseLer$ID &amp;lt;- as.</description>
     </item>
