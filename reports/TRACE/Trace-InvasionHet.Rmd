@@ -1,0 +1,145 @@
+---
+title: "TRACE document"
+output: bookdown::pdf_document2
+toc:  FALSE
+header-includes: \usepackage{etoc}
+---
+
+This is a TRACE document (“TRAnsparent and Comprehensive model Evaludation”) which provides supporting evidence that our model presented in:
+
+> **Kendall, B.E., J. Williams, and J. Levine. 20XX. Understanding the sources of variability in population spread.**
+
+was thoughtfully designed, correctly implemented, thoroughly tested, well understood, and appropriately used for its intended purpose. 
+
+The rationale of this document follows: 
+
+> Schmolke A, Thorbek P, DeAngelis DL, Grimm V. 2010. Ecological modelling supporting environmental decision making: a strategy for the future. *Trends in Ecology and Evolution* 25: 479-486.
+
+and uses the updated standard terminology and document structure in:
+
+> Grimm V, Augusiak J, Focks A, Frank B, Gabsi F, Johnston ASA, Kułakowska K, Liu C, Martin BT, Meli M, Radchuk V, Schmolke A, Thorbek P, Railsback SF. 2014. Towards better modelling and decision support: documenting model development, testing, and analysis using TRACE. *Ecological Modelling* 280: 129-139 
+
+and
+
+> Augusiak J, Van den Brink PJ, Grimm V. 2014. Merging validation and evaluation of ecological models to ‘evaludation’: a review of terminology and a practical approach. *Ecological Modelling* 280: 117-128. 
+
+\tableofcontents 
+
+\etocsettocstyle{\vspace{1em}}{}
+
+
+#	Problem formulation
+\small
+
+**This TRACE element provides supporting information on:** The decision-making context in which the model will be used; the types of model clients or stakeholders addressed; a precise specification of the question(s) that should be answered with the model, including a specification of necessary model outputs; and a statement of the domain of applicability of the model, including the extent of acceptable extrapolations. 
+\normalsize
+
+**Summary:**
+
+> **< Provide here a concise summary of this element, e.g. brief text and/or a bullet point list. If you use lists, make sure that elements in the list match exactly the headings of the corresponding part in the text. Please keep bold font and indentation for the summary. >**
+
+\localtableofcontents
+
+< Your text. Any subheadings will appear in the local toc as well as the global one >
+
+
+
+#	Model description 
+\small
+
+**This TRACE element provides supporting information on:**  The model. Provide a detailed written model description. For individual/agent-based and other simulation models, the ODD protocol is recommended as standard format. For complex submodels it should include concise explanations of the underlying rationale. Model users should learn what the model is, how it works, and what guided its design.
+\normalsize
+
+**Summary:**
+
+> **< Provide here a concise summary of this element, e.g. brief text and/or a bullet point list. If you use lists, make sure that elements in the list match exactly the headings of the corresponding part in the text. Please keep bold font and indentation for the summary. >**
+
+\localtableofcontents
+
+< Your text. Any subheadings will appear in the local toc as well as the global one >
+
+#	Data evaluation
+\small
+
+**This TRACE element provides supporting information on:**  The quality and sources of numerical and qualitative data used to parameterize the model, both directly and inversely via calibration, and of the observed patterns that were used to design the overall model structure. This critical evaluation will allow model users to assess the scope and the uncertainty of the data and knowledge on which the model is based.
+\normalsize
+
+**Summary:**
+
+> **< Provide here a concise summary of this element, e.g. brief text and/or a bullet point list. If you use lists, make sure that elements in the list match exactly the headings of the corresponding part in the text. Please keep bold font and indentation for the summary. >**
+
+\localtableofcontents
+
+< Your text. Any subheadings will appear in the local toc as well as the global one >
+
+#	Conceptual model evaluation
+\small
+
+**This TRACE element provides supporting information on:**  The simplifying assumptions underlying a model’s design, both with regard to empirical knowledge and general, basic principles. This critical evaluation allows model users to understand that model design was not ad hoc but based on carefully scrutinized considerations. 
+\normalsize
+
+**Summary:**
+
+> **< Provide here a concise summary of this element, e.g. brief text and/or a bullet point list. If you use lists, make sure that elements in the list match exactly the headings of the corresponding part in the text. Please keep bold font and indentation for the summary. >**
+
+\localtableofcontents
+
+< Your text. Any subheadings will appear in the local toc as well as the global one >
+
+#	Implementation verification
+\small
+
+**This TRACE element provides supporting information on:**  (1) whether the computer code implementing the model has been thoroughly tested for programming errors, (2) whether the implemented model performs as indicated by the model description, and (3) how the software has been designed and documented to provide necessary usability tools (interfaces, automation of experiments, etc.) and to facilitate future installation, modification, and maintenance.
+\normalsize
+
+**Summary:**
+
+> **< Provide here a concise summary of this element, e.g. brief text and/or a bullet point list. If you use lists, make sure that elements in the list match exactly the headings of the corresponding part in the text. Please keep bold font and indentation for the summary. >**
+
+\localtableofcontents
+
+< Your text. Any subheadings will appear in the local toc as well as the global one >
+
+ 
+#	Model output verification
+\small
+
+**This TRACE element provides supporting information on:**  (1) how well model output matches observations and (2) how much calibration and effects of environmental drivers were involved in obtaining good fits of model output and data. 
+\normalsize
+
+**Summary:**
+
+> **< Provide here a concise summary of this element, e.g. brief text and/or a bullet point list. If you use lists, make sure that elements in the list match exactly the headings of the corresponding part in the text. Please keep bold font and indentation for the summary. >**
+
+\localtableofcontents
+
+< Your text. Any subheadings will appear in the local toc as well as the global one >
+
+#	Model analysis
+\small
+
+**This TRACE element provides supporting information on:**  (1) how sensitive model output is to changes in model parameters (sensitivity analysis), and (2) how well the emergence of model output has been understood. 
+\normalsize
+
+**Summary:**
+
+> **< Provide here a concise summary of this element, e.g. brief text and/or a bullet point list. If you use lists, make sure that elements in the list match exactly the headings of the corresponding part in the text. Please keep bold font and indentation for the summary. >**
+
+\localtableofcontents
+
+< Your text. Any subheadings will appear in the local toc as well as the global one >
+
+#	Model output corroboration 
+\small
+
+**This TRACE element provides supporting information on:**  How model predictions compare to independent data and patterns that were not used, and preferably not even known, while the model was developed, parameterized, and verified. By documenting model output corroboration, model users learn about evidence which, in addition to model output verification, indicates that the model is structurally realistic so that its predictions can be trusted to some degree. 
+\normalsize
+
+**Summary:**
+
+> **< Provide here a concise summary of this element, e.g. brief text and/or a bullet point list. If you use lists, make sure that elements in the list match exactly the headings of the corresponding part in the text. Please keep bold font and indentation for the summary. >**
+
+\localtableofcontents
+
+< Your text. Any subheadings will appear in the local toc as well as the global one >
+
