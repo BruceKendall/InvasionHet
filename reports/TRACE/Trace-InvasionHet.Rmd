@@ -51,17 +51,7 @@ The research project is designed to increase scientific understanding about the 
 3. Understand how drift and selection lead to increases or decreases in spread variability.
 
 ## General approach
-We built discrete-time, discrete-space models designed to represent, qualitatively and quantitatively, replicated greenhouse experiments in which *Arabidopsis thaliana* invades a (nearly) one-dimensional landscape [described in @Williams2016b;@Williams2018]. The landscape for a given population was made up of "pots" aligned in a "runway;" we retained those terms in our model. The model had many sources of stochasticity and variability:
-
-1. Seed production declines with plant density in a pot ("density dependence")
-1. Individuals of a given genotype within a pot at a given time may produce different numbers of seeds ("demographic stochasticity")
-2. Differences across generations, runways, and/or pots in the expected seed output (after controlling for density) of a genotype ("environmental stochasticity")
-4. Variation in the distance traveled by individual seeds of a given genotype based on draws from a dispersal kernel ("dispersal sampling")
-5. Differences across generations, runways, and/or pots in the dispersal kernel of a genotype ("kernel stochasticity")
-6. Differences among genotypes in expected demographic and dispersal parameters ("genetic heterogeneity")
-7. Variation across generations, runways, and/or pots in the genetic makeup of the population ("evolution")
-
-We built models containing all of these factors, parameterized from various data sources. We then ran replicate simulations of the full model, as well as with one or more of the factors turned off, and calculated the variability in spread rate among and within replicates. [NEED TO DEFINE THIS PRECISELY] We used these to estimate the contributions of the individual sources of variability to the overall variability in spread rate.
+We built discrete-time, discrete-space models designed to represent, qualitatively and quantitatively, replicated greenhouse experiments in which *Arabidopsis thaliana* invades a (nearly) one-dimensional landscape [described in @Williams2016b;@Williams2018]. The model had a variety of sources of stochasticity and variability, representing the processes in the first goal statement above. We built models containing all of these factors, parameterized from various data sources. We then ran replicate simulations of the full model, as well as with one or more of the factors turned off, and calculated the variability in spread rate among and within replicates. [NEED TO DEFINE THIS PRECISELY] We used these to estimate the contributions of the individual sources of variability to the overall variability in spread rate.
 
 NOTE: this doesn't quite address the issues that we are supposed to include here!
 
@@ -77,7 +67,34 @@ NOTE: this doesn't quite address the issues that we are supposed to include here
 
 \localtableofcontents
 
-< Your text. Any subheadings will appear in the local toc as well as the global one >
+## Model structure
+We built discrete-time, discrete-space models designed to represent, qualitatively and quantitatively, replicated greenhouse experiments in which *Arabidopsis thaliana* invades a (nearly) one-dimensional landscape [described in @Williams2016b;@Williams2018]. The landscape for a given population was made up of "pots" aligned in a "runway;" we retained those terms in our model. The model had many sources of stochasticity and variability:
+
+1. Seed production declines with plant density in a pot ("density dependence")
+1. Individuals of a given genotype within a pot at a given time may produce different numbers of seeds ("demographic stochasticity")
+2. Differences across generations, runways, and/or pots in the expected seed output (after controlling for density) of a genotype ("environmental stochasticity")
+4. Variation in the distance traveled by individual seeds of a given genotype based on draws from a dispersal kernel ("dispersal sampling")
+5. Differences across generations, runways, and/or pots in the dispersal kernel of a genotype ("kernel stochasticity")
+6. Differences among genotypes in expected demographic and dispersal parameters ("genetic heterogeneity")
+7. Variation across generations, runways, and/or pots in the genetic makeup of the population ("evolution")
+
+## Local demography model
+
+The primary state variable is the pre-germination number of seeds of genotype $g$ in pot $x$ at time $t$, $S_{g,x,t}$. In models with only a single genotype, the $g$ index is suppressed. These seeds germinate, survived, flowered and produced seeds; the number of produced seeds, prior to dispersal, is given by
+\begin{equation}
+S'_{g,x,t} = S_{g,x,t} f\left(\sum_{i=1}^G S_{i,x,t}, \mathbf{\theta_g} \right),
+\end{equation}
+where per-capita seed production, $f$, depends on the total local population across all $G$ genotypes and $\mathbf{\theta_g}$ is a vector of genotype-specific parameters.
+
+There was evidence from various experiments that seed density affected seedling establishment, seedling density affected survival to reproduction, and adult density affected per-capita seed production. However, we were not able to estimate genotype-specific parameters for all of these stages; furthermore, a complex model involving all three stages resulted in a net seed production rate that was very similar to the one that could be estimated by simply relating observed $S'$ to $S$, so for simplicity and generalizability we opted to use the latter approach.
+
+### Single genotype
+
+### Multiple genotypes
+
+### Demographic and environmental stochasticity
+
+## Dispersal model
 
 #	Data evaluation
 \small
