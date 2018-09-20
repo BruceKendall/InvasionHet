@@ -3,11 +3,12 @@ title: "TRACE document"
 output: bookdown::pdf_document2
 toc:  FALSE
 header-includes: \usepackage{etoc}
+bibliography: ../Bibliography.bib
 ---
 
 This is a TRACE document (“TRAnsparent and Comprehensive model Evaludation”) which provides supporting evidence that our model presented in:
 
-> **Kendall, B.E., J. Williams, and J. Levine. 20XX. Understanding the sources of variability in population spread.**
+> **Kendall, B.E., J.L. Williams, and J.M. Levine. 20XX. Understanding the sources of variability in population spread.**
 
 was thoughtfully designed, correctly implemented, thoroughly tested, well understood, and appropriately used for its intended purpose. 
 
@@ -42,7 +43,27 @@ and
 
 < Your text. Any subheadings will appear in the local toc as well as the global one >
 
+## Project objectives
+The research project is designed to increase scientific understanding about the sources of variability in the rate at which a populations spreads through space. The work has the following goals:
 
+1. Understand how variation in spread rate is affected by demographic and environmental stochasticity affecting demography; finite draws and kernel sampling affecting dispersal; and genetically driven heterogeneity in mean demography and dispersal.
+2. Understand how these contributions change as habitat becomes more fragmented.
+3. Understand how drift and selection lead to increases or decreases in spread variability.
+
+## General approach
+We built discrete-time, discrete-space models designed to represent, qualitatively and quantitatively, replicated greenhouse experiments in which *Arabidopsis thaliana* invades a (nearly) one-dimensional landscape [described in @Williams2016b;@Williams2018]. The landscape for a given population was made up of "pots" aligned in a "runway;" we retained those terms in our model. The model had many sources of stochasticity and variability:
+
+1. Seed production declines with plant density in a pot ("density dependence")
+1. Individuals of a given genotype within a pot at a given time may produce different numbers of seeds ("demographic stochasticity")
+2. Differences across generations, runways, and/or pots in the expected seed output (after controlling for density) of a genotype ("environmental stochasticity")
+4. Variation in the distance traveled by individual seeds of a given genotype based on draws from a dispersal kernel ("dispersal sampling")
+5. Differences across generations, runways, and/or pots in the dispersal kernel of a genotype ("kernel stochasticity")
+6. Differences among genotypes in expected demographic and dispersal parameters ("genetic heterogeneity")
+7. Variation across generations, runways, and/or pots in the genetic makeup of the population ("evolution")
+
+We built models containing all of these factors, parameterized from various data sources. We then ran replicate simulations of the full model, as well as with one or more of the factors turned off, and calculated the variability in spread rate among and within replicates. [NEED TO DEFINE THIS PRECISELY] We used these to estimate the contributions of the individual sources of variability to the overall variability in spread rate.
+
+NOTE: this doesn't quite address the issues that we are supposed to include here!
 
 #	Model description 
 \small
@@ -143,3 +164,4 @@ and
 
 < Your text. Any subheadings will appear in the local toc as well as the global one >
 
+# References {#references .unnumbered}
