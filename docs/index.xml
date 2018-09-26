@@ -23,6 +23,16 @@
     </item>
     
     <item>
+      <title>Some thoughts on approaches</title>
+      <link>/InvasionHet/2018/09/26/some-thoughts-on-approaches/</link>
+      <pubDate>Wed, 26 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/09/26/some-thoughts-on-approaches/</guid>
+      <description>Some things I thought about before I got up:
+ Testing array manipulation: I&amp;rsquo;m pretty confident in my accuracy in iterating the models using for loops, so I should write a (slow) version with loops that will be the check for faster apply() approaches. Another approach to code verification is to compare various outputs (e.g., seed production as a function of density) to the means and residual variances that are intended to go in.</description>
+    </item>
+    
+    <item>
       <title>Getting back to work</title>
       <link>/InvasionHet/2018/09/19/getting-back-to-work/</link>
       <pubDate>Wed, 19 Sep 2018 00:00:00 +0000</pubDate>
