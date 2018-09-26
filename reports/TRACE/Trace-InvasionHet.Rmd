@@ -110,6 +110,35 @@ There was evidence from various experiments that seed density affected seedling 
 
 < Your text. Any subheadings will appear in the local toc as well as the global one >
 
+## Ler data
+### Population data
+
+### Dispersal data
+These data are in the file `2013_08_08_Exp1_Spray.csv`. This is a direct measurement of seed dispersal distance. The parents are in pots with a range of densities (these pots came from an early population experiment that was abandoned). When the parents were mature, each pot was placed next to a long piece of sticky paper the same shape as a population runway. Then the simulated rain treatment was applied. The sticky paper was divided into 1 cm bands, and the number of seeds in each band was recorded.
+
+For this analysis, we discarded the data on pots from the "clipped" treatment.
+
+We also used data from the first generation of the population experiment, subset to continuous runways and excluding the clipped treatment. Using data on the number of seeds falling in each pot (including the parents' pot) we calculated the ratio of generated seeds that dispersed into the runway to those that stayed in the parental pot. [WE COULD ALSO USE THESE REPS TO LOOK AT DISPERSAL, BUT SO FAR WE HAVE NOT]
+
+NEED ASSESSMENT OF DATA QUALITY
+
+### Seed production patterns
+
+### Dispersal patterns
+
+## RIL data
+### Population data
+
+### Dispersal data
+
+### Genetic data
+
+### Seed production patterns
+
+### Dispersal patterns
+
+
+
 #	Conceptual model evaluation
 \small
 
@@ -181,4 +210,4 @@ There was evidence from various experiments that seed density affected seedling 
 
 < Your text. Any subheadings will appear in the local toc as well as the global one >
 
-# References {#references .unnumbered}
+# References {#references}
