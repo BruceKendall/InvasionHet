@@ -86,7 +86,7 @@ iterate_model <- function(Adults, params, controls) {
   }
   
   # Seed sampling?
-  if (contrls$seed_sampling) {
+  if (controls$seed_sampling) {
     Seeds <- seed_sampling(Seeds, kernel_params, params, controls)
   } else {
     Seeds <- round(det_kernel(Seeds, kernel_params, params, controls))
