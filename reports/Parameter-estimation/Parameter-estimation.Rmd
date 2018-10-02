@@ -1,0 +1,47 @@
+---
+title: "Parameter estimation"
+author: "Bruce E. Kendall"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+toc: TRUE
+bibliography: ../Bibliography.bib
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+project_root <- normalizePath("../..")
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = project_root)
+
+
+# Clean up
+rm(project_root)
+```
+```{r, echo=FALSE, message=FALSE}
+library(ProjectTemplate)
+load.project()
+```
+
+This document describes the parameterization of the models in Kendall, Williams and Levine. 
+There are two sets of parameters: a single genotype model, parameterized with Ler [@Williams2018]; and a multi-genotype model, parameterized with the "RIL" data [@Williams2016b].
+For now we include all code, so that we can see what's going on; if we need to share this as a supplement then we will need to clean it up.
+
+# Single-genotype model
+## Dispersal kernel
+Our dispersal kernel is essentially zero-inflated: a certain fraction of seeds stay in the maternal pot, and the remainder disperse according to a standard kernel. We only account for seeds staying in the runway.
+
+The primary data object for this analysis is `disperseLer`, which is derived from `2013_08_08_Exp1_Spray.csv`:
+```{r}
+cat(readr::read_file("data/disperseLer.R"))
+summary(disperseLer)
+head(disperseLer)
+```
+The `Seedlings` column records the number of seedlings that germinated in the home pot [I THINK---NEED TO CHECK THIS] when associated with `Distance` value of 4; at other distance values it is the number of seeds found in the one-cm strip from `Distance` - 1 to `Distance`.
+Thus, `Distance` = 8 is the first strip on the sticky paper, and represents dispersal 0--1 cm beyond the maternal pot.
+
+# References {#references}

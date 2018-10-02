@@ -23,6 +23,15 @@
     </item>
     
     <item>
+      <title>Parameterization data</title>
+      <link>/InvasionHet/2018/10/02/parameterization-data/</link>
+      <pubDate>Tue, 02 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/10/02/parameterization-data/</guid>
+      <description>In trying to write up the data section of the TRACE document, I&amp;rsquo;ve realized that the TRACE section is really about data quality, not the actual parameterization. Furthermore, I&amp;rsquo;m having trouble keeping track of what I actually did. So I&amp;rsquo;m now writing a &amp;ldquo;Parameter estimation&amp;rdquo; document. For now I&amp;rsquo;m going to write a version that shows all the guts; we may want a cleaned up one (if at all) for publication.</description>
+    </item>
+    
+    <item>
       <title>Some thoughts on approaches</title>
       <link>/InvasionHet/2018/09/26/some-thoughts-on-approaches/</link>
       <pubDate>Wed, 26 Sep 2018 00:00:00 +0000</pubDate>
