@@ -112,11 +112,24 @@ There was evidence from various experiments that seed density affected seedling 
 
 ## Ler data
 ### Population data
+We used the control treatment of the Ler population experiment described by @Williams2018. The invasion front was defined as the furthest pot occupied by a plant; spread rate in generation $t$ was defined as the distance (in pots? cm?) between the location of the invasion front in generation $t-1$ and the location of the invasion front in generation $t$.Patterns of spread rate were used in model corroboration, but not in parameterization. However, we did use the first generation of continuous runways to augment our estimates of dispersal paramters, and seed production in the most fragmented runways to extend our density dependence estimates to higher density.
+
+Here is the description of the Ler population experiment, from @Williams2018:
+
+> We developed *Arabidopsis thaliana* as a model system for studying spread [@Williams2016b], because its short life span makes it possible to observe 3–4 generations per year in a greenhouse environment. Plants with short generation times that grow well under greenhouse conditions have proven to be excellent model systems for asking questions about the dynamics of populations with discrete generations (Crone and Taylor 1996, Crone 1997). In this study, we used the Landsberg *erecta* (Ler) accession to populate our experiments. *Arabidopsis thaliana* disperses its seeds passively; mature fruits (siliques) open along two seams, and mature seeds drop from a central partition, aided by rain and wind in natural populations. The erecta mutation causes plants tohave shorter, sturdier stems, making the scale of dispersal tractable. Crowding makes the plants even shorter which can further constrain dispersal given known relationships between height and dispersal among different *Arabidopsis* recombinant inbred lines (Fakheran et al. 2010, @Williams2016b). Due to many generations of being inbred, Ler individuals have identical genotypes and produce >95% of their seeds through selfing. Thus we do not expect trait differences among individuals other than those due to phenotypic plasticity, maternal or epigenetic effects, or the rare possibility of new mutation.
+
+> Plants were given the opportunity to spread across a linear series of soil-filled plastic planting pots that were 21 9 7.3 9 5.5 cm (Bachmann Plantec, Hochdorf, Switzerland), arranged so that each patch was 7.3 cm wide. The total length of each array was extended as the invasions moved, but always extended 58.4 cm (8 pots) past the last pot with reproducing individuals. To assess the influence of landscape patchiness on spread, we separated pots in the arrays by distances of 0 (continuous), 2, 4, or 6 $\times$ mean dispersal distance. Seeds that fell into gaps between patches died. Given the constant patch (pot) size in all patchiness treatments, when we altered the distance between suitable habitats, we also altered the total fraction of suitable habitat.
+
+We used only the control treatments, discarding the density treatments described by @Williams2018.
 
 ### Dispersal data
-These data are in the file `2013_08_08_Exp1_Spray.csv`. This is a direct measurement of seed dispersal distance. The parents are in pots with a range of densities (these pots came from an early population experiment that was abandoned). When the parents were mature, each pot was placed next to a long piece of sticky paper the same shape as a population runway. Then the simulated rain treatment was applied. The sticky paper was divided into 1 cm bands, and the number of seeds in each band was recorded.
-
+We used data from the dispersal experiment described by @Williams2018.
+[These data are in the file `2013_08_08_Exp1_Spray.csv`. ]
 For this analysis, we discarded the data on pots from the "clipped" treatment.
+
+[Here is the description from @Williams2018:
+
+> To quantify dispersal, as well as the potential effect of density on dispersal, we used data from a second experiment, where we grew plants across a range of densities ($N = 48$ pots, containing between 1 and 500 individuals) under the same growing conditions as in the main experiment. During the seed dispersal phase, a sheet of sticky paper as wide as the pots (7.3 cm) was placed to one side of each pot at the same height as the pot, and all seeds that landed on the sticky paper were counted, as well as all seeds that germinated in the starting pot.]
 
 We also used data from the first generation of the population experiment, subset to continuous runways and excluding the clipped treatment. Using data on the number of seeds falling in each pot (including the parents' pot) we calculated the ratio of generated seeds that dispersed into the runway to those that stayed in the parental pot. [WE COULD ALSO USE THESE REPS TO LOOK AT DISPERSAL, BUT SO FAR WE HAVE NOT]
 
