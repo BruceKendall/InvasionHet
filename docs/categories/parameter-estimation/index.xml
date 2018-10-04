@@ -6,10 +6,19 @@
     <description>Recent content in Parameter Estimation on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 23 Oct 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/categories/parameter-estimation/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>fitdistrplus</title>
+      <link>/InvasionHet/2018/10/04/fitdistrplus/</link>
+      <pubDate>Thu, 04 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/10/04/fitdistrplus/</guid>
+      <description>Warning in .check.version(config): Your configuration is compatible with version 0.8 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.8.2. I’ve modified the helper functions to separate out the creation of the censored data frame from the fitting, and to allow setting the origin. Note that setting zero = 7 only looks at the runway, and allows use of non-truncated distributions when the distribution only has support for non-negative values.</description>
+    </item>
     
     <item>
       <title>Revisiting plans, and wrestling with seed stochasticity</title>

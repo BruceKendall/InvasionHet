@@ -56,10 +56,8 @@ ptlnorm <- function(q, meanlog, sdlog, low = 3.5)
 #   ID, Density, Siliques, Seedlings, Distance
 # All data in dispersal_data are used, so if only a single rep is to be analyzed, it
 #   should be subset outside this function
-fit_dispersal_models <- function(dispersal_data, plot.it = TRUE) {
-  data_loc <- subset(dispersal_data, Distance > 4)
-  data_vec <- rep(data_loc$Distance, data_loc$Seedlings)
-  cens_data_tble <- data.frame(left = data_vec - 4.5, right = data_vec - 3.5)
+fit_dispersal_models <- function(dispersal_data, zero = 3.5, plot.it = TRUE) {
+  cens_data_tble <- cens_dispersal_data(data_vec, zero)
   fit_tnorm <- fitdistcens(cens_data_tble, "tnorm", start = list(mean = 6, sd = 10))
   fit_tlnorm <- fitdistcens(cens_data_tble, "tlnorm", 
                             start = list(meanlog = log(6), sdlog = log(10)))
@@ -75,4 +73,18 @@ fit_dispersal_models <- function(dispersal_data, plot.it = TRUE) {
              mulog = stlnorm$est[1], sdlog = stlnorm$est[2], 
              se_mu = stnorm$sd[1], se_sd = stnorm$sd[2],
              se_mulog = stlnorm$sd[1], se_sdlog = stlnorm$sd[2])
+}
+
+########################################################################################
+# Convert the dispersal data into a form used by fitdistcens()
+# dispersal_data must contain columns Distance and Seedlings
+# zero is the zero point for the dispersal kernel. Default (3.5) puts the origin in the
+#   middle of the maternal pot. Use zero = 0 to set the origin to the trailing edge of
+#   the home pot, and zero = 7 to set the origin to the leading edge of the home pot.
+# Returns a data frame giving the left and right values of the interval for each seed
+#   in the dataset
+cens_dispersal_data <- function(dispersal_data, zero = 3.5) {
+  data_loc <- subset(dispersal_data, Distance > 4)
+  data_vec <- rep(data_loc$Distance, data_loc$Seedlings)
+  data.frame(left = data_vec - (zero + 1), right = data_vec - zero)
 }
