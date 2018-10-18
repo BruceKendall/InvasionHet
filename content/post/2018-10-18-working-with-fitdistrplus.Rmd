@@ -42,3 +42,14 @@ nonparaminR <- c("x", "p", "q", "n", "log", "log.p", "lower.tail",
 However, the first argument of the distribution functions in **rmutil** is "y". I can try to fix that here, but who knows whether the assumption of the first argument being x is baked in anywhere else!
 
 The thing to try is to make a locally modified version of `computegetparam` and, if that works, `fitdistccens`. These will have to be sourced after **fitdistrplus** is loaded.
+
+OK, I've made a modified version of `computegetparam` and put it in `src/myfitdistrplus.R`. Let's try it:
+```{r fitdist2, message=TRUE, error=TRUE}
+source("src/myfitdistrplus.R")
+p1 <- fitdist(temp$Distance - 7, "ggamma", start = list(s = 5, m = 4, f = 2))
+```
+Shoot, it seems that the local function definition is not overriding the definition within the package. The same thing happens when I do it from the command line, so it's not just a knitr thing.
+
+I think the only solution (short of submitting a bug report and hoping for a fast update) is to download the package from its github mirror (https://github.com/cran/fitdistrplus) and build my own version.
+
+Tried that, and so far generating the same error...

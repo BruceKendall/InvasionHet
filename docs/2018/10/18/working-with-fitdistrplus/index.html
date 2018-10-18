@@ -61,7 +61,7 @@
 
   <article class="article">
     
-    <span class="article-duration">1 min read</span>
+    <span class="article-duration">2 min read</span>
     
 
     <h1 class="article-title">Working with fitdistrcens</h1>
@@ -88,6 +88,13 @@ try(fitdistcens(cens_data, &quot;ggamma&quot;, start = list(s = 5, m = 4, f = 2)
         &quot;ncp&quot;)</code></pre>
 <p>However, the first argument of the distribution functions in <strong>rmutil</strong> is “y”. I can try to fix that here, but who knows whether the assumption of the first argument being x is baked in anywhere else!</p>
 <p>The thing to try is to make a locally modified version of <code>computegetparam</code> and, if that works, <code>fitdistccens</code>. These will have to be sourced after <strong>fitdistrplus</strong> is loaded.</p>
+<p>OK, I’ve made a modified version of <code>computegetparam</code> and put it in <code>src/myfitdistrplus.R</code>. Let’s try it:</p>
+<pre class="r"><code>source(&quot;src/myfitdistrplus.R&quot;)
+p1 &lt;- fitdist(temp$Distance - 7, &quot;ggamma&quot;, start = list(s = 5, m = 4, f = 2))</code></pre>
+<pre><code>Error in checkparamlist(arg_startfix$start.arg, arg_startfix$fix.arg, : Some parameter names have no starting/fixed value.</code></pre>
+<p>Shoot, it seems that the local function definition is not overriding the definition within the package. The same thing happens when I do it from the command line, so it’s not just a knitr thing.</p>
+<p>I think the only solution (short of submitting a bug report and hoping for a fast update) is to download the package from its github mirror (<a href="https://github.com/cran/fitdistrplus" class="uri">https://github.com/cran/fitdistrplus</a>) and build my own version.</p>
+<p>Tried that, and so far generating the same error…</p>
 
     </div>
   </article>
