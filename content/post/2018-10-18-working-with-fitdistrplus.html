@@ -1,0 +1,31 @@
+---
+title: Working with fitdistrcens
+author: Bruce Kendall
+date: '2018-10-18'
+slug: working-with-fitdistrplus
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+
+
+
+<pre><code>Warning in .check.version(config): Your configuration is compatible with version 0.8 of the ProjectTemplate package.
+  Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.8.2.</code></pre>
+<p>So here’s what happens if we try to run <code>fitdistrcens</code> on a non-standard distribution:</p>
+<pre class="r"><code>library(rmutil)
+temp &lt;- filter(disperseLer, ID == &quot;100_0&quot;)
+cens_data &lt;- cens_dispersal_data(temp, 7)
+try(fitdistcens(cens_data, &quot;ggamma&quot;, start = list(s = 5, m = 4, f = 2)), outFile = stdout())</code></pre>
+<pre><code>Error in checkparamlist(arg_startfix$start.arg, arg_startfix$fix.arg,  : 
+  argument &quot;hasnodefaultval&quot; is missing, with no default</code></pre>
+<p>Does it work with <code>fitdist</code>, which doesn’t account for the censoring?</p>
+<pre class="r"><code>p1 &lt;- fitdist(temp$Distance - 7, &quot;ggamma&quot;, start = list(s = 5, m = 4, f = 2))</code></pre>
+<pre><code>Error in checkparamlist(arg_startfix$start.arg, arg_startfix$fix.arg, : Some parameter names have no starting/fixed value.</code></pre>
+<p>No, but gives a different error. I’ve traced this to the firstline of <code>computegetparam</code>, which has first line:</p>
+<pre class="r"><code>nonparaminR &lt;- c(&quot;x&quot;, &quot;p&quot;, &quot;q&quot;, &quot;n&quot;, &quot;log&quot;, &quot;log.p&quot;, &quot;lower.tail&quot;, 
+        &quot;ncp&quot;)</code></pre>
+<p>However, the first argument of the distribution functions in <strong>rmutil</strong> is “y”. I can try to fix that here, but who knows whether the assumption of the first argument being x is baked in anywhere else!</p>
+<p>The thing to try is to make a locally modified version of <code>computegetparam</code> and, if that works, <code>fitdistccens</code>. These will have to be sourced after <strong>fitdistrplus</strong> is loaded.</p>

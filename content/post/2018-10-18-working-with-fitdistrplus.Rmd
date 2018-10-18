@@ -1,0 +1,44 @@
+---
+title: Working with fitdistrcens
+author: Bruce Kendall
+date: '2018-10-18'
+slug: working-with-fitdistrplus
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+#library(ProjectTemplate)
+ProjectTemplate::load.project()
+#print(parent.frame())
+```
+So here's what happens if we try to run `fitdistrcens` on a non-standard distribution:
+```{r fitdistcens, message=TRUE, error=TRUE}
+library(rmutil)
+temp <- filter(disperseLer, ID == "100_0")
+cens_data <- cens_dispersal_data(temp, 7)
+try(fitdistcens(cens_data, "ggamma", start = list(s = 5, m = 4, f = 2)), outFile = stdout())
+```
+
+Does it work with `fitdist`, which doesn't account for the censoring?
+```{r fitdist, message=TRUE, error=TRUE}
+p1 <- fitdist(temp$Distance - 7, "ggamma", start = list(s = 5, m = 4, f = 2))
+```
+No, but gives a different error. I've traced this to the firstline of `computegetparam`, which has first line:
+```r
+nonparaminR <- c("x", "p", "q", "n", "log", "log.p", "lower.tail", 
+        "ncp")
+```
+However, the first argument of the distribution functions in **rmutil** is "y". I can try to fix that here, but who knows whether the assumption of the first argument being x is baked in anywhere else!
+
+The thing to try is to make a locally modified version of `computegetparam` and, if that works, `fitdistccens`. These will have to be sourced after **fitdistrplus** is loaded.
