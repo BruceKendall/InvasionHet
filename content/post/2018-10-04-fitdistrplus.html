@@ -1,0 +1,52 @@
+---
+title: fitdistrplus
+author: Bruce Kendall
+date: '2018-10-04'
+slug: fitdistrplus
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+
+
+
+<pre><code>Warning in .check.version(config): Your configuration is compatible with version 0.8 of the ProjectTemplate package.
+  Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.8.2.</code></pre>
+<p>I’ve modified the helper functions to separate out the creation of the censored data frame from the fitting, and to allow setting the origin. Note that setting <code>zero = 7</code> only looks at the runway, and allows use of non-truncated distributions when the distribution only has support for non-negative values.</p>
+<p>For example:</p>
+<pre class="r"><code>library(fitdistrplus)
+temp &lt;- filter(disperseLer, ID == &quot;100_0&quot;)
+cens_data &lt;- cens_dispersal_data(temp, 7)
+p1 &lt;- fitdistcens(cens_data, &quot;lnorm&quot;)
+summary(p1)</code></pre>
+<pre><code>Fitting of the distribution &#39; lnorm &#39; By maximum likelihood on censored data 
+Parameters
+         estimate Std. Error
+meanlog 0.6041551 0.09963495
+sdlog   0.7210309 0.08006517
+Loglikelihood:  -102.8429   AIC:  209.6857   BIC:  213.8066 
+Correlation matrix:
+           meanlog      sdlog
+meanlog  1.0000000 -0.1424193
+sdlog   -0.1424193  1.0000000</code></pre>
+<pre class="r"><code>plot(p1)</code></pre>
+<p><img src="/InvasionHet/post/2018-10-04-fitdistrplus_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code>p2 &lt;- fitdistcens(cens_data, &quot;exp&quot;)
+summary(p2)</code></pre>
+<pre><code>Fitting of the distribution &#39; exp &#39; By maximum likelihood on censored data 
+Parameters
+      estimate Std. Error
+rate 0.4364277 0.05776133
+Loglikelihood:  -106.5479   AIC:  215.0957   BIC:  217.1562 </code></pre>
+<pre class="r"><code>plot(p2)</code></pre>
+<p><img src="/InvasionHet/post/2018-10-04-fitdistrplus_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
+<p>I’ve just found that the <strong>rmutil</strong> package adds a lot of distributions, some of which may be useful (not 2DT though). However, starting values of the parameters need to be set. Furthermore, there appears to be a bug in <code>fitdistcens</code>: comparing with <code>fitdist</code>, it appears that the line</p>
+<pre><code>    arg_startfix &lt;- checkparamlist(arg_startfix$start.arg, arg_startfix$fix.arg, 
+        argddistname)</code></pre>
+<p>needs to be replaced by</p>
+<pre><code>    hasnodefaultval &lt;- sapply(formals(ddistname), is.name)
+    arg_startfix &lt;- checkparamlist(arg_startfix$start.arg, arg_startfix$fix.arg, 
+        argddistname, hasnodefaultval)</code></pre>
+<p>I can hack that, but need to send a bug report (unfortunately the code is on R-forge and not very user-friendly).</p>

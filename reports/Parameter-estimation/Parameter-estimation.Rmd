@@ -22,7 +22,7 @@ knitr::opts_knit$set(root.dir = project_root)
 # Clean up
 rm(project_root)
 ```
-```{r, echo=FALSE, message=FALSE}
+```{r loadproject, echo=FALSE, message=FALSE}
 library(ProjectTemplate)
 load.project()
 ```
@@ -33,15 +33,47 @@ For now we include all code, so that we can see what's going on; if we need to s
 
 # Single-genotype model
 ## Dispersal kernel
-Our dispersal kernel is essentially zero-inflated: a certain fraction of seeds stay in the maternal pot, and the remainder disperse according to a standard kernel. We only account for seeds staying in the runway.
+Our dispersal kernel is essentially zero-inflated: a certain fraction of seeds stay in the maternal pot, and the remainder disperse according to a standard kernel. We only account for seeds staying in the runway. The dispersal kernels we use are:
 
+* Log-normal
+* Left-truncated normal
+* Half-normal
+* Exponential
+
+### Objectives
+1. Estimate mean and variance of fraction dispersing, based on beta-binomial model
+2. Determine which dispersal kernel is "best"
+3. Estimate kernel parameters for each replicate
+4. Examine whether dispersal parameters depend on density
+5. Estimate mean, variance, and distributional form for kernel parameters
+
+### Data sources
 The primary data object for this analysis is `disperseLer`, which is derived from `2013_08_08_Exp1_Spray.csv`:
-```{r}
+```{r dispersler}
 cat(readr::read_file("data/disperseLer.R"))
 summary(disperseLer)
 head(disperseLer)
 ```
 The `Seedlings` column records the number of seedlings that germinated in the home pot [I THINK---NEED TO CHECK THIS] when associated with `Distance` value of 4; at other distance values it is the number of seeds found in the one-cm strip from `Distance` - 1 to `Distance`.
 Thus, `Distance` = 8 is the first strip on the sticky paper, and represents dispersal 0--1 cm beyond the maternal pot.
+
+### Methods
+For the kernel estimation, it is not obvious what the "correct" value should be for distance zero, as the plants that are the source of the seeds are spread throughout the 7 cm wide pot (but note that they might not all contribute equivalently to dispersing seeds: plants on the edge of the pot often "lean" over the disperal area if it is not already occupied by plants, and dispersal from plants in the middle of the pot may be impeded by the edge plants.
+From a practical standpoint, we test all three, and choose the one that seems to provide the best general fit.
+
+The dispersal data are "interval censored"---that is, we don't know where in the one-cm bands (or the maternal pot) the seeds lie. 
+Furthmore, when we set the origin to values other than the leading edge of the pot, then we essentially have not observations from the left end of the distribution (since we don't know what fraction of the seeds in the maternal pot are "didn't disperse" and what fraction are "dispersed less than one pot's distance").
+In those cases we need to truncate the distributions so that the probabilities are calculated correctly.
+This also allows us, in simulations, to not have to distinguish two classes of non-dispersing seeds.
+The fitting routine we use requires p and d forms for the density and distribution functions of the distribution.
+Here are examples for a left-truncated lognormal:
+```{r tlnorm}
+dtlnorm
+ptlnorm
+```
+
+The values in the data frame implicitly assign distance zero to the trailing edge of the pot; other plausible candidates are the middle of the pot (hence the first band in the dispersal data is from 3.4 to 4.5) or the leading edge of the pot (hence the first band in the dispersal data is from 0 to 1).
+We fit distributions using the **fitdistrplus** package [v. `r packageVersion("fitdistrplus")`; @Delignette-Muller2015], which can account for interval and terminal truncation of the data.
+For the fraction dispersing, we used `dbetabinom` from the **rmutil** package [v. `r packageVersion("rmutil")`; @Swihart2018].
 
 # References {#references}

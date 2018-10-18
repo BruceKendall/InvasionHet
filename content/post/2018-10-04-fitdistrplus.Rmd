@@ -1,0 +1,52 @@
+---
+title: fitdistrplus
+author: Bruce Kendall
+date: '2018-10-04'
+slug: fitdistrplus
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+#library(ProjectTemplate)
+ProjectTemplate::load.project()
+#print(parent.frame())
+```
+I've modified the helper functions to separate out the creation of the censored data frame from the fitting, and to allow setting the origin. Note that setting `zero = 7` only looks at the runway, and allows use of non-truncated distributions when the distribution only has support for non-negative values.
+
+For example:
+```{r}
+library(fitdistrplus)
+temp <- filter(disperseLer, ID == "100_0")
+cens_data <- cens_dispersal_data(temp, 7)
+p1 <- fitdistcens(cens_data, "lnorm")
+summary(p1)
+plot(p1)
+p2 <- fitdistcens(cens_data, "exp")
+summary(p2)
+plot(p2)
+```
+
+I've just found that the **rmutil** package adds a lot of distributions, some of which may be useful (not 2DT though). However, starting values of the parameters need to be set. Furthermore, there appears to be a bug in `fitdistcens`: comparing with `fitdist`, it appears that the line
+```
+    arg_startfix <- checkparamlist(arg_startfix$start.arg, arg_startfix$fix.arg, 
+        argddistname)
+```
+needs to be replaced by
+```
+    hasnodefaultval <- sapply(formals(ddistname), is.name)
+    arg_startfix <- checkparamlist(arg_startfix$start.arg, arg_startfix$fix.arg, 
+        argddistname, hasnodefaultval)
+```
+
+I can hack that, but need to send a bug report (unfortunately the code is on R-forge and not very user-friendly).
