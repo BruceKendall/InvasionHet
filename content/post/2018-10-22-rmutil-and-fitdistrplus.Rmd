@@ -1,0 +1,59 @@
+---
+title: rmutil and fitdistrplus
+author: Bruce Kendall
+date: '2018-10-22'
+slug: rmutil-and-fitdistrplus
+categories:
+  - Parameter estimation
+  - Code development
+tags:
+  - dispersal
+  - Ler
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+#library(ProjectTemplate)
+ProjectTemplate::load.project()
+#print(parent.frame())
+```
+
+So the fix I did last week to `computegetparam()` (to allow "y" as an argument to the distribution functions) does allow `fitdist` to work (sort of) with the **rmutil** distributions. However, there can still be failures in estimatation or SE calculation, because there are a number of other ways that the **rmutil** distributions work differntly from the base distribution functions. **fitdistrplus** expects that:
+
+- If the distribution parameters are out of bounds, `ddist` and `pdist` will return `NaN` (**rmutil** throws an error)
+- If `x` is outside the support of `dist`, `ddist` will return zero (**rmutil** throws an error)
+- If `x` is less than the minumum supported value of `dist`, `pdist` will return zero (**rmutil** throws an error)
+- If `x` is greater than the maxumum supported value of `dist`, `pdist` will return one (**rmutil** throws an error)
+- If `x` is NA, `ddist` and `pdist` will return an NA (**rmutil** throws an error)
+
+So I'm going to need to rewrite the distribution functions. Fortunately they are in pure R---see https://github.com/swihart/rmutil/blob/master/R/dist.r. However, the rewriting will be painful enough that I'll want to be selective about the distributions I pick!
+
+Note that I can change y to x; but I still need to make the fix in `fitdistcens`, so will still need my local copy of **fitdistplus**. And because it needs to call functions that are not revealed outside the package environment, it needs to be part of a complete package.
+
+I did just find in the **fitdistr** documentation that, in addition to distributions in the **stats** package, **fitdistr** provides inbuilt support (including initial values) for "invgamma", "llogis", "invweibull", "pareto1", "pareto", "lgamma", "trgamma", "invtrgamma" from the **actuar** package.
+
+I made the change to `fitdistcens`, and it is now getting past the initialization phase. But it still gets hung up because of the errors returned by `dggamma` and pggamma`.
+
+Here are the updated functions:
+```{r ggamma}
+dggamma
+pggamma
+```
+
+And here's a fit:
+```{r fitdistcens}
+temp <- filter(disperseLer, ID == "100_0", Distance > 4)
+cens_data <- cens_dispersal_data(temp, 7)
+p1 <- fitdistcens(cens_data, "ggamma", start = list(s = 1.7, m = 11, f = 2))
+summary(p1)
+plot(p1) 
+```
+The fit looks pretty good, but the correlation matrix suggests that it's overparameterized. Also, not all start values for the parameters work!
+
+Note that, if I want to use an offset different than 7, I'll need to write truncated versions as well.

@@ -23,6 +23,15 @@
     </item>
     
     <item>
+      <title>rmutil and fitdistrplus</title>
+      <link>/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</link>
+      <pubDate>Mon, 22 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</guid>
+      <description>Warning in .check.version(config): Your configuration is compatible with version 0.8 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.8.2. So the fix I did last week to computegetparam() (to allow “y” as an argument to the distribution functions) does allow fitdist to work (sort of) with the rmutil distributions. However, there can still be failures in estimatation or SE calculation, because there are a number of other ways that the rmutil distributions work differntly from the base distribution functions.</description>
+    </item>
+    
+    <item>
       <title>Working with fitdistrcens</title>
       <link>/InvasionHet/2018/10/18/working-with-fitdistrplus/</link>
       <pubDate>Thu, 18 Oct 2018 00:00:00 +0000</pubDate>

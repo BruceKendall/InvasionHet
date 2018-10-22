@@ -1,0 +1,77 @@
+---
+title: rmutil and fitdistrplus
+author: Bruce Kendall
+date: '2018-10-22'
+slug: rmutil-and-fitdistrplus
+categories:
+  - Parameter estimation
+  - Code development
+tags:
+  - dispersal
+  - Ler
+---
+
+
+
+<pre><code>Warning in .check.version(config): Your configuration is compatible with version 0.8 of the ProjectTemplate package.
+  Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.8.2.</code></pre>
+<p>So the fix I did last week to <code>computegetparam()</code> (to allow “y” as an argument to the distribution functions) does allow <code>fitdist</code> to work (sort of) with the <strong>rmutil</strong> distributions. However, there can still be failures in estimatation or SE calculation, because there are a number of other ways that the <strong>rmutil</strong> distributions work differntly from the base distribution functions. <strong>fitdistrplus</strong> expects that:</p>
+<ul>
+<li>If the distribution parameters are out of bounds, <code>ddist</code> and <code>pdist</code> will return <code>NaN</code> (<strong>rmutil</strong> throws an error)</li>
+<li>If <code>x</code> is outside the support of <code>dist</code>, <code>ddist</code> will return zero (<strong>rmutil</strong> throws an error)</li>
+<li>If <code>x</code> is less than the minumum supported value of <code>dist</code>, <code>pdist</code> will return zero (<strong>rmutil</strong> throws an error)</li>
+<li>If <code>x</code> is greater than the maxumum supported value of <code>dist</code>, <code>pdist</code> will return one (<strong>rmutil</strong> throws an error)</li>
+<li>If <code>x</code> is NA, <code>ddist</code> and <code>pdist</code> will return an NA (<strong>rmutil</strong> throws an error)</li>
+</ul>
+<p>So I’m going to need to rewrite the distribution functions. Fortunately they are in pure R—see <a href="https://github.com/swihart/rmutil/blob/master/R/dist.r" class="uri">https://github.com/swihart/rmutil/blob/master/R/dist.r</a>. However, the rewriting will be painful enough that I’ll want to be selective about the distributions I pick!</p>
+<p>Note that I can change y to x; but I still need to make the fix in <code>fitdistcens</code>, so will still need my local copy of <strong>fitdistplus</strong>. And because it needs to call functions that are not revealed outside the package environment, it needs to be part of a complete package.</p>
+<p>I did just find in the <strong>fitdistr</strong> documentation that, in addition to distributions in the <strong>stats</strong> package, <strong>fitdistr</strong> provides inbuilt support (including initial values) for “invgamma”, “llogis”, “invweibull”, “pareto1”, “pareto”, “lgamma”, “trgamma”, “invtrgamma” from the <strong>actuar</strong> package.</p>
+<p>I made the change to <code>fitdistcens</code>, and it is now getting past the initialization phase. But it still gets hung up because of the errors returned by <code>dggamma</code> and pggamma`.</p>
+<p>Here are the updated functions:</p>
+<pre class="r"><code>dggamma</code></pre>
+<pre><code>function (x, s, m, f, log = FALSE) 
+{
+    if (any(m &lt;= 0)) 
+        return(NaN)
+    if (any(s &lt;= 0)) 
+        return(NaN)
+    if (any(f &lt;= 0)) 
+        return(NaN)
+    y &lt;- x
+    tmp &lt;- log(f) + (f - 1) * log(y) + dgamma(y^f, s, scale = (m/s)^f, 
+        log = TRUE)
+    if (!log) 
+        tmp &lt;- exp(tmp)
+    tmp
+}</code></pre>
+<pre class="r"><code>pggamma</code></pre>
+<pre><code>function (q, s, m, f) 
+{
+    if (any(m &lt;= 0)) 
+        return(NaN)
+    if (any(s &lt;= 0)) 
+        return(NaN)
+    if (any(f &lt;= 0)) 
+        return(NaN)
+    pgamma(q^f, s, scale = (m/s)^f)
+}</code></pre>
+<p>And here’s a fit:</p>
+<pre class="r"><code>temp &lt;- filter(disperseLer, ID == &quot;100_0&quot;, Distance &gt; 4)
+cens_data &lt;- cens_dispersal_data(temp, 7)
+p1 &lt;- fitdistcens(cens_data, &quot;ggamma&quot;, start = list(s = 1.7, m = 11, f = 2))
+summary(p1)</code></pre>
+<pre><code>Fitting of the distribution &#39; ggamma &#39; By maximum likelihood on censored data 
+Parameters
+   estimate Std. Error
+s 2.2711322  4.5620815
+m 2.1207476  2.8582386
+f 0.9187322  0.9675258
+Loglikelihood:  -102.3071   AIC:  210.6143   BIC:  216.7956 
+Correlation matrix:
+           s          m          f
+s  1.0000000 -0.9928811 -0.9944067
+m -0.9928811  1.0000000  0.9973951
+f -0.9944067  0.9973951  1.0000000</code></pre>
+<pre class="r"><code>plot(p1) </code></pre>
+<p><img src="/InvasionHet/post/2018-10-22-rmutil-and-fitdistrplus_files/figure-html/fitdistcens-1.png" width="672" /> The fit looks pretty good, but the correlation matrix suggests that it’s overparameterized. Also, not all start values for the parameters work!</p>
+<p>Note that, if I want to use an offset different than 7, I’ll need to write truncated versions as well.</p>

@@ -8,6 +8,11 @@
   </url>
   
   <url>
+    <loc>/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</loc>
+    <lastmod>2018-10-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/InvasionHet/2018/10/18/working-with-fitdistrplus/</loc>
     <lastmod>2018-10-18T00:00:00+00:00</lastmod>
   </url>
@@ -129,6 +134,12 @@
   </url>
   
   <url>
+    <loc>/InvasionHet/categories/code-development/</loc>
+    <lastmod>2018-10-22T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/InvasionHet/categories/conceptual-model-evaluation/</loc>
     <lastmod>2017-09-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -142,7 +153,7 @@
   
   <url>
     <loc>/InvasionHet/tags/dispersal/</loc>
-    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-22T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -154,7 +165,7 @@
   
   <url>
     <loc>/InvasionHet/tags/ler/</loc>
-    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-22T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -172,7 +183,7 @@
   
   <url>
     <loc>/InvasionHet/categories/parameter-estimation/</loc>
-    <lastmod>2018-10-18T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-22T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
