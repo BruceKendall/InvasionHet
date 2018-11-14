@@ -1,6 +1,11 @@
 ---
-title: ''
-date: ''
+title: blogdown tweak
+author: Bruce Kendall
+date: '2018-11-14'
+slug: blogdown-tweak
+categories:
+  - Housekeeping
+tags: []
 ---
 ```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
 #######################################################################################
@@ -15,3 +20,7 @@ date: ''
 ProjectTemplate::load.project()
 #print(parent.frame())
 ```
+
+I've modified `themes/hugo-lithium-theme/archetypes/default.md` to include the `setup2` chunk. Thus that chunk gets automatically added into a new blog post created with the addin. This goes into all new posts, so will need to be deleted in md files. I made a second archetype that was a copy of the original, but it doesn't seem to be available from the addin menu.
+
+Looking into this, it seems like it *should* be available; I've posted a question on stackexchange.
