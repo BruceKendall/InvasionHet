@@ -1,0 +1,81 @@
+---
+title: fitdistrplus bug
+author: Bruce Kendall
+date: '2018-11-14'
+slug: fitdistrplus-bug
+categories:
+  - Code development
+tags: []
+---
+
+
+
+<p>I’ve sent a bug report to the maintainer of <strong>fitdistrplus</strong>. Here’s the MRE I provided:</p>
+<pre class="r"><code># Generate some data
+mydata &lt;- rnorm(20, 0, 10)
+mydata_cens &lt;- data.frame(left = floor(mydata), right = ceiling(mydata))
+
+# Confirm that they can be fit by &quot;norm&quot;
+library(fitdistrplus)
+fitdist(mydata, &quot;norm&quot;)</code></pre>
+<pre><code>Fitting of the distribution &#39; norm &#39; by maximum likelihood 
+Parameters:
+       estimate Std. Error
+mean  0.9049781   2.634855
+sd   11.7834301   1.863124</code></pre>
+<pre class="r"><code>fitdistcens(mydata_cens, &quot;norm&quot;)</code></pre>
+<pre><code>Fitting of the distribution &#39; norm &#39; on censored data by maximum likelihood 
+Parameters:
+       estimate
+mean  0.9529095
+sd   11.6716267</code></pre>
+<pre class="r"><code># A simple distribution function without defaults
+dmynorm &lt;- function(x, mean, sd, log = FALSE) dnorm(x, mean, sd, log)
+pmynorm &lt;- function(q, mean, sd, lower.tail = TRUE, log.p = FALSE) pnorm(q, mean, sd, lower.tail, log.p)
+
+# Fitting without start values generates errors, as expected
+try(fitdist(mydata, &quot;mynorm&quot;))</code></pre>
+<pre><code>Error in computing default starting values.</code></pre>
+<pre class="r"><code>try(fitdistcens(mydata_cens, &quot;mynorm&quot;))</code></pre>
+<pre><code>Error in computing default starting values.</code></pre>
+<pre class="r"><code># fitdist works with mynorm when start values provided
+fitdist(mydata, &quot;mynorm&quot;, start = list(mean = 0, sd = 1))</code></pre>
+<pre><code>Fitting of the distribution &#39; mynorm &#39; by maximum likelihood 
+Parameters:
+       estimate Std. Error
+mean  0.9206415   2.633970
+sd   11.7794494   1.861552</code></pre>
+<pre class="r"><code># fitdistcens returns an error with mynorm when start values provided
+try(fitdistcens(mydata_cens, &quot;mynorm&quot;, start = list(mean = 0, sd = 1)), outFile = stdout())</code></pre>
+<pre><code>&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
+Error in fitdistcens(mydata_cens, &quot;mynorm&quot;, start = list(mean = 0, sd = 1)) : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100</code></pre>
+<pre class="r"><code># Second bug: fitdist gives different results when given start values equal to the distribution default
+fitdist(mydata, &quot;norm&quot;)</code></pre>
+<pre><code>Fitting of the distribution &#39; norm &#39; by maximum likelihood 
+Parameters:
+       estimate Std. Error
+mean  0.9049781   2.634855
+sd   11.7834301   1.863124</code></pre>
+<pre class="r"><code>fitdist(mydata, &quot;norm&quot;, start = list(mean = 0, sd = 1))</code></pre>
+<pre><code>Fitting of the distribution &#39; norm &#39; by maximum likelihood 
+Parameters:
+       estimate Std. Error
+mean  0.9206415   2.633970
+sd   11.7794494   1.861552</code></pre>
+<p>The discrepancy in the two MLE estimates is somewhat troubling too!</p>
+<p>Note that the error shown in the script above is different from what is shown in an interactive session!</p>
+<div id="temporary-fix" class="section level2">
+<h2>Temporary fix</h2>
+<p>I tried putting a version of <code>fitdistcens()</code> with my proposed fix in <code>lib/myfitdistrplus.R</code>. Scripts in <code>lib/</code> get loaded <em>after</em> the packages are loaded, so this masks the version in the package. I thought this would be more transparent than using my modified version of the whole package (<strong>fitdistrplus_bk</strong>). However, because <strong>fitdistrplus</strong> doesn’t export all its utility functions, the function fails because it’s not in the package namespace. If assign it to the package namespace (using <code>environment(fitdistcens) &lt;- asNamespace(&quot;fitdistrplus&quot;)</code>; see <a href="https://stackoverflow.com/questions/3094232/add-objects-to-package-namespace" class="uri">https://stackoverflow.com/questions/3094232/add-objects-to-package-namespace</a>), then it gets masked by the version that’s already in the package!</p>
+<p>I could give it a new name, but that would be harder to update if/when a new version of <strong>fitdistrplus</strong> is released. So for now I will use the munged version of the package that I created (available from <code>devtools::install_github(&quot;BruceKendall/fitdistrplus_bk&quot;)</code>)—that can be updated by changing one line in <code>global.dcf</code>.</p>
+<p>So now we can do:</p>
+<pre class="r"><code>detach(package:fitdistrplus) # Since we loaded it above
+fitdistcens(mydata_cens, &quot;mynorm&quot;, start = list(mean = 0, sd = 10))</code></pre>
+<pre><code>Fitting of the distribution &#39; mynorm &#39; on censored data by maximum likelihood 
+Parameters:
+     estimate
+mean 1.499655
+sd   7.376152</code></pre>
+</div>

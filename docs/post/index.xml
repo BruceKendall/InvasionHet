@@ -23,6 +23,16 @@
     </item>
     
     <item>
+      <title>fitdistrplus bug</title>
+      <link>/InvasionHet/2018/11/14/fitdistrplus-bug/</link>
+      <pubDate>Wed, 14 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/11/14/fitdistrplus-bug/</guid>
+      <description>I’ve sent a bug report to the maintainer of fitdistrplus. Here’s the MRE I provided:
+# Generate some data mydata &amp;lt;- rnorm(20, 0, 10) mydata_cens &amp;lt;- data.frame(left = floor(mydata), right = ceiling(mydata)) # Confirm that they can be fit by &amp;quot;norm&amp;quot; library(fitdistrplus) fitdist(mydata, &amp;quot;norm&amp;quot;) Fitting of the distribution &amp;#39; norm &amp;#39; by maximum likelihood Parameters: estimate Std. Error mean 0.9049781 2.634855 sd 11.7834301 1.863124 fitdistcens(mydata_cens, &amp;quot;norm&amp;quot;) Fitting of the distribution &amp;#39; norm &amp;#39; on censored data by maximum likelihood Parameters: estimate mean 0.</description>
+    </item>
+    
+    <item>
       <title>rmutil and fitdistrplus</title>
       <link>/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</link>
       <pubDate>Mon, 22 Oct 2018 00:00:00 +0000</pubDate>

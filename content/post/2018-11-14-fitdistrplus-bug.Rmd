@@ -1,0 +1,64 @@
+---
+title: fitdistrplus bug
+author: Bruce Kendall
+date: '2018-11-14'
+slug: fitdistrplus-bug
+categories:
+  - Code development
+tags: []
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+I've sent a bug report to the maintainer of **fitdistrplus**. Here's the MRE I provided:
+```{r}
+# Generate some data
+mydata <- rnorm(20, 0, 10)
+mydata_cens <- data.frame(left = floor(mydata), right = ceiling(mydata))
+
+# Confirm that they can be fit by "norm"
+library(fitdistrplus)
+fitdist(mydata, "norm")
+fitdistcens(mydata_cens, "norm")
+
+# A simple distribution function without defaults
+dmynorm <- function(x, mean, sd, log = FALSE) dnorm(x, mean, sd, log)
+pmynorm <- function(q, mean, sd, lower.tail = TRUE, log.p = FALSE) pnorm(q, mean, sd, lower.tail, log.p)
+
+# Fitting without start values generates errors, as expected
+try(fitdist(mydata, "mynorm"))
+try(fitdistcens(mydata_cens, "mynorm"))
+
+# fitdist works with mynorm when start values provided
+fitdist(mydata, "mynorm", start = list(mean = 0, sd = 1))
+
+# fitdistcens returns an error with mynorm when start values provided
+try(fitdistcens(mydata_cens, "mynorm", start = list(mean = 0, sd = 1)), outFile = stdout())
+
+# Second bug: fitdist gives different results when given start values equal to the distribution default
+fitdist(mydata, "norm")
+fitdist(mydata, "norm", start = list(mean = 0, sd = 1))
+```
+The discrepancy in the two MLE estimates is somewhat troubling too!
+
+Note that the error shown in the script above is different from what is shown in an interactive session!
+
+## Temporary fix
+I tried putting a version of `fitdistcens()` with my proposed fix in `lib/myfitdistrplus.R`. Scripts in `lib/` get loaded *after* the packages are loaded, so this masks the version in the package. I thought this would be more transparent than using my modified version of the whole package (**fitdistrplus_bk**). However, because **fitdistrplus** doesn't export all its utility functions, the function fails because it's not in the package namespace. If assign it to the package namespace (using `environment(fitdistcens) <- asNamespace("fitdistrplus")`; see https://stackoverflow.com/questions/3094232/add-objects-to-package-namespace), then it gets masked by the version that's already in the package!
+
+I could give it a new name, but that would be harder to update if/when a new version of **fitdistrplus** is released. So for now I will use the munged version of the package that I created (available from `devtools::install_github("BruceKendall/fitdistrplus_bk")`)---that can be updated by changing one line in `global.dcf`.
+
+So now we can do:
+```{r}
+detach(package:fitdistrplus) # Since we loaded it above
+fitdistcens(mydata_cens, "mynorm", start = list(mean = 0, sd = 10))
+```
