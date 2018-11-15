@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Likely-looking distributions - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Likely-looking distributions - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">1 min read</span>
+    
+
+    <h1 class="article-title">Likely-looking distributions</h1>
+
+    
+    <span class="article-date">2018/11/14</span>
+    
+
+    <div class="article-content">
+      <p>Let’s think about which distributions could be good. We know what the (half-)normal, exponential, and log-normal look like.</p>
+<p>Nathan et al. (2012) also suggest:</p>
+<ul>
+<li>Exponential power</li>
+<li>2Dt</li>
+<li>Inverse power</li>
+<li>Logistic</li>
+<li>Mixture models</li>
+<li>Inverse Gaussian (Wald)</li>
+<li>Wiebull</li>
+<li>Gamma</li>
+</ul>
+<p>The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by <span class="math inline">\(2\pi r\)</span>, but that doesn’t seem right for e.g. their Gaussian formulation.</p>
+<p>Some notes:</p>
+<ul>
+<li>Gamma is special case of exponential. It can have a mode at the origin or at positive values. Good candidate.</li>
+<li>Inverse Gaussian is also a good candidate, based on shape.</li>
+<li>Both gamma and inverse Gaussian are special cases of the 3-parameter generalized inverse Gaussian. <code>GIGrvg::(d)gig</code> (but no p form); <code>rmutil::(d)ginvgauss</code></li>
+<li>The exponential, Weibull, and gamma are all special cases of the 3-parameter generalized gamma distribution. At least for the plots shown on wikipedia, it does not appear to allow a mode away from zero(?). <code>flexsurv::dgengamma</code></li>
+</ul>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

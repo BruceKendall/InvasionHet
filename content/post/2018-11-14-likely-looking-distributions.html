@@ -1,0 +1,34 @@
+---
+title: Likely-looking distributions
+author: Bruce Kendall
+date: '2018-11-14'
+slug: likely-looking-distributions
+categories:
+  - Conceptual model evaluation
+  - Parameter estimation
+tags:
+  - dispersal
+---
+
+
+
+<p>Let’s think about which distributions could be good. We know what the (half-)normal, exponential, and log-normal look like.</p>
+<p>Nathan et al. (2012) also suggest:</p>
+<ul>
+<li>Exponential power</li>
+<li>2Dt</li>
+<li>Inverse power</li>
+<li>Logistic</li>
+<li>Mixture models</li>
+<li>Inverse Gaussian (Wald)</li>
+<li>Wiebull</li>
+<li>Gamma</li>
+</ul>
+<p>The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by <span class="math inline">\(2\pi r\)</span>, but that doesn’t seem right for e.g. their Gaussian formulation.</p>
+<p>Some notes:</p>
+<ul>
+<li>Gamma is special case of exponential. It can have a mode at the origin or at positive values. Good candidate.</li>
+<li>Inverse Gaussian is also a good candidate, based on shape.</li>
+<li>Both gamma and inverse Gaussian are special cases of the 3-parameter generalized inverse Gaussian. <code>GIGrvg::(d)gig</code> (but no p form); <code>rmutil::(d)ginvgauss</code></li>
+<li>The exponential, Weibull, and gamma are all special cases of the 3-parameter generalized gamma distribution. At least for the plots shown on wikipedia, it does not appear to allow a mode away from zero(?). <code>flexsurv::dgengamma</code></li>
+</ul>

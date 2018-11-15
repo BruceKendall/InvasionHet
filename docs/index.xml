@@ -23,12 +23,24 @@
     </item>
     
     <item>
+      <title>Likely-looking distributions</title>
+      <link>/InvasionHet/2018/11/14/likely-looking-distributions/</link>
+      <pubDate>Wed, 14 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/11/14/likely-looking-distributions/</guid>
+      <description>Let’s think about which distributions could be good. We know what the (half-)normal, exponential, and log-normal look like.
+Nathan et al. (2012) also suggest:
+ Exponential power 2Dt Inverse power Logistic Mixture models Inverse Gaussian (Wald) Wiebull Gamma  The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by \(2\pi r\), but that doesn’t seem right for e.</description>
+    </item>
+    
+    <item>
       <title>blogdown tweak</title>
       <link>/InvasionHet/2018/11/14/blogdown-tweak/</link>
       <pubDate>Wed, 14 Nov 2018 00:00:00 +0000</pubDate>
       
       <guid>/InvasionHet/2018/11/14/blogdown-tweak/</guid>
-      <description>I’ve modified themes/hugo-lithium-theme/archetypes/default.md to include the setup2 chunk. Thus that chunk gets automatically added into a new blog post created with the addin.</description>
+      <description>I’ve modified themes/hugo-lithium-theme/archetypes/default.md to include the setup2 chunk. Thus that chunk gets automatically added into a new blog post created with the addin. This goes into all new posts, so will need to be deleted in md files. I made a second archetype that was a copy of the original, but it doesn’t seem to be available from the addin menu.
+Looking into this, it seems like it should be available; I’ve posted a question on stackexchange.</description>
     </item>
     
     <item>

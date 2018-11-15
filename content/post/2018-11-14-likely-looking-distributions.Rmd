@@ -1,0 +1,46 @@
+---
+title: Likely-looking distributions
+author: Bruce Kendall
+date: '2018-11-14'
+slug: likely-looking-distributions
+categories:
+  - Conceptual model evaluation
+  - Parameter estimation
+tags:
+  - dispersal
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+#library(ProjectTemplate)
+ProjectTemplate::load.project()
+#print(parent.frame())
+```
+
+Let's think about which distributions could be good. We know what the (half-)normal, exponential, and log-normal look like. 
+
+Nathan et al. (2012) also suggest:
+
+* Exponential power
+* 2Dt
+* Inverse power
+* Logistic
+* Mixture models
+* Inverse Gaussian (Wald)
+* Wiebull
+* Gamma
+
+The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a "distance kernel" by multiplying by $2\pi r$, but that doesn't seem right for e.g. their Gaussian formulation.
+
+Some notes:
+
+* Gamma is special case of exponential. It can have a mode at the origin or at positive values. Good candidate.
+* Inverse Gaussian is also a good candidate, based on shape. 
+* Both gamma and inverse Gaussian are special cases of the 3-parameter generalized inverse Gaussian. `GIGrvg::(d)gig` (but no p form); `rmutil::(d)ginvgauss`
+* The exponential, Weibull, and gamma are all special cases of the 3-parameter generalized gamma distribution. At least for the plots shown on wikipedia, it does not appear to allow a mode away from zero(?). `flexsurv::dgengamma`
