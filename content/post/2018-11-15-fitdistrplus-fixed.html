@@ -1,0 +1,28 @@
+---
+title: fitdistrplus fixed
+author: Bruce Kendall
+date: '2018-11-15'
+slug: fitdistrplus-fixed
+categories:
+  - Code development
+  - Housekeeping
+tags:
+  - dispersal
+---
+
+
+
+<p>The developers of <strong>fitdistrplus</strong> got back to me already with a code fix. The new version (1.0-12) is available from R-forge using</p>
+<pre class="r"><code>install.packages(&quot;fitdistrplus&quot;, repos=&quot;http://R-Forge.R-project.org&quot;)</code></pre>
+<p>So now with <strong>fitdistrplus</strong> loaded in <code>global.dcf</code> I can run</p>
+<pre class="r"><code>mydata &lt;- rnorm(20, 0, 10)
+mydata_cens &lt;- data.frame(left = floor(mydata), right = ceiling(mydata))
+dmynorm &lt;- function(x, mean, sd, log = FALSE) dnorm(x, mean, sd, log)
+pmynorm &lt;- function(q, mean, sd, lower.tail = TRUE, log.p = FALSE) pnorm(q, mean, sd, lower.tail, log.p)
+fitdistcens(mydata_cens, &quot;mynorm&quot;, start = list(mean = 0, sd = 10))</code></pre>
+<pre><code>Fitting of the distribution &#39; mynorm &#39; on censored data by maximum likelihood 
+Parameters:
+          estimate
+mean -0.0008706237
+sd    9.6356247206</code></pre>
+<p>They also explained that for “standard” distributions such as “norm”, the default mle start matches the mean and sd of the data, so that is the source of the apparent discrepancy.</p>

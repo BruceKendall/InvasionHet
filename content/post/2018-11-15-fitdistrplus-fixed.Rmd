@@ -1,0 +1,40 @@
+---
+title: fitdistrplus fixed
+author: Bruce Kendall
+date: '2018-11-15'
+slug: fitdistrplus-fixed
+categories:
+  - Code development
+  - Housekeeping
+tags:
+  - dispersal
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+#library(ProjectTemplate)
+ProjectTemplate::load.project()
+#print(parent.frame())
+```
+
+The developers of **fitdistrplus** got back to me already with a code fix. The new version (1.0-12) is available from R-forge using
+```r
+install.packages("fitdistrplus", repos="http://R-Forge.R-project.org")
+```
+
+So now with **fitdistrplus** loaded in `global.dcf` I can run
+```{r}
+mydata <- rnorm(20, 0, 10)
+mydata_cens <- data.frame(left = floor(mydata), right = ceiling(mydata))
+dmynorm <- function(x, mean, sd, log = FALSE) dnorm(x, mean, sd, log)
+pmynorm <- function(q, mean, sd, lower.tail = TRUE, log.p = FALSE) pnorm(q, mean, sd, lower.tail, log.p)
+fitdistcens(mydata_cens, "mynorm", start = list(mean = 0, sd = 10))
+```
+
+They also explained that for "standard" distributions such as "norm", the default mle start matches the mean and sd of the data, so that is the source of the apparent discrepancy.

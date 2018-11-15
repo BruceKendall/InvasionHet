@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>fitdistrplus fixed - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="fitdistrplus fixed - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">1 min read</span>
+    
+
+    <h1 class="article-title">fitdistrplus fixed</h1>
+
+    
+    <span class="article-date">2018/11/15</span>
+    
+
+    <div class="article-content">
+      <p>The developers of <strong>fitdistrplus</strong> got back to me already with a code fix. The new version (1.0-12) is available from R-forge using</p>
+<pre class="r"><code>install.packages(&quot;fitdistrplus&quot;, repos=&quot;http://R-Forge.R-project.org&quot;)</code></pre>
+<p>So now with <strong>fitdistrplus</strong> loaded in <code>global.dcf</code> I can run</p>
+<pre class="r"><code>mydata &lt;- rnorm(20, 0, 10)
+mydata_cens &lt;- data.frame(left = floor(mydata), right = ceiling(mydata))
+dmynorm &lt;- function(x, mean, sd, log = FALSE) dnorm(x, mean, sd, log)
+pmynorm &lt;- function(q, mean, sd, lower.tail = TRUE, log.p = FALSE) pnorm(q, mean, sd, lower.tail, log.p)
+fitdistcens(mydata_cens, &quot;mynorm&quot;, start = list(mean = 0, sd = 10))</code></pre>
+<pre><code>Fitting of the distribution &#39; mynorm &#39; on censored data by maximum likelihood 
+Parameters:
+          estimate
+mean -0.0008706237
+sd    9.6356247206</code></pre>
+<p>They also explained that for “standard” distributions such as “norm”, the default mle start matches the mean and sd of the data, so that is the source of the apparent discrepancy.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+

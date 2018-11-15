@@ -23,6 +23,17 @@
     </item>
     
     <item>
+      <title>fitdistrplus fixed</title>
+      <link>/InvasionHet/2018/11/15/fitdistrplus-fixed/</link>
+      <pubDate>Thu, 15 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/11/15/fitdistrplus-fixed/</guid>
+      <description>The developers of fitdistrplus got back to me already with a code fix. The new version (1.0-12) is available from R-forge using
+install.packages(&amp;quot;fitdistrplus&amp;quot;, repos=&amp;quot;http://R-Forge.R-project.org&amp;quot;) So now with fitdistrplus loaded in global.dcf I can run
+mydata &amp;lt;- rnorm(20, 0, 10) mydata_cens &amp;lt;- data.frame(left = floor(mydata), right = ceiling(mydata)) dmynorm &amp;lt;- function(x, mean, sd, log = FALSE) dnorm(x, mean, sd, log) pmynorm &amp;lt;- function(q, mean, sd, lower.tail = TRUE, log.p = FALSE) pnorm(q, mean, sd, lower.</description>
+    </item>
+    
+    <item>
       <title>Likely-looking distributions</title>
       <link>/InvasionHet/2018/11/14/likely-looking-distributions/</link>
       <pubDate>Wed, 14 Nov 2018 00:00:00 +0000</pubDate>
