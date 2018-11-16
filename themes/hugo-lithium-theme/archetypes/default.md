@@ -11,7 +11,5 @@ date: ''
 #######################################################################################
 
 # Load the project. For some reason it has to be in a separate chunck.
-#library(ProjectTemplate)
 ProjectTemplate::load.project()
-#print(parent.frame())
 ```
