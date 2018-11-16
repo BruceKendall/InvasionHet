@@ -1,18 +1,77 @@
----
-title: Likely-looking distributions
-author: Bruce Kendall
-date: '2018-11-16'
-slug: likely-looking-distributions
-categories:
-  - Conceptual model evaluation
-  - Parameter estimation
-tags:
-  - dispersal
----
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Likely-looking distributions - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Likely-looking distributions - Project notebook for the Invasion Heterogeneity project">
 
 
 
-<p>Let’s think about which distributions could be good. We know what the (half-)normal, exponential, and log-normal look like.</p>
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">Likely-looking distributions</h1>
+
+    
+    <span class="article-date">2018/11/15</span>
+    
+
+    <div class="article-content">
+      <p>Let’s think about which distributions could be good. We know what the (half-)normal, exponential, and log-normal look like.</p>
 <p>Nathan et al. (2012) also suggest:</p>
 <ul>
 <li>Exponential power</li>
@@ -91,26 +150,57 @@ scale 0.3598061 1.0000000</code></pre>
 <div id="inverse-gaussian" class="section level2">
 <h2>Inverse Gaussian</h2>
 <p>This requires setting start values to the parameters. Following the logic of other functions in <strong>fitdistrplus</strong>, we’d like to match empirical moments. Wikipedia (<a href="https://en.wikipedia.org/wiki/Inverse_Gaussian_distribution" class="uri">https://en.wikipedia.org/wiki/Inverse_Gaussian_distribution</a>) gives a distribution in terms of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\lambda\)</span>, where the mean is <span class="math inline">\(\mu\)</span> and the variance is <span class="math inline">\(\mu^3/\lambda\)</span>. The function in <strong>actuar</strong> has parameters “mean” and “shape.” It is described in terms of of the “dispersion” parameter which is the inverse of shape; inspection reveals that “mean” is <span class="math inline">\(\mu\)</span> and “dispersion” is <span class="math inline">\(1/\lambda\)</span> in the Wikipedia formulation, so “shape” is <span class="math inline">\(\lambda\)</span>. Thus we want to estimate start values using <code>mean = mean(x)</code> and <code>shape = mean(x)^3 / var(x)</code>.</p>
-<pre class="r"><code>library(actuar)
-x &lt;- apply(cens_data, 1, mean) # set each value to the middle of its interval
-start_pars &lt;- list (
-                      mean = mean(x),
-                      shape = mean(x)^3 / var(x)
-                    )
-fit_invgauss &lt;- fitdistcens(cens_data, &quot;invgauss&quot;, start = start_pars)</code></pre>
-<pre><code>Warning in checkparamlist(arg_startfix$start.arg, arg_startfix$fix.arg, :
-Some parameter names have no starting/fixed value but have a default value.</code></pre>
-<pre class="r"><code>summary(fit_invgauss)</code></pre>
-<pre><code>Fitting of the distribution &#39; invgauss &#39; By maximum likelihood on censored data 
-Parameters
-      estimate Std. Error
-mean  2.339617  0.2437156
-shape 3.804128  0.8686025
-Loglikelihood:  -102.5821   AIC:  209.1642   BIC:  213.285 
-Correlation matrix:
-            mean      shape
-mean  1.00000000 0.03855307
-shape 0.03855307 1.00000000</code></pre>
-<pre class="r"><code>plot(fit_invgauss) </code></pre>
-<p><img src="/InvasionHet/post/2018-11-14-likely-looking-distributions_files/figure-html/invgauss-1.png" width="672" /></p>
+<pre class="r"><code>library(actuar)</code></pre>
+<pre><code>
+Attaching package: &#39;actuar&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:grDevices&#39;:
+
+    cm</code></pre>
+<pre class="r"><code>#fit_weibull &lt;- fitdistcens(cens_data, &quot;invgauss&quot;)
+#summary(fit_invgauss)
+#plot(fit_invgauss) </code></pre>
 </div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

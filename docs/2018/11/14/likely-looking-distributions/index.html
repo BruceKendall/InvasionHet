@@ -19,6 +19,11 @@
 
 
 
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
 <link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
 <link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
 
@@ -56,7 +61,7 @@
 
   <article class="article">
     
-    <span class="article-duration">1 min read</span>
+    <span class="article-duration">3 min read</span>
     
 
     <h1 class="article-title">Likely-looking distributions</h1>
@@ -81,11 +86,66 @@
 <p>The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by <span class="math inline">\(2\pi r\)</span>, but that doesn’t seem right for e.g. their Gaussian formulation.</p>
 <p>Some notes:</p>
 <ul>
-<li>Gamma is special case of exponential. It can have a mode at the origin or at positive values. Good candidate.</li>
+<li>Gamma is generalization of exponential. It can have a mode at the origin or at positive values. Good candidate.</li>
 <li>Inverse Gaussian is also a good candidate, based on shape.</li>
 <li>Both gamma and inverse Gaussian are special cases of the 3-parameter generalized inverse Gaussian. <code>GIGrvg::(d)gig</code> (but no p form); <code>rmutil::(d)ginvgauss</code></li>
 <li>The exponential, Weibull, and gamma are all special cases of the 3-parameter generalized gamma distribution. At least for the plots shown on wikipedia, it does not appear to allow a mode away from zero(?). <code>flexsurv::dgengamma</code></li>
 </ul>
+<p>Here is the list of distributions for which start values are found automatically from the help for <code>mledist</code>): For the following named distributions, reasonable starting values will be computed if start is omitted (i.e. NULL) : “norm”, “lnorm”, “exp” and “pois”, “cauchy”, “gamma”, “logis”, “nbinom” (parametrized by mu and size), “geom”, “beta”, “weibull” from the stats package; “invgamma”, “llogis”, “invweibull”, “pareto1”, “pareto”, “lgamma”, “trgamma”, “invtrgamma” from the actuar package.</p>
+<p>Let’s look at some of these, with one of the datasets. We’ll start with the origin at the leading edge of the home pot, so I don’t have to deal with the left-truncation (I have an idea for generalizing that code).</p>
+<pre class="r"><code>temp &lt;- filter(disperseLer, ID == &quot;100_0&quot;)
+cens_data &lt;- cens_dispersal_data(temp, 7)</code></pre>
+<div id="gamma-distribution" class="section level2">
+<h2>Gamma distribution</h2>
+<pre class="r"><code>fit_gamma &lt;- fitdistcens(cens_data, &quot;gamma&quot;)
+summary(fit_gamma)</code></pre>
+<pre><code>Fitting of the distribution &#39; gamma &#39; By maximum likelihood on censored data 
+Parameters
+       estimate Std. Error
+shape 1.9355007  0.4065521
+rate  0.8327602  0.1888287
+Loglikelihood:  -102.311   AIC:  208.622   BIC:  212.7429 
+Correlation matrix:
+          shape      rate
+shape 1.0000000 0.9065196
+rate  0.9065196 1.0000000</code></pre>
+<pre class="r"><code>plot(fit_gamma) </code></pre>
+<p><img src="/InvasionHet/post/2018-11-14-likely-looking-distributions_files/figure-html/gamma-1.png" width="672" /></p>
+</div>
+<div id="logistic-distribution" class="section level2">
+<h2>Logistic distribution</h2>
+<pre class="r"><code>fit_logis &lt;- fitdistcens(cens_data, &quot;logis&quot;)
+summary(fit_logis)</code></pre>
+<pre><code>Fitting of the distribution &#39; logis &#39; By maximum likelihood on censored data 
+Parameters
+          estimate Std. Error
+location 2.1323049  0.2119352
+scale    0.9098716  0.1028623
+Loglikelihood:  -111.5651   AIC:  227.1303   BIC:  231.2511 
+Correlation matrix:
+           location      scale
+location 1.00000000 0.09289735
+scale    0.09289735 1.00000000</code></pre>
+<pre class="r"><code>plot(fit_logis) </code></pre>
+<p><img src="/InvasionHet/post/2018-11-14-likely-looking-distributions_files/figure-html/logistic-1.png" width="672" /> It looks like this distribution is not restricted to postive values, so needs to be truncated anyway. It seems unlikely to be a good generic fit as it never allows a mode away from zero (just a plateau).</p>
+</div>
+<div id="weibull-distribution" class="section level2">
+<h2>Weibull distribution</h2>
+<pre class="r"><code>fit_weibull &lt;- fitdistcens(cens_data, &quot;weibull&quot;)
+summary(fit_weibull)</code></pre>
+<pre><code>Fitting of the distribution &#39; weibull &#39; By maximum likelihood on censored data 
+Parameters
+      estimate Std. Error
+shape 1.427613  0.1622270
+scale 2.554287  0.2546927
+Loglikelihood:  -102.4526   AIC:  208.9051   BIC:  213.026 
+Correlation matrix:
+          shape     scale
+shape 1.0000000 0.3598061
+scale 0.3598061 1.0000000</code></pre>
+<pre class="r"><code>plot(fit_weibull) </code></pre>
+<p><img src="/InvasionHet/post/2018-11-14-likely-looking-distributions_files/figure-html/weibull-1.png" width="672" /></p>
+</div>
 
     </div>
   </article>
@@ -108,6 +168,18 @@
 
     </div>
     
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
 
     
 <script src="/InvasionHet/js/math-code.js"></script>

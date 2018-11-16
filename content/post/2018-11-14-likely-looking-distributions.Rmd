@@ -1,7 +1,7 @@
 ---
 title: Likely-looking distributions
 author: Bruce Kendall
-date: '2018-11-14'
+date: '2018-11-16'
 slug: likely-looking-distributions
 categories:
   - Conceptual model evaluation
@@ -40,7 +40,54 @@ The scaling factors in Nathan et al. are for two-dimensional dispersal expressed
 
 Some notes:
 
-* Gamma is special case of exponential. It can have a mode at the origin or at positive values. Good candidate.
+* Gamma is generalization of exponential. It can have a mode at the origin or at positive values. Good candidate.
 * Inverse Gaussian is also a good candidate, based on shape. 
 * Both gamma and inverse Gaussian are special cases of the 3-parameter generalized inverse Gaussian. `GIGrvg::(d)gig` (but no p form); `rmutil::(d)ginvgauss`
 * The exponential, Weibull, and gamma are all special cases of the 3-parameter generalized gamma distribution. At least for the plots shown on wikipedia, it does not appear to allow a mode away from zero(?). `flexsurv::dgengamma`
+
+Here is the list of distributions for which start values are found automatically from the help for `mledist`): For the following named distributions, reasonable starting values will be computed if start is omitted (i.e. NULL) : "norm", "lnorm", "exp" and "pois", "cauchy", "gamma", "logis", "nbinom" (parametrized by mu and size), "geom", "beta", "weibull" from the stats package; "invgamma", "llogis", "invweibull", "pareto1", "pareto", "lgamma", "trgamma", "invtrgamma" from the actuar package.
+
+Let's look at some of these, with one of the datasets. We'll start with the origin at the leading edge of the home pot, so I don't have to deal with the left-truncation (I have an idea for generalizing that code).
+
+```{r data0}
+temp <- filter(disperseLer, ID == "100_0")
+cens_data <- cens_dispersal_data(temp, 7)
+```
+
+## Gamma distribution
+```{r gamma}
+fit_gamma <- fitdistcens(cens_data, "gamma")
+summary(fit_gamma)
+plot(fit_gamma) 
+```
+
+## Logistic distribution
+```{r logistic}
+fit_logis <- fitdistcens(cens_data, "logis")
+summary(fit_logis)
+plot(fit_logis) 
+```
+
+It looks like this distribution is not restricted to postive values, so needs to be truncated anyway. It seems unlikely to be a good generic fit as it never allows a mode away from zero (just a plateau).
+
+## Weibull distribution
+```{r weibull}
+fit_weibull <- fitdistcens(cens_data, "weibull")
+summary(fit_weibull)
+plot(fit_weibull) 
+```
+
+## Inverse Gaussian
+This requires setting start values to the parameters. Following the logic of other functions in **fitdistrplus**, we'd like to match empirical moments. Wikipedia (https://en.wikipedia.org/wiki/Inverse_Gaussian_distribution) gives a distribution in terms of $\mu$ and $\lambda$, where the mean is $\mu$ and the variance is $\mu^3/\lambda$. The function in **actuar** has parameters "mean" and "shape." It is described in terms of of the "dispersion" parameter which is the inverse of shape; inspection reveals that "mean" is $\mu$ and "dispersion" is $1/\lambda$ in the Wikipedia formulation, so "shape" is $\lambda$. Thus we want to estimate start values using `mean = mean(x)` and `shape = mean(x)^3 / var(x)`.
+
+```{r invgauss}
+library(actuar)
+x <- apply(cens_data, 1, mean) # set each value to the middle of its interval
+start_pars <- list (
+                      mean = mean(x),
+                      shape = mean(x)^3 / var(x)
+                    )
+fit_invgauss <- fitdistcens(cens_data, "invgauss", start = start_pars)
+summary(fit_invgauss)
+plot(fit_invgauss) 
+```

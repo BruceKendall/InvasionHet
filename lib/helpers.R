@@ -88,3 +88,30 @@ cens_dispersal_data <- function(dispersal_data, zero = 3.5) {
   data_vec <- rep(data_loc$Distance, data_loc$Seedlings)
   data.frame(left = data_vec - (zero + 1), right = data_vec - zero)
 }
+
+########################################################################################
+# Estimate starting parameter values for use by fitdist or fitdistcens
+# x is the data. If it is a vector it is left unchanged. If it is a two-colum matrix
+#   then it is assumed to be set up for fitdistcens, and the midpoint of each interval
+#   is calculated. There is no testing for Inf values (only interval censoring allowed)
+# dist is a character string giving the root name of the distribution (e.g., "norm")
+# Returns a list with named start values, unless "dist" hasn't had a method defined, in
+#   which case it returns NULL with a warning.
+start_params <- function(x, dist) {
+  if (dim(as.matrix(x))[2] == 2) {
+    x <- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] > 2) {
+    stop("x must be a vector or two-column matrix")
+  }
+  
+
+  start_pars <- switch(dist,
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning("No method exists for setting start values for ", dist)
+  }
+  return(start_pars)
+}
