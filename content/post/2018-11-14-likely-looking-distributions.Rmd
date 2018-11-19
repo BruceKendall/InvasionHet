@@ -20,7 +20,7 @@ tags:
 # Load the project. For some reason it has to be in a separate chunck.
 #library(ProjectTemplate)
 ProjectTemplate::load.project()
-#print(parent.frame())
+#print(parent.frame()) 
 ```
 
 Let's think about which distributions could be good. We know what the (half-)normal, exponential, and log-normal look like. 
@@ -91,3 +91,54 @@ fit_invgauss <- fitdistcens(cens_data, "invgauss", start = start_pars)
 summary(fit_invgauss)
 plot(fit_invgauss) 
 ```
+
+I've created a function `start_params()` in `helpers.R` that does this:
+```{r start_params, echo=FALSE}
+start_params
+```
+I will add other distributions in the `switch` function. Here's a test that it works:
+```{r invgauss2}
+library(actuar)
+start_pars <- start_params(cens_data, "invgauss")
+fit_invgauss <- fitdistcens(cens_data, "invgauss", start = start_pars)
+summary(fit_invgauss)
+```
+
+## Generalized gamma distribution
+This is provided by **flexsurv**, with root `gengamma`. This implementation has parameters $\mu$, $\sigma$, and $Q$.
+
+The Wikipedia definition (https://en.wikipedia.org/wiki/Generalized_gamma_distribution) is 
+$$
+f(x | a, d, p) = \frac{(p/a^d)x^{d -1}e^{-(x/a)^p}}{\Gamma(d/p)}
+$$
+The Wikipedia article includes the conversion to the flexsurv definition:
+$$
+\begin{aligned}
+\mu &= \ln a + \frac{\ln d - \ln p}{p}\\
+\sigma &= \frac{1}{\sqrt{pd}}\\
+Q &= \sqrt{p/d}
+\end{aligned}
+$$
+We actually need to invert these to do the substitutions in the moment calculations. We have
+$$
+\begin{aligned}
+d/p &= Q^{-2}\\
+pd &= \sigma^{-2}\\
+d/p &= (\sigma p)^{-2} = Q^{-2}\\
+p &= Q/\sigma\\
+d &= 1/(\sigma Q)\\
+\ln a &= \ln (d/p)^{-p} - \mu = \ln Q^{2 Q/\sigma} - \mu\\
+a &= \exp\left[ \ln Q^{2 Q/\sigma} - \mu\right]
+\end{aligned}
+$$
+But actually, this isn't going to help much, because the terms for the mean and variance on Wikipedia aren't going to be invertible (at least not easily).
+
+From the description on the help page, it seems like $\mu$ is the mean of $x$ and $\sigma$ is the sd of $\log(x)$. Let's give this a try:
+```{r ggtest}
+library(flexsurv)
+x <- rgengamma(1000, 2, 3, 0)
+mean(x)
+mean(log(x))
+sqrt(var(log(x)))
+```
+When $Q=0$ (the lognormal limit) then $\mu$ is the mean of $\log(x)$ and $\sigma$ is the sd of $\log(x)$. But the meanings are rather different at the Weibull and gamma limits, as described in the help for gengamma. So I think the strategy will be to fit those three standard parameters and use the AIC-best to set the start values for `gengamma`.

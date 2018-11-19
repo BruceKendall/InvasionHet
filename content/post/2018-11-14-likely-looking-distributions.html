@@ -113,4 +113,72 @@ mean  1.00000000 0.03855307
 shape 0.03855307 1.00000000</code></pre>
 <pre class="r"><code>plot(fit_invgauss) </code></pre>
 <p><img src="/InvasionHet/post/2018-11-14-likely-looking-distributions_files/figure-html/invgauss-1.png" width="672" /></p>
+<p>I’ve created a function <code>start_params()</code> in <code>helpers.R</code> that does this:</p>
+<pre><code>function (x, dist) 
+{
+    if (dim(as.matrix(x))[2] == 2) {
+        x &lt;- apply(x, 1, mean)
+    }
+    else if (dim(as.matrix(x))[2] &gt; 2) {
+        stop(&quot;x must be a vector or two-column matrix&quot;)
+    }
+    start_pars &lt;- switch(dist, invgauss = list(mean = mean(x), 
+        shape = mean(x)^3/var(x)), NULL)
+    if (is.null(start_pars)) {
+        warning(&quot;No method exists for setting start values for &quot;, 
+            dist)
+    }
+    return(start_pars)
+}</code></pre>
+<p>I will add other distributions in the <code>switch</code> function. Here’s a test that it works:</p>
+<pre class="r"><code>library(actuar)
+start_pars &lt;- start_params(cens_data, &quot;invgauss&quot;)
+fit_invgauss &lt;- fitdistcens(cens_data, &quot;invgauss&quot;, start = start_pars)</code></pre>
+<pre><code>Warning in checkparamlist(arg_startfix$start.arg, arg_startfix$fix.arg, :
+Some parameter names have no starting/fixed value but have a default value:
+dispersion.</code></pre>
+<pre class="r"><code>summary(fit_invgauss)</code></pre>
+<pre><code>Fitting of the distribution &#39; invgauss &#39; By maximum likelihood on censored data 
+Parameters
+      estimate Std. Error
+mean  2.339617  0.2437156
+shape 3.804128  0.8686025
+Loglikelihood:  -102.5821   AIC:  209.1642   BIC:  213.285 
+Correlation matrix:
+            mean      shape
+mean  1.00000000 0.03855307
+shape 0.03855307 1.00000000</code></pre>
+</div>
+<div id="generalized-gamma-distribution" class="section level2">
+<h2>Generalized gamma distribution</h2>
+<p>This is provided by <strong>flexsurv</strong>, with root <code>gengamma</code>. This implementation has parameters <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma\)</span>, and <span class="math inline">\(Q\)</span>.</p>
+<p>The Wikipedia definition (<a href="https://en.wikipedia.org/wiki/Generalized_gamma_distribution" class="uri">https://en.wikipedia.org/wiki/Generalized_gamma_distribution</a>) is <span class="math display">\[
+f(x | a, d, p) = \frac{(p/a^d)x^{d -1}e^{-(x/a)^p}}{\Gamma(d/p)}
+\]</span> The Wikipedia article includes the conversion to the flexsurv definition: <span class="math display">\[
+\begin{aligned}
+\mu &amp;= \ln a + \frac{\ln d - \ln p}{p}\\
+\sigma &amp;= \frac{1}{\sqrt{pd}}\\
+Q &amp;= \sqrt{p/d}
+\end{aligned}
+\]</span> We actually need to invert these to do the substitutions in the moment calculations. We have <span class="math display">\[
+\begin{aligned}
+d/p &amp;= Q^{-2}\\
+pd &amp;= \sigma^{-2}\\
+d/p &amp;= (\sigma p)^{-2} = Q^{-2}\\
+p &amp;= Q/\sigma\\
+d &amp;= 1/(\sigma Q)\\
+\ln a &amp;= \ln (d/p)^{-p} - \mu = \ln Q^{2 Q/\sigma} - \mu\\
+a &amp;= \exp\left[ \ln Q^{2 Q/\sigma} - \mu\right]
+\end{aligned}
+\]</span> But actually, this isn’t going to help much, because the terms for the mean and variance on Wikipedia aren’t going to be invertible (at least not easily).</p>
+<p>From the description on the help page, it seems like <span class="math inline">\(\mu\)</span> is the mean of <span class="math inline">\(x\)</span> and <span class="math inline">\(\sigma\)</span> is the sd of <span class="math inline">\(\log(x)\)</span>. Let’s give this a try:</p>
+<pre class="r"><code>library(flexsurv)
+x &lt;- rgengamma(1000, 2, 3, 0)
+mean(x)</code></pre>
+<pre><code>[1] 469.7918</code></pre>
+<pre class="r"><code>mean(log(x))</code></pre>
+<pre><code>[1] 2.005169</code></pre>
+<pre class="r"><code>sqrt(var(log(x)))</code></pre>
+<pre><code>[1] 3.001755</code></pre>
+<p>When <span class="math inline">\(Q=0\)</span> (the lognormal limit) then <span class="math inline">\(\mu\)</span> is the mean of <span class="math inline">\(\log(x)\)</span> and <span class="math inline">\(\sigma\)</span> is the sd of <span class="math inline">\(\log(x)\)</span>. But the meanings are rather different at the Weibull and gamma limits, as described in the help for gengamma. So I think the strategy will be to fit those three standard parameters and use the AIC-best to set the start values for <code>gengamma</code>.</p>
 </div>
