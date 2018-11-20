@@ -1,0 +1,69 @@
+---
+title: More on distributions
+author: Bruce Kendall
+date: '2018-11-20'
+slug: more-on-distributions
+categories:
+  - Code development
+  - Parameter estimation
+tags:
+  - dispersal
+---
+
+
+
+<pre class="r"><code>temp &lt;- filter(disperseLer, ID == &quot;100_0&quot;)
+cens_data &lt;- cens_dispersal_data(temp, 7)</code></pre>
+<div id="generalized-gamma" class="section level2">
+<h2>Generalized gamma</h2>
+<p>I’ve made a specialized start function for gengamma:</p>
+<pre class="r"><code>start_gengamma</code></pre>
+<pre><code>function (x, truncated = FALSE) 
+{
+    if (dim(as.matrix(x))[2] != 2) {
+        stop(&quot;Only interval-censored methods have been developed in start_gengamma&quot;)
+    }
+    dist_list &lt;- c(&quot;lnorm&quot;, &quot;weibull&quot;, &quot;gamma&quot;)
+    n &lt;- length(dist_list)
+    base_fits &lt;- data.frame(dist = dist_list, AIC = numeric(n), 
+        p1 = numeric(n), p2 = numeric(n), stringsAsFactors = FALSE)
+    base_starts &lt;- array(list(NULL), n)
+    if (truncated) {
+        stop(&quot;Truncated methods have not yet been developed in start_gengamma&quot;)
+    }
+    for (i in 1:n) {
+        fit &lt;- fitdistcens(x, base_fits$dist[i], base_starts[[i]])
+        base_fits$AIC[i] &lt;- fit$aic
+        base_fits$p1[i] &lt;- coef(fit)[1]
+        base_fits$p2[i] &lt;- coef(fit)[2]
+    }
+    best &lt;- base_fits[which.min(base_fits$AIC), ]
+    start_pars &lt;- with(best, switch(dist, lnorm = list(mu = p1, 
+        sigma = p2, Q = 2), weibull = list(mu = log(p1), sigma = 1/p2, 
+        Q = 1), gamma = list(mu = log(p1/p2), sigma = sqrt(1/p1), 
+        Q = sqrt(1/p1))))
+    return(start_pars)
+}</code></pre>
+<p>This can called via <code>start_params()</code>:</p>
+<pre class="r"><code>start_params</code></pre>
+<pre><code>function (x, dist, ...) 
+{
+    x_orig &lt;- x
+    if (dim(as.matrix(x))[2] == 2) {
+        x &lt;- apply(x, 1, mean)
+    }
+    else if (dim(as.matrix(x))[2] &gt; 2) {
+        stop(&quot;x must be a vector or two-column matrix&quot;)
+    }
+    start_pars &lt;- switch(dist, invgauss = list(mean = mean(x), 
+        shape = mean(x)^3/var(x)), gengamma = start_gengamma(x_orig, 
+        ...), NULL)
+    if (is.null(start_pars)) {
+        warning(&quot;No method exists for setting start values for &quot;, 
+            dist)
+    }
+    return(start_pars)
+}</code></pre>
+<p>Note that the optional parameter <code>truncated</code> can be passed through via the dots. The truncated case needs to be written (the function in fitdistcens will be different).</p>
+<p>Note that there are comments in the code that are not coming through here—somehow the rmarkdown rendering is “tidying” the code output!</p>
+</div>

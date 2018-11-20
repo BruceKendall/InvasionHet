@@ -1,0 +1,41 @@
+---
+title: More on distributions
+author: Bruce Kendall
+date: '2018-11-20'
+slug: more-on-distributions
+categories:
+  - Code development
+  - Parameter estimation
+tags:
+  - dispersal
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+
+```{r data0}
+temp <- filter(disperseLer, ID == "100_0")
+cens_data <- cens_dispersal_data(temp, 7)
+```
+
+## Generalized gamma
+I've made a specialized start function for gengamma:
+```{r start_gg}
+start_gengamma
+```
+This can called via `start_params()`:
+```{r start_gg2}
+start_params
+```
+Note that the optional parameter `truncated` can be passed through via the dots. The truncated case needs to be written (the function in fitdistcens will be different).
+
+Note that there are comments in the code that are not coming through here---somehow the rmarkdown rendering is "tidying" the code output!

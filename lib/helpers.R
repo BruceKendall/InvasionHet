@@ -95,9 +95,12 @@ cens_dispersal_data <- function(dispersal_data, zero = 3.5) {
 #   then it is assumed to be set up for fitdistcens, and the midpoint of each interval
 #   is calculated. There is no testing for Inf values (only interval censoring allowed)
 # dist is a character string giving the root name of the distribution (e.g., "norm")
+# ... Other arguments for specialized start functions. Possibilities include "truncated"
+#   (T/F, default F), for indicating to start_gengamma() whether to used truncated forms.
 # Returns a list with named start values, unless "dist" hasn't had a method defined, in
 #   which case it returns NULL with a warning.
-start_params <- function(x, dist) {
+start_params <- function(x, dist, ...) {
+  x_orig <- x
   if (dim(as.matrix(x))[2] == 2) {
     x <- apply(x, 1, mean) # set each value to the middle of its interval
   } else if (dim(as.matrix(x))[2] > 2) {
@@ -108,10 +111,49 @@ start_params <- function(x, dist) {
   start_pars <- switch(dist,
     invgauss = list(mean = mean(x),
                     shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
     NULL
   )
   if (is.null(start_pars)) {
     warning("No method exists for setting start values for ", dist)
   }
+  return(start_pars)
+}
+
+start_gengamma <- function(x, truncated = FALSE) {
+  if (dim(as.matrix(x))[2] != 2) {
+    stop("Only interval-censored methods have been developed in start_gengamma")
+    # Dealing with this requires a switch between fitdistcens() and fitdist().
+    # I may not need it.
+  }
+  
+  # Set up the empty data frame for the base dist fits
+  dist_list <- c("lnorm", "weibull", "gamma")
+  n <- length(dist_list)
+  base_fits <- data.frame(dist = dist_list, AIC = numeric(n), p1 = numeric(n), 
+                          p2 = numeric(n), stringsAsFactors = FALSE)
+  base_starts <- array(list(NULL), n)
+  
+  if (truncated) {
+    stop("Truncated methods have not yet been developed in start_gengamma")
+    # Need to add code to get start pars for base dists
+  }
+  
+  # Fit the base distributions
+  for (i in 1:n) {
+    fit <- fitdistcens(x, base_fits$dist[i], base_starts[[i]])
+    base_fits$AIC[i] <- fit$aic
+    base_fits$p1[i] <- coef(fit)[1]
+    base_fits$p2[i] <- coef(fit)[2]
+  }
+  
+  # Get the AIC-best one and use it to set the base parameters
+  best <- base_fits[which.min(base_fits$AIC), ]
+  start_pars <- with(best, switch(dist,
+    lnorm = list(mu = p1, sigma = p2, Q = 2),
+    weibull = list(mu = log(p1), sigma = 1/p2, Q = 1),
+    gamma = list(mu = log(p1/p2), sigma = sqrt(1/p1), Q = sqrt(1/p1))
+  ))
+  
   return(start_pars)
 }

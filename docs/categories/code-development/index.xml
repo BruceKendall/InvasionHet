@@ -6,10 +6,20 @@
     <description>Recent content in Code Development on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Nov 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 20 Nov 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/categories/code-development/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>More on distributions</title>
+      <link>/InvasionHet/2018/11/20/more-on-distributions/</link>
+      <pubDate>Tue, 20 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/11/20/more-on-distributions/</guid>
+      <description>temp &amp;lt;- filter(disperseLer, ID == &amp;quot;100_0&amp;quot;) cens_data &amp;lt;- cens_dispersal_data(temp, 7) Generalized gamma I’ve made a specialized start function for gengamma:
+start_gengamma function (x, truncated = FALSE) { if (dim(as.matrix(x))[2] != 2) { stop(&amp;quot;Only interval-censored methods have been developed in start_gengamma&amp;quot;) } dist_list &amp;lt;- c(&amp;quot;lnorm&amp;quot;, &amp;quot;weibull&amp;quot;, &amp;quot;gamma&amp;quot;) n &amp;lt;- length(dist_list) base_fits &amp;lt;- data.frame(dist = dist_list, AIC = numeric(n), p1 = numeric(n), p2 = numeric(n), stringsAsFactors = FALSE) base_starts &amp;lt;- array(list(NULL), n) if (truncated) { stop(&amp;quot;Truncated methods have not yet been developed in start_gengamma&amp;quot;) } for (i in 1:n) { fit &amp;lt;- fitdistcens(x, base_fits$dist[i], base_starts[[i]]) base_fits$AIC[i] &amp;lt;- fit$aic base_fits$p1[i] &amp;lt;- coef(fit)[1] base_fits$p2[i] &amp;lt;- coef(fit)[2] } best &amp;lt;- base_fits[which.</description>
+    </item>
     
     <item>
       <title>fitdistrplus fixed</title>
