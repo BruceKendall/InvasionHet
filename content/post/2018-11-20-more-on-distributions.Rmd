@@ -63,3 +63,57 @@ plot(xx, phnorm(xx), type = "l")
 ```
 
 I've put the above functions in `dists.R` and added the distribution to `start_params()`
+
+## 2dt distribution
+The formula for the density function of the 2dt distribution given by Nathan et al. (2012) is 
+$$
+f(x; a,b) = \frac{b-1}{\pi a^2}\left( 1 + \frac{x^2}{a^2}\right)^{-b}.
+$$
+Bullock et al (2017) claim to be using Nathan's formulations but omit the final exponent (although there's no way of knowing whether that's a typo in the table, as they don't appear to provide their code):
+$$
+f(x; a,b) = \frac{b-1}{\pi a^2}\left( 1 + \frac{x^2}{a^2}\right).
+$$
+Clark's (1999) original formula is
+$$
+f(x; u,p) = \frac{p}{\pi u} \left( 1 + \frac{x^2}{u}\right)^{-(p+1)}.
+$$
+This is equivalent to the Nathan formulation if we let $b = p+1$ and $a = \sqrt{u}$.
+
+The Nathan formula is for what he calls $k_L(r)$, the "location kernel." In 2-d space (the primary focus of the paper), this will be quite different from the "distance kernel" ($k_D(r)$) because of the increasing area at each distance. However, in one dimension with bi-directional dispersal $k_D(r) = 2k_L(r)$, and in fact we are measuring half of that, or $k_L(r)$. But there are factors of $a$ and 2 that look suspicious.
+
+Let's compare Nelson's formulations with the theoretical ones for some standard distribution. We'll start with the exponential, which in the theoretical case is only has non-negative support. The theoretical distribution is
+$$
+f(x; \lambda) = \lambda e^{-\lambda x}.
+$$
+Nathan's formulation is
+$$
+f(x; a) = \frac{1}{2\pi a^2} e^{-x/a}.
+$$
+From the term in the exponential we get $a = 1/\lambda$; but then there is an extra $1/2\pi a$ in Norman's normalization constant. This is different from Nathan's claimed conversion from $k_L(r)$ to $k_D(r)$ in the 2D case, which is a factor of $2 \pi x$ (although note that the distributions are formulated such that $a = E[x]$).
+
+Now let's look at the normal distribution, which has support on the full real line (as would 2Dt, as it has terms only in $x^2$). The theoretical distribution is
+$$
+f(x; \mu, \sigma) = \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{(x - \mu)^2}{2 \sigma^2}}.
+$$
+The half-normal is thus, for $x \ge 0$,
+$$
+f(x; \sigma) = \frac{2}{\sqrt{2 \pi \sigma^2}} e^{-\frac{x^2}{2 \sigma^2}}.
+$$
+Nathan's formula is
+$$
+f(x; a) = \frac{1}{\pi a^2} e^{-\frac{x^2}{a^2}}.
+$$
+From the term in the exponential, we get that $a = \sqrt{2\pi \sigma^2}$, and thus the normalization term is $\frac{1}{\sqrt{2 \pi \sigma^2}} \frac{1}{\pi a} = \frac{2}{\sqrt{2 \pi \sigma^2}} \frac{1}{2 \pi a}$. So once again we have to multiply Nelson's form by $2 \pi a$ to get the distribution we want.
+
+This means that the distribution function we want for the 2Dt is
+$$
+f(x; a,b) = \frac{2(b-1)}{a}\left( 1 + \frac{x^2}{a^2}\right)^{-b},
+$$
+with $x \ge 0$.
+
+However, there does not seem to be a straightforward analytical solution to the integral of this, for calculating the CDF, which is need by `fitdist` (the p form of the distribution). I could make a version with numerical integration; the question is, what sort of vectorization (if any) is required by fitdist? In fact, the built-in distribution functions seem to have rather unpredictable responses if vectors are provided for both x (or q) and one or more parameters. A quick google did not pull up any description; and since they use c code it's not easy to see what's going on.
+
+The numerical integration is not vectorized, I think. Furthermore, the function to be used by optim is supposed to return a scalar result, so I think that we don't need to worry about vectorization over parameters. But there may well be vectorization over x and q. I think the approach could be to write some draft functions and include warning statements that show the the dimensions of various inputs. That's for tomorrow.
+
+## Log-sech distribution
+A quick note that the log-sech distribution was one of the best. This wasn't on my previous list. So need to look into that. I also think that I haven't yet delved into the inverse power distribution.
