@@ -109,6 +109,7 @@ start_params <- function(x, dist, ...) {
   
 
   start_pars <- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
     invgauss = list(mean = mean(x),
                     shape = mean(x)^3 / var(x)),
     gengamma = start_gengamma(x_orig, ...),

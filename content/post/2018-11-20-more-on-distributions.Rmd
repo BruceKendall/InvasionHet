@@ -39,3 +39,27 @@ start_params
 Note that the optional parameter `truncated` can be passed through via the dots. The truncated case needs to be written (the function in fitdistcens will be different).
 
 Note that there are comments in the code that are not coming through here---somehow the rmarkdown rendering is "tidying" the code output!
+
+## Exponential power
+This is another name for the generalized normal (https://en.wikipedia.org/wiki/Generalized_normal_distribution) and has been implemented in package **gnorm** (https://cran.r-project.org/web/packages/gnorm/vignettes/gnormUse.html). It's a three-parameter distribution with the normal, Laplace and uniform distributions as special cases. It's defined on the whole real line, so I could either truncate it (allowing the mode to be either positive or negative) or make a "half-gnorm," setting the location parameter (mu) at zero and reflecting the distribution.
+
+Getting start values for the parameters is non-trivial (the Gamma function would need to be inverted!), but a decent starting place in either case would be `beta = 2`, which gives the normnal distribution; in that case the `sigma` of the normal distribution is equivalent to `sqrt(2) * alpha`.
+
+## Half-normal
+So let's look at half-distributions (which will also be needed for 2Dt). Here's what I think it would look like:
+```{r hnorm}
+dhnorm <- function(x, sigma = 1, log = FALSE) {
+  (x > 0) * 2 * dnorm(x, 0, sigma, log)
+}
+phnorm <- function(q, sigma = 1, lower.tail = TRUE, log.p = FALSE) {
+  phn <- (q > 0) * (1 - 2 * pnorm(q, 0, sigma, lower.tail = FALSE))
+  if (!lower.tail) phn <- (q > 0) * (1 - phn)
+  if (log.p) phn <- log(phn)
+  phn
+}
+xx <- seq(-1, 6, 0.1)
+plot(xx, dhnorm(xx), type = "l")
+plot(xx, phnorm(xx), type = "l")
+```
+
+I've put the above functions in `dists.R` and added the distribution to `start_params()`

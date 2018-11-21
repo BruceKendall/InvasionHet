@@ -1,30 +1,11 @@
-### generalized gamma distribution
-###
-pggamma <- function(q, s, m, f){
-#  if(any(q<=0)) return(0)
-  if(any(m<=0)) return(NaN)
-  if(any(s<=0)) return(NaN)
-  if(any(f<=0)) return(NaN)
-  pgamma(q^f,s,scale=(m/s)^f)}
+### Half-normal distribution
+dhnorm <- function(x, sigma = 1, log = FALSE) {
+  (x > 0) * 2 * dnorm(x, 0, sigma, log)
+}
 
-dggamma <- function(x, s, m, f, log=FALSE){
-#  if(any(x<=0)) return(0)
-  if(any(m<=0)) return(NaN)
-  if(any(s<=0)) return(NaN)
-  if(any(f<=0)) return(NaN)
-  y <- x
-  tmp <- log(f)+(f-1)*log(y)+dgamma(y^f,s,scale=(m/s)^f,log=TRUE)
-  if(!log)tmp <- exp(tmp)
-  tmp}
-
-qggamma <- function(p, s, m, f) {
-  if(any(m<=0)) return(NaN)
-  if(any(s<=0)) return(NaN)
-  if(any(f<=0)) return(NaN)
-  qgamma(p,s,scale=(m/s)^f)^(1/f)}
-
-rggamma <- function(n=1, s, m, f){
-  if(any(m<=0)) return(NaN)
-  if(any(s<=0)) return(NaN)
-  if(any(f<=0)) return(NaN)
-  qgamma(runif(n),s,scale=(m/s)^f)^(1/f)}
+phnorm <- function(q, sigma = 1, lower.tail = TRUE, log.p = FALSE) {
+  phn <- (q > 0) * (1 - 2 * pnorm(q, 0, sigma, lower.tail = FALSE))
+  if (!lower.tail) phn <- (q > 0) * (1 - phn)
+  if (log.p) phn <- log(phn)
+  phn
+}
