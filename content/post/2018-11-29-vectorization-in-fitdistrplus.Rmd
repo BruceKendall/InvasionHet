@@ -1,0 +1,67 @@
+---
+title: Vectorization in fitdistrplus
+author: Bruce Kendall
+date: '2018-11-29'
+categories:
+  - Code development
+  - Parameter estimation
+tags:
+  - dispersal
+slug: vectorization-in-fitdistrplus
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+I need to figure out how **fitdistr** is vectorizing the calls to the distribution functions, so I can appropriately build the 2Dt function and think sensibly about the truncated distributions. 
+
+The gory details are below, but in summary:
+
+- The parameter values are never vectorized
+- `x` and `q` (passed to `ddist` and `pdist` respectively) may be vectors
+- `x` and `q` may have length zero (which will need to be trapped for when I'm not just passing them on to a predefined distribution) (I don't know why!)
+- `x` and `q` may have values NA, NaN, Inf (again, I'll need to do some trapping)
+
+So I'll make a distribution that reports its inputs:
+```{r mylnorm}
+dmylnorm <- function(x, meanlog = 0, sdlog = 1, log = FALSE) {
+  cat("In dmylnorm \n")
+  cat("x:", x, "\n")
+  cat("meanlog:", meanlog, "\n")
+  cat("sdlog:", sdlog, "\n")
+  dlnorm(x, meanlog, sdlog, log)
+}
+dmylnorm(1:10)
+dmylnorm(1, (1:10)/10)
+
+pmylnorm <- function(q, meanlog = 0, sdlog = 1, lower.tail = TRUE, log.p = FALSE) {
+  cat("In pmylnorm \n")
+  cat("q:", q, "\n")
+  cat("meanlog:", meanlog, "\n")
+  cat("sdlog:", sdlog, "\n")
+  plnorm(q, meanlog, sdlog, lower.tail, log.p)
+}
+```
+
+So let's generate some data and run it through `fitdist`:
+```{r testfit}
+mydat <- rlnorm(20) 
+mydat
+fitdist(mydat, "mylnorm", start = list(meanlog = 0, sdlog = 1))
+```
+So it is using vector values of `x` and `q`, but not of the parameters. In fact, after the initial setup, it looks like it's not using the pdist at all!
+
+Now let's double-check the censored data fitting:
+```{r testfitcens}
+mydatcens <- data.frame(left = floor(mydat), right = ceiling(mydat))
+mydatcens
+fitdistcens(mydatcens, "mylnorm", start = list(meanlog = 0, sdlog = 1))
+```

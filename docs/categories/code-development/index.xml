@@ -6,10 +6,31 @@
     <description>Recent content in Code Development on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 20 Nov 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 29 Nov 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/categories/code-development/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Getting start values from moments</title>
+      <link>/InvasionHet/2018/11/29/getting-start-values-form-moments/</link>
+      <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/11/29/getting-start-values-form-moments/</guid>
+      <description>It is possible to get start values from the matching moments fit. For example:
+library(fitdistrplus) Loading required package: MASS Loading required package: survival Loading required package: npsurv Loading required package: lsei library(actuar)  Attaching package: &amp;#39;actuar&amp;#39; The following object is masked from &amp;#39;package:grDevices&amp;#39;: cm x4 &amp;lt;- rpareto(1000, 6, 2) s4 &amp;lt;- fitdist(x4, &amp;quot;pareto&amp;quot;, &amp;quot;mme&amp;quot;, order=c(1, 2), memp=function(x, order) emm(x, order)) s4$estimate  shape scale 9.323582 3.527362  fitdist(x4, &amp;quot;pareto&amp;quot;, start = as.</description>
+    </item>
+    
+    <item>
+      <title>Vectorization in fitdistrplus</title>
+      <link>/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</link>
+      <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</guid>
+      <description>I need to figure out how fitdistr is vectorizing the calls to the distribution functions, so I can appropriately build the 2Dt function and think sensibly about the truncated distributions.
+The gory details are below, but in summary:
+ The parameter values are never vectorized x and q (passed to ddist and pdist respectively) may be vectors x and q may have length zero (which will need to be trapped for when I’m not just passing them on to a predefined distribution) (I don’t know why!</description>
+    </item>
     
     <item>
       <title>More on distributions</title>

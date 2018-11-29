@@ -1,0 +1,40 @@
+---
+title: Getting start values from moments
+author: Bruce Kendall
+date: '2018-11-29'
+slug: getting-start-values-form-moments
+categories:
+  - Code development
+  - Parameter estimation
+tags:
+  - dispersal
+---
+
+It is possible to get start values from the matching moments fit. For example:
+```{r}
+library(fitdistrplus)
+library(actuar)
+x4  <-  rpareto(1000, 6, 2)
+s4 <- fitdist(x4, "pareto", "mme", order=c(1, 2), memp=function(x, order) emm(x, order))
+s4$estimate
+fitdist(x4, "pareto", start = as.list(s4$estimate))
+```
+(`emm` is in the **actuar** library; `order` needs to have a length that matches the number of parameters). But note that this requires the existence of a `mdist` function that computes the theoretical moments, given parameters. This is certainly easier than inverting the formulas for the moments from Wikipedia! **actuar** provides these for some distributions.
+
+There doesn't seem to be a general theoretical approach to moments of truncated distributions. But since I'm only looking at lower truncation of distributions with non-negative support, I can probably get close enough by using a vector of 10 points between zero and the truncation level to get the "missing" part that needs to be removed from the theoretical moment (although there will be a bit of tricky scaling to address).
+
+Let's double check that this works with censored data:
+```{r cens}
+x5 <- data.frame(left = floor(x4), right = ceiling(x4))
+s5 <- try(fitdistcens(x5, "pareto", "mme", order=c(1, 2), memp=function(x, order) emm(x, order)))
+# s5$estimate
+# fitdist(x5, "pareto", start = as.list(s5$estimate))
+```
+In fact this doesn't work! `fitdistcens` only uses mle.
+
+We could try this:
+```{r cens2}
+x5a <- apply(x5, 1, mean)
+s5 <- try(fitdist(x5a, "pareto", "mme", order=c(1, 2), memp=function(x, order) emm(x, order)))
+```
+Nope, that isn't robust (in this case probably because there's so little variation in the censored data)

@@ -1,0 +1,50 @@
+---
+title: Getting start values from moments
+author: Bruce Kendall
+date: '2018-11-29'
+slug: getting-start-values-form-moments
+categories:
+  - Code development
+  - Parameter estimation
+tags:
+  - dispersal
+---
+
+
+
+<p>It is possible to get start values from the matching moments fit. For example:</p>
+<pre class="r"><code>library(fitdistrplus)</code></pre>
+<pre><code>Loading required package: MASS</code></pre>
+<pre><code>Loading required package: survival</code></pre>
+<pre><code>Loading required package: npsurv</code></pre>
+<pre><code>Loading required package: lsei</code></pre>
+<pre class="r"><code>library(actuar)</code></pre>
+<pre><code>
+Attaching package: &#39;actuar&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:grDevices&#39;:
+
+    cm</code></pre>
+<pre class="r"><code>x4  &lt;-  rpareto(1000, 6, 2)
+s4 &lt;- fitdist(x4, &quot;pareto&quot;, &quot;mme&quot;, order=c(1, 2), memp=function(x, order) emm(x, order))
+s4$estimate</code></pre>
+<pre><code>   shape    scale 
+9.323582 3.527362 </code></pre>
+<pre class="r"><code>fitdist(x4, &quot;pareto&quot;, start = as.list(s4$estimate))</code></pre>
+<pre><code>Fitting of the distribution &#39; pareto &#39; by maximum likelihood 
+Parameters:
+      estimate Std. Error
+shape 8.119001   2.433532
+scale 3.020057   1.011061</code></pre>
+<p>(<code>emm</code> is in the <strong>actuar</strong> library; <code>order</code> needs to have a length that matches the number of parameters). But note that this requires the existence of a <code>mdist</code> function that computes the theoretical moments, given parameters. This is certainly easier than inverting the formulas for the moments from Wikipedia! <strong>actuar</strong> provides these for some distributions.</p>
+<p>There doesn’t seem to be a general theoretical approach to moments of truncated distributions. But since I’m only looking at lower truncation of distributions with non-negative support, I can probably get close enough by using a vector of 10 points between zero and the truncation level to get the “missing” part that needs to be removed from the theoretical moment (although there will be a bit of tricky scaling to address).</p>
+<p>Let’s double check that this works with censored data:</p>
+<pre class="r"><code>x5 &lt;- data.frame(left = floor(x4), right = ceiling(x4))
+s5 &lt;- try(fitdistcens(x5, &quot;pareto&quot;, &quot;mme&quot;, order=c(1, 2), memp=function(x, order) emm(x, order)))
+# s5$estimate
+# fitdist(x5, &quot;pareto&quot;, start = as.list(s5$estimate))</code></pre>
+<p>In fact this doesn’t work! <code>fitdistcens</code> only uses mle.</p>
+<p>We could try this:</p>
+<pre class="r"><code>x5a &lt;- apply(x5, 1, mean)
+s5 &lt;- try(fitdist(x5a, &quot;pareto&quot;, &quot;mme&quot;, order=c(1, 2), memp=function(x, order) emm(x, order)))</code></pre>
+<pre><code>&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, mdistnam = mdistname, memp = memp, hessian = TRUE,     method = opt.meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;</code></pre>
+<p>Nope, that isn’t robust (in this case probably because there’s so little variation in the censored data)</p>

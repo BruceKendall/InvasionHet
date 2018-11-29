@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Getting start values from moments - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Getting start values from moments - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">Getting start values from moments</h1>
+
+    
+    <span class="article-date">2018/11/29</span>
+    
+
+    <div class="article-content">
+      <p>It is possible to get start values from the matching moments fit. For example:</p>
+<pre class="r"><code>library(fitdistrplus)</code></pre>
+<pre><code>Loading required package: MASS</code></pre>
+<pre><code>Loading required package: survival</code></pre>
+<pre><code>Loading required package: npsurv</code></pre>
+<pre><code>Loading required package: lsei</code></pre>
+<pre class="r"><code>library(actuar)</code></pre>
+<pre><code>
+Attaching package: &#39;actuar&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:grDevices&#39;:
+
+    cm</code></pre>
+<pre class="r"><code>x4  &lt;-  rpareto(1000, 6, 2)
+s4 &lt;- fitdist(x4, &quot;pareto&quot;, &quot;mme&quot;, order=c(1, 2), memp=function(x, order) emm(x, order))
+s4$estimate</code></pre>
+<pre><code>   shape    scale 
+9.323582 3.527362 </code></pre>
+<pre class="r"><code>fitdist(x4, &quot;pareto&quot;, start = as.list(s4$estimate))</code></pre>
+<pre><code>Fitting of the distribution &#39; pareto &#39; by maximum likelihood 
+Parameters:
+      estimate Std. Error
+shape 8.119001   2.433532
+scale 3.020057   1.011061</code></pre>
+<p>(<code>emm</code> is in the <strong>actuar</strong> library; <code>order</code> needs to have a length that matches the number of parameters). But note that this requires the existence of a <code>mdist</code> function that computes the theoretical moments, given parameters. This is certainly easier than inverting the formulas for the moments from Wikipedia! <strong>actuar</strong> provides these for some distributions.</p>
+<p>There doesn’t seem to be a general theoretical approach to moments of truncated distributions. But since I’m only looking at lower truncation of distributions with non-negative support, I can probably get close enough by using a vector of 10 points between zero and the truncation level to get the “missing” part that needs to be removed from the theoretical moment (although there will be a bit of tricky scaling to address).</p>
+<p>Let’s double check that this works with censored data:</p>
+<pre class="r"><code>x5 &lt;- data.frame(left = floor(x4), right = ceiling(x4))
+s5 &lt;- try(fitdistcens(x5, &quot;pareto&quot;, &quot;mme&quot;, order=c(1, 2), memp=function(x, order) emm(x, order)))
+# s5$estimate
+# fitdist(x5, &quot;pareto&quot;, start = as.list(s5$estimate))</code></pre>
+<p>In fact this doesn’t work! <code>fitdistcens</code> only uses mle.</p>
+<p>We could try this:</p>
+<pre class="r"><code>x5a &lt;- apply(x5, 1, mean)
+s5 &lt;- try(fitdist(x5a, &quot;pareto&quot;, &quot;mme&quot;, order=c(1, 2), memp=function(x, order) emm(x, order)))</code></pre>
+<pre><code>&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, mdistnam = mdistname, memp = memp, hessian = TRUE,     method = opt.meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;</code></pre>
+<p>Nope, that isn’t robust (in this case probably because there’s so little variation in the censored data)</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

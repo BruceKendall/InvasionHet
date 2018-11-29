@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Vectorization in fitdistrplus - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Vectorization in fitdistrplus - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">30 min read</span>
+    
+
+    <h1 class="article-title">Vectorization in fitdistrplus</h1>
+
+    
+    <span class="article-date">2018/11/29</span>
+    
+
+    <div class="article-content">
+      <p>I need to figure out how <strong>fitdistr</strong> is vectorizing the calls to the distribution functions, so I can appropriately build the 2Dt function and think sensibly about the truncated distributions.</p>
+<p>The gory details are below, but in summary:</p>
+<ul>
+<li>The parameter values are never vectorized</li>
+<li><code>x</code> and <code>q</code> (passed to <code>ddist</code> and <code>pdist</code> respectively) may be vectors</li>
+<li><code>x</code> and <code>q</code> may have length zero (which will need to be trapped for when I’m not just passing them on to a predefined distribution) (I don’t know why!)</li>
+<li><code>x</code> and <code>q</code> may have values NA, NaN, Inf (again, I’ll need to do some trapping)</li>
+</ul>
+<p>So I’ll make a distribution that reports its inputs:</p>
+<pre class="r"><code>dmylnorm &lt;- function(x, meanlog = 0, sdlog = 1, log = FALSE) {
+  cat(&quot;In dmylnorm \n&quot;)
+  cat(&quot;x:&quot;, x, &quot;\n&quot;)
+  cat(&quot;meanlog:&quot;, meanlog, &quot;\n&quot;)
+  cat(&quot;sdlog:&quot;, sdlog, &quot;\n&quot;)
+  dlnorm(x, meanlog, sdlog, log)
+}
+dmylnorm(1:10)</code></pre>
+<pre><code>In dmylnorm 
+x: 1 2 3 4 5 6 7 8 9 10 
+meanlog: 0 
+sdlog: 1 </code></pre>
+<pre><code> [1] 0.398942280 0.156874019 0.072728256 0.038153457 0.021850715
+ [6] 0.013354538 0.008581626 0.005739296 0.003965747 0.002815902</code></pre>
+<pre class="r"><code>dmylnorm(1, (1:10)/10)</code></pre>
+<pre><code>In dmylnorm 
+x: 1 
+meanlog: 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1 
+sdlog: 1 </code></pre>
+<pre><code> [1] 0.3969525 0.3910427 0.3813878 0.3682701 0.3520653 0.3332246 0.3122539
+ [8] 0.2896916 0.2660852 0.2419707</code></pre>
+<pre class="r"><code>pmylnorm &lt;- function(q, meanlog = 0, sdlog = 1, lower.tail = TRUE, log.p = FALSE) {
+  cat(&quot;In pmylnorm \n&quot;)
+  cat(&quot;q:&quot;, q, &quot;\n&quot;)
+  cat(&quot;meanlog:&quot;, meanlog, &quot;\n&quot;)
+  cat(&quot;sdlog:&quot;, sdlog, &quot;\n&quot;)
+  plnorm(q, meanlog, sdlog, lower.tail, log.p)
+}</code></pre>
+<p>So let’s generate some data and run it through <code>fitdist</code>:</p>
+<pre class="r"><code>mydat &lt;- rlnorm(20) 
+mydat</code></pre>
+<pre><code> [1]  0.5904349  2.9247735  2.2196987  0.8539104  1.3832922  0.8819703
+ [7]  2.0710698  0.1524415  2.3086514  1.2646456 16.0086215  0.8155863
+[13]  0.9015805  0.2559542  1.6114184  2.1547082  0.5778989  0.6185283
+[19]  0.4560678  0.6797890</code></pre>
+<pre class="r"><code>fitdist(mydat, &quot;mylnorm&quot;, start = list(meanlog = 0, sdlog = 1))</code></pre>
+<pre><code>In dmylnorm 
+x:  
+meanlog: 0 
+sdlog: 1 
+In dmylnorm 
+x: 0 1 Inf NaN -1 
+meanlog: 0 
+sdlog: 1 
+In dmylnorm 
+x: 0 1 NA 
+meanlog: 0 
+sdlog: 1 
+In dmylnorm 
+x: 0 1 
+meanlog: 0 
+sdlog: -1 
+In pmylnorm 
+q:  
+meanlog: 0 
+sdlog: 1 
+In pmylnorm 
+q: 0 1 Inf NaN -1 
+meanlog: 0 
+sdlog: 1 
+In pmylnorm 
+q: 0 1 NA 
+meanlog: 0 
+sdlog: 1 
+In pmylnorm 
+q: 0 1 
+meanlog: 0 
+sdlog: -1 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0 
+sdlog: 1 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.1 
+sdlog: 1 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0 
+sdlog: 1.1 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.1 
+sdlog: 0.9 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.075 
+sdlog: 0.95 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.175 
+sdlog: 0.95 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.04375 
+sdlog: 0.9875 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.01875 
+sdlog: 0.9375 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.0796875 
+sdlog: 0.984375 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.1109375 
+sdlog: 0.946875 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.06054688 
+sdlog: 0.9773437 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.05585938 
+sdlog: 0.9429687 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07373047 
+sdlog: 0.9740234 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.05927734 
+sdlog: 1.001367 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07106934 
+sdlog: 0.9628418 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.08425293 
+sdlog: 0.9595215 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07832642 
+sdlog: 0.9639771 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07566528 
+sdlog: 0.9527954 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07421417 
+sdlog: 0.9687164 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.06695709 
+sdlog: 0.9675812 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07548409 
+sdlog: 0.9648781 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07233925 
+sdlog: 0.9590034 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07374544 
+sdlog: 0.9662882 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07816019 
+sdlog: 0.9683245 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07284205 
+sdlog: 0.9642125 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07110341 
+sdlog: 0.9656226 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.06891307 
+sdlog: 0.9659948 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.0720068 
+sdlog: 0.9676983 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07263324 
+sdlog: 0.9650839 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.0699912 
+sdlog: 0.9644183 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07280688 
+sdlog: 0.9658207 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07433671 
+sdlog: 0.9652821 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07191173 
+sdlog: 0.9655374 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07352839 
+sdlog: 0.9653672 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.0723159 
+sdlog: 0.9654949 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07214225 
+sdlog: 0.9647581 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07264072 
+sdlog: 0.9655551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07232338 
+sdlog: 0.965966 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07255577 
+sdlog: 0.9653044 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07464072 
+sdlog: 0.9655551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07264072 
+sdlog: 0.9655551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07364072 
+sdlog: 0.9665551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07364072 
+sdlog: 0.9645551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07264072 
+sdlog: 0.9655551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07064072 
+sdlog: 0.9655551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07164072 
+sdlog: 0.9665551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07164072 
+sdlog: 0.9645551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07364072 
+sdlog: 0.9665551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07164072 
+sdlog: 0.9665551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07264072 
+sdlog: 0.9675551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07264072 
+sdlog: 0.9655551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07364072 
+sdlog: 0.9645551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07164072 
+sdlog: 0.9645551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07264072 
+sdlog: 0.9655551 
+In dmylnorm 
+x: 0.5904349 2.924773 2.219699 0.8539104 1.383292 0.8819703 2.07107 0.1524415 2.308651 1.264646 16.00862 0.8155863 0.9015805 0.2559542 1.611418 2.154708 0.5778989 0.6185283 0.4560678 0.679789 
+meanlog: 0.07264072 
+sdlog: 0.9635551 </code></pre>
+<pre><code>Fitting of the distribution &#39; mylnorm &#39; by maximum likelihood 
+Parameters:
+          estimate Std. Error
+meanlog 0.07264072  0.2159047
+sdlog   0.96555506  0.1526871</code></pre>
+<p>So it is using vector values of <code>x</code> and <code>q</code>, but not of the parameters. In fact, after the initial setup, it looks like it’s not using the pdist at all!</p>
+<p>Now let’s double-check the censored data fitting:</p>
+<pre class="r"><code>mydatcens &lt;- data.frame(left = floor(mydat), right = ceiling(mydat))
+mydatcens</code></pre>
+<pre><code>   left right
+1     0     1
+2     2     3
+3     2     3
+4     0     1
+5     1     2
+6     0     1
+7     2     3
+8     0     1
+9     2     3
+10    1     2
+11   16    17
+12    0     1
+13    0     1
+14    0     1
+15    1     2
+16    2     3
+17    0     1
+18    0     1
+19    0     1
+20    0     1</code></pre>
+<pre class="r"><code>fitdistcens(mydatcens, &quot;mylnorm&quot;, start = list(meanlog = 0, sdlog = 1))</code></pre>
+<pre><code>In dmylnorm 
+x:  
+meanlog: 0 
+sdlog: 1 
+In dmylnorm 
+x: 0 1 Inf NaN -1 
+meanlog: 0 
+sdlog: 1 
+In dmylnorm 
+x: 0 1 NA 
+meanlog: 0 
+sdlog: 1 
+In dmylnorm 
+x: 0 1 
+meanlog: 0 
+sdlog: -1 
+In pmylnorm 
+q:  
+meanlog: 0 
+sdlog: 1 
+In pmylnorm 
+q: 0 1 Inf NaN -1 
+meanlog: 0 
+sdlog: 1 
+In pmylnorm 
+q: 0 1 NA 
+meanlog: 0 
+sdlog: 1 
+In pmylnorm 
+q: 0 1 
+meanlog: 0 
+sdlog: -1 
+In dmylnorm 
+x:  
+meanlog: 0 
+sdlog: 1 
+In pmylnorm 
+q:  
+meanlog: 0 
+sdlog: 1 
+In pmylnorm 
+q:  
+meanlog: 0 
+sdlog: 1 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: 0 
+sdlog: 1 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: 0 
+sdlog: 1 
+In dmylnorm 
+x:  
+meanlog: 0.1 
+sdlog: 1 
+In pmylnorm 
+q:  
+meanlog: 0.1 
+sdlog: 1 
+In pmylnorm 
+q:  
+meanlog: 0.1 
+sdlog: 1 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: 0.1 
+sdlog: 1 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: 0.1 
+sdlog: 1 
+In dmylnorm 
+x:  
+meanlog: 0 
+sdlog: 1.1 
+In pmylnorm 
+q:  
+meanlog: 0 
+sdlog: 1.1 
+In pmylnorm 
+q:  
+meanlog: 0 
+sdlog: 1.1 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: 0 
+sdlog: 1.1 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: 0 
+sdlog: 1.1 
+In dmylnorm 
+x:  
+meanlog: -0.1 
+sdlog: 1.1 
+In pmylnorm 
+q:  
+meanlog: -0.1 
+sdlog: 1.1 
+In pmylnorm 
+q:  
+meanlog: -0.1 
+sdlog: 1.1 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1 
+sdlog: 1.1 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1 
+sdlog: 1.1 
+In dmylnorm 
+x:  
+meanlog: -0.2 
+sdlog: 1.15 
+In pmylnorm 
+q:  
+meanlog: -0.2 
+sdlog: 1.15 
+In pmylnorm 
+q:  
+meanlog: -0.2 
+sdlog: 1.15 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.2 
+sdlog: 1.15 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.2 
+sdlog: 1.15 
+In dmylnorm 
+x:  
+meanlog: -0.2 
+sdlog: 1.25 
+In pmylnorm 
+q:  
+meanlog: -0.2 
+sdlog: 1.25 
+In pmylnorm 
+q:  
+meanlog: -0.2 
+sdlog: 1.25 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.2 
+sdlog: 1.25 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.2 
+sdlog: 1.25 
+In dmylnorm 
+x:  
+meanlog: -0.3 
+sdlog: 1.375 
+In pmylnorm 
+q:  
+meanlog: -0.3 
+sdlog: 1.375 
+In pmylnorm 
+q:  
+meanlog: -0.3 
+sdlog: 1.375 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.3 
+sdlog: 1.375 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.3 
+sdlog: 1.375 
+In dmylnorm 
+x:  
+meanlog: -0.4 
+sdlog: 1.3 
+In pmylnorm 
+q:  
+meanlog: -0.4 
+sdlog: 1.3 
+In pmylnorm 
+q:  
+meanlog: -0.4 
+sdlog: 1.3 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.4 
+sdlog: 1.3 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.4 
+sdlog: 1.3 
+In dmylnorm 
+x:  
+meanlog: -0.1 
+sdlog: 1.15 
+In pmylnorm 
+q:  
+meanlog: -0.1 
+sdlog: 1.15 
+In pmylnorm 
+q:  
+meanlog: -0.1 
+sdlog: 1.15 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1 
+sdlog: 1.15 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1 
+sdlog: 1.15 
+In dmylnorm 
+x:  
+meanlog: -0.1 
+sdlog: 1.25 
+In pmylnorm 
+q:  
+meanlog: -0.1 
+sdlog: 1.25 
+In pmylnorm 
+q:  
+meanlog: -0.1 
+sdlog: 1.25 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1 
+sdlog: 1.25 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1 
+sdlog: 1.25 
+In dmylnorm 
+x:  
+meanlog: -0.125 
+sdlog: 1.225 
+In pmylnorm 
+q:  
+meanlog: -0.125 
+sdlog: 1.225 
+In pmylnorm 
+q:  
+meanlog: -0.125 
+sdlog: 1.225 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.125 
+sdlog: 1.225 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.125 
+sdlog: 1.225 
+In dmylnorm 
+x:  
+meanlog: -0.225 
+sdlog: 1.325 
+In pmylnorm 
+q:  
+meanlog: -0.225 
+sdlog: 1.325 
+In pmylnorm 
+q:  
+meanlog: -0.225 
+sdlog: 1.325 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.225 
+sdlog: 1.325 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.225 
+sdlog: 1.325 
+In dmylnorm 
+x:  
+meanlog: -0.13125 
+sdlog: 1.19375 
+In pmylnorm 
+q:  
+meanlog: -0.13125 
+sdlog: 1.19375 
+In pmylnorm 
+q:  
+meanlog: -0.13125 
+sdlog: 1.19375 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.13125 
+sdlog: 1.19375 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.13125 
+sdlog: 1.19375 
+In dmylnorm 
+x:  
+meanlog: -0.19375 
+sdlog: 1.28125 
+In pmylnorm 
+q:  
+meanlog: -0.19375 
+sdlog: 1.28125 
+In pmylnorm 
+q:  
+meanlog: -0.19375 
+sdlog: 1.28125 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.19375 
+sdlog: 1.28125 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.19375 
+sdlog: 1.28125 
+In dmylnorm 
+x:  
+meanlog: -0.146875 
+sdlog: 1.215625 
+In pmylnorm 
+q:  
+meanlog: -0.146875 
+sdlog: 1.215625 
+In pmylnorm 
+q:  
+meanlog: -0.146875 
+sdlog: 1.215625 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.146875 
+sdlog: 1.215625 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.146875 
+sdlog: 1.215625 
+In dmylnorm 
+x:  
+meanlog: -0.221875 
+sdlog: 1.240625 
+In pmylnorm 
+q:  
+meanlog: -0.221875 
+sdlog: 1.240625 
+In pmylnorm 
+q:  
+meanlog: -0.221875 
+sdlog: 1.240625 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.221875 
+sdlog: 1.240625 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.221875 
+sdlog: 1.240625 
+In dmylnorm 
+x:  
+meanlog: -0.1492188 
+sdlog: 1.228906 
+In pmylnorm 
+q:  
+meanlog: -0.1492188 
+sdlog: 1.228906 
+In pmylnorm 
+q:  
+meanlog: -0.1492188 
+sdlog: 1.228906 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1492188 
+sdlog: 1.228906 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1492188 
+sdlog: 1.228906 
+In dmylnorm 
+x:  
+meanlog: -0.09609375 
+sdlog: 1.194531 
+In pmylnorm 
+q:  
+meanlog: -0.09609375 
+sdlog: 1.194531 
+In pmylnorm 
+q:  
+meanlog: -0.09609375 
+sdlog: 1.194531 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.09609375 
+sdlog: 1.194531 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.09609375 
+sdlog: 1.194531 
+In dmylnorm 
+x:  
+meanlog: -0.1740234 
+sdlog: 1.236133 
+In pmylnorm 
+q:  
+meanlog: -0.1740234 
+sdlog: 1.236133 
+In pmylnorm 
+q:  
+meanlog: -0.1740234 
+sdlog: 1.236133 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1740234 
+sdlog: 1.236133 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1740234 
+sdlog: 1.236133 
+In dmylnorm 
+x:  
+meanlog: -0.1763672 
+sdlog: 1.249414 
+In pmylnorm 
+q:  
+meanlog: -0.1763672 
+sdlog: 1.249414 
+In pmylnorm 
+q:  
+meanlog: -0.1763672 
+sdlog: 1.249414 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1763672 
+sdlog: 1.249414 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1763672 
+sdlog: 1.249414 
+In dmylnorm 
+x:  
+meanlog: -0.154248 
+sdlog: 1.224072 
+In pmylnorm 
+q:  
+meanlog: -0.154248 
+sdlog: 1.224072 
+In pmylnorm 
+q:  
+meanlog: -0.154248 
+sdlog: 1.224072 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.154248 
+sdlog: 1.224072 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.154248 
+sdlog: 1.224072 
+In dmylnorm 
+x:  
+meanlog: -0.1790527 
+sdlog: 1.231299 
+In pmylnorm 
+q:  
+meanlog: -0.1790527 
+sdlog: 1.231299 
+In pmylnorm 
+q:  
+meanlog: -0.1790527 
+sdlog: 1.231299 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1790527 
+sdlog: 1.231299 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1790527 
+sdlog: 1.231299 
+In dmylnorm 
+x:  
+meanlog: -0.1566772 
+sdlog: 1.229504 
+In pmylnorm 
+q:  
+meanlog: -0.1566772 
+sdlog: 1.229504 
+In pmylnorm 
+q:  
+meanlog: -0.1566772 
+sdlog: 1.229504 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1566772 
+sdlog: 1.229504 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1566772 
+sdlog: 1.229504 
+In dmylnorm 
+x:  
+meanlog: -0.1369019 
+sdlog: 1.217444 
+In pmylnorm 
+q:  
+meanlog: -0.1369019 
+sdlog: 1.217444 
+In pmylnorm 
+q:  
+meanlog: -0.1369019 
+sdlog: 1.217444 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1369019 
+sdlog: 1.217444 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1369019 
+sdlog: 1.217444 
+In dmylnorm 
+x:  
+meanlog: -0.164743 
+sdlog: 1.231461 
+In pmylnorm 
+q:  
+meanlog: -0.164743 
+sdlog: 1.231461 
+In pmylnorm 
+q:  
+meanlog: -0.164743 
+sdlog: 1.231461 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.164743 
+sdlog: 1.231461 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.164743 
+sdlog: 1.231461 
+In dmylnorm 
+x:  
+meanlog: -0.1671722 
+sdlog: 1.236893 
+In pmylnorm 
+q:  
+meanlog: -0.1671722 
+sdlog: 1.236893 
+In pmylnorm 
+q:  
+meanlog: -0.1671722 
+sdlog: 1.236893 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1671722 
+sdlog: 1.236893 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1671722 
+sdlog: 1.236893 
+In dmylnorm 
+x:  
+meanlog: -0.1639412 
+sdlog: 1.233688 
+In pmylnorm 
+q:  
+meanlog: -0.1639412 
+sdlog: 1.233688 
+In pmylnorm 
+q:  
+meanlog: -0.1639412 
+sdlog: 1.233688 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1639412 
+sdlog: 1.233688 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1639412 
+sdlog: 1.233688 
+In dmylnorm 
+x:  
+meanlog: -0.172007 
+sdlog: 1.235644 
+In pmylnorm 
+q:  
+meanlog: -0.172007 
+sdlog: 1.235644 
+In pmylnorm 
+q:  
+meanlog: -0.172007 
+sdlog: 1.235644 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.172007 
+sdlog: 1.235644 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.172007 
+sdlog: 1.235644 
+In dmylnorm 
+x:  
+meanlog: -0.1605097 
+sdlog: 1.231039 
+In pmylnorm 
+q:  
+meanlog: -0.1605097 
+sdlog: 1.231039 
+In pmylnorm 
+q:  
+meanlog: -0.1605097 
+sdlog: 1.231039 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1605097 
+sdlog: 1.231039 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1605097 
+sdlog: 1.231039 
+In dmylnorm 
+x:  
+meanlog: -0.1613115 
+sdlog: 1.228812 
+In pmylnorm 
+q:  
+meanlog: -0.1613115 
+sdlog: 1.228812 
+In pmylnorm 
+q:  
+meanlog: -0.1613115 
+sdlog: 1.228812 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1613115 
+sdlog: 1.228812 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1613115 
+sdlog: 1.228812 
+In dmylnorm 
+x:  
+meanlog: -0.1619689 
+sdlog: 1.230031 
+In pmylnorm 
+q:  
+meanlog: -0.1619689 
+sdlog: 1.230031 
+In pmylnorm 
+q:  
+meanlog: -0.1619689 
+sdlog: 1.230031 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1619689 
+sdlog: 1.230031 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1619689 
+sdlog: 1.230031 
+In dmylnorm 
+x:  
+meanlog: -0.1577356 
+sdlog: 1.22961 
+In pmylnorm 
+q:  
+meanlog: -0.1577356 
+sdlog: 1.22961 
+In pmylnorm 
+q:  
+meanlog: -0.1577356 
+sdlog: 1.22961 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1577356 
+sdlog: 1.22961 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1577356 
+sdlog: 1.22961 
+In dmylnorm 
+x:  
+meanlog: -0.1629912 
+sdlog: 1.230998 
+In pmylnorm 
+q:  
+meanlog: -0.1629912 
+sdlog: 1.230998 
+In pmylnorm 
+q:  
+meanlog: -0.1629912 
+sdlog: 1.230998 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1629912 
+sdlog: 1.230998 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1629912 
+sdlog: 1.230998 
+In dmylnorm 
+x:  
+meanlog: -0.1644504 
+sdlog: 1.22999 
+In pmylnorm 
+q:  
+meanlog: -0.1644504 
+sdlog: 1.22999 
+In pmylnorm 
+q:  
+meanlog: -0.1644504 
+sdlog: 1.22999 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1644504 
+sdlog: 1.22999 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1644504 
+sdlog: 1.22999 
+In dmylnorm 
+x:  
+meanlog: -0.1614949 
+sdlog: 1.230777 
+In pmylnorm 
+q:  
+meanlog: -0.1614949 
+sdlog: 1.230777 
+In pmylnorm 
+q:  
+meanlog: -0.1614949 
+sdlog: 1.230777 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1614949 
+sdlog: 1.230777 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1614949 
+sdlog: 1.230777 
+In dmylnorm 
+x:  
+meanlog: -0.1625171 
+sdlog: 1.231744 
+In pmylnorm 
+q:  
+meanlog: -0.1625171 
+sdlog: 1.231744 
+In pmylnorm 
+q:  
+meanlog: -0.1625171 
+sdlog: 1.231744 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1625171 
+sdlog: 1.231744 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1625171 
+sdlog: 1.231744 
+In dmylnorm 
+x:  
+meanlog: -0.1623801 
+sdlog: 1.231316 
+In pmylnorm 
+q:  
+meanlog: -0.1623801 
+sdlog: 1.231316 
+In pmylnorm 
+q:  
+meanlog: -0.1623801 
+sdlog: 1.231316 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1623801 
+sdlog: 1.231316 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1623801 
+sdlog: 1.231316 
+In dmylnorm 
+x:  
+meanlog: -0.1608838 
+sdlog: 1.231094 
+In pmylnorm 
+q:  
+meanlog: -0.1608838 
+sdlog: 1.231094 
+In pmylnorm 
+q:  
+meanlog: -0.1608838 
+sdlog: 1.231094 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1608838 
+sdlog: 1.231094 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1608838 
+sdlog: 1.231094 
+In dmylnorm 
+x:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In dmylnorm 
+x:  
+meanlog: -0.1633495 
+sdlog: 1.231561 
+In pmylnorm 
+q:  
+meanlog: -0.1633495 
+sdlog: 1.231561 
+In pmylnorm 
+q:  
+meanlog: -0.1633495 
+sdlog: 1.231561 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1633495 
+sdlog: 1.231561 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1633495 
+sdlog: 1.231561 
+In dmylnorm 
+x:  
+meanlog: -0.1619585 
+sdlog: 1.230973 
+In pmylnorm 
+q:  
+meanlog: -0.1619585 
+sdlog: 1.230973 
+In pmylnorm 
+q:  
+meanlog: -0.1619585 
+sdlog: 1.230973 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1619585 
+sdlog: 1.230973 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1619585 
+sdlog: 1.230973 
+In dmylnorm 
+x:  
+meanlog: -0.1604643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1604643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1604643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1604643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1604643 
+sdlog: 1.231022 
+In dmylnorm 
+x:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In dmylnorm 
+x:  
+meanlog: -0.1614643 
+sdlog: 1.232022 
+In pmylnorm 
+q:  
+meanlog: -0.1614643 
+sdlog: 1.232022 
+In pmylnorm 
+q:  
+meanlog: -0.1614643 
+sdlog: 1.232022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1614643 
+sdlog: 1.232022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1614643 
+sdlog: 1.232022 
+In dmylnorm 
+x:  
+meanlog: -0.1614643 
+sdlog: 1.230022 
+In pmylnorm 
+q:  
+meanlog: -0.1614643 
+sdlog: 1.230022 
+In pmylnorm 
+q:  
+meanlog: -0.1614643 
+sdlog: 1.230022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1614643 
+sdlog: 1.230022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1614643 
+sdlog: 1.230022 
+In dmylnorm 
+x:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In dmylnorm 
+x:  
+meanlog: -0.1644643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1644643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1644643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1644643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1644643 
+sdlog: 1.231022 
+In dmylnorm 
+x:  
+meanlog: -0.1634643 
+sdlog: 1.232022 
+In pmylnorm 
+q:  
+meanlog: -0.1634643 
+sdlog: 1.232022 
+In pmylnorm 
+q:  
+meanlog: -0.1634643 
+sdlog: 1.232022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1634643 
+sdlog: 1.232022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1634643 
+sdlog: 1.232022 
+In dmylnorm 
+x:  
+meanlog: -0.1634643 
+sdlog: 1.230022 
+In pmylnorm 
+q:  
+meanlog: -0.1634643 
+sdlog: 1.230022 
+In pmylnorm 
+q:  
+meanlog: -0.1634643 
+sdlog: 1.230022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1634643 
+sdlog: 1.230022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1634643 
+sdlog: 1.230022 
+In dmylnorm 
+x:  
+meanlog: -0.1614643 
+sdlog: 1.232022 
+In pmylnorm 
+q:  
+meanlog: -0.1614643 
+sdlog: 1.232022 
+In pmylnorm 
+q:  
+meanlog: -0.1614643 
+sdlog: 1.232022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1614643 
+sdlog: 1.232022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1614643 
+sdlog: 1.232022 
+In dmylnorm 
+x:  
+meanlog: -0.1634643 
+sdlog: 1.232022 
+In pmylnorm 
+q:  
+meanlog: -0.1634643 
+sdlog: 1.232022 
+In pmylnorm 
+q:  
+meanlog: -0.1634643 
+sdlog: 1.232022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1634643 
+sdlog: 1.232022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1634643 
+sdlog: 1.232022 
+In dmylnorm 
+x:  
+meanlog: -0.1624643 
+sdlog: 1.233022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.233022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.233022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1624643 
+sdlog: 1.233022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1624643 
+sdlog: 1.233022 
+In dmylnorm 
+x:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In dmylnorm 
+x:  
+meanlog: -0.1614643 
+sdlog: 1.230022 
+In pmylnorm 
+q:  
+meanlog: -0.1614643 
+sdlog: 1.230022 
+In pmylnorm 
+q:  
+meanlog: -0.1614643 
+sdlog: 1.230022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1614643 
+sdlog: 1.230022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1614643 
+sdlog: 1.230022 
+In dmylnorm 
+x:  
+meanlog: -0.1634643 
+sdlog: 1.230022 
+In pmylnorm 
+q:  
+meanlog: -0.1634643 
+sdlog: 1.230022 
+In pmylnorm 
+q:  
+meanlog: -0.1634643 
+sdlog: 1.230022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1634643 
+sdlog: 1.230022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1634643 
+sdlog: 1.230022 
+In dmylnorm 
+x:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1624643 
+sdlog: 1.231022 
+In dmylnorm 
+x:  
+meanlog: -0.1624643 
+sdlog: 1.229022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.229022 
+In pmylnorm 
+q:  
+meanlog: -0.1624643 
+sdlog: 1.229022 
+In pmylnorm 
+q: 1 3 3 1 2 1 3 1 3 2 17 1 1 1 2 3 1 1 1 1 
+meanlog: -0.1624643 
+sdlog: 1.229022 
+In pmylnorm 
+q: 0 2 2 0 1 0 2 0 2 1 16 0 0 0 1 2 0 0 0 0 
+meanlog: -0.1624643 
+sdlog: 1.229022 </code></pre>
+<pre><code>Fitting of the distribution &#39; mylnorm &#39; on censored data by maximum likelihood 
+Parameters:
+          estimate
+meanlog -0.1624643
+sdlog    1.2310220</code></pre>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
