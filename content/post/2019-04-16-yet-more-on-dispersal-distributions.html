@@ -1,0 +1,37 @@
+---
+title: Yet more on dispersal distributions
+author: Bruce Kendall
+date: '2019-04-16'
+slug: yet-more-on-dispersal-distributions
+categories:
+  - Conceptual model evaluation
+  - Code development
+  - Planning
+tags:
+  - dispersal
+  - Ler
+---
+
+
+
+<p>Once again, here’s the list of distributions, with where we are on each:</p>
+<ul>
+<li>Distributions with modes at zero:
+<ul>
+<li><em>Exponential power (generalized normal)</em>: This is in the <strong>gnorm</strong> package, and getting start values is probably nontrivial. It is defined on the whole real line, so a “sensible” value for the location parameter (<span class="math inline">\(\mu\)</span>) is zero. It is a generalization of the normal, Laplace, and uniform distributions. It might be better just to calculate the first two directly (I’ve already written code for a half-normal, and could do the same for the Laplace)</li>
+<li><em>2Dt</em>: This requires writing a function to get the CDF by numerical integration, unless I can figure out the sense in which it is related to the t distribution. Not sure how to get start values.</li>
+<li><em>Log-sech</em>: This will require a custom formulation, like 2Dt. Cauchy is a special case, which we can use for start values.</li>
+<li><em>Inverse power</em>: This will require a custom formulation, like 2Dt. Not sure how to get start values.</li>
+</ul></li>
+<li><em>Logistic</em>: This works out of the box, but needs to be truncated.</li>
+<li><em>Mixture models</em>: this is an infinitely large set; I won’t treat it here.</li>
+<li>Special cases of <em>generalized inverse Gaussian</em>. Code for this is in the <strong>rmutils</strong> package; I would have to write a wrapper for those to trap for non-numeric and vector values of <span class="math inline">\(x\)</span>. I also haven’t yet looked at how to get start values.
+<ul>
+<li><em>Gamma</em>: this is in the <strong>stats</strong> package: <code>(d)gamma</code>. So this can be used out of the box.</li>
+<li><em>Inverse Gaussian (Wald)</em>: this is in the <strong>actuar</strong> package: <code>(d)invgauss</code>. This requires start values; I wrote code for this last year.</li>
+</ul></li>
+<li><em>Wiebull</em>: This is in the <strong>stats</strong> package and works out of the box.</li>
+<li><em>Lognormal</em>: This is in the <strong>stats</strong> package and works out of the box.</li>
+</ul>
+<p>I also put a bunch of effort into the generalized gamma distribution, which generalizes the gamma, Wiebull, and exponential distributions. I’ve written a function that gets the start values for non-truncated data; I’d need to do more work for the truncated distributions.</p>
+<p>I just looked again at the empirical dispersal dists. Although theere are many the have a mode slightly away from zero, there’s only one that is far from zero; so I think we need to fit the central distributions, unfortunately.</p>

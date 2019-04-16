@@ -6,10 +6,20 @@
     <description>Recent content in Code Development on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 29 Nov 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 16 Apr 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/categories/code-development/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Yet more on dispersal distributions</title>
+      <link>/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</link>
+      <pubDate>Tue, 16 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</guid>
+      <description>Once again, here’s the list of distributions, with where we are on each:
+ Distributions with modes at zero:  Exponential power (generalized normal): This is in the gnorm package, and getting start values is probably nontrivial. It is defined on the whole real line, so a “sensible” value for the location parameter (\(\mu\)) is zero. It is a generalization of the normal, Laplace, and uniform distributions. It might be better just to calculate the first two directly (I’ve already written code for a half-normal, and could do the same for the Laplace) 2Dt: This requires writing a function to get the CDF by numerical integration, unless I can figure out the sense in which it is related to the t distribution.</description>
+    </item>
     
     <item>
       <title>Getting start values from moments</title>
