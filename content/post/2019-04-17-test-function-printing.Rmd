@@ -1,0 +1,88 @@
+---
+title: Test function printing
+author: Bruce Kendall
+date: '2019-04-17'
+slug: test-function-printing
+categories:
+  - Housekeeping
+tags:
+  - blogdown
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+options(keep.source = TRUE) 
+ProjectTemplate::load.project()
+```
+Function printing works as desired if the function is defined within the document. The issue is if it is defined externally, and loaded via `source`. It appears that if I use `options(keep.source = TRUE)`{.R} before the call to `load.project` this will be done correctly.
+
+Function setup:
+```{r}
+myfunc <- function(x, y) {
+  # Here's a function with a comment and custom spacing in the source code
+  switch(x, 
+    one = 1,
+    two = if (y) {
+            3
+          } else {
+            2
+          }
+  )
+}
+```
+
+Print using `print`
+```{r}
+print(myfunc)
+```
+
+Print using `print.function`
+```{r}
+print.function(myfunc)
+```
+
+```{r}
+getOption("keep.source")
+print(start_params)
+withAutoprint(start_params)
+```
+
+```{r}
+rm("start_params")
+source("lib/helpers.R", keep.source = TRUE)
+print(start_params)
+withAutoprint(start_params)
+```
+
+```{r}
+rm("start_params")
+start_params <- function(x, dist, ...) {
+  x_orig <- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x <- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] > 2) {
+    stop("x must be a vector or two-column matrix")
+  }
+  
+
+  start_pars <- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning("No method exists for setting start values for ", dist)
+  }
+  return(start_pars)
+}
+
+print(start_params)
+```

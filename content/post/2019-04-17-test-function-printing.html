@@ -1,0 +1,191 @@
+---
+title: Test function printing
+author: Bruce Kendall
+date: '2019-04-17'
+slug: test-function-printing
+categories:
+  - Housekeeping
+tags:
+  - blogdown
+---
+
+
+
+<p>Function printing works as desired if the function is defined within the document. The issue is if it is defined externally, and loaded via <code>source</code>. It appears that if I use <code class="R">options(keep.source = TRUE)</code> before the call to <code>load.project</code> this will be done correctly.</p>
+<p>Function setup:</p>
+<pre class="r"><code>myfunc &lt;- function(x, y) {
+  # Here&#39;s a function with a comment and custom spacing in the source code
+  switch(x, 
+    one = 1,
+    two = if (y) {
+            3
+          } else {
+            2
+          }
+  )
+}</code></pre>
+<p>Print using <code>print</code></p>
+<pre class="r"><code>print(myfunc)</code></pre>
+<pre><code>function(x, y) {
+  # Here&#39;s a function with a comment and custom spacing in the source code
+  switch(x, 
+    one = 1,
+    two = if (y) {
+            3
+          } else {
+            2
+          }
+  )
+}</code></pre>
+<p>Print using <code>print.function</code></p>
+<pre class="r"><code>print.function(myfunc)</code></pre>
+<pre><code>function(x, y) {
+  # Here&#39;s a function with a comment and custom spacing in the source code
+  switch(x, 
+    one = 1,
+    two = if (y) {
+            3
+          } else {
+            2
+          }
+  )
+}</code></pre>
+<pre class="r"><code>getOption(&quot;keep.source&quot;)</code></pre>
+<pre><code>[1] FALSE</code></pre>
+<pre class="r"><code>print(start_params)</code></pre>
+<pre><code>function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}</code></pre>
+<pre class="r"><code>withAutoprint(start_params)</code></pre>
+<pre><code>&gt; start_params
+function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}</code></pre>
+<pre class="r"><code>rm(&quot;start_params&quot;)
+source(&quot;lib/helpers.R&quot;, keep.source = TRUE)
+print(start_params)</code></pre>
+<pre><code>function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}</code></pre>
+<pre class="r"><code>withAutoprint(start_params)</code></pre>
+<pre><code>&gt; start_params
+function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}</code></pre>
+<pre class="r"><code>rm(&quot;start_params&quot;)
+start_params &lt;- function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}
+
+print(start_params)</code></pre>
+<pre><code>function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}</code></pre>

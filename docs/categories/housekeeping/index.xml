@@ -23,6 +23,17 @@
     </item>
     
     <item>
+      <title>Test function printing</title>
+      <link>/InvasionHet/2019/04/17/test-function-printing/</link>
+      <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/04/17/test-function-printing/</guid>
+      <description>Function printing works as desired if the function is defined within the document. The issue is if it is defined externally, and loaded via source. It appears that if I use options(keep.source = TRUE) before the call to load.project this will be done correctly.
+Function setup:
+myfunc &amp;lt;- function(x, y) { # Here&amp;#39;s a function with a comment and custom spacing in the source code switch(x, one = 1, two = if (y) { 3 } else { 2 } ) } Print using print</description>
+    </item>
+    
+    <item>
       <title>fitdistrplus fixed</title>
       <link>/InvasionHet/2018/11/15/fitdistrplus-fixed/</link>
       <pubDate>Thu, 15 Nov 2018 00:00:00 +0000</pubDate>

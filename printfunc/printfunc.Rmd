@@ -1,0 +1,31 @@
+---
+title: "Function printer"
+author: "Bruce E. Kendall"
+date: "4/17/2019"
+output: pdf_document
+---
+
+Function setup:
+```{r}
+myfunc <- function(x, y) {
+  # Here's a function with a comment and custom spacing in the source code
+  switch(x, 
+    one = 1,
+    two = if (y) {
+            3
+          } else {
+            2
+          }
+  )
+}
+```
+
+Print using `print`
+```{r}
+print(myfunc)
+```
+
+Print using `print.function`
+```{r}
+print.function(myfunc)
+```

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Test function printing - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Test function printing - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">4 min read</span>
+    
+
+    <h1 class="article-title">Test function printing</h1>
+
+    
+    <span class="article-date">2019/04/17</span>
+    
+
+    <div class="article-content">
+      <p>Function printing works as desired if the function is defined within the document. The issue is if it is defined externally, and loaded via <code>source</code>. It appears that if I use <code class="R">options(keep.source = TRUE)</code> before the call to <code>load.project</code> this will be done correctly.</p>
+<p>Function setup:</p>
+<pre class="r"><code>myfunc &lt;- function(x, y) {
+  # Here&#39;s a function with a comment and custom spacing in the source code
+  switch(x, 
+    one = 1,
+    two = if (y) {
+            3
+          } else {
+            2
+          }
+  )
+}</code></pre>
+<p>Print using <code>print</code></p>
+<pre class="r"><code>print(myfunc)</code></pre>
+<pre><code>function(x, y) {
+  # Here&#39;s a function with a comment and custom spacing in the source code
+  switch(x, 
+    one = 1,
+    two = if (y) {
+            3
+          } else {
+            2
+          }
+  )
+}</code></pre>
+<p>Print using <code>print.function</code></p>
+<pre class="r"><code>print.function(myfunc)</code></pre>
+<pre><code>function(x, y) {
+  # Here&#39;s a function with a comment and custom spacing in the source code
+  switch(x, 
+    one = 1,
+    two = if (y) {
+            3
+          } else {
+            2
+          }
+  )
+}</code></pre>
+<pre class="r"><code>getOption(&quot;keep.source&quot;)</code></pre>
+<pre><code>[1] FALSE</code></pre>
+<pre class="r"><code>print(start_params)</code></pre>
+<pre><code>function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}</code></pre>
+<pre class="r"><code>withAutoprint(start_params)</code></pre>
+<pre><code>&gt; start_params
+function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}</code></pre>
+<pre class="r"><code>rm(&quot;start_params&quot;)
+source(&quot;lib/helpers.R&quot;, keep.source = TRUE)
+print(start_params)</code></pre>
+<pre><code>function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}</code></pre>
+<pre class="r"><code>withAutoprint(start_params)</code></pre>
+<pre><code>&gt; start_params
+function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}</code></pre>
+<pre class="r"><code>rm(&quot;start_params&quot;)
+start_params &lt;- function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}
+
+print(start_params)</code></pre>
+<pre><code>function(x, dist, ...) {
+  x_orig &lt;- x
+  if (dim(as.matrix(x))[2] == 2) {
+    x &lt;- apply(x, 1, mean) # set each value to the middle of its interval
+  } else if (dim(as.matrix(x))[2] &gt; 2) {
+    stop(&quot;x must be a vector or two-column matrix&quot;)
+  }
+  
+
+  start_pars &lt;- switch(dist,
+    hnorm = list(sigma = sqrt(mean(x^2))),
+    invgauss = list(mean = mean(x),
+                    shape = mean(x)^3 / var(x)),
+    gengamma = start_gengamma(x_orig, ...),
+    NULL
+  )
+  if (is.null(start_pars)) {
+    warning(&quot;No method exists for setting start values for &quot;, dist)
+  }
+  return(start_pars)
+}</code></pre>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+
