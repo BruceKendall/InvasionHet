@@ -23,6 +23,19 @@
     </item>
     
     <item>
+      <title>Half-normal distribution</title>
+      <link>/InvasionHet/2019/04/17/half-normal-distribution/</link>
+      <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/04/17/half-normal-distribution/</guid>
+      <description>Last year I wrote a half-normal distribution but didn’t actually test its fitness for fitting the data. So let’s try it out.
+Our usual data:
+temp &amp;lt;- filter(disperseLer, ID == &amp;quot;100_0&amp;quot;) cens_data &amp;lt;- cens_dispersal_data(temp, 7) Let’s give it a try:
+try(fitdistcens(cens_data, &amp;quot;hnorm&amp;quot;)) Error in computing default starting values. Nope, it needs a start value. Fortunately I already provided one in start_params()!
+try(fitdistcens(cens_data, &amp;quot;hnorm&amp;quot;, start = start_params(cens_data, &amp;quot;hnorm&amp;quot;))) Fitting of the distribution &amp;#39; hnorm &amp;#39; on censored data by maximum likelihood Parameters: estimate sigma 2.</description>
+    </item>
+    
+    <item>
       <title>Restricting the list of distributions</title>
       <link>/InvasionHet/2019/04/17/restricting-the-list-of-distributions/</link>
       <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>

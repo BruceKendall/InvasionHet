@@ -1,0 +1,56 @@
+---
+title: Half-normal distribution
+author: Bruce Kendall
+date: '2019-04-17'
+slug: half-normal-distribution
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+Last year I wrote a half-normal distribution but didn't actually test its fitness for fitting the data. So let's try it out.
+
+Our usual data:
+```{r}
+temp <- filter(disperseLer, ID == "100_0")
+cens_data <- cens_dispersal_data(temp, 7)
+```
+
+Let's give it a try:
+```{r, cache=TRUE}
+try(fitdistcens(cens_data, "hnorm"))
+```
+
+Nope, it needs a start value. Fortunately I already provided one in `start_params()`!
+```{r, cache=TRUE}
+try(fitdistcens(cens_data, "hnorm", start = start_params(cens_data, "hnorm")))
+```
+It works!
+
+Just out of curiousity, how good is the fit?
+```{r}
+f1 <- fitdistcens(cens_data, "hnorm", start = start_params(cens_data, "hnorm"))
+summary(f1)
+try(plot(f1))
+```
+Oh dear, plotting requires that the quantile form of the distribution also be defined!
+
+But we can get a basic plot:
+```{r}
+try(plot(f1, NPMLE.method = "Turnbull"))
+```
+
+Note that, for this dataset, the AIC is about the same as for the gamma and Weibull!

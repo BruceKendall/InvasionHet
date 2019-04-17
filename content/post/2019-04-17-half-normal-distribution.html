@@ -1,0 +1,44 @@
+---
+title: Half-normal distribution
+author: Bruce Kendall
+date: '2019-04-17'
+slug: half-normal-distribution
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+
+
+
+<p>Last year I wrote a half-normal distribution but didn’t actually test its fitness for fitting the data. So let’s try it out.</p>
+<p>Our usual data:</p>
+<pre class="r"><code>temp &lt;- filter(disperseLer, ID == &quot;100_0&quot;)
+cens_data &lt;- cens_dispersal_data(temp, 7)</code></pre>
+<p>Let’s give it a try:</p>
+<pre class="r"><code>try(fitdistcens(cens_data, &quot;hnorm&quot;))</code></pre>
+<pre><code>Error in computing default starting values.</code></pre>
+<p>Nope, it needs a start value. Fortunately I already provided one in <code>start_params()</code>!</p>
+<pre class="r"><code>try(fitdistcens(cens_data, &quot;hnorm&quot;, start = start_params(cens_data, &quot;hnorm&quot;)))</code></pre>
+<pre><code>Fitting of the distribution &#39; hnorm &#39; on censored data by maximum likelihood 
+Parameters:
+      estimate
+sigma 2.851693</code></pre>
+<p>It works!</p>
+<p>Just out of curiousity, how good is the fit?</p>
+<pre class="r"><code>f1 &lt;- fitdistcens(cens_data, &quot;hnorm&quot;, start = start_params(cens_data, &quot;hnorm&quot;))
+summary(f1)</code></pre>
+<pre><code>Fitting of the distribution &#39; hnorm &#39; By maximum likelihood on censored data 
+Parameters
+      estimate Std. Error
+sigma 2.851693  0.2674797
+Loglikelihood:  -103.1706   AIC:  208.3412   BIC:  210.4016 </code></pre>
+<pre class="r"><code>try(plot(f1))</code></pre>
+<p>Oh dear, plotting requires that the quantile form of the distribution also be defined!</p>
+<p>But we can get a basic plot:</p>
+<pre class="r"><code>try(plot(f1, NPMLE.method = &quot;Turnbull&quot;))</code></pre>
+<pre><code>Warning in plotdistcens(censdata = x$censdata, distr = x$distname, para = c(as.list(x$estimate), : Q-Q plot and P-P plot are available only using the method implemented in the package npsurv (Wang) 
+            with the arguments NPMLE.method at Wang (default recommended arguments).</code></pre>
+<p><img src="/InvasionHet/post/2019-04-17-half-normal-distribution_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Note that, for this dataset, the AIC is about the same as for the gamma and Weibull!</p>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Half-normal distribution - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Half-normal distribution - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">1 min read</span>
+    
+
+    <h1 class="article-title">Half-normal distribution</h1>
+
+    
+    <span class="article-date">2019/04/17</span>
+    
+
+    <div class="article-content">
+      <p>Last year I wrote a half-normal distribution but didn’t actually test its fitness for fitting the data. So let’s try it out.</p>
+<p>Our usual data:</p>
+<pre class="r"><code>temp &lt;- filter(disperseLer, ID == &quot;100_0&quot;)
+cens_data &lt;- cens_dispersal_data(temp, 7)</code></pre>
+<p>Let’s give it a try:</p>
+<pre class="r"><code>try(fitdistcens(cens_data, &quot;hnorm&quot;))</code></pre>
+<pre><code>Error in computing default starting values.</code></pre>
+<p>Nope, it needs a start value. Fortunately I already provided one in <code>start_params()</code>!</p>
+<pre class="r"><code>try(fitdistcens(cens_data, &quot;hnorm&quot;, start = start_params(cens_data, &quot;hnorm&quot;)))</code></pre>
+<pre><code>Fitting of the distribution &#39; hnorm &#39; on censored data by maximum likelihood 
+Parameters:
+      estimate
+sigma 2.851693</code></pre>
+<p>It works!</p>
+<p>Just out of curiousity, how good is the fit?</p>
+<pre class="r"><code>f1 &lt;- fitdistcens(cens_data, &quot;hnorm&quot;, start = start_params(cens_data, &quot;hnorm&quot;))
+summary(f1)</code></pre>
+<pre><code>Fitting of the distribution &#39; hnorm &#39; By maximum likelihood on censored data 
+Parameters
+      estimate Std. Error
+sigma 2.851693  0.2674797
+Loglikelihood:  -103.1706   AIC:  208.3412   BIC:  210.4016 </code></pre>
+<pre class="r"><code>try(plot(f1))</code></pre>
+<p>Oh dear, plotting requires that the quantile form of the distribution also be defined!</p>
+<p>But we can get a basic plot:</p>
+<pre class="r"><code>try(plot(f1, NPMLE.method = &quot;Turnbull&quot;))</code></pre>
+<pre><code>Warning in plotdistcens(censdata = x$censdata, distr = x$distname, para = c(as.list(x$estimate), : Q-Q plot and P-P plot are available only using the method implemented in the package npsurv (Wang) 
+            with the arguments NPMLE.method at Wang (default recommended arguments).</code></pre>
+<p><img src="/InvasionHet/post/2019-04-17-half-normal-distribution_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Note that, for this dataset, the AIC is about the same as for the gamma and Weibull!</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
