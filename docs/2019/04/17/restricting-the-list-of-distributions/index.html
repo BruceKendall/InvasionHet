@@ -6,8 +6,8 @@
 <meta name="generator" content="Hugo 0.29" />
 
 
-<title>Tags - Project notebook for the Invasion Heterogeneity project</title>
-<meta property="og:title" content="Tags - Project notebook for the Invasion Heterogeneity project">
+<title>Restricting the list of distributions - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Restricting the list of distributions - Project notebook for the Invasion Heterogeneity project">
 
 
 
@@ -16,8 +16,6 @@
 
 
 
-
-<link href="/InvasionHet/tags/index.xml" rel="alternate" type="application/rss+xml" title="Project notebook for the Invasion Heterogeneity project" />
 
 
 
@@ -55,26 +53,33 @@
 
 
 <main class="content" role="main">
-  <div>
-    <h1 id="title">Tags</h1>
-    <ul>
+
+  <article class="article">
     
+    <span class="article-duration">1 min read</span>
     
-    <article class="archive-item">
-      <a href="/InvasionHet/tags/blogdown">blogdown</a> 5
-    </article>
+
+    <h1 class="article-title">Restricting the list of distributions</h1>
+
     
-    <article class="archive-item">
-      <a href="/InvasionHet/tags/dispersal">dispersal</a> 16
-    </article>
+    <span class="article-date">2019/04/17</span>
     
-    <article class="archive-item">
-      <a href="/InvasionHet/tags/ler">ler</a> 11
-    </article>
-    
-    </ul>
-  </div>
+
+    <div class="article-content">
+      <p>I&rsquo;ve just realized that any dispersal distribution that I&rsquo;m actually going to use in the model requires the ability to generate random numbers. Thus, for the &ldquo;custom&rdquo; distributions I&rsquo;d have to write a RNG, which I really don&rsquo;t want to do.</p>
+
+<p>So I think that means ditching the 2Dt, log-sech, and inverse power models.</p>
+
+<p>If the best fit is a truncated distribution then I might need to write a simple wrapper to discard the truncated bit.</p>
+
+    </div>
+  </article>
+
+  
+
+
 </main>
+
       <footer class="footer">
         <ul class="footer-links">
           <li>
