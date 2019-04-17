@@ -76,6 +76,71 @@ fit_dispersal_models <- function(dispersal_data, zero = 3.5, plot.it = TRUE) {
 }
 
 ########################################################################################
+fit_dispersal_untruncated <- function(dispersal_data, zero = 7,
+                                      model_list = c("hnorm", "exp", "lnorm", "gamma",
+                                                     "weibull", "invgauss", "logis",
+                                                     "invgamma", "gengamma")) {
+# Fit untruncated dispersal models to data
+# dispersal_data must be a data frame containing columns
+#   ID, Density, Siliques, Seedlings, Distance
+# All data in dispersal_data are used in a single fit, so if only a single rep is to 
+#   be analyzed, it should be subset outside this function
+
+  if ("invgauss" %in% model_list) library(actuar)
+  if ("gengamma" %in% model_list) library(flexsurv)
+  print("Hello!!")
+  cens_data_tble <- cens_dispersal_data(dispersal_data, zero)
+  
+  result <- data.frame(ID = factor(), 
+                       model = factor(), 
+                       AIC = double(),
+                       par1 = double(),
+                       par2 = double(),
+                       par3 = double(),
+                       se1 = double(),
+                       se2 = double(),
+                       se3 = double())
+  
+  for (model in model_list) {
+    fit_i <- try(fitdistcens(cens_data_tble, model, 
+                             start = start_params(cens_data_tble, model)))
+    if (model == "gengamma") {
+      start = start_params(cens_data_tble, model)
+      start[3] <- 0
+      fit_0 <- try(fitdist(cens_data_tble[,2], model, start = start))
+      if (class(fit_0) != "try-error") start <- as.list(fit_0$est)
+      fit_i <- try(fitdistcens(cens_data_tble, model, start = start))
+    }
+    if (class(fit_i) != "try-error") { 
+      par_i <- rep(NA, 3)
+      se_i <- rep(NA, 3)
+      n_par <- length(fit_i$est)
+      par_i[1:n_par] <- fit_i$est
+      se_i[1:n_par] <- fit_i$sd
+      
+      result <- rbind(result,
+                      data.frame(ID = dispersal_data$ID[1],
+                                 model = model,
+                                 AIC = fit_i$aic,
+                                 par1 = par_i[1], par2 = par_i[2], par3 = par_i[3],
+                                 se1 = se_i[1], se2 = se_i[2], se3 = se_i[3]))
+    }
+  }
+  
+  result
+}
+
+fiteach_disp_unt <- function(dispersal_data, ...) {
+  ID_list <- unique(dispersal_data$ID)
+  result <- NULL
+  for (id in ID_list) {
+    result <- rbind(result, 
+                    filter(dispersal_data, ID == id) %>% 
+                      fit_dispersal_untruncated())
+  }
+  return(result)
+}
+########################################################################################
 # Convert the dispersal data into a form used by fitdistcens()
 # dispersal_data must contain columns Distance and Seedlings
 # zero is the zero point for the dispersal kernel. Default (3.5) puts the origin in the

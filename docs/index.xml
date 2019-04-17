@@ -23,6 +23,16 @@
     </item>
     
     <item>
+      <title>Fitting the distributions</title>
+      <link>/InvasionHet/2019/04/17/fitting-the-distributions/</link>
+      <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/04/17/fitting-the-distributions/</guid>
+      <description>I’ve written the code to automatically fit all the untruncated distributions. Here it is, in helpers.R:
+fit_dispersal_untruncated  function(dispersal_data, zero = 7, model_list = c(&amp;quot;hnorm&amp;quot;, &amp;quot;exp&amp;quot;, &amp;quot;lnorm&amp;quot;, &amp;quot;gamma&amp;quot;, &amp;quot;weibull&amp;quot;, &amp;quot;invgauss&amp;quot;, &amp;quot;logis&amp;quot;, &amp;quot;invgamma&amp;quot;)) { # Fit untruncated dispersal models to data # dispersal_data must be a data frame containing columns # ID, Density, Siliques, Seedlings, Distance # All data in dispersal_data are used in a single fit, so if only a single rep is to # be analyzed, it should be subset outside this function if (&amp;quot;invgauss&amp;quot; %in% model_list) library(actuar) if (&amp;quot;gengamma&amp;quot; %in% model_list) library(flexsurv) cens_data_tble &amp;lt;- cens_dispersal_data(dispersal_data, zero) result &amp;lt;- data.</description>
+    </item>
+    
+    <item>
       <title>Half-normal distribution</title>
       <link>/InvasionHet/2019/04/17/half-normal-distribution/</link>
       <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>

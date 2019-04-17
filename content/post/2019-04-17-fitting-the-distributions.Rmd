@@ -1,0 +1,86 @@
+---
+title: Fitting the distributions
+author: Bruce Kendall
+date: '2019-04-17'
+slug: fitting-the-distributions
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+options(keep.source = TRUE) 
+ProjectTemplate::load.project() 
+```
+
+I've written the code to automatically fit all the untruncated distributions. Here it is, in `helpers.R`:
+```{r}
+fit_dispersal_untruncated 
+```
+
+And here are the results of fitting it to our test dataset:
+```{r, warning=FALSE, message=FALSE}
+temp <- filter(disperseLer, ID == "73_0")
+fit_dispersal_untruncated(temp) 
+```
+
+When I first ran it, I had set the "zero" to 0, and I got an error for gengamma. So this distribution might not be too robust.
+
+
+And now, fitting all the reps:
+```{r fiteach, warning=FALSE, message=FALSE, cache=FALSE}
+library(tidyverse)
+result <- fiteach_disp_unt(disperseLer)
+result
+```
+
+There they all are! The generalized gamma didn't always converge, which is the source of the warnings and the fact that it is missing from many places.
+
+Now lets calculate the delta-AIC within each dataset:
+```{r}
+result <- group_by(result, ID) %>% mutate(delta_AIC = AIC - min(AIC))
+print(result, n=50) 
+```
+And plot the results:
+```{r}
+ggplot(result, aes(x=delta_AIC, group = model)) + geom_histogram() + facet_wrap(~model, scales = "free") 
+```
+
+Only the generalized gamma has consistently small delta-AIC values, suggesting that I should try harder on this. Let's look at a particular case:
+```{r}
+temp <- filter(disperseLer, ID == "73_0")
+cens_data <- cens_dispersal_data(temp, 7)
+start <- start_params(cens_data, "gengamma")
+start[3] <- 0
+library(flexsurv)
+# dgengamma <- function(x, mu, sigma, Q) {
+#   print(x)
+#   print(c(mu, sigma, Q))
+#   (x > 0) * flexsurv::dgengamma(x, mu, sigma, Q)
+# }
+fit <- try(fitdistcens(cens_data, "gengamma", start = start, silent = FALSE, lower = c(-Inf, 0, -Inf), optim.method = "L-BFGS-B", control=list(trace=0)))
+fit <- try(fitdist(cens_data[,2], "gengamma", start = start, silent = FALSE, lower = c(-Inf, 0, -Inf), optim.method = "L-BFGS-B", control=list(trace=0)))
+summary(fit)
+fit$est
+fit <- try(fitdistcens(cens_data, "gengamma", start = as.list(fit$est), silent = FALSE, lower = c(-Inf, 0, -Inf), optim.method = "L-BFGS-B", control=list(trace=0)))
+summary(fit)
+```
+
+
+Got it to fit almost everywhere, and still is always better than 4. Some cases where it is 2, suggesting a limiting distribution fits equally. But sometimes it's at zero.
+
+```{r}
+result2 <- filter(result, ID != "90_1", ID!="79_0")
+plot(filter(result2, model == "gengamma")$delta_AIC, filter(result2, model == "weibull")$delta_AIC, xlab = "gengamma delta_AIC", ylab = "weibull delta_AIC")
+plot(filter(result2, model == "gengamma")$delta_AIC, filter(result2, model == "gamma")$delta_AIC, xlab = "gengamma delta_AIC", ylab = "gamma delta_AIC")
+plot(filter(result2, model == "gengamma")$delta_AIC, filter(result2, model == "lnorm")$delta_AIC, xlab = "gengamma delta_AIC", ylab = "lnorm delta_AIC")
+```
