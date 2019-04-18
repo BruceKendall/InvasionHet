@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
@@ -125,3 +126,115 @@ a &amp;= \exp\left[\mu - \log(\nu)/p \right]\\
   </body>
 </html>
 
+||||||| merged common ancestors
+=======
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Moments of generalized gamma - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Moments of generalized gamma - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">1 min read</span>
+    
+
+    <h1 class="article-title">Moments of generalized gamma</h1>
+
+    
+    <span class="article-date">2019/04/18</span>
+    
+
+    <div class="article-content">
+      <p>The fact that we are still having trouble fitting the generalized gamma suggests that we should move to a method of moments. Because the distribution has three parameters we need three moments. Wikipedia gives the mean and variance, but not the skew; and anywy it may be easier to use raw moments.</p>
+<p>Stacy and Mihram (1965: Technometrics 7, 349-58) give an expression for the raw moments:</p>
+<p><span class="math display">\[
+E(X^r) = \frac{a^r \Gamma \left[\nu + r/p \right]}{\Gamma(\nu)}.
+\]</span> This is only finite if <span class="math inline">\(r/p &gt; -\nu\)</span>.</p>
+<p>This uses the original parameterization that the flexsurv authors do not like; the density function is: <span class="math display">\[
+|p| x^{p \nu - 1} \frac{\exp \left[-(x/a)^p\right]}{a^{p \nu} \Gamma(\nu)}.
+\]</span></p>
+<p>This is close to the paramterization in gengamma.orig from flexsurv: their <span class="math inline">\(b\)</span> (“shape”, positive) is the positive half of <span class="math inline">\(p\)</span>; their <span class="math inline">\(k\)</span> is <span class="math inline">\(\nu\)</span>; their <span class="math inline">\(a\)</span> (“scale”, positive) is <span class="math inline">\(a\)</span>. So to get to the preferred parameterization we have…</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
+>>>>>>> 043a75e7657478543768a79d09d57f290f1802d1

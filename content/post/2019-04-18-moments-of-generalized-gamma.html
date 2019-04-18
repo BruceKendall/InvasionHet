@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: Moments of generalized gamma
 author: Bruce Kendall
@@ -38,3 +39,28 @@ a &amp;= \exp\left[\mu - \log(\nu)/p \right]\\
   &amp;= e^{\mu} Q^{2 \sigma/Q}
 \end{aligned}
 \]</span> This looks a little different from the formulas I calculated last year, but I think that the previous ones had a mistake. I can test these using some random numbers.</p>
+||||||| merged common ancestors
+=======
+---
+title: Moments of generalized gamma
+author: Bruce Kendall
+date: '2019-04-18'
+slug: moments-of-generalized-gamma
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+---
+
+
+
+<p>The fact that we are still having trouble fitting the generalized gamma suggests that we should move to a method of moments. Because the distribution has three parameters we need three moments. Wikipedia gives the mean and variance, but not the skew; and anywy it may be easier to use raw moments.</p>
+<p>Stacy and Mihram (1965: Technometrics 7, 349-58) give an expression for the raw moments:</p>
+<p><span class="math display">\[
+E(X^r) = \frac{a^r \Gamma \left[\nu + r/p \right]}{\Gamma(\nu)}.
+\]</span> This is only finite if <span class="math inline">\(r/p &gt; -\nu\)</span>.</p>
+<p>This uses the original parameterization that the flexsurv authors do not like; the density function is: <span class="math display">\[
+|p| x^{p \nu - 1} \frac{\exp \left[-(x/a)^p\right]}{a^{p \nu} \Gamma(\nu)}.
+\]</span></p>
+<p>This is close to the paramterization in gengamma.orig from flexsurv: their <span class="math inline">\(b\)</span> (“shape”, positive) is the positive half of <span class="math inline">\(p\)</span>; their <span class="math inline">\(k\)</span> is <span class="math inline">\(\nu\)</span>; their <span class="math inline">\(a\)</span> (“scale”, positive) is <span class="math inline">\(a\)</span>. So to get to the preferred parameterization we have…</p>
+>>>>>>> 043a75e7657478543768a79d09d57f290f1802d1
