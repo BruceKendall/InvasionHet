@@ -1,0 +1,59 @@
+---
+title: Moments of generalized gamma
+author: Bruce Kendall
+date: '2019-04-18'
+slug: moments-of-generalized-gamma
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+The fact that we are still having trouble fitting the generalized gamma suggests that we should move to a method of moments. Because the distribution has three parameters we need three moments. Wikipedia gives the mean and variance, but not the skew; and anywy it may be easier to use raw moments.
+
+Stacy and Mihram (1965: Technometrics 7, 349-58) give an expression for the raw moments:
+
+$$
+E(X^r) = \frac{a^r \Gamma \left[\nu + r/p \right]}{\Gamma(\nu)}.
+$$
+This is only finite if $r/p > -\nu$.
+
+This uses the original parameterization that the flexsurv authors do not like; the density function is:
+$$
+|p| x^{p \nu - 1} \frac{\exp \left[-(x/a)^p\right]}{a^{p \nu} \Gamma(\nu)}.
+$$
+
+This is close to the paramterization in gengamma.orig from flexsurv: their $b$ ("shape", positive) is the positive half of $p$; their $k$ is $\nu$; their $a$ ("scale", positive) is $a$. So to get to the preferred parameterization we have:
+
+$$
+\begin{aligned}
+\mu &= \log(a) + \log(\nu)/p\\
+\sigma &= 1/(p \sqrt{\nu})\\
+Q &= 1/\sqrt{\nu}
+\end{aligned}
+$$
+
+Inverting this, we get
+$$
+\begin{aligned}
+\nu &= 1/Q^2\\
+p &= 1/(\sigma \sqrt{\nu})\\
+  &= Q/\sigma\\
+a &= \exp\left[\mu - \log(\nu)/p \right]\\
+  &= \exp\left[\mu - \log(\nu^{1/p}) \right]\\
+  &= \frac{e^{\mu}}{\nu^{1/p}}\\
+  &= e^{\mu} Q^{2 \sigma/Q}
+\end{aligned}
+$$
+This looks a little different from the formulas I calculated last year, but I think that the previous ones had a mistake. I can test these using some random numbers.
