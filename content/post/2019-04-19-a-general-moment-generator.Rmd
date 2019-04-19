@@ -1,0 +1,55 @@
+---
+title: A general moment generator
+author: Bruce Kendall
+date: '2019-04-19'
+slug: a-general-moment-generator
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+I'm close to having the formulas needed to create an "mgengamma", allowing us to use the method of moments to fit that distribution. But that doesn't get us closer to a broader problem: the need to get good start values for truncated distributions, as well as, potentially, bespoke distributions such as 2Dt.
+
+For this, I think I can write a function to generate random numbers under the distribution, then calculate the moments and return them in a form useful to the moment matching algorithm. The trick is to ensure repeatability, which will entail always having the same random seed.
+
+It could look something like this:
+```{r}
+mgengamma <- function(order, mu, sigma, Q, seed = 1066, ndraw = 100) {
+  set.seed(seed)
+  randdata <- flexsurv::rgengamma(ndraw, mu, sigma, Q)
+  apply(outer(randdata, order, "^"), 2, mean)
+}
+```
+Let's test that it really does return the same results each time for fixed parameters:
+```{r}
+mgengamma(1:3, 2, 3, 0.5)
+mgengamma(1:3, 2, 3, 0.5)
+```
+OK, that's good!
+
+Now let's try fitting some data.
+
+```{r}
+temp <- filter(disperseLer, ID == "73_0")
+cens_data <- cens_dispersal_data(temp, 7)
+library(actuar)
+library(flexsurv)
+mid_data <- apply(cens_data, 1, mean)
+fit1 <- try(fitdist(mid_data, "gengamma", "mme", order = 1:3, memp = emm))
+summary(fit1)
+```
+Oh dear. Two problems: first, mme method only works for fitdist; hence the need to pick midpoint values for the data. That's ok, if the only goal is to get start values for the real fit. Second, even the mme method requires start values! So this doesn't really make much progress for us. 
+
+**This is a dead end**

@@ -23,6 +23,16 @@
     </item>
     
     <item>
+      <title>A general moment generator</title>
+      <link>/InvasionHet/2019/04/19/a-general-moment-generator/</link>
+      <pubDate>Fri, 19 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/04/19/a-general-moment-generator/</guid>
+      <description>I’m close to having the formulas needed to create an “mgengamma”, allowing us to use the method of moments to fit that distribution. But that doesn’t get us closer to a broader problem: the need to get good start values for truncated distributions, as well as, potentially, bespoke distributions such as 2Dt.
+For this, I think I can write a function to generate random numbers under the distribution, then calculate the moments and return them in a form useful to the moment matching algorithm.</description>
+    </item>
+    
+    <item>
       <title>Moments of generalized gamma</title>
       <link>/InvasionHet/2019/04/18/moments-of-generalized-gamma/</link>
       <pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate>

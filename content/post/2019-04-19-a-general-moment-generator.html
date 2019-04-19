@@ -1,0 +1,40 @@
+---
+title: A general moment generator
+author: Bruce Kendall
+date: '2019-04-19'
+slug: a-general-moment-generator
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+---
+
+
+
+<p>I’m close to having the formulas needed to create an “mgengamma”, allowing us to use the method of moments to fit that distribution. But that doesn’t get us closer to a broader problem: the need to get good start values for truncated distributions, as well as, potentially, bespoke distributions such as 2Dt.</p>
+<p>For this, I think I can write a function to generate random numbers under the distribution, then calculate the moments and return them in a form useful to the moment matching algorithm. The trick is to ensure repeatability, which will entail always having the same random seed.</p>
+<p>It could look something like this:</p>
+<pre class="r"><code>mgengamma &lt;- function(order, mu, sigma, Q, seed = 1066, ndraw = 100) {
+  set.seed(seed)
+  randdata &lt;- flexsurv::rgengamma(ndraw, mu, sigma, Q)
+  apply(outer(randdata, order, &quot;^&quot;), 2, mean)
+}</code></pre>
+<p>Let’s test that it really does return the same results each time for fixed parameters:</p>
+<pre class="r"><code>mgengamma(1:3, 2, 3, 0.5)</code></pre>
+<pre><code>[1] 3.275758e+01 1.531580e+04 1.400531e+07</code></pre>
+<pre class="r"><code>mgengamma(1:3, 2, 3, 0.5)</code></pre>
+<pre><code>[1] 3.275758e+01 1.531580e+04 1.400531e+07</code></pre>
+<p>OK, that’s good!</p>
+<p>Now let’s try fitting some data.</p>
+<pre class="r"><code>temp &lt;- filter(disperseLer, ID == &quot;73_0&quot;)
+cens_data &lt;- cens_dispersal_data(temp, 7)
+library(actuar)
+library(flexsurv)
+mid_data &lt;- apply(cens_data, 1, mean)
+fit1 &lt;- try(fitdist(mid_data, &quot;gengamma&quot;, &quot;mme&quot;, order = 1:3, memp = emm))</code></pre>
+<pre><code>Error in computing default starting values.</code></pre>
+<pre class="r"><code>summary(fit1)</code></pre>
+<pre><code>   Length     Class      Mode 
+        1 try-error character </code></pre>
+<p>Oh dear. Two problems: first, mme method only works for fitdist; hence the need to pick midpoint values for the data. That’s ok, if the only goal is to get start values for the real fit. Second, even the mme method requires start values! So this doesn’t really make much progress for us.</p>
+<p><strong>This is a dead end</strong></p>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>A general moment generator - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="A general moment generator - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">A general moment generator</h1>
+
+    
+    <span class="article-date">2019/04/19</span>
+    
+
+    <div class="article-content">
+      <p>I’m close to having the formulas needed to create an “mgengamma”, allowing us to use the method of moments to fit that distribution. But that doesn’t get us closer to a broader problem: the need to get good start values for truncated distributions, as well as, potentially, bespoke distributions such as 2Dt.</p>
+<p>For this, I think I can write a function to generate random numbers under the distribution, then calculate the moments and return them in a form useful to the moment matching algorithm. The trick is to ensure repeatability, which will entail always having the same random seed.</p>
+<p>It could look something like this:</p>
+<pre class="r"><code>mgengamma &lt;- function(order, mu, sigma, Q, seed = 1066, ndraw = 100) {
+  set.seed(seed)
+  randdata &lt;- flexsurv::rgengamma(ndraw, mu, sigma, Q)
+  apply(outer(randdata, order, &quot;^&quot;), 2, mean)
+}</code></pre>
+<p>Let’s test that it really does return the same results each time for fixed parameters:</p>
+<pre class="r"><code>mgengamma(1:3, 2, 3, 0.5)</code></pre>
+<pre><code>[1] 3.275758e+01 1.531580e+04 1.400531e+07</code></pre>
+<pre class="r"><code>mgengamma(1:3, 2, 3, 0.5)</code></pre>
+<pre><code>[1] 3.275758e+01 1.531580e+04 1.400531e+07</code></pre>
+<p>OK, that’s good!</p>
+<p>Now let’s try fitting some data.</p>
+<pre class="r"><code>temp &lt;- filter(disperseLer, ID == &quot;73_0&quot;)
+cens_data &lt;- cens_dispersal_data(temp, 7)
+library(actuar)
+library(flexsurv)
+mid_data &lt;- apply(cens_data, 1, mean)
+fit1 &lt;- try(fitdist(mid_data, &quot;gengamma&quot;, &quot;mme&quot;, order = 1:3, memp = emm))</code></pre>
+<pre><code>Error in computing default starting values.</code></pre>
+<pre class="r"><code>summary(fit1)</code></pre>
+<pre><code>   Length     Class      Mode 
+        1 try-error character </code></pre>
+<p>Oh dear. Two problems: first, mme method only works for fitdist; hence the need to pick midpoint values for the data. That’s ok, if the only goal is to get start values for the real fit. Second, even the mme method requires start values! So this doesn’t really make much progress for us.</p>
+<p><strong>This is a dead end</strong></p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+
