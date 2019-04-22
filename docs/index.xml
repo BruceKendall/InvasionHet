@@ -23,6 +23,16 @@
     </item>
     
     <item>
+      <title>Robustifying the generalized gamma fit</title>
+      <link>/InvasionHet/2019/04/22/robustifying-the-generalized-gamma-fit/</link>
+      <pubDate>Mon, 22 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/04/22/robustifying-the-generalized-gamma-fit/</guid>
+      <description>I’m still a bit concerned about the generalized gamma, for two reasons: am I getting good enough starting values; and why do I get errors in the function evaluation.
+For the first, my previous work on moments was not helpful. So I think that the only robust approach is to start from lots of random start values. However, that brings up the second issue of rather frequent failures. I think the issue is that flexsurv is not quite standard in how it deals with edge conditions.</description>
+    </item>
+    
+    <item>
       <title>A general moment generator</title>
       <link>/InvasionHet/2019/04/19/a-general-moment-generator/</link>
       <pubDate>Fri, 19 Apr 2019 00:00:00 +0000</pubDate>

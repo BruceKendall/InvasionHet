@@ -1,0 +1,93 @@
+---
+title: Robustifying the generalized gamma fit
+author: Bruce Kendall
+date: '2019-04-22'
+slug: robustifying-the-generalized-gamma-fit
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+I'm still a bit concerned about the generalized gamma, for two reasons: am I getting good enough starting values; and why do I get errors in the function evaluation.
+
+For the first, my previous work on moments was not helpful. So I think that the only robust approach is to start from lots of random start values. However, that brings up the second issue of rather frequent failures. I think the issue is that flexsurv is not quite standard in how it deals with edge conditions. So let's look at this a bit more.
+
+First, generate the error:
+```{r}
+library(flexsurv)
+temp <- filter(disperseLer, ID == "73_0")
+cens_data_tble <- cens_dispersal_data(temp, 7)
+startgg <- start_params(cens_data_tble, "gengamma")
+startgg
+fit <- try(fitdistcens(cens_data_tble, "gengamma", start = startgg))
+summary(fit)
+```
+
+That actually works now -- what I had to fix was some mistakes in translating from the limiting distribugtions in start_gengamma. It seems like it may work now; next step is to test this on all the data.
+
+## Old results
+That threw an error, as expected. Now let's go back to my experiments on vectorization and see what happens when I pass in the values to the d and p functions; we'll ontrast that with a well-functioning distribution.
+
+```{r}
+attach(startgg)
+dgengamma(numeric(0), mu,sigma, Q)
+dlnorm(numeric(0))
+
+dgengamma(c(0, 1, Inf, NaN, -1), mu,sigma, Q)
+dlnorm(c(0, 1, Inf, NaN, -1))
+
+dgengamma(c(0, 1, NA), mu,sigma, Q)
+dlnorm(c(0, 1, NA))
+
+pgengamma(numeric(0), mu,sigma, Q)
+plnorm(numeric(0))
+
+pgengamma(c(0, 1, Inf, NaN, -1), mu,sigma, Q)
+plnorm(c(0, 1, Inf, NaN, -1))
+
+pgengamma(c(0, 1, NA), mu,sigma, Q)
+plnorm(c(0, 1, NA))
+
+detach(startgg)
+```
+
+Things that need fixing in dgengamma:
+- Should return 0 instead of NaN when x = 0
+- Should return 0 instead of NaN when x = Inf
+
+pgengamma looks ok.
+
+So let's try a wrapper:
+```{r}
+dmygengamma <- function(x, mu, sigma, Q, ...) {
+  print((x))
+  print(c(mu, sigma, Q))
+  res <- flexsurv::dgengamma(x, mu, sigma, Q, ...)
+  res[x == 0] <- 0
+  res[!is.finite(x)] <- 0
+  print((res))
+  res
+}
+pmygengamma <- function(q, mu, sigma, Q, ...) {
+  print((q))
+  print(c(mu, sigma, Q))
+  res <- flexsurv::pgengamma(q, mu, sigma, Q, ...)
+  print((res))
+  res
+}
+fit <- try(fitdistcens(cens_data_tble, "mygengamma", start = startgg))
+```
+
+So there really doens't seem to be a way to stop this. It does seem that, with the start values I'm using, the CDF seems to be plateauing after just a few centimeters. So maybe I'm getting the wrong translation from the limiting distributions?

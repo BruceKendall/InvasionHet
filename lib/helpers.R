@@ -212,13 +212,13 @@ start_gengamma <- function(x, truncated = FALSE) {
     base_fits$p1[i] <- coef(fit)[1]
     base_fits$p2[i] <- coef(fit)[2]
   }
-  
+  print(base_fits)
   # Get the AIC-best one and use it to set the base parameters
   best <- base_fits[which.min(base_fits$AIC), ]
   start_pars <- with(best, switch(dist,
-    lnorm = list(mu = p1, sigma = p2, Q = 2),
-    weibull = list(mu = log(p1), sigma = 1/p2, Q = 1),
-    gamma = list(mu = log(p1/p2), sigma = sqrt(1/p1), Q = sqrt(1/p1))
+    lnorm = list(mu = p1, sigma = p2, Q = 0),
+    weibull = list(mu = log(p2), sigma = 1/p1, Q = 1),
+    gamma = list(mu = -log(p2), sigma = sqrt(1/p1), Q = sqrt(1/p1))
   ))
   
   return(start_pars)
