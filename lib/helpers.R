@@ -136,7 +136,7 @@ fiteach_disp_unt <- function(dispersal_data, ...) {
   for (id in ID_list) {
     result <- rbind(result, 
                     filter(dispersal_data, ID == id) %>% 
-                      fit_dispersal_untruncated())
+                      fit_dispersal_untruncated(...))
   }
   return(result)
 }
