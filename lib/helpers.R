@@ -88,7 +88,7 @@ fit_dispersal_untruncated <- function(dispersal_data, zero = 7,
 
   if ("invgauss" %in% model_list) library(actuar)
   if ("gengamma" %in% model_list) library(flexsurv)
-  print("Hello!!")
+
   cens_data_tble <- cens_dispersal_data(dispersal_data, zero)
   
   result <- data.frame(ID = factor(), 
@@ -212,7 +212,6 @@ start_gengamma <- function(x, truncated = FALSE) {
     base_fits$p1[i] <- coef(fit)[1]
     base_fits$p2[i] <- coef(fit)[2]
   }
-  print(base_fits)
   # Get the AIC-best one and use it to set the base parameters
   best <- base_fits[which.min(base_fits$AIC), ]
   start_pars <- with(best, switch(dist,
