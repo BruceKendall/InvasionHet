@@ -23,6 +23,17 @@
     </item>
     
     <item>
+      <title>Finalizing dispersal (for now)</title>
+      <link>/InvasionHet/2019/04/25/finalizing-dispersal-for-now/</link>
+      <pubDate>Thu, 25 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/04/25/finalizing-dispersal-for-now/</guid>
+      <description>Time is running short for the Davis presentation. So, at least for now, I will accept the generalized gamma distribution and the subset of data to which it fits, and move forward with creating the model.
+What I need to do:
+ Double check that that the replicate-specific model fits better than a single set of parameters for all the data Plot the resulting dispersal kernels Plot the patterns of covariance in parameters Quantify the meta-distribution of parameters, to use in the model  Evidence of heterogeneity The replicates to which gengamma didn’t fit were 79_0 and 90_1.</description>
+    </item>
+    
+    <item>
       <title>Robustifying the generalized gamma fit</title>
       <link>/InvasionHet/2019/04/22/robustifying-the-generalized-gamma-fit/</link>
       <pubDate>Mon, 22 Apr 2019 00:00:00 +0000</pubDate>

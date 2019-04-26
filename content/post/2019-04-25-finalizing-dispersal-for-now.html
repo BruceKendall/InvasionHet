@@ -1,0 +1,60 @@
+---
+title: Finalizing dispersal (for now)
+author: Bruce Kendall
+date: '2019-04-25'
+slug: finalizing-dispersal-for-now
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+
+
+
+<p>Time is running short for the Davis presentation. So, at least for now, I will accept the generalized gamma distribution and the subset of data to which it fits, and move forward with creating the model.</p>
+<p>What I need to do:</p>
+<ul>
+<li>Double check that that the replicate-specific model fits better than a single set of parameters for all the data</li>
+<li>Plot the resulting dispersal kernels</li>
+<li>Plot the patterns of covariance in parameters</li>
+<li>Quantify the meta-distribution of parameters, to use in the model</li>
+</ul>
+<div id="evidence-of-heterogeneity" class="section level1">
+<h1>Evidence of heterogeneity</h1>
+<p>The replicates to which <code>gengamma</code> didn’t fit were 79_0 and 90_1. So drop these from the dataset:</p>
+<pre class="r"><code>disperseLer2 &lt;- filter(disperseLer, ID != &quot;79_0&quot;, ID != &quot;90_1&quot;)</code></pre>
+<p>Now fit the combined data:</p>
+<pre class="r"><code>fitall &lt;- fit_dispersal_untruncated(disperseLer2, model = &quot;gengamma&quot;)
+fitall[, -1]</code></pre>
+<pre><code>     model      AIC     par1      par2     par3       se1         se2
+1 gengamma 59533.29 1.616633 0.8058442 1.043558 0.0148677 0.007544482
+         se3
+1 0.03199557</code></pre>
+<p>Now fit the combined data and sum the AIC:</p>
+<pre class="r"><code>fiteach &lt;- fiteach_disp_unt(disperseLer2, model = &quot;gengamma&quot;)
+sum(fiteach$AIC) </code></pre>
+<pre><code>[1] 57957.58</code></pre>
+<p>The replicate-specific fits have a cumulative AIC that is massively smaller than the fit to the lumped data (by 1576 AIC units!), so we are safe to assume heterogeneity among replicates.</p>
+</div>
+<div id="plotting-the-kernels" class="section level1">
+<h1>Plotting the kernels</h1>
+<p>Unfortunately, it does not appear that <code>stat_function()</code> in <strong>ggplot2</strong> has a straightforward way of iteratively building functions from a table of parameters. So let’s try a loop:</p>
+<pre class="r"><code>p &lt;- ggplot(data = data.frame(x = c(0, 20)), mapping = aes(x = x)) 
+for (i in 1:nrow(fiteach)) {
+  pvec &lt;- as.numeric(fiteach[i, 4:6])
+  plist &lt;- list(mu = pvec[1], sigma = pvec[2], Q= pvec[3])
+  p &lt;- p + stat_function(fun = dgengamma, args = plist)
+}
+p + xlab(&quot;Distance (cm)&quot;) + ylab(&quot;Probability density&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2019-04-25-finalizing-dispersal-for-now_files/figure-html/kernel_plots-1.png" width="672" /></p>
+</div>
+<div id="patterns-in-the-parameters" class="section level1">
+<h1>Patterns in the parameters</h1>
+<p>First a scatterplot:</p>
+<pre class="r"><code>params &lt;- fiteach[, 4:6]
+names(params) &lt;- c(&quot;mu&quot;, &quot;sigma&quot;, &quot;Q&quot;)
+pairs(params)</code></pre>
+<p><img src="/InvasionHet/post/2019-04-25-finalizing-dispersal-for-now_files/figure-html/plotmatrix-1.png" width="672" /></p>
+<p>There’s one major outlier (with a high <span class="math inline">\(Q\)</span> and low <span class="math inline">\(\sigma\)</span>). But, even if I remove that point, the pattern looks rather more complex than just a multivariate normal. So I think that, rather than a parametric model for the kernel parameters, I’ll just draw from the “observed” values. If I wanted to get fancy I could take into account the uncertainty associated with each estimate as well… but that’s for another day (if ever).</p>
+</div>
