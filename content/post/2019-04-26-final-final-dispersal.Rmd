@@ -1,0 +1,69 @@
+---
+title: Final final dispersal
+author: Bruce Kendall
+date: '2019-04-26'
+slug: final-final-dispersal
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+A few things. 
+
+1. On further reflection, I think that I do indeed want to use multivariate normal for generating dispersal kernels.
+2. I need to find the "odd" fit and drop that from the analysis
+3. For "fitall," I need to check the other distributions; maybe one of them is better.
+
+# Eliminate odd fit
+First replicate yesterday's analysis and print them out with IDs:
+```{r showall}
+disperseLer2 <- filter(disperseLer, ID != "79_0", ID != "90_1")
+fiteach <- fiteach_disp_unt(disperseLer2, model = "gengamma")
+fiteach
+```
+It's 131_0 that has off the wall parameter values. So let's drop that:
+```{r restrict}
+fiteach <- filter(fiteach, ID != "131_0")
+disperseLer2 <- filter(disperseLer, ID != "79_0", ID != "90_1", ID != "131_0")
+```
+
+# Check other distributions for lumped data
+See if there's another distribution that does better on the combined data:
+```{r fitall, warning=FALSE}
+fitall <- fit_dispersal_untruncated(disperseLer2)
+fitall[, -1]
+```
+The generalized gamma and Weibull are essentially identical; for simplicity stick with the generalized gamma.
+
+# MVN statistics
+Add better names:
+```{r rename}
+names(fiteach)[4:6] <- c("mu", "sigma", "Q")
+```
+Calculate the mean and covariance matrix:
+```{r cov}
+apply(fiteach[, 4:6], 2, mean)
+cov(fiteach[, 4:6])
+```
+It's interesting that the mean parameters are not all that different from the parameters estimated by fitting to the combined data.
+
+# Implementation details
+There are functions to implement random numbers in **MASS** and **mvtnorm**. In `gengamma` we need to ensure that $\sigma > 0$, so we'll need to trap for that and reject those instances.
+
+The covariance matrix needs to be positive definite (symmetric, with positive eigenvalues). Let's check that:
+```{r posdef}
+eigen(cov(fiteach[, 4:6]))$values
+```

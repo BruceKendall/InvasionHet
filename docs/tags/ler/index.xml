@@ -6,10 +6,21 @@
     <description>Recent content in Ler on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 26 Apr 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/tags/ler/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Final final dispersal</title>
+      <link>/InvasionHet/2019/04/26/final-final-dispersal/</link>
+      <pubDate>Fri, 26 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/04/26/final-final-dispersal/</guid>
+      <description>A few things.
+On further reflection, I think that I do indeed want to use multivariate normal for generating dispersal kernels. I need to find the “odd” fit and drop that from the analysis For “fitall,” I need to check the other distributions; maybe one of them is better.  Eliminate odd fit First replicate yesterday’s analysis and print them out with IDs:
+disperseLer2 &amp;lt;- filter(disperseLer, ID != &amp;quot;79_0&amp;quot;, ID !</description>
+    </item>
     
     <item>
       <title>Finalizing dispersal (for now)</title>

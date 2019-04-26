@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Final final dispersal - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Final final dispersal - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">4 min read</span>
+    
+
+    <h1 class="article-title">Final final dispersal</h1>
+
+    
+    <span class="article-date">2019/04/26</span>
+    
+
+    <div class="article-content">
+      <p>A few things.</p>
+<ol style="list-style-type: decimal">
+<li>On further reflection, I think that I do indeed want to use multivariate normal for generating dispersal kernels.</li>
+<li>I need to find the “odd” fit and drop that from the analysis</li>
+<li>For “fitall,” I need to check the other distributions; maybe one of them is better.</li>
+</ol>
+<div id="eliminate-odd-fit" class="section level1">
+<h1>Eliminate odd fit</h1>
+<p>First replicate yesterday’s analysis and print them out with IDs:</p>
+<pre class="r"><code>disperseLer2 &lt;- filter(disperseLer, ID != &quot;79_0&quot;, ID != &quot;90_1&quot;)
+fiteach &lt;- fiteach_disp_unt(disperseLer2, model = &quot;gengamma&quot;)
+fiteach</code></pre>
+<pre><code>      ID    model       AIC      par1      par2       par3        se1
+1   73_0 gengamma 1532.7099 1.5705188 0.7274812 1.11856834 0.09299536
+2   75_0 gengamma 1260.6284 1.5754181 0.7398792 0.80032607 0.08777013
+3   75_1 gengamma  711.4370 1.3897357 0.6990100 0.85168137 0.11959774
+4   77_0 gengamma 1154.4199 1.3075839 0.7766100 1.02186949 0.09310170
+5   78_2 gengamma 3036.2062 1.9264567 0.6177754 1.39254074 0.05485524
+6   85_1 gengamma  723.5636 1.1042957 0.7434504 0.64516097 0.10218872
+7   85_2 gengamma 4352.3654 1.6845414 0.7287975 1.16159040 0.04620832
+8   87_0 gengamma 2489.2966 2.1062651 0.5786449 1.50122029 0.05743747
+9   87_1 gengamma 4850.7614 2.0847454 0.5446348 1.61348967 0.02946639
+10  87_2 gengamma 2492.6409 1.2874927 0.7539517 0.64842787 0.06288539
+11  88_0 gengamma  498.3070 0.8765649 0.7376402 0.44541340 0.12992853
+12  88_1 gengamma  628.5354 0.9385477 0.8006707 0.62020914 0.13540407
+13  89_1 gengamma 2375.2083 1.6154394 0.9268213 0.96075654 0.08838146
+14  90_0 gengamma 1402.8895 1.3406103 0.7107653 0.76284388 0.07678142
+15  91_2 gengamma 3389.3104 1.9958910 0.6802506 1.70706425 0.05595355
+16  93_0 gengamma 1031.9530 1.5857862 0.7520879 1.27259535 0.11826774
+17  95_0 gengamma  638.3967 1.1606068 0.8520061 0.77401440 0.14135879
+18  98_0 gengamma 1962.8573 2.3950095 0.4239582 1.31165273 0.03620348
+19  99_0 gengamma 1254.0399 1.7933582 0.7040002 1.61320847 0.10095189
+20 100_0 gengamma  210.6143 0.8246610 0.7224616 0.66411003 0.23427575
+21 101_0 gengamma  594.8261 1.1830518 0.6772137 0.63878812 0.10178420
+22 104_0 gengamma 3917.4117 1.5464011 0.9657413 0.86335757 0.07602481
+23 105_0 gengamma 1746.7117 1.2620166 0.7064396 1.04740184 0.07110049
+24 106_0 gengamma  644.5337 1.1390566 1.1264888 0.52882397 0.21646613
+25 107_0 gengamma  777.7528 1.7401369 0.8236298 2.26415493 0.17055919
+26 107_2 gengamma 1036.8040 0.9456040 0.8249566 0.03550689 0.09954148
+27 108_0 gengamma 3239.2418 1.8564565 0.6758718 1.32637966 0.05534337
+28 109_0 gengamma  988.4116 1.7736910 0.6983398 1.70628572 0.22367568
+29 118_0 gengamma  205.4763 1.1173135 0.6736985 0.85511907 0.21767532
+30 119_0 gengamma  160.3928 2.2336363 0.6272254 2.46752375 0.38968420
+31 125_0 gengamma 1534.8225 1.3243076 0.7062166 1.10682576 0.07765058
+32 128_1 gengamma 4374.8454 1.2674743 0.9127868 0.78235320 0.05624516
+33 131_0 gengamma  237.2200 2.0302936 0.2393278 7.74987734 0.28652229
+34 133_0 gengamma  155.7122 1.2203364 0.7027501 0.35803631 0.23641921
+35 134_0 gengamma  302.3750 1.1033311 0.7198087 0.33926105 0.15644901
+36 135_0 gengamma 2044.9037 1.7691996 0.6133321 1.18335981 0.06060079
+          se2         se3
+1  0.04804562  0.22620815
+2  0.04251064  0.19854791
+3  0.05647364  0.29710497
+4  0.04607035  0.21107458
+5  0.03200087  0.15514218
+6  0.04677023  0.23777597
+7  0.02503094  0.10713912
+8  0.03455947  0.17428449
+9  0.01791465  0.09055254
+10 0.02753747  0.14519248
+11 0.05284602  0.32670323
+12 0.05408072  0.31858117
+13 0.04239155  0.16856071
+14 0.03578577  0.18436440
+15 0.03387011  0.15375545
+16 0.06301221  0.28525462
+17 0.06204964  0.30210655
+18 0.02155646  0.13019346
+19 0.05940893  0.26973211
+20 0.08531420  0.62555528
+21 0.04704184  0.25347646
+22 0.03404707  0.14200174
+23 0.03508750  0.17834473
+24 0.08242011  0.37899596
+25 0.10716097  0.48143897
+26 0.04567253  0.21942764
+27 0.03138857  0.14211558
+28 0.13372291  0.64672198
+29 0.09639627  0.58280696
+30 0.26407179  1.47971117
+31 0.03935433  0.19478576
+32 0.02572051  0.11020461
+33 0.34289683 11.41698144
+34 0.09430727  0.58690333
+35 0.06684391  0.37338208
+36 0.03369890  0.16641702</code></pre>
+<p>It’s 131_0 that has off the wall parameter values. So let’s drop that:</p>
+<pre class="r"><code>fiteach &lt;- filter(fiteach, ID != &quot;131_0&quot;)
+disperseLer2 &lt;- filter(disperseLer, ID != &quot;79_0&quot;, ID != &quot;90_1&quot;, ID != &quot;131_0&quot;)</code></pre>
+</div>
+<div id="check-other-distributions-for-lumped-data" class="section level1">
+<h1>Check other distributions for lumped data</h1>
+<p>See if there’s another distribution that does better on the combined data:</p>
+<pre class="r"><code>fitall &lt;- fit_dispersal_untruncated(disperseLer2)
+fitall[, -1]</code></pre>
+<pre><code>     model      AIC      par1      par2    par3         se1         se2
+1    hnorm 59478.47 5.9667460        NA      NA 0.038876611          NA
+2      exp 59960.06 0.2161974        NA      NA 0.001991312          NA
+3    lnorm 60240.61 1.1837707 0.9083042      NA 0.008519121 0.006614545
+4    gamma 59318.79 1.4197157 0.3061000      NA 0.018801228 0.004665275
+5  weibull 59279.33 1.2339374 4.9625537      NA 0.009398779 0.039320453
+6 invgauss 60500.76 4.6560921 4.2475101      NA 0.044885364 0.062803220
+7    logis 64218.88 4.1861429 2.0269893      NA 0.032556250 0.015659978
+8 invgamma 62151.61 1.4637570 3.3358372      NA 0.018801397 0.054113129
+9 gengamma 59279.67 1.6182836 0.8048686 1.04131 0.014874102 0.007545794
+         se3
+1         NA
+2         NA
+3         NA
+4         NA
+5         NA
+6         NA
+7         NA
+8         NA
+9 0.03202261</code></pre>
+<p>The generalized gamma and Weibull are essentially identical; for simplicity stick with the generalized gamma.</p>
+</div>
+<div id="mvn-statistics" class="section level1">
+<h1>MVN statistics</h1>
+<p>Add better names:</p>
+<pre class="r"><code>names(fiteach)[4:6] &lt;- c(&quot;mu&quot;, &quot;sigma&quot;, &quot;Q&quot;)</code></pre>
+<p>Calculate the mean and covariance matrix:</p>
+<pre class="r"><code>apply(fiteach[, 4:6], 2, mean)</code></pre>
+<pre><code>       mu     sigma         Q 
+1.4870155 0.7335828 1.0397120 </code></pre>
+<pre class="r"><code>cov(fiteach[, 4:6])</code></pre>
+<pre><code>               mu       sigma           Q
+mu     0.16380901 -0.02650471  0.17343623
+sigma -0.02650471  0.01558271 -0.02484992
+Q      0.17343623 -0.02484992  0.27712366</code></pre>
+<p>It’s interesting that the mean parameters are not all that different from the parameters estimated by fitting to the combined data.</p>
+</div>
+<div id="implementation-details" class="section level1">
+<h1>Implementation details</h1>
+<p>There are functions to implement random numbers in <strong>MASS</strong> and <strong>mvtnorm</strong>. In <code>gengamma</code> we need to ensure that <span class="math inline">\(\sigma &gt; 0\)</span>, so we’ll need to trap for that and reject those instances.</p>
+<p>The covariance matrix needs to be positive definite (symmetric, with positive eigenvalues). Let’s check that:</p>
+<pre class="r"><code>eigen(cov(fiteach[, 4:6]))$values</code></pre>
+<pre><code>[1] 0.40618219 0.03971544 0.01061775</code></pre>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
