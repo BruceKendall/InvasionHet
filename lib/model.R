@@ -13,7 +13,8 @@
 #' ### Elements of `params`
 #'  
 #' `n_types` (integer)
-#' :    Number of genotypes
+#' :    Number of genotypes. Ignored by `iterate_model_ler()`; for this model, all 
+#' remaining parameters should be scalars (other than the matrix of kernel parameters)
 #' 
 #' `a_Gompertz` (scalar, or vector of length `n_types`)
 #' :    Intercept of the Gompertz model of density dependence. 
@@ -46,14 +47,22 @@
 #' :    Set to `TRUE` to include demographic stochasticity in seed production. If `FALSE`,
 #' then seed number is simply rounded to the nearest integer.
 #' 
+#' `kernel_stoch` (logical)
+#' :    Set to `TRUE` to include dispersal kernel heterogeneity.
+#' 
+#' `seed_sampling` (logical)
+#' :    Set to `TRUE` to have each seed sample the dispersal kernel independently. If
+#' `FALSE`, then the number of seeds dispersing to each pot is the expected number
+#' rounded to the nearest integer.
+#' 
 #' ### State variables
 #' The state variables are `Adults` and (internally) `Seeds`. These are structured as
 #' a matrix with each row being a replicate and each column a pot. 
 #' 
 #' <!-- ############################################################################# --> 
-#' # `iterate_model()`
-#' Iterates the model one time step
-iterate_model <- function(Adults, params, controls) {
+#' # `iterate_model_ler()`
+#' Iterates the Ler (single genotype) model one time step
+iterate_model_ler <- function(Adults, params, controls) {
   #### SEED PRODUCTION ####
   # Density dependence in seed production
   Seeds <- Gompertz_seeds(Adults, params)
@@ -75,8 +84,7 @@ iterate_model <- function(Adults, params, controls) {
   if (cotrols$kernel_stoch) {
     kernel_params <- kernal_stoch(params, controls)
   } else { # Distribute the genotype-specific parameters across pots and reps
-    array_dim <- c(params$n_types,
-                   controls$n_pots,
+    array_dim <- c(controls$n_pots,
                    controls$n_sims)
     kernel_params <- list(
       frac_dispersing = array(params$frac_dispersing, array_dim),
