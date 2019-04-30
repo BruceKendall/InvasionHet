@@ -37,7 +37,7 @@
 #' `n_pots` (integer; calculated by model)
 #' :    Number of pots in the array
 #' 
-#' `n_sims` (integer)
+#' `n_reps` (integer)
 #' :    Number of replicate simulations
 #' 
 #' `ES_seeds` (logical)
@@ -61,7 +61,7 @@
 #' 
 #' <!-- ############################################################################# --> 
 #' # `iterate_model_ler()`
-#' Iterates the Ler (single genotype) model one time step
+#' Iterates a single instance of the Ler (single genotype) model one time step
 iterate_model_ler <- function(Adults, params, controls) {
   #### SEED PRODUCTION ####
   # Density dependence in seed production
@@ -69,7 +69,7 @@ iterate_model_ler <- function(Adults, params, controls) {
   
   # Environmental stochasticicy in seed production?
   if (controls$ES_seeds) {
-    Seeds <- ES_seeds(Seeds, params, controls$n_sims)
+    Seeds <- ES_seeds(Seeds, params, controls$n_reps)
   }
   
   # Demographic stochasticity in seed production?
@@ -132,6 +132,7 @@ ES_seeds <- function(Seeds, params, n_rep) {
     lseeds <- log(Seeds) + rnorm(1, 0, sigma_seed_time)
     
     ## Apply inter-rep ES equally to all pots within each rep
+    ## This uses recyling, and depends on each row being a rep
     lseeds <- lseeds + rnorm(n_rep, 0, sigma_seed_rep)
     
     ## Return anti-log-transformed result
