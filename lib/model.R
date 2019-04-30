@@ -82,6 +82,8 @@ iterate_model_ler <- function(Adults, params, controls) {
   
   #### DISPERSAL ####
   ## This is hard-coded for the generalized gamma distribution
+  
+  ## Calculated dispersal from each pot
   # Kernel stochasticity?
   if (cotrols$kernel_stoch) {
     kernel_params <- kernal_stoch(params, controls)
@@ -98,10 +100,13 @@ iterate_model_ler <- function(Adults, params, controls) {
   
   # Seed sampling?
   if (controls$seed_sampling) {
-    Seeds <- seed_sampling(Seeds, kernel_params, params, controls)
+    dispersed_seeds_by_pot <- seed_sampling(Seeds, kernel_params, params, controls)
   } else {
-    Seeds <- round(det_kernel(Seeds, kernel_params, params, controls))
+    dispersed_seeds_by_pot <- round(det_kernel(Seeds, kernel_params, params, controls))
   }
+  
+  ## Combine all the dispersed seeds
+  Seeds <- combine_dispersed_seeds(dispersed_seeds_by_pot)
   
   return(Seeds)
 }
