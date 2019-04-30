@@ -63,6 +63,7 @@
 #' # `iterate_model_ler()`
 #' Iterates a single instance of the Ler (single genotype) model one time step
 iterate_model_ler <- function(Adults, params, controls) {
+  n_pots <- ncol(Adults)
   #### SEED PRODUCTION ####
   # Density dependence in seed production
   Seeds <- Gompertz_seeds(Adults, params)
@@ -80,16 +81,18 @@ iterate_model_ler <- function(Adults, params, controls) {
   }
   
   #### DISPERSAL ####
+  ## This is hard-coded for the generalized gamma distribution
   # Kernel stochasticity?
   if (cotrols$kernel_stoch) {
     kernel_params <- kernal_stoch(params, controls)
   } else { # Distribute the genotype-specific parameters across pots and reps
-    array_dim <- c(controls$n_pots,
-                   controls$n_sims)
+    array_dim <- c(controls$n_reps,
+                   n_pots)
     kernel_params <- list(
       frac_dispersing = array(params$frac_dispersing, array_dim),
-      mulog           = array(params$mulog,           array_dim),
-      sdlog           = array(params$sdlog,           array_dim)
+      gg_mu           = array(params$gg_mu,           array_dim),
+      gg_sigma        = array(params$gg_sigma,        array_dim),
+      gg_Q            = array(params$gg_Q,            array_dim)
     )
   }
   
