@@ -32,6 +32,8 @@
 #' `theta_seed` (positive scalar)
 #' :    Variance inflation factor for quasi-Poisson demographic stochasticity
 #' 
+#' <!--Need to add kernel parameters, pot_width --> 
+#' 
 #' ### Elements of `controls`
 #' 
 #' `n_pots` (integer; calculated by model)
@@ -181,4 +183,52 @@ rqpois <- function(n, mu, theta) {
 DS_seeds <- function(Seeds, params) {
   n <- prod(dim(Seeds))
   rqpois(n, Seeds, params$theta)
+}
+
+
+#' <!-- ############################################################################# --> 
+#' # `det_kernel()`
+#' Distribute seeds according to a deterministic kernel
+det_kernel <- function(Seeds, kernel_params, params, controls){
+  #### Seeds staying in maternal (home) pot ####
+  home_pot <- Seeds * (1 - kernel_params$frac_dispersing)
+  
+  #### Seeds dispersing forward ####
+  disp_seeds <- Seeds * kernel_params$frac_dispersing/2
+  
+  # Because we don't know how far seeds might disperse, we have to grow the
+  # array using a while loop until the expected number of seeds at all distances
+  # is less than 0.5 for all pots and all reps
+  max_dist <- 6
+  reached_max_dist <- FALSE
+  while(!reached_max_dist) {
+    # forward_dispersal is a 3-d array, with dimensions n_reps, n_pots, max_dist
+    # It will hold the expected dispersal number at each distance for each rep x pot
+    forward_dispersal <- array(dim=c(dim(Seeds, max_dist))) 
+    # dvec is the pot boundaries. We use diff(pgengamma(dvec, ...)) to get the 
+    # fraction of the distribution in each pot.
+    dvec <- controls$pot_width * (0:max_dist)
+    # There might be a clever way to do this with apply(), but it would take 
+    # lots of brain power to figure it out...
+    for (pot in 1:ncol(Seeds)) {
+      for (rep in 1:nrow(Seeds)) {
+        forward_dispersal[rep, pot, ] <- diff(pgengamma(dvec,
+                                            kernel_params$gg_mu[rep, pot],
+                                            kernel_params$gg_sigma[rep, pot],
+                                            kernel_params$gg_Q[rep, pot])) *
+                                         disp_seeds[rep, pot]
+      }
+    }
+    if (min(forward_dispersal) < 0.5) { # End the while loop
+      reached_max_dist <- TRUE
+    } else { # increment max_dist and continue on
+      max_dist <- max_dist + 1
+    }
+  }
+  
+  #### Backward dispersal is identical to forward dispersal ####
+  return(list(home_pot = home_pot, 
+              forward_dispersal = forward_dispersal,
+              backward_dispersal = forward_dispersal, 
+              max_dist = max_dist))
 }
