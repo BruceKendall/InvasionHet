@@ -185,6 +185,30 @@ DS_seeds <- function(Seeds, params) {
   rqpois(n, Seeds, params$theta)
 }
 
+#' <!-- ############################################################################# --> 
+#' # `kernel_stoch()`
+#' Calculate rep- and pot-specific dispersal kernels
+kernal_stoch <- function(params, controls) {
+  library(MASS)
+  with(controls, with(params, {
+    if (kernel_stoch_pots) { # Each pot gets different parameters
+      ndraw <-  n_pots * n_reps
+      
+    } else { # All pots w/in rep are identical
+      ndraw <- n_reps
+    }
+    fd_draws <- rbeta(ndraw, fd_a, fd_b)
+    mv_draws <- mvrnorm(ndraw, c(gg_mu, gg_sigma, gg_Q), gg_cov, empirical = TRUE)
+    array_dim <- c(n_reps, n_pots)
+    kernel_params <- list(
+      frac_dispersing = matrix(fd_draws, n_reps, n_pots, byrow = FALSE),
+      gg_mu           = matrix(mv_draws[, 1], n_reps, n_pots, byrow = FALSE),
+      gg_sigma        = matrix(mv_draws[, 2], n_reps, n_pots, byrow = FALSE),
+      gg_Q            = matrix(mv_draws[, 3], n_reps, n_pots, byrow = FALSE)
+    )
+    return(kernel_params)
+  }))
+}
 
 #' <!-- ############################################################################# --> 
 #' # `det_kernel()`
