@@ -204,7 +204,7 @@ det_kernel <- function(Seeds, kernel_params, params, controls){
   while(!reached_max_dist) {
     # forward_dispersal is a 3-d array, with dimensions n_reps, n_pots, max_dist
     # It will hold the expected dispersal number at each distance for each rep x pot
-    forward_dispersal <- array(dim=c(dim(Seeds, max_dist))) 
+    forward_dispersal <- array(dim=c(dim(Seeds), max_dist)) 
     # dvec is the pot boundaries. We use diff(pgengamma(dvec, ...)) to get the 
     # fraction of the distribution in each pot.
     dvec <- controls$pot_width * (0:max_dist)
