@@ -1,6 +1,25 @@
 ### Functions to test components of model.R
 ### Prior to invoking these functions, run ProjectTemplate::load.project()
 
+test_kernel_stoch <- function() {
+  controls <- list(n_pots = 3,
+                   n_reps = 2,
+                   kernel_stoch_pots = TRUE)
+  cov_mat <- matrix(c(0.15, -0.026, 0.17,
+                      -0.026, 0.015, -0.025,
+                      0.17, -0.025, 0.28),
+                    3, 3)
+  params <- list(gg_mu = 1.5,
+                 gg_sigma = 0.75,
+                 gg_Q = 1,
+                 gg_cov = cov_mat,
+                 frac_dispersing = 0.75,
+                 fd_sdev = 0.1)
+
+  # Test that the code runs
+  print(kernel_stoch(params, controls))
+}
+
 test_det_kernel <- function() {
   library(flexsurv)
   nrep <- 2
