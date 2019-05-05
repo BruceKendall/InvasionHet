@@ -18,6 +18,25 @@ test_kernel_stoch <- function() {
 
   # Test that the code runs
   print(kernel_stoch(params, controls))
+  
+  # Test for no within-rep ES
+  controls$kernel_stoch_pots <- FALSE
+  controls$n_reps <- 4 # mvrnorm fails if n < length(mu) and empirical == TRUE
+  print(kernel_stoch(params, controls))
+  
+  # Generate large sample to test means, (co)variances
+  controls <- list(n_pots = 100,
+                   n_reps = 100,
+                   kernel_stoch_pots = TRUE)
+  rv_sample <- kernel_stoch(params, controls)
+  print(mean(rv_sample$frac_dispersing))
+  print(sqrt(var(as.vector(rv_sample$frac_dispersing))))
+  print(c(mean(rv_sample$gg_mu), mean(rv_sample$gg_sigma), mean(rv_sample$gg_Q)))
+  print(cov(cbind(as.vector(rv_sample$gg_mu), as.vector(rv_sample$gg_sigma), 
+                  as.vector(rv_sample$gg_Q))))
+  
+  # Look for negative values of sigma
+  print(sum(rv_sample$gg_sigma <= 0))
 }
 
 test_det_kernel <- function() {
