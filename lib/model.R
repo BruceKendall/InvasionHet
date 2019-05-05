@@ -188,7 +188,7 @@ DS_seeds <- function(Seeds, params) {
 #' <!-- ############################################################################# --> 
 #' # `kernel_stoch()`
 #' Calculate rep- and pot-specific dispersal kernels
-kernal_stoch <- function(params, controls) {
+kernel_stoch <- function(params, controls) {
   library(MASS)
   with(controls, with(params, {
     if (kernel_stoch_pots) { # Each pot gets different parameters
