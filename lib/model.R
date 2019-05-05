@@ -197,7 +197,7 @@ kernel_stoch <- function(params, controls) {
     } else { # All pots w/in rep are identical
       ndraw <- n_reps
     }
-    fd_draws <- rbeta(ndraw, fd_a, fd_b)
+    fd_draws <- rbeta2(ndraw, frac_dispersing, fd_sdev)
     mv_draws <- mvrnorm(ndraw, c(gg_mu, gg_sigma, gg_Q), gg_cov, empirical = TRUE)
     array_dim <- c(n_reps, n_pots)
     kernel_params <- list(
