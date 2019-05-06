@@ -268,3 +268,25 @@ det_kernel <- function(Seeds, kernel_params, params, controls){
               backward_dispersal = forward_dispersal, 
               max_dist = max_dist))
 }
+
+#' <!-- ############################################################################# --> 
+#' # `seed_sampling()`
+#' Distribute seeds according to independent draws from a kernel
+#' 
+seed_sampling <- function(Seeds, kernel_params, params, controls) {
+  #### Seeds staying in maternal (home) pot ####
+  np <- array(c(Seeds, (1 - kernel_params$frac_dispersing)), dim = c(dim(Seeds), 2))
+  home_pot <- apply(np, c(1, 2), function(x) rbinom(1, x[1], x[2]))
+  
+  #### Seeds leaving home pot ####
+  disp_seeds <- Seeds - home_pot
+  max_ds <- max(disp_seeds) # to set the array dimension to pad to
+  ngg <- array(c(Seeds, unlist(kernel_params)), dim = c(dim(Seeds), 5))
+  disp_dist <- apply(ngg, c(1,2), function(x) c(rgengamma(x[1], x[3], x[4], x[5]), rep(0, times = max_ds - x[1])))
+  max_dist <- max(disp_dist) / controls$pot_width
+  forward_draw <- rbernoulli(prod(dim(disp_dist)))
+  disp_forward <- ceiling(forward_draw * disp_dist / controls$pot_width)
+  disp_backward <- ceiling((!forward_draw) * disp_dist / controls$pot_width)
+  
+  # Still need to tabulate these. table() will be the first step, I guess.
+}
