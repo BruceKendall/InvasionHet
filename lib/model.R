@@ -281,14 +281,31 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   #### Seeds leaving home pot ####
   disp_seeds <- Seeds - home_pot
   max_ds <- max(disp_seeds) # to set the array dimension to pad to
+  
+  # Put seeds and all params into a common array
   ngg <- array(c(Seeds, unlist(kernel_params)), dim = c(dim(Seeds), 5))
-  disp_dist <- apply(ngg, c(1,2), function(x) c(rgengamma(x[1], x[3], x[4], x[5]), rep(0, times = max_ds - x[1])))
-  max_dist <- max(disp_dist) / controls$pot_width
+  
+  # Generate a vector of seed-specific dispersal distances for each pot/rep.
+  # To get conformable dimensions, pad results for pots w/ less than max_ds 
+  # seeds with zeros
+  disp_dist <- apply(ngg, c(1,2), 
+                     function(x) c(rgengamma(x[1], x[3], x[4], x[5]), 
+                                   rep(0, times = max_ds - x[1])))
+  
+  # Distribute seeds into forward and backward dispersal, and rescale distance to pots
   forward_draw <- rbernoulli(prod(dim(disp_dist)))
   disp_forward <- ceiling(forward_draw * disp_dist / controls$pot_width)
   disp_backward <- ceiling((!forward_draw) * disp_dist / controls$pot_width)
+  max_dist <- max(c(disp_forward, disp_backward)) # farthest dispersing seed
   
-  # Still need to tabulate these. table() will be the first step, I guess.
+  # Tabulate the number at each distance
+  forward_dispersal <- apply(disp_forward, c(1, 2), disp_table, max_dist = max_dist)
+  backward_dispersal <- apply(disp_backward, c(1, 2), disp_table, max_dist = max_dist)
+  
+  return(list(home_pot = home_pot, 
+              forward_dispersal = forward_dispersal,
+              backward_dispersal = backward_dispersal, 
+              max_dist = max_dist))
 }
 
 disp_table <- function(dists, max_dist) {
