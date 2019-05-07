@@ -290,3 +290,14 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   
   # Still need to tabulate these. table() will be the first step, I guess.
 }
+
+disp_table <- function(dists, max_dist) {
+  raw_table <- table(dists)
+  if (names(raw_table)[1] == "0") { # Drop the zeros, if any
+    raw_table <- raw_table[-1]
+  }
+  dist_vals <- as.numeric(names(raw_table))
+  dist_counts <- numeric(max_dist)
+  dist_counts[dist_vals] <- raw_table
+  return(dist_counts)
+}
