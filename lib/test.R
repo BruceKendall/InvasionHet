@@ -125,4 +125,28 @@ test_seed_sampling <- function() {
   )
   d1 <- seed_sampling(Seeds, kernel_params, params, controls)
   print(d1)
+  ### Tests for variable kernels
+  cov_mat <- matrix(c(0.15, -0.026, 0.17,
+                      -0.026, 0.015, -0.025,
+                      0.17, -0.025, 0.28),
+                    3, 3)
+  params <- list(gg_mu = 1.5,
+                 gg_sigma = 0.75,
+                 gg_Q = 1,
+                 gg_cov = cov_mat,
+                 frac_dispersing = 0.75,
+                 fd_sdev = 0.1)
+  controls <- list(pot_width = 7,
+                   n_pots = 2,
+                   n_reps = 3,
+                   kernel_stoch_pots = TRUE)
+  kernel_params <- kernel_stoch(params, controls)
+  Seeds <- with(controls, matrix(1000, n_reps, n_pots))
+  d2 <- seed_sampling(Seeds, kernel_params, params, controls)
+  print(d2)
+  
+  controls$kernel_stoch_pots = FALSE
+  kernel_params <- kernel_stoch(params, controls)
+  d3 <- seed_sampling(Seeds, kernel_params, params, controls)
+  print(d3)
 }
