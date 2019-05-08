@@ -282,8 +282,8 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   disp_seeds <- Seeds - home_pot
   max_ds <- max(disp_seeds) # to set the array dimension to pad to
   
-  # Put seeds and all params into a common array
-  ngg <- array(c(Seeds, unlist(kernel_params)), dim = c(dim(Seeds), 5))
+  # Put dispersing seeds and all params into a common array
+  ngg <- array(c(disp_seeds, unlist(kernel_params)), dim = c(dim(Seeds), 5))
   
   # Generate a vector of seed-specific dispersal distances for each pot/rep.
   # To get conformable dimensions, pad results for pots w/ less than max_ds 
