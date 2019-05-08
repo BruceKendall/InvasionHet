@@ -101,3 +101,28 @@ test_det_kernel <- function() {
   d3 <- det_kernel(Seeds, kernel_params, params, controls)
   print(d3)
 }
+
+test_seed_sampling <- function() {
+  library(flexsurv)
+  nrep <- 2
+  npot <- 3
+  Seeds <- matrix(100, nrep, npot)
+  print(Seeds)
+  
+  params <- list(gg_mu = 1.5,
+                 gg_sigma = 0.75,
+                 gg_Q = 1,
+                 frac_dispersing = 0.75)
+  controls <- list(pot_width = 7)
+  
+  ### Tests for constant kernel
+  array_dim <- c(nrep, npot)
+  kernel_params <- list(
+    frac_dispersing = array(params$frac_dispersing, array_dim),
+    gg_mu           = array(params$gg_mu,           array_dim),
+    gg_sigma        = array(params$gg_sigma,        array_dim),
+    gg_Q            = array(params$gg_Q,            array_dim)
+  )
+  d1 <- seed_sampling(Seeds, kernel_params, params, controls)
+  print(d1)
+}
