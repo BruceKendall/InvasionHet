@@ -150,3 +150,15 @@ test_seed_sampling <- function() {
   d3 <- seed_sampling(Seeds, kernel_params, params, controls)
   print(d3)
 }
+
+test_combine_dispersed_seeds <- function(n_rep = 2, n_pot = 3, max_dist = 4) {
+  xy <- n_rep * n_pot
+  xyz <- xy * max_dist
+  testseeds <- list(home_pot = matrix(100*(1:xy), n_rep, n_pot),
+                    forward_dispersal = array(10*(1:xyz), dim = c(n_rep, n_pot, max_dist)),
+                    backward_dispersal = array(1:xyz, dim = c(n_rep, n_pot, max_dist)),
+                    max_dist = max_dist)
+  print(testseeds)
+  
+  combine_dispersed_seeds(testseeds, n_rep, n_pot)
+}
