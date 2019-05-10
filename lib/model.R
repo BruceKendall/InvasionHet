@@ -108,7 +108,8 @@ iterate_model_ler <- function(Adults, params, controls) {
   }
   
   ## Combine all the dispersed seeds
-  Seeds <- combine_dispersed_seeds(dispersed_seeds_by_pot)
+  Seeds <- combine_dispersed_seeds(dispersed_seeds_by_pot, controls$n_reps, 
+                                   n_pots + dispersed_seeds_by_pots$max_dist)
   
   return(Seeds)
 }
@@ -320,4 +321,39 @@ disp_table <- function(dists, max_dist) {
   dist_counts <- numeric(max_dist)
   dist_counts[dist_vals] <- raw_table
   return(dist_counts)
+}
+
+#' <!-- ############################################################################# --> 
+#' # `combine_dispersed_seeds()`
+#' Take the dispersed seeds from each pot and combine them to get net dispersal across
+#' the whole runway
+#' 
+combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots) {
+  with(seeds_by_pot, {
+    ### Non-dispersing seeds
+    disp_seeds <- home_pot
+  
+    ### Backwards dispersing seeds
+    # Add a temporary buffer to hold the seeds that disperse off the back end of 
+    # the runway
+    disp_seeds <- matrix(c(rep(0, max_dist), disp_seeds), n_reps, max_dist + n_pots)
+    # Sum up the seeds, with an appropriate backshift
+    for (dist in 1:max_dist) {
+      disp_seeds[ , (max_dist - dist) + (1:n_pots)] <- backward_dispersal[ , , dist] +
+        disp_seeds[ , (max_dist - dist) + (1:n_pots)]
+    }
+    # Get rid of the temporary buffer
+    disp_seeds <- disp_seeds[ , -(1:max_dist)]
+    
+    ### forwards dispersing seeds
+    # Add a buffer for seeds dispersing into new territory
+    disp_seeds <- matrix(c(disp_seeds, rep(0, max_dist)), n_reps, max_dist + n_pots)
+    # Sum up the seeds, with an appropriate forward shift
+    for (dist in 1:max_dist) {
+      disp_seeds[ , dist + (1:n_pots)] <- disp_seeds[ , dist + (1:n_pots)] + 
+        forward_dispersal[ , , dist]
+    }
+    
+    return(disp_seeds)
+  })
 }
