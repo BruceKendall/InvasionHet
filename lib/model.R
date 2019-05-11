@@ -65,13 +65,17 @@
 #' a matrix with each row being a replicate and each column a pot. 
 #' 
 #' <!-- ############################################################################# --> 
-#' # `iterate_model_ler()`
-#' Iterates a single instance of the Ler (single genotype) model one time step
-iterate_model_ler <- function(Adults, params, controls) {
+#' # `iterate_genotype()`
+#' Iterates the single genotype model one time step.
+#' If this is part of a multi-genotype simulation, then `N_tot` needs to provided; 
+#' it should be the summed
+#' numbers of individuals across all genotypes in each pot/rep (to use for 
+#' density dependence).
+iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
   controls$n_pots <- ncol(Adults)
   #### SEED PRODUCTION ####
   # Density dependence in seed production
-  Seeds <- Gompertz_seeds(Adults, params)
+  Seeds <- Gompertz_seeds(Adults, params, N_tot)
   
   # Environmental stochasticicy in seed production?
   if (controls$ES_seeds) {
@@ -129,9 +133,9 @@ iterate_model_ler <- function(Adults, params, controls) {
 #' $$\log(S/A) = a + b \log A$$
 #' $$\log S = \log A + a + b \log A$$
 #' $$S = \exp[a + (b+1) \log A].$$
-Gompertz_seeds <- function(Adults, params) {
+Gompertz_seeds <- function(Adults, params, N_tot) {
   with(params, {
-    expected_seeds <- exp(a_Gompertz + (1 + b_Gompertz) * log(Adults))
+    expected_seeds <- exp(a_Gompertz + (1 + b_Gompertz) * log(N_tot))
     return(expected_seeds)
   })
 }
