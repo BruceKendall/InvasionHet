@@ -34,6 +34,9 @@
 #' 
 #' <!--Need to add kernel parameters, pot_width --> 
 #' 
+#' `gap_size` (non-negative integer)
+#' :    Size of gaps, measured in number of pots. Set to zero for continuous landscape
+#' 
 #' ### Elements of `controls`
 #' 
 #' `n_pots` (integer; calculated by model)
@@ -65,7 +68,7 @@
 #' # `iterate_model_ler()`
 #' Iterates a single instance of the Ler (single genotype) model one time step
 iterate_model_ler <- function(Adults, params, controls) {
-  n_pots <- ncol(Adults)
+  controls$n_pots <- ncol(Adults)
   #### SEED PRODUCTION ####
   # Density dependence in seed production
   Seeds <- Gompertz_seeds(Adults, params)
@@ -91,7 +94,7 @@ iterate_model_ler <- function(Adults, params, controls) {
     kernel_params <- kernal_stoch(params, controls)
   } else { # Distribute the genotype-specific parameters across pots and reps
     array_dim <- c(controls$n_reps,
-                   n_pots)
+                   controls$n_pots)
     kernel_params <- list(
       frac_dispersing = array(params$frac_dispersing, array_dim),
       gg_mu           = array(params$gg_mu,           array_dim),
@@ -107,9 +110,14 @@ iterate_model_ler <- function(Adults, params, controls) {
     dispersed_seeds_by_pot <- round(det_kernel(Seeds, kernel_params, params, controls))
   }
   
+  controls$n_pots <- controls$n_pots + dispersed_seeds_by_pots$max_dist
+  
   ## Combine all the dispersed seeds
   Seeds <- combine_dispersed_seeds(dispersed_seeds_by_pot, controls$n_reps, 
-                                   n_pots + dispersed_seeds_by_pots$max_dist)
+                                   controls$n_pots)
+  
+  # Zero out the seeds in the gaps
+  Seeds <- gapify(Seeds, params, controls)
   
   return(Seeds)
 }
@@ -357,4 +365,22 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots) {
     
     return(disp_seeds)
   })
+}
+
+#' <!-- ############################################################################# --> 
+#' # `gapify()`
+#' Set the seed abundance to zero in the "pots" that are actually gaps 
+#' 
+gapify <- function(Seeds, params) {
+  gap <- params$gap_size
+  if (gap == 0) { # Don't do anything
+    return(Seeds)
+  } else {
+    n_rep <- controls$n_reps
+    n_pot <- controls$n_pots
+    gap_mask <- rep(c(1, rep(0, gap)), length = n_pot)
+    gap_mask <- matrix(gap_mask, n_rep, n_pot, byrow = TRUE)
+    Seeds <- Seeds * gap_mask
+    return(Seeds)
+  }
 }
