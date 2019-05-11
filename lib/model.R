@@ -371,7 +371,7 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots) {
 #' # `gapify()`
 #' Set the seed abundance to zero in the "pots" that are actually gaps 
 #' 
-gapify <- function(Seeds, params) {
+gapify <- function(Seeds, params, controls) {
   gap <- params$gap_size
   if (gap == 0) { # Don't do anything
     return(Seeds)

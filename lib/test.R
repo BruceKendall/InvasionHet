@@ -162,3 +162,16 @@ test_combine_dispersed_seeds <- function(n_rep = 2, n_pot = 3, max_dist = 4) {
   
   combine_dispersed_seeds(testseeds, n_rep, n_pot)
 }
+
+test_gapify <- function() {
+  nrep <- 2
+  npot <- 12
+  Seeds <- matrix(100, nrep, npot)
+  print(Seeds)
+  print(gapify(Seeds, controls = list(n_reps=nrep, n_pots=npot),
+                  params = list(gap_size = 0)))
+  print(gapify(Seeds, controls = list(n_reps=nrep, n_pots=npot),
+               params = list(gap_size = 1)))
+  print(gapify(Seeds, controls = list(n_reps=nrep, n_pots=npot),
+               params = list(gap_size = 3)))
+}
