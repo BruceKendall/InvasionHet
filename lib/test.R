@@ -175,3 +175,40 @@ test_gapify <- function() {
   print(gapify(Seeds, controls = list(n_reps=nrep, n_pots=npot),
                params = list(gap_size = 3)))
 }
+
+test_iterate_genotype <- function(n_gens = 6, n_init = 10, nreps = 3, ES_seeds = TRUE, 
+                                  DS_seeds = TRUE, kernel_stoch = TRUE, 
+                                  seed_sampling = TRUE, gap_size = 0,
+                                  kernel_stoch_pots = TRUE) {
+  controls <- list(n_reps = nreps,
+                   ES_seeds = ES_seeds,
+                   DS_seeds = DS_seeds,
+                   kernel_stoch = kernel_stoch,
+                   seed_sampling = seed_sampling,
+                   kernel_stoch_pots = kernel_stoch_pots)
+  cov_mat <- matrix(c(0.15, -0.026, 0.17,
+                      -0.026, 0.015, -0.025,
+                      0.17, -0.025, 0.28),
+                    3, 3)
+  params <- list(a_Gompertz = 4,
+                 b_Gompertz = 0.75,
+                 sigma_seed_time = 0.75,
+                 sigma_seed_rep = 0.5,
+                 theta_seed = 75,
+                 gg_mu = 1.5,
+                 gg_sigma = 0.75,
+                 gg_Q = 1,
+                 gg_cov = cov_mat,
+                 frac_dispersing = 0.75,
+                 fd_sdev = 0.1,
+                 gap_size = gap_size)
+  Adults <- matrix(n_init, nreps, 1)
+  
+  print("Generation 0:")
+  print(Adults)
+  for (i in 1:n_gens) {
+    print(cat("Generation", i))
+    Adults <- iterate_genotype(Adults, params, controls)
+    print(Adults)
+  }
+}
