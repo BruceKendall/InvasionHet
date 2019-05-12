@@ -94,8 +94,8 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
   
   ## Calculated dispersal from each pot
   # Kernel stochasticity?
-  if (cotrols$kernel_stoch) {
-    kernel_params <- kernal_stoch(params, controls)
+  if (controls$kernel_stoch) {
+    kernel_params <- kernel_stoch(params, controls)
   } else { # Distribute the genotype-specific parameters across pots and reps
     array_dim <- c(controls$n_reps,
                    controls$n_pots)
