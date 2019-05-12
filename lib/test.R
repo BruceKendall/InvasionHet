@@ -185,7 +185,8 @@ test_iterate_genotype <- function(n_gens = 6, n_init = 10, nreps = 3, ES_seeds =
                    DS_seeds = DS_seeds,
                    kernel_stoch = kernel_stoch,
                    seed_sampling = seed_sampling,
-                   kernel_stoch_pots = kernel_stoch_pots)
+                   kernel_stoch_pots = kernel_stoch_pots,
+                   pot_width = 7)
   cov_mat <- matrix(c(0.15, -0.026, 0.17,
                       -0.026, 0.015, -0.025,
                       0.17, -0.025, 0.28),
