@@ -195,7 +195,7 @@ rqpois <- function(n, mu, theta) {
 #' approximation to the quasi-Poisson.
 DS_seeds <- function(Seeds, params) {
   n <- prod(dim(Seeds))
-  rqpois(n, Seeds, params$theta)
+  array(rqpois(n, Seeds, params$theta), dim(Seeds))
 }
 
 #' <!-- ############################################################################# --> 
