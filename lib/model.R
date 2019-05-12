@@ -114,7 +114,7 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
     dispersed_seeds_by_pot <- round(det_kernel(Seeds, kernel_params, params, controls))
   }
   
-  controls$n_pots <- controls$n_pots + dispersed_seeds_by_pots$max_dist
+  controls$n_pots <- controls$n_pots + dispersed_seeds_by_pot$max_dist
   
   ## Combine all the dispersed seeds
   Seeds <- combine_dispersed_seeds(dispersed_seeds_by_pot, controls$n_reps, 
