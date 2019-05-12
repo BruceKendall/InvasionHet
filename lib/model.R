@@ -383,14 +383,17 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots) {
 #' 
 gapify <- function(Seeds, params, controls) {
   gap <- params$gap_size
-  if (gap == 0) { # Don't do anything
-    return(Seeds)
-  } else {
+  if (gap > 0) { 
     n_rep <- controls$n_reps
     n_pot <- controls$n_pots
     gap_mask <- rep(c(1, rep(0, gap)), length = n_pot)
     gap_mask <- matrix(gap_mask, n_rep, n_pot, byrow = TRUE)
     Seeds <- Seeds * gap_mask
-    return(Seeds)
   }
+  
+  # Drop any trailing zeros
+  npot <- controls$n_pots
+  rep_sum <- cummax(apply(Seeds, 2, sum)[npot:1])[npot:1]
+  
+  Seeds[, rep_sum > 0]
 }
