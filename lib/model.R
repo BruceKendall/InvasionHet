@@ -356,7 +356,7 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots) {
         disp_seeds[ , (max_dist - dist) + (1:n_pots)]
     }
     # Get rid of the temporary buffer
-    disp_seeds <- disp_seeds[ , -(1:max_dist)]
+    disp_seeds <- disp_seeds[ , -(1:max_dist), drop = FALSE]
     
     ### forwards dispersing seeds
     # Add a buffer for seeds dispersing into new territory
