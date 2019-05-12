@@ -111,7 +111,9 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
   if (controls$seed_sampling) {
     dispersed_seeds_by_pot <- seed_sampling(Seeds, kernel_params, params, controls)
   } else {
-    dispersed_seeds_by_pot <- round(det_kernel(Seeds, kernel_params, params, controls))
+    dispersed_seeds_by_pot <- 
+      det_kernel(Seeds, kernel_params, params, controls) %>%
+        lapply(round)
   }
   
   ## Combine all the dispersed seeds
