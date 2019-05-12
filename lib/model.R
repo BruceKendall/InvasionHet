@@ -135,7 +135,8 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
 #' $$S = \exp[a + (b+1) \log A].$$
 Gompertz_seeds <- function(Adults, params, N_tot) {
   with(params, {
-    expected_seeds <- exp(a_Gompertz + (1 + b_Gompertz) * log(N_tot))
+    expected_seeds <- Adults * exp(a_Gompertz) * N_tot ^ b_Gompertz
+    expected_seeds[is.nan(expected_seeds)] <- 0
     return(expected_seeds)
   })
 }
@@ -186,6 +187,9 @@ ES_seeds <- function(Seeds, params, n_rep) {
 #' has not been tested.
 #' 
 rqpois <- function(n, mu, theta) {
+  if (n == 0) {
+    return(0)
+  }
   rnbinom(n = n, mu = mu, size = mu/(theta-1))
 }
 
