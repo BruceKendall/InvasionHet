@@ -395,5 +395,5 @@ gapify <- function(Seeds, params, controls) {
   npot <- controls$n_pots
   rep_sum <- cummax(apply(Seeds, 2, sum)[npot:1])[npot:1]
   
-  Seeds[, rep_sum > 0]
+  Seeds[, rep_sum > 0, drop = FALSE]
 }
