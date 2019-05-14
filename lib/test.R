@@ -194,7 +194,7 @@ test_iterate_genotype <- function(n_gens = 6, n_init = 10, nreps = 3, ES_seeds =
   params <- list(a_Gompertz = 4,
                  b_Gompertz = -0.75,
                  sigma_seed_time = 0.75,
-                 sigma_seed_rep = 0.5,
+                 sigma_seed_rep = 0.25,
                  theta_seed = 75,
                  gg_mu = 1.5,
                  gg_sigma = 0.75,
