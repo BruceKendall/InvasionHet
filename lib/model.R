@@ -138,7 +138,7 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
 Gompertz_seeds <- function(Adults, params, N_tot) {
   with(params, {
     expected_seeds <- Adults * exp(a_Gompertz) * N_tot ^ b_Gompertz
-    expected_seeds[is.nan(expected_seeds)] <- 0
+    expected_seeds[Adults * N_tot == 0] <- 0
     return(expected_seeds)
   })
 }
@@ -189,9 +189,6 @@ ES_seeds <- function(Seeds, params, n_rep) {
 #' has not been tested.
 #' 
 rqpois <- function(n, mu, theta) {
-  if (n == 0) {
-    return(0)
-  }
   rnbinom(n = n, mu = mu, size = mu/(theta-1))
 }
 
@@ -201,7 +198,10 @@ rqpois <- function(n, mu, theta) {
 #' approximation to the quasi-Poisson.
 DS_seeds <- function(Seeds, params) {
   n <- prod(dim(Seeds))
-  array(rqpois(n, Seeds, params$theta), dim(Seeds))
+  # Don't want to see the warnings thrown when mu = 0
+  rand_seeds <- array(suppressWarnings(rqpois(n, Seeds, params$theta)), dim(Seeds))
+  rand_seeds[Seeds == 0] <- 0 # rqpois returns NA for these cases
+  rand_seeds
 }
 
 #' <!-- ############################################################################# --> 
