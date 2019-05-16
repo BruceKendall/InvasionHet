@@ -31,3 +31,18 @@ for (i in 1:5) {
   test_iterate_genotype(1, nreps = 5, ES_seeds = TRUE,DS_seeds = FALSE, kernel_stoch = FALSE, 
                       seed_sampling = FALSE,kernel_stoch_pots = FALSE, gap_size = 0) # OK
 }
+
+
+test_iterate_genotype(4, ES_seeds = FALSE,DS_seeds = TRUE, kernel_stoch = FALSE, 
+                      seed_sampling = FALSE,kernel_stoch_pots = FALSE, gap_size = 0) # OK
+
+test_iterate_genotype(4, ES_seeds = FALSE,DS_seeds = FALSE, kernel_stoch = TRUE, 
+                      seed_sampling = FALSE,kernel_stoch_pots = FALSE, gap_size = 0) # OK
+
+test_iterate_genotype(4, ES_seeds = FALSE,DS_seeds = FALSE, kernel_stoch = TRUE, 
+                      seed_sampling = FALSE,kernel_stoch_pots = TRUE, gap_size = 0) # OK
+
+test_iterate_genotype(1, nreps = 20, ES_seeds = FALSE,DS_seeds = FALSE, kernel_stoch = FALSE, 
+                      seed_sampling = TRUE,kernel_stoch_pots = TRUE, gap_size = 0) # OK
+
+
