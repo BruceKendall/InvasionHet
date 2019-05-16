@@ -1,0 +1,23 @@
+---
+title: Model iteration complete
+author: Bruce Kendall
+date: '2019-05-16'
+slug: model-iteration-complete
+categories:
+  - Code development
+tags:
+  - Ler
+---
+
+Over the past few weeks I've finished writing and testing the dispersal modules, and have a complete model for iterating multiple reps for a single genotype. I've also done a bunch of debugging, most of which centered on dealing with situations where the number of adults or seeds were zero, or in the first generation where one of the array dimensions was one. I've set it up so that the "total" number of adults can be passed in separately, to allow this same routine to be used for each genotype in the multi-RIL simulations.
+
+It now runs for all the cases I've tested. There are only a few limiting cases where I can actually demonstrate that it is fully correct; for that I rely on the tests I've done for the subroutines. But I have reasonably high confidence in the model code.
+
+For Ler, the next step is getting a complete parameterization. I should pull the bits of parameterization code from the journal and put them into a munge script. I'm actually not entirely sure how to get the right values from the DD seed production---the eyeballed parameters I used for the testing seemed not to be generating enough seeds (though in retrospect I realize that I might not have accounted for dispersal losses).
+
+For Ler simulations, I think there are two things I'd want:
+
+1. Time series of abundance by distance for a given rep. This is primarily for visualization (to make plots similar to the data) and may not be a priority for the talk. I think it would need to be an array, with an element for each time step, and a vector (or matrix, for multiple reps or genotypes) in each element. I'd also need a function to munge that into a form that ggplot can process, as well as setting any zeros to NA so they don't plot. Although for the gappy landscapes, maybe I just drop those distances altogether.
+2. Analyses of mean spread velocity and variance in spread velocity. One way to do this is to get asymptotic estimates with large numbers of reps. Another, which allows comparison with the empirical estimates, is to create ensembles with the same number of reps as in the experiments (10, I think), and replicate that a bunch of times to get a distribution of 10-rep means and variances to which the data can be compared.
+
+For the RIL experiments (for which I still need to parameterize, but hopefully that will go quicker if I follow the RIL template), I need to aggregate total density at each generation/pot/rep as well as redistributing genotypes for the no-evolution treatment. For the latter, I should use a multinomial distribution.

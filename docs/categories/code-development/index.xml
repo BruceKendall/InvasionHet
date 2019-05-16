@@ -6,10 +6,19 @@
     <description>Recent content in Code Development on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 16 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/categories/code-development/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Model iteration complete</title>
+      <link>/InvasionHet/2019/05/16/model-iteration-complete/</link>
+      <pubDate>Thu, 16 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/05/16/model-iteration-complete/</guid>
+      <description>Over the past few weeks I’ve finished writing and testing the dispersal modules, and have a complete model for iterating multiple reps for a single genotype. I’ve also done a bunch of debugging, most of which centered on dealing with situations where the number of adults or seeds were zero, or in the first generation where one of the array dimensions was one. I’ve set it up so that the “total” number of adults can be passed in separately, to allow this same routine to be used for each genotype in the multi-RIL simulations.</description>
+    </item>
     
     <item>
       <title>Yet more on dispersal distributions</title>
