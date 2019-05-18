@@ -23,6 +23,17 @@
     </item>
     
     <item>
+      <title>Beta-binomial distribution of fraction dispersing</title>
+      <link>/InvasionHet/2019/05/18/beta-binomial-distribution-of-fraction-dispersing/</link>
+      <pubDate>Sat, 18 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/05/18/beta-binomial-distribution-of-fraction-dispersing/</guid>
+      <description>I never looked at how to calculate the parameters for the fraction dispersing. The trick may be the betabinomial function in the VGAM library.
+The first step is to amalgamate all the dispersing seeds from disperseLer:
+nondispersers &amp;lt;- subset(disperseLer, Pot == 0, c(&amp;quot;ID&amp;quot;, &amp;quot;Seedlings&amp;quot;)) dispersers &amp;lt;- filter(disperseLer, Pot == 1) %&amp;gt;% group_by(ID) %&amp;gt;% summarise(dispersers = sum(Seedlings)) disperse_num &amp;lt;- merge(nondispersers, dispersers) names(disperse_num)[2] &amp;lt;- &amp;quot;nondispersers&amp;quot; disperse_num$dispersers &amp;lt;- round(2 * disperse_num$dispersers) So now we make an intercept-only model with vgam.</description>
+    </item>
+    
+    <item>
       <title>Estimating seed production with mixed effects</title>
       <link>/InvasionHet/2019/05/18/estimating-seed-production-with-mixed-effects/</link>
       <pubDate>Sat, 18 May 2019 00:00:00 +0000</pubDate>

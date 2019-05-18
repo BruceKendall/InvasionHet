@@ -1,0 +1,66 @@
+---
+title: Beta-binomial distribution of fraction dispersing
+author: Bruce Kendall
+date: '2019-05-18'
+slug: beta-binomial-distribution-of-fraction-dispersing
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+
+
+
+<p>I never looked at how to calculate the parameters for the fraction dispersing. The trick may be the <code>betabinomial</code> function in the <strong>VGAM</strong> library.</p>
+<p>The first step is to amalgamate all the dispersing seeds from <code>disperseLer</code>:</p>
+<pre class="r"><code>nondispersers &lt;- subset(disperseLer, Pot == 0, c(&quot;ID&quot;, &quot;Seedlings&quot;))
+dispersers &lt;- filter(disperseLer, Pot == 1) %&gt;% group_by(ID) %&gt;% summarise(dispersers = sum(Seedlings))
+disperse_num &lt;- merge(nondispersers, dispersers)
+names(disperse_num)[2] &lt;- &quot;nondispersers&quot;
+disperse_num$dispersers &lt;- round(2 * disperse_num$dispersers)</code></pre>
+<p>So now we make an intercept-only model with vgam.</p>
+<pre class="r"><code>library(VGAM)
+bbfit &lt;- vglm(cbind(dispersers, nondispersers) ~ 1, betabinomial, data = disperse_num)
+summary(bbfit)</code></pre>
+<pre><code>
+Call:
+vglm(formula = cbind(dispersers, nondispersers) ~ 1, family = betabinomial, 
+    data = disperse_num)
+
+Pearson residuals:
+                   Min      1Q   Median     3Q   Max
+logitlink(mu)  -2.7263 -0.4860  0.05773 0.5152 2.162
+logitlink(rho) -0.7111 -0.6557 -0.49997 0.1977 4.045
+
+Coefficients: 
+              Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept):1  0.05167    0.12312   0.420    0.675    
+(Intercept):2 -1.78155    0.21624  -8.239   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Names of linear predictors: logitlink(mu), logitlink(rho)
+
+Log-likelihood: -238.6762 on 74 degrees of freedom
+
+Number of Fisher scoring iterations: 3 
+
+No Hauck-Donner effect found in any of the estimates</code></pre>
+<pre class="r"><code>Coef(bbfit)</code></pre>
+<pre><code>       mu       rho 
+0.5129148 0.1441117 </code></pre>
+<p>The parameterization in vgam is somewhat unconventional. mu is simply the mean of the beta distribution, alpha/(alpha + beta), but rho is 1/(1 + alpha + beta) where alpha and beta are the conventional shape parameters.</p>
+<p>To get to the variance parameter, we need to transform this. <span class="math display">\[\begin{align}
+V &amp;= \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}\\
+&amp;= \mu (1-\mu) \rho.
+\end{align}\]</span></p>
+<p>So we have</p>
+<pre class="r"><code>fd_mean &lt;- Coef(bbfit)[1]
+fd_stdv &lt;- sqrt(fd_mean * (1 - fd_mean) * Coef(bbfit)[2])
+fd_mean</code></pre>
+<pre><code>       mu 
+0.5129148 </code></pre>
+<pre class="r"><code>fd_stdv</code></pre>
+<pre><code>       mu 
+0.1897469 </code></pre>

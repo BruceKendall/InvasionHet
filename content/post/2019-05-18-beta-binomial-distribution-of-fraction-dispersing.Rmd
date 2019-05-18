@@ -1,0 +1,56 @@
+---
+title: Beta-binomial distribution of fraction dispersing
+author: Bruce Kendall
+date: '2019-05-18'
+slug: beta-binomial-distribution-of-fraction-dispersing
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - Ler
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+I never looked at how to calculate the parameters for the fraction dispersing. The trick may be the `betabinomial` function in the **VGAM** library.
+
+The first step is to amalgamate all the dispersing seeds from `disperseLer`:
+```{r munge}
+nondispersers <- subset(disperseLer, Pot == 0, c("ID", "Seedlings"))
+dispersers <- filter(disperseLer, Pot == 1) %>% group_by(ID) %>% summarise(dispersers = sum(Seedlings))
+disperse_num <- merge(nondispersers, dispersers)
+names(disperse_num)[2] <- "nondispersers"
+disperse_num$dispersers <- round(2 * disperse_num$dispersers)
+```
+
+So now we make an intercept-only model with vgam.
+```{r vgam}
+library(VGAM)
+bbfit <- vglm(cbind(dispersers, nondispersers) ~ 1, betabinomial, data = disperse_num)
+summary(bbfit)
+Coef(bbfit)
+```
+The parameterization in vgam is somewhat unconventional. mu is simply the mean of the beta distribution, alpha/(alpha + beta), but rho is 1/(1 + alpha + beta) where alpha and beta are the conventional shape parameters.
+
+To get to the variance parameter, we need to transform this.
+$$\begin{align}
+V &= \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}\\
+&= \mu (1-\mu) \rho.
+\end{align}$$
+
+So we have
+```{r lastbit}
+fd_mean <- Coef(bbfit)[1]
+fd_stdv <- sqrt(fd_mean * (1 - fd_mean) * Coef(bbfit)[2])
+fd_mean
+fd_stdv
+```
