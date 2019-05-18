@@ -28,29 +28,17 @@ Note that I could also estimate generation as a fixed effect to recreate the obs
 
 I will use `glmer` in the **lme4** package. To get the nesting, the reps need to have unique values within each gen; to do that I create a `genID` variable.
 
-Here's the data preparation, taken straight from the earlier post:
-```{r data_prep}
-seed_data <- group_by(popLer, ID, Pot) %>%
-  mutate(Nm1 = 1 + (Treatment == "C") * (lag(Seedlings) - 1))
-#seed_data$Nm1 <- lag(popLer$Seedlings)
-seed_data <- subset(seed_data, 
-                    Treatment %in% c("B", "C") & 
-                      Generation > 1 & 
-                      Gap %in% c("1p", "2p"))
-seed_data$GenID <- with(seed_data, interaction(Gen, ID))
-seed_data$Nm1[is.na(seed_data$Nm1)] <- 1
-seed_data$ID <- as.factor(seed_data$ID) 
-```
+The prepared data are in `Ler_fecundity`, precalculated from a munge script. See "Updated Ler fecundity data" on 10/23/17.
 
 OK, now load the library and try fitting a model. The first lesson we learn is that "quasi" families cannot be used.
 ```{r fit_glmer}
 library(lme4)
 seeds_DD <- try(glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
-                  data = seed_data, family = quasipoisson))
+                  data = Ler_fecundity, family = quasipoisson))
 print(seeds_DD, TRUE)
 seeds_DD <- try(glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
-                  data = seed_data, family = poisson))
-summary(seeds_DD)
+                  data = Ler_fecundity, family = poisson))
+summary(seeds_DD) 
 ```
 
 The estimates for the intercept and the effects of density are in the same ballpark as the prior fixed effects analysis (recall that to get the Gompertz parameter we need to subtract 1 from the coefficient on `log(Nm1)`). Interestingly, the among-rep variation is much larger than the among-generation variation. Gazing at the fixed effects coefficients from the prior analysis, this seems right.
@@ -74,19 +62,9 @@ as.data.frame(VarCorr(seeds_DD))$sdcor[1] # Extract the first RE sd.
 
 So here's the full code that will be needed in the parameter estimation script:
 ```{r script}
-# Data munging
-seed_data <- group_by(popLer, ID, Pot) %>%
-  mutate(Nm1 = 1 + (Treatment == "C") * (lag(Seedlings) - 1))
-seed_data <- subset(seed_data, 
-                    Treatment %in% c("B", "C") & 
-                      Generation > 1 & 
-                      Gap %in% c("1p", "2p"))
-seed_data$GenID <- with(seed_data, interaction(Gen, ID))
-seed_data$Nm1[is.na(seed_data$Nm1)] <- 1
-
 # Fit model
 seeds_DD <- glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
-                  data = seed_data, family = poisson)
+                  data = Ler_fecundity, family = poisson)
 
 # Extract parameters
 Ler_params <- list(

@@ -15,59 +15,49 @@ tags:
 <p>Returning to parameter estimation for density dependent seed production… This is based primarily on the post from 5 June 2017. The main change is that I want to use mixed effects to estimate the variance due to a random effect of generation, as well as a random effect of replicate within generation.</p>
 <p>Note that I could also estimate generation as a fixed effect to recreate the observed sequence of temporal variability in seed production.</p>
 <p>I will use <code>glmer</code> in the <strong>lme4</strong> package. To get the nesting, the reps need to have unique values within each gen; to do that I create a <code>genID</code> variable.</p>
-<p>Here’s the data preparation, taken straight from the earlier post:</p>
-<pre class="r"><code>seed_data &lt;- group_by(popLer, ID, Pot) %&gt;%
-  mutate(Nm1 = 1 + (Treatment == &quot;C&quot;) * (lag(Seedlings) - 1))
-#seed_data$Nm1 &lt;- lag(popLer$Seedlings)
-seed_data &lt;- subset(seed_data, 
-                    Treatment %in% c(&quot;B&quot;, &quot;C&quot;) &amp; 
-                      Generation &gt; 1 &amp; 
-                      Gap %in% c(&quot;1p&quot;, &quot;2p&quot;))
-seed_data$GenID &lt;- with(seed_data, interaction(Gen, ID))
-seed_data$Nm1[is.na(seed_data$Nm1)] &lt;- 1
-seed_data$ID &lt;- as.factor(seed_data$ID) </code></pre>
+<p>The prepared data are in <code>Ler_fecundity</code>, precalculated from a munge script. See “Updated Ler fecundity data” on 10/23/17.</p>
 <p>OK, now load the library and try fitting a model. The first lesson we learn is that “quasi” families cannot be used.</p>
 <pre class="r"><code>library(lme4)
 seeds_DD &lt;- try(glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
-                  data = seed_data, family = quasipoisson))
+                  data = Ler_fecundity, family = quasipoisson))
 print(seeds_DD, TRUE)</code></pre>
 <pre><code>[1] &quot;Error in lme4::glFormula(formula = Seedlings ~ log(Nm1) + (1 | Gen) +  : \n  \&quot;quasi\&quot; families cannot be used in glmer\n&quot;
 attr(,&quot;class&quot;)
 [1] &quot;try-error&quot;
 attr(,&quot;condition&quot;)
-&lt;simpleError in lme4::glFormula(formula = Seedlings ~ log(Nm1) + (1 | Gen) +     (1 | GenID), data = seed_data, family = quasipoisson): &quot;quasi&quot; families cannot be used in glmer&gt;</code></pre>
+&lt;simpleError in lme4::glFormula(formula = Seedlings ~ log(Nm1) + (1 | Gen) +     (1 | GenID), data = Ler_fecundity, family = quasipoisson): &quot;quasi&quot; families cannot be used in glmer&gt;</code></pre>
 <pre class="r"><code>seeds_DD &lt;- try(glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
-                  data = seed_data, family = poisson))
-summary(seeds_DD)</code></pre>
+                  data = Ler_fecundity, family = poisson))
+summary(seeds_DD) </code></pre>
 <pre><code>Generalized linear mixed model fit by maximum likelihood (Laplace
   Approximation) [glmerMod]
  Family: poisson  ( log )
 Formula: Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID)
-   Data: seed_data
+   Data: Ler_fecundity
 
      AIC      BIC   logLik deviance df.resid 
- 31809.5  31826.8 -15900.8  31801.5      551 
+ 21339.0  21354.9 -10665.5  21331.0      397 
 
 Scaled residuals: 
-    Min      1Q  Median      3Q     Max 
--20.181  -4.275  -0.279   3.024  42.759 
+     Min       1Q   Median       3Q      Max 
+-20.5930  -3.6700  -0.3992   3.0677  26.8679 
 
 Random effects:
  Groups Name        Variance Std.Dev.
- GenID  (Intercept) 0.4144   0.6437  
- Gen    (Intercept) 0.0613   0.2476  
-Number of obs: 555, groups:  GenID, 200; Gen, 5
+ GenID  (Intercept) 0.48458  0.6961  
+ Gen    (Intercept) 0.07978  0.2825  
+Number of obs: 401, groups:  GenID, 134; Gen, 5
 
 Fixed effects:
             Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)  3.89904    0.12004   32.48   &lt;2e-16 ***
-log(Nm1)     0.32180    0.00207  155.50   &lt;2e-16 ***
+(Intercept)  4.24444    0.14157   29.98   &lt;2e-16 ***
+log(Nm1)     0.23680    0.00245   96.66   &lt;2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
 Correlation of Fixed Effects:
          (Intr)
-log(Nm1) -0.046</code></pre>
+log(Nm1) -0.051</code></pre>
 <p>The estimates for the intercept and the effects of density are in the same ballpark as the prior fixed effects analysis (recall that to get the Gompertz parameter we need to subtract 1 from the coefficient on <code>log(Nm1)</code>). Interestingly, the among-rep variation is much larger than the among-generation variation. Gazing at the fixed effects coefficients from the prior analysis, this seems right.</p>
 <p>Now, about the overdispersion. <a href="https://stats.stackexchange.com/questions/62006/definition-of-dispersion-parameter-for-quasipoisson-family">This post</a> describes how to calculate the Poisson overdispersion parameter. There is also a function <code>glmer.nb()</code> for estimating using a negative binomial distribution; recall that is what we are using to generate quasipoisson random numbers. But back on 10/23/17 I found a paper saying that using negative binomial directly gives a quadratic mean-variance relationship, whereas the data are closer to linear.</p>
 <p>So here’s the overdispersion calculation:</p>
@@ -92,19 +82,9 @@ log(Nm1) -0.046</code></pre>
 <pre class="r"><code>as.data.frame(VarCorr(seeds_DD))$sdcor[1] # Extract the first RE sd.</code></pre>
 <pre><code>[1] 0.6437352</code></pre>
 <p>So here’s the full code that will be needed in the parameter estimation script:</p>
-<pre class="r"><code># Data munging
-seed_data &lt;- group_by(popLer, ID, Pot) %&gt;%
-  mutate(Nm1 = 1 + (Treatment == &quot;C&quot;) * (lag(Seedlings) - 1))
-seed_data &lt;- subset(seed_data, 
-                    Treatment %in% c(&quot;B&quot;, &quot;C&quot;) &amp; 
-                      Generation &gt; 1 &amp; 
-                      Gap %in% c(&quot;1p&quot;, &quot;2p&quot;))
-seed_data$GenID &lt;- with(seed_data, interaction(Gen, ID))
-seed_data$Nm1[is.na(seed_data$Nm1)] &lt;- 1
-
-# Fit model
+<pre class="r"><code># Fit model
 seeds_DD &lt;- glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
-                  data = seed_data, family = poisson)
+                  data = Ler_fecundity, family = poisson)
 
 # Extract parameters
 Ler_params &lt;- list(
@@ -118,17 +98,17 @@ Ler_params &lt;- list(
 Ler_params</code></pre>
 <pre><code>$a_Gompertz
 (Intercept) 
-    3.89904 
+   4.244445 
 
 $b_Gompertz
   log(Nm1) 
--0.6781985 
+-0.7632042 
 
 $sigma_seed_time
-[1] 0.2475933
+[1] 0.2824573
 
 $sigma_seed_rep
-[1] 0.6437352
+[1] 0.6961171
 
 $theta_seed
-[1] 48.37515</code></pre>
+[1] 43.42342</code></pre>
