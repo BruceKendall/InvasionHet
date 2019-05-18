@@ -23,6 +23,16 @@
     </item>
     
     <item>
+      <title>Estimating seed production with mixed effects</title>
+      <link>/InvasionHet/2019/05/18/estimating-seed-production-with-mixed-effects/</link>
+      <pubDate>Sat, 18 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/05/18/estimating-seed-production-with-mixed-effects/</guid>
+      <description>Warning: I need to see what the “seeds” here are—they may only be home pot seeds, in which case I need to adjust the intercept (and perhaps its variance) by the fraction dispersing from the dispersal analyses.
+Returning to parameter estimation for density dependent seed production… This is based primarily on the post from 5 June 2017. The main change is that I want to use mixed effects to estimate the variance due to a random effect of generation, as well as a random effect of replicate within generation.</description>
+    </item>
+    
+    <item>
       <title>Model iteration complete</title>
       <link>/InvasionHet/2019/05/16/model-iteration-complete/</link>
       <pubDate>Thu, 16 May 2019 00:00:00 +0000</pubDate>

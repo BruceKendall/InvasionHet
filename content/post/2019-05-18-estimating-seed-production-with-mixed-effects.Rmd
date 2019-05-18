@@ -1,0 +1,101 @@
+---
+title: Estimating seed production with mixed effects
+author: Bruce Kendall
+date: '2019-05-18'
+slug: estimating-seed-production-with-mixed-effects
+categories:
+  - Parameter estimation
+tags:
+  - Ler
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+**Warning**: I need to see what the "seeds" here are---they may only be home pot seeds, in which case I need to adjust the intercept (and perhaps its variance) by the fraction dispersing from the dispersal analyses.
+
+
+Returning to parameter estimation for density dependent seed production... This is based primarily on the post from 5 June 2017. The main change is that I want to use mixed effects to estimate the variance due to a random effect of generation, as well as a random effect of replicate within generation.
+
+Note that I could also estimate generation as a fixed effect to recreate the observed sequence of temporal variability in seed production.
+
+I will use `glmer` in the **lme4** package. To get the nesting, the reps need to have unique values within each gen; to do that I create a `genID` variable.
+
+Here's the data preparation, taken straight from the earlier post:
+```{r data_prep}
+seed_data <- group_by(popLer, ID, Pot) %>%
+  mutate(Nm1 = 1 + (Treatment == "C") * (lag(Seedlings) - 1))
+#seed_data$Nm1 <- lag(popLer$Seedlings)
+seed_data <- subset(seed_data, 
+                    Treatment %in% c("B", "C") & 
+                      Generation > 1 & 
+                      Gap %in% c("1p", "2p"))
+seed_data$GenID <- with(seed_data, interaction(Gen, ID))
+seed_data$Nm1[is.na(seed_data$Nm1)] <- 1
+seed_data$ID <- as.factor(seed_data$ID) 
+```
+
+OK, now load the library and try fitting a model. The first lesson we learn is that "quasi" families cannot be used.
+```{r fit_glmer}
+library(lme4)
+seeds_DD <- try(glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
+                  data = seed_data, family = quasipoisson))
+print(seeds_DD, TRUE)
+seeds_DD <- try(glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
+                  data = seed_data, family = poisson))
+summary(seeds_DD)
+```
+
+The estimates for the intercept and the effects of density are in the same ballpark as the prior fixed effects analysis (recall that to get the Gompertz parameter we need to subtract 1 from the coefficient on `log(Nm1)`). Interestingly, the among-rep variation is much larger than the among-generation variation. Gazing at the fixed effects coefficients from the prior analysis, this seems right.
+
+Now, about the overdispersion. [This post](https://stats.stackexchange.com/questions/62006/definition-of-dispersion-parameter-for-quasipoisson-family) describes how to calculate the Poisson overdispersion parameter. There is also a function `glmer.nb()` for estimating using a negative binomial distribution; recall that is what we are using to generate quasipoisson random numbers. But back on 10/23/17 I found a paper saying that using negative binomial directly gives a quadratic mean-variance relationship, whereas the data are closer to linear.
+
+So here's the overdispersion calculation:
+```{r overdispersion}
+sum(residuals(seeds_DD, type="pearson")^2)/df.residual(seeds_DD)
+```
+This value is quite a bit lower than the prior analysis.
+
+Now we need to extract the coefficients of the model. A raw call to `coef` gives every intercept, not so useful.
+```{r coef}
+fixef(seeds_DD)
+fixef(seeds_DD)[1] # Extract the first fixed coefficient
+VarCorr(seeds_DD)
+as.data.frame(VarCorr(seeds_DD))
+as.data.frame(VarCorr(seeds_DD))$sdcor[1] # Extract the first RE sd.
+```
+
+So here's the full code that will be needed in the parameter estimation script:
+```{r script}
+# Data munging
+seed_data <- group_by(popLer, ID, Pot) %>%
+  mutate(Nm1 = 1 + (Treatment == "C") * (lag(Seedlings) - 1))
+seed_data <- subset(seed_data, 
+                    Treatment %in% c("B", "C") & 
+                      Generation > 1 & 
+                      Gap %in% c("1p", "2p"))
+seed_data$GenID <- with(seed_data, interaction(Gen, ID))
+seed_data$Nm1[is.na(seed_data$Nm1)] <- 1
+
+# Fit model
+seeds_DD <- glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
+                  data = seed_data, family = poisson)
+
+# Extract parameters
+Ler_params <- list(
+  a_Gompertz = fixef(seeds_DD)[1],
+  b_Gompertz = fixef(seeds_DD)[2] - 1,
+  sigma_seed_time = as.data.frame(VarCorr(seeds_DD))$sdcor[2],
+  sigma_seed_rep = as.data.frame(VarCorr(seeds_DD))$sdcor[1],
+  theta_seed = sum(residuals(seeds_DD, type="pearson")^2)/df.residual(seeds_DD)
+)
+
+Ler_params
+```
