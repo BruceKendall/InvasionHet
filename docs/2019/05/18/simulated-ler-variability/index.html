@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Simulated Ler variability - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Simulated Ler variability - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">4 min read</span>
+    
+
+    <h1 class="article-title">Simulated Ler variability</h1>
+
+    
+    <span class="article-date">2019/05/18</span>
+    
+
+    <div class="article-content">
+      <p>So, we are now ready to do some analyses. Let’s look at simulated Ler mean and variability over 6 generations.</p>
+<pre class="r"><code>n_init &lt;- 50
+Ler_params$gap_size &lt;- 0 
+controls &lt;- list(
+  n_reps = 10,
+  DS_seeds = TRUE,
+  ES_seeds = TRUE,
+  kernel_stoch = TRUE,
+  kernel_stoch_pots = TRUE,
+  seed_sampling = TRUE,
+  pot_width = 7
+)
+Adults &lt;- matrix(n_init, controls$n_reps, 1)
+for (i in 1:6) {
+  Adults &lt;- iterate_genotype(Adults, Ler_params, controls)
+}
+Adults</code></pre>
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
+ [1,]  432  677  796  226  624  536  347  334  436   124    75   108    34
+ [2,]  103  118  352  212  129  207  136  165  154   255   134   103    33
+ [3,]  117  177  114   83   82   75   83  123   56    69    85   218    37
+ [4,]   85  146  175  211  180  231  208  231  102   171   100    51    57
+ [5,]  192  175  385  335  445  748  373  458  294   325   291   232   123
+ [6,]  134  269  272  348  188  397  110  217  183   129   243   230   119
+ [7,]   26   45  107  110   78   67   37   89   70    24    25    19     8
+ [8,]  488  713  549  604 1024  429  594  310  238    51    22     0     0
+ [9,]  915  968 1123  790  849  779  720 1106  754  1180   670   298   381
+[10,]   27   41   77  104   65   96  185  103   78    20     2     0     0
+      [,14] [,15] [,16] [,17] [,18] [,19] [,20]
+ [1,]    17     1     0     0     0     0     0
+ [2,]    16     6     0     0     0     0     0
+ [3,]     7    30    49    56    31     2     2
+ [4,]    39     5     1     0     0     0     0
+ [5,]    53    51    32     3     2     0     0
+ [6,]   157    69     8     2     1     0     0
+ [7,]     3     0     0     0     0     0     0
+ [8,]     1     0     0     0     0     0     0
+ [9,]    46    19     0     0     0     0     0
+[10,]     0     0     0     0     0     0     0</code></pre>
+<p>The densities do not seem to be getting nearly large enough.</p>
+<p>Calculate the distribution, and statistics, of furthest dispersal.</p>
+<pre class="r"><code>npot &lt;- ncol(Adults)
+rep_sum &lt;- t(apply(Adults[, npot:1], 1, cummax))[, npot:1]
+rep_sum</code></pre>
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
+ [1,]  796  796  796  624  624  536  436  436  436   124   108   108    34
+ [2,]  352  352  352  255  255  255  255  255  255   255   134   103    33
+ [3,]  218  218  218  218  218  218  218  218  218   218   218   218    56
+ [4,]  231  231  231  231  231  231  231  231  171   171   100    57    57
+ [5,]  748  748  748  748  748  748  458  458  325   325   291   232   123
+ [6,]  397  397  397  397  397  397  243  243  243   243   243   230   157
+ [7,]  110  110  110  110   89   89   89   89   70    25    25    19     8
+ [8,] 1024 1024 1024 1024 1024  594  594  310  238    51    22     1     1
+ [9,] 1180 1180 1180 1180 1180 1180 1180 1180 1180  1180   670   381   381
+[10,]  185  185  185  185  185  185  185  103   78    20     2     0     0
+      [,14] [,15] [,16] [,17] [,18] [,19] [,20]
+ [1,]    17     1     0     0     0     0     0
+ [2,]    16     6     0     0     0     0     0
+ [3,]    56    56    56    56    31     2     2
+ [4,]    39     5     1     0     0     0     0
+ [5,]    53    51    32     3     2     0     0
+ [6,]   157    69     8     2     1     0     0
+ [7,]     3     0     0     0     0     0     0
+ [8,]     1     0     0     0     0     0     0
+ [9,]    46    19     0     0     0     0     0
+[10,]     0     0     0     0     0     0     0</code></pre>
+<pre class="r"><code>maxd &lt;- apply(rep_sum, 1, function(x) max((1:length(x))[x &gt; 0]))
+maxd</code></pre>
+<pre><code> [1] 15 15 20 16 18 18 14 14 15 11</code></pre>
+<pre class="r"><code>mean(maxd)</code></pre>
+<pre><code>[1] 15.6</code></pre>
+<pre class="r"><code>var(maxd) </code></pre>
+<pre><code>[1] 6.488889</code></pre>
+<p>Now for the data:</p>
+<pre class="r"><code>maxd_data &lt;- pull(subset(LerC_spread, Gap == &quot;0p&quot; &amp; Generation == 6), Furthest)
+maxd_data</code></pre>
+<pre><code> [1] 13 13  9 19 17 10 11 20 12 16</code></pre>
+<pre class="r"><code>mean(maxd_data)</code></pre>
+<pre><code>[1] 14</code></pre>
+<pre class="r"><code>var(maxd_data)</code></pre>
+<pre><code>[1] 14.44444</code></pre>
+<p>OK, so the variance is way too low. This may be related to the underproduction of seeds.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

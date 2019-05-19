@@ -18,6 +18,11 @@
   </url>
   
   <url>
+    <loc>/InvasionHet/2019/05/18/simulated-ler-variability/</loc>
+    <lastmod>2019-05-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/InvasionHet/2019/05/16/model-iteration-complete/</loc>
     <lastmod>2019-05-16T00:00:00+00:00</lastmod>
   </url>
@@ -223,6 +228,12 @@
   </url>
   
   <url>
+    <loc>/InvasionHet/categories/analysis/</loc>
+    <lastmod>2019-05-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/InvasionHet/tags/blogdown/</loc>
     <lastmod>2017-09-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -230,6 +241,7 @@
   
   <url>
     <loc>/InvasionHet/categories/</loc>
+    <lastmod>2019-05-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

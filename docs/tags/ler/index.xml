@@ -33,6 +33,16 @@ Returning to parameter estimation for density dependent seed production… This 
     </item>
     
     <item>
+      <title>Simulated Ler variability</title>
+      <link>/InvasionHet/2019/05/18/simulated-ler-variability/</link>
+      <pubDate>Sat, 18 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/05/18/simulated-ler-variability/</guid>
+      <description>So, we are now ready to do some analyses. Let’s look at simulated Ler mean and variability over 6 generations.
+n_init &amp;lt;- 50 Ler_params$gap_size &amp;lt;- 0 controls &amp;lt;- list( n_reps = 10, DS_seeds = TRUE, ES_seeds = TRUE, kernel_stoch = TRUE, kernel_stoch_pots = TRUE, seed_sampling = TRUE, pot_width = 7 ) Adults &amp;lt;- matrix(n_init, controls$n_reps, 1) for (i in 1:6) { Adults &amp;lt;- iterate_genotype(Adults, Ler_params, controls) } Adults  [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [1,] 432 677 796 226 624 536 347 334 436 124 75 108 34 [2,] 103 118 352 212 129 207 136 165 154 255 134 103 33 [3,] 117 177 114 83 82 75 83 123 56 69 85 218 37 [4,] 85 146 175 211 180 231 208 231 102 171 100 51 57 [5,] 192 175 385 335 445 748 373 458 294 325 291 232 123 [6,] 134 269 272 348 188 397 110 217 183 129 243 230 119 [7,] 26 45 107 110 78 67 37 89 70 24 25 19 8 [8,] 488 713 549 604 1024 429 594 310 238 51 22 0 0 [9,] 915 968 1123 790 849 779 720 1106 754 1180 670 298 381 [10,] 27 41 77 104 65 96 185 103 78 20 2 0 0 [,14] [,15] [,16] [,17] [,18] [,19] [,20] [1,] 17 1 0 0 0 0 0 [2,] 16 6 0 0 0 0 0 [3,] 7 30 49 56 31 2 2 [4,] 39 5 1 0 0 0 0 [5,] 53 51 32 3 2 0 0 [6,] 157 69 8 2 1 0 0 [7,] 3 0 0 0 0 0 0 [8,] 1 0 0 0 0 0 0 [9,] 46 19 0 0 0 0 0 [10,] 0 0 0 0 0 0 0 The densities do not seem to be getting nearly large enough.</description>
+    </item>
+    
+    <item>
       <title>Model iteration complete</title>
       <link>/InvasionHet/2019/05/16/model-iteration-complete/</link>
       <pubDate>Thu, 16 May 2019 00:00:00 +0000</pubDate>

@@ -1,0 +1,65 @@
+---
+title: Simulated Ler variability
+author: Bruce Kendall
+date: '2019-05-18'
+slug: simulated-ler-variability
+categories:
+  - Analysis
+tags:
+  - Ler
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+So, we are now ready to do some analyses. Let's look at simulated Ler mean and variability over 6 generations.
+
+```{r Ler_continuous, cache=FALSE}
+n_init <- 50
+Ler_params$gap_size <- 0 
+controls <- list(
+  n_reps = 10,
+  DS_seeds = TRUE,
+  ES_seeds = TRUE,
+  kernel_stoch = TRUE,
+  kernel_stoch_pots = TRUE,
+  seed_sampling = TRUE,
+  pot_width = 7
+)
+Adults <- matrix(n_init, controls$n_reps, 1)
+for (i in 1:6) {
+  Adults <- iterate_genotype(Adults, Ler_params, controls)
+}
+Adults
+```
+
+The densities do not seem to be getting nearly large enough.
+
+Calculate the distribution, and statistics, of furthest dispersal.
+```{r maxd, cache=FALSE}
+npot <- ncol(Adults)
+rep_sum <- t(apply(Adults[, npot:1], 1, cummax))[, npot:1]
+rep_sum
+maxd <- apply(rep_sum, 1, function(x) max((1:length(x))[x > 0]))
+maxd
+mean(maxd)
+var(maxd) 
+```
+
+Now for the data:
+```{r maxd_data}
+maxd_data <- pull(subset(LerC_spread, Gap == "0p" & Generation == 6), Furthest)
+maxd_data
+mean(maxd_data)
+var(maxd_data)
+```
+
+OK, so the variance is way too low. This may be related to the underproduction of seeds.
