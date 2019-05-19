@@ -58,7 +58,7 @@ Now for the data:
 ```{r maxd_data}
 maxd_data <- pull(subset(LerC_spread, Gap == "0p" & Generation == 6), Furthest)
 maxd_data
-mean(maxd_data)
+mean(maxd_data) 
 var(maxd_data)
 ```
 
