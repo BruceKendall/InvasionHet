@@ -23,7 +23,7 @@ gg_cov <- cov(fiteach[, 4:6])
 
 ## Density dependent seed production
 # Ler_fecundity is the data; inflate the home seedlings by the average fraction dispersing
-Ler_fecundity$Seedlings <- round(frac_dispersing * Ler_fecundity$Seedlings)
+Ler_fecundity$Seedlings <- round(Ler_fecundity$Seedlings / frac_dispersing)
 
 library(lme4)
 seeds_DD <- glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
