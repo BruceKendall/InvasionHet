@@ -3,10 +3,12 @@
 .RData
 .Ruserdata
 cache/*.Rdata
+!cache/Ler_spread_stats.Rdata
 notebook/_book
 notebook/_main.rds
 notebook/_bookdown_files/*_cache/latex
 notebook/_bookdown_files/*_files/figure-latex
 cache/*.hash
+!cache/Ler_spread_stats.hash
 reports/*/*.pdf
 reports/*/*_cache
