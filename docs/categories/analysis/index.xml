@@ -6,10 +6,30 @@
     <description>Recent content in Analysis on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 19 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/categories/analysis/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Distribution of Ler variability</title>
+      <link>/InvasionHet/2019/05/19/distribution-of-ler-variability/</link>
+      <pubDate>Sun, 19 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/05/19/distribution-of-ler-variability/</guid>
+      <description>So, last night’s analysis suggests that there’s not enough spread variability in the model. But it varied from run to run. So lets do a bunch of runs using replicate and see how far off we are.
+n_init &amp;lt;- 50 Ler_params$gap_size &amp;lt;- 0 controls &amp;lt;- list( n_reps = 10, DS_seeds = TRUE, ES_seeds = TRUE, kernel_stoch = TRUE, kernel_stoch_pots = TRUE, seed_sampling = TRUE, pot_width = 7 ) The iteration and analysis, as a function to pass to replicate:</description>
+    </item>
+    
+    <item>
+      <title>Plans for near-term analyses</title>
+      <link>/InvasionHet/2019/05/19/plans-for-near-term-analyses/</link>
+      <pubDate>Sun, 19 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/05/19/plans-for-near-term-analyses/</guid>
+      <description>OK, so I’ve demonstrated that the Ler model with continuous runway generates plausible results for the mean and variance of spread, although the latter can have some really extreme values that I probably need to investigate. The substantive conclusions from turning off one type of stochasticity at a time in that model:
+ Kernel stochasticity increases the mean spread rate Both kernel stochasticity and seed sampling greatly increases the variance in spread rate Both ES and DS in seed production decrease the mean spread rate, but have little impact on the variance.</description>
+    </item>
     
     <item>
       <title>Simulated Ler variability</title>

@@ -1,0 +1,150 @@
+---
+title: Distribution of Ler variability
+author: Bruce Kendall
+date: '2019-05-19'
+slug: distribution-of-ler-variability
+categories:
+  - Analysis
+tags:
+  - Ler
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+So, last night's analysis suggests that there's not enough spread variability in the model. But it varied from run to run. So lets do a bunch of runs using replicate and see how far off we are.
+
+```{r params}
+n_init <- 50
+Ler_params$gap_size <- 0 
+controls <- list(
+  n_reps = 10,
+  DS_seeds = TRUE,
+  ES_seeds = TRUE,
+  kernel_stoch = TRUE,
+  kernel_stoch_pots = TRUE,
+  seed_sampling = TRUE,
+  pot_width = 7
+)
+```
+
+The iteration and analysis, as a function to pass to replicate:
+```{r rep_func}
+sim_mean_var <- function() {
+  Adults <- matrix(n_init, controls$n_reps, 1)
+  for (i in 1:6) {
+    Adults <- iterate_genotype(Adults, Ler_params, controls)
+  }
+  npot <- ncol(Adults)
+  rep_sum <- t(apply(Adults[, npot:1], 1, cummax))[, npot:1]
+  maxd <- apply(rep_sum, 1, function(x) max((1:length(x))[x > 0]))
+  maxd <- maxd[is.finite(maxd)]
+  result <- c(mean(maxd), var(maxd))
+  names(result) <- c("Mean", "Variance")
+  result
+}
+```
+
+Test the function:
+```{r func_test}
+sim_mean_var()
+```
+
+Do the replication
+```{r replicate}
+nruns <- 100
+rep_spread_stats <- t(replicate(nruns, sim_mean_var(), simplify = TRUE))
+rep_spread_stats
+```
+I had to trap for cases where the population had gone extinct by gen 6.
+
+Make a plot.
+```{r plot}
+rep_spread_stats <- as.data.frame(rep_spread_stats) 
+maxd_data <- pull(subset(LerC_spread, Gap == "0p" & Generation == 6), Furthest)
+
+ggplot(rep_spread_stats, aes(x = Mean)) + geom_histogram() + 
+  geom_vline(colour = "red", xintercept = mean(maxd_data))
+
+ggplot(rep_spread_stats, aes(x = Variance)) + geom_histogram() + 
+  geom_vline(colour = "red", xintercept = var(maxd_data))
+```
+So, the distibution of variances is really skewed and there are some really large values. but the data are right in there. Here is the data: `r c(mean(maxd_data), var(maxd_data))`. And here is the mean of the simulations: `r apply(rep_spread_stats, 2, mean)`. If I trim the most extreme values we get `r apply(rep_spread_stats, 2, mean, trim = 1/nruns)`
+
+Just for grins, let's see what happens if we turn off kernel stochasticity.
+```{r replicate2}
+nruns <- 100
+controls$kernel_stoch <- FALSE
+rep_spread_stats <- t(replicate(nruns, sim_mean_var(), simplify = TRUE))
+```
+```{r plot2}
+rep_spread_stats <- as.data.frame(rep_spread_stats) 
+ggplot(rep_spread_stats, aes(x = Mean)) + geom_histogram() + 
+  geom_vline(colour = "red", xintercept = mean(maxd_data))
+
+ggplot(rep_spread_stats, aes(x = Variance)) + geom_histogram() + 
+  geom_vline(colour = "red", xintercept = var(maxd_data))
+```
+That shoots it all to heck! Let's try shutting off the others one at a time.
+
+No seed sampling:
+```{r replicate3}
+nruns <- 100
+controls$kernel_stoch <- TRUE
+controls$seed_sampling <- FALSE
+rep_spread_stats <- t(replicate(nruns, sim_mean_var(), simplify = TRUE))
+```
+```{r plot3}
+rep_spread_stats <- as.data.frame(rep_spread_stats) 
+ggplot(rep_spread_stats, aes(x = Mean)) + geom_histogram() + 
+  geom_vline(colour = "red", xintercept = mean(maxd_data))
+
+ggplot(rep_spread_stats, aes(x = Variance)) + geom_histogram() + 
+  geom_vline(colour = "red", xintercept = var(maxd_data))
+```
+
+No ES:
+```{r replicate4}
+nruns <- 100
+controls$ES_seeds <- FALSE
+controls$seed_sampling <- TRUE
+rep_spread_stats <- t(replicate(nruns, sim_mean_var(), simplify = TRUE))
+```
+```{r plot4}
+rep_spread_stats <- as.data.frame(rep_spread_stats) 
+ggplot(rep_spread_stats, aes(x = Mean)) + geom_histogram() + 
+  geom_vline(colour = "red", xintercept = mean(maxd_data))
+
+ggplot(rep_spread_stats, aes(x = Variance)) + geom_histogram() + 
+  geom_vline(colour = "red", xintercept = var(maxd_data))
+```
+
+No DS:
+```{r replicate5}
+nruns <- 100
+controls$DS_seeds <- FALSE
+controls$ES_seeds <- TRUE
+rep_spread_stats <- t(replicate(nruns, sim_mean_var(), simplify = TRUE))
+```
+```{r plot5}
+rep_spread_stats <- as.data.frame(rep_spread_stats) 
+ggplot(rep_spread_stats, aes(x = Mean)) + geom_histogram() + 
+  geom_vline(colour = "red", xintercept = mean(maxd_data))
+
+ggplot(rep_spread_stats, aes(x = Variance)) + geom_histogram() + 
+  geom_vline(colour = "red", xintercept = var(maxd_data))
+```
+
+Bottom line conclusions:
+
+* Kernel stochasticity increases the mean spread rate
+* Both kernel stochasticity and seed sampling greatly increases the variance in spread rate
+* Both ES and DS in seed production decrease the mean spread rate, but have little impact on the variance.

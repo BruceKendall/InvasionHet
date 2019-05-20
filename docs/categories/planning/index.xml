@@ -6,10 +6,20 @@
     <description>Recent content in Planning on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 19 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/categories/planning/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Plans for near-term analyses</title>
+      <link>/InvasionHet/2019/05/19/plans-for-near-term-analyses/</link>
+      <pubDate>Sun, 19 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/05/19/plans-for-near-term-analyses/</guid>
+      <description>OK, so I’ve demonstrated that the Ler model with continuous runway generates plausible results for the mean and variance of spread, although the latter can have some really extreme values that I probably need to investigate. The substantive conclusions from turning off one type of stochasticity at a time in that model:
+ Kernel stochasticity increases the mean spread rate Both kernel stochasticity and seed sampling greatly increases the variance in spread rate Both ES and DS in seed production decrease the mean spread rate, but have little impact on the variance.</description>
+    </item>
     
     <item>
       <title>Yet more on dispersal distributions</title>

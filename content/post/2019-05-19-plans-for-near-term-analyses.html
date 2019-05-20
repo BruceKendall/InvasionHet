@@ -1,0 +1,37 @@
+---
+title: Plans for near-term analyses
+author: Bruce Kendall
+date: '2019-05-19'
+slug: plans-for-near-term-analyses
+categories:
+  - Analysis
+  - Planning
+tags:
+  - Ler
+---
+
+
+
+<p>OK, so I’ve demonstrated that the Ler model with continuous runway generates plausible results for the mean and variance of spread, although the latter can have some really extreme values that I probably need to investigate. The substantive conclusions from turning off one type of stochasticity at a time in that model:</p>
+<ul>
+<li>Kernel stochasticity increases the mean spread rate</li>
+<li>Both kernel stochasticity and seed sampling greatly increases the variance in spread rate</li>
+<li>Both ES and DS in seed production decrease the mean spread rate, but have little impact on the variance.</li>
+</ul>
+<p>What I want to do is run all combinations of ES, DS, KS (kernel stochasticity) and SS (seed sampling). 16 combinations in total, for each landscape. Then I can get at their direct effects on mean and variance as well as their interactions. There are two potential ways I could do the analysis:</p>
+<ol style="list-style-type: decimal">
+<li>Run so many reps that the estimates of the mean and variance of spread are relatively precise, and just assemble the peices arithmetically (e.g., the interaction between ES and DS would be var(ES:DS) - (var(ES) + var(DS))). This could get rather squirrely for the higher-order terms.</li>
+<li>Following the logic in <a href="/2019/05/19/distribution-of-ler-variability/">this morning’s post</a>, I can generate <span class="math inline">\(m\)</span> copies of <span class="math inline">\(n\)</span>-rep runs (where <span class="math inline">\(n\)</span> is small, say 10 to match the data), treat the variance of each run as a data point, and do an lm with all interactions. The point estimates of the effects <em>should</em> be the same as doing the arithmetic calculations on all <span class="math inline">\(n \times m\)</span> reps, but the lm is less likely to have mistakes. There’s still the question of how to pick n and m, given a total sample size; primarily, m should be large enough to have useful residual df. In the short term I think I keep doing n=10, m=100.</li>
+</ol>
+<p>In the short term, I think I will use the second option for ease of implementation. So we need a script that</p>
+<ul>
+<li>cycles through all the combinations of ES, DS, KS and SS (no stoch is a special case)</li>
+<li>assembles the collection of means and variances into a data table with appropriate identifiers</li>
+<li>run a single version of the deterministic model, and store m copies of the resulting “mean” and variance = 0</li>
+<li>saves the result (so I can fiddle around with analyses without having to re-generate it)</li>
+</ul>
+<p>Then I can analyze this with lm. Repeat for the various landscapes.</p>
+<p>So here’s what I need to do in the long term:</p>
+<ol style="list-style-type: decimal">
+<li>Assess how many simulations I need to get a stable estimate of the variance. To do this I should run a large number of reps (1000? 10,000?) and then take multiple subsamples of a given size and calculate their variances. I think the subsamples should be without replacement, which means that the total number of reps should be 10x larger than the highest level I assess. So I guess 10,000 to start. The reason for not simply running 10k for everything (even assuming that’s sufficient)</li>
+</ol>
