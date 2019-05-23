@@ -23,6 +23,16 @@
     </item>
     
     <item>
+      <title>Ler sims, and RIL parameterization plans</title>
+      <link>/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</link>
+      <pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</guid>
+      <description>Ler analysis I’ve got the complete set of gen 6 spread distances now. For a few of them there are some crazy high dispersal distances, so it can be easier to trim the most extreme ones
+options(tibble.print_max = Inf) Ler_spread_stats %&amp;gt;% group_by(Gap, DS, ES, KS, SS) %&amp;gt;% summarize(Mean = mean(Max_Dist), Var = var(Max_Dist)) # A tibble: 64 x 7 # Groups: Gap, DS, ES, KS [?] Gap DS ES KS SS Mean Var &amp;lt;int&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; 1 0 FALSE FALSE FALSE FALSE 14 0 2 0 FALSE FALSE FALSE TRUE 15.</description>
+    </item>
+    
+    <item>
       <title>Distribution of Ler variability</title>
       <link>/InvasionHet/2019/05/19/distribution-of-ler-variability/</link>
       <pubDate>Sun, 19 May 2019 00:00:00 +0000</pubDate>

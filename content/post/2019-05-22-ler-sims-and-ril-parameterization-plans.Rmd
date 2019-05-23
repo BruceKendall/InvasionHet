@@ -1,0 +1,111 @@
+---
+title: Ler sims, and RIL parameterization plans
+author: Bruce Kendall
+date: '2019-05-22'
+slug: ler-sims-and-ril-parameterization-plans
+categories:
+  - Analysis
+  - Parameter estimation
+tags:
+  - Ler
+  - RIL
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+# Ler analysis
+
+I've got the complete set of gen 6 spread distances now. For a few of them there are some crazy high dispersal distances, so it can be easier to trim the most extreme ones
+```{r summary}
+options(tibble.print_max = Inf)
+Ler_spread_stats %>% group_by(Gap, DS, ES, KS, SS) %>%
+  summarize(Mean = mean(Max_Dist), Var = var(Max_Dist))
+filter(Ler_spread_stats, Max_Dist < 60) %>% group_by(Gap, DS, ES, KS, SS) %>%
+  summarize(Mean = mean(Max_Dist), Var = var(Max_Dist))
+```
+
+Here are the data values for the differnet landscapes
+```{r real}
+real_stats <- filter(LerC_spread, Generation==6) %>% group_by(Gap) %>%
+  summarize(Mean = mean(Furthest), Var = var(Furthest))
+real_stats
+```
+
+```{r plot}
+Ler_summ <- filter(Ler_spread_stats, Max_Dist < 60) %>% group_by(Gap, DS, ES, KS, SS) %>%
+  summarize(Mean = mean(Max_Dist), Variance = var(Max_Dist)) %>%
+  mutate(DS2 = paste("DS =", DS),
+         ES2 = paste("ES =", ES))
+ggplot(filter(Ler_summ, Gap == 0), 
+       aes(y = Mean, x = KS, fill = SS)) +
+  geom_bar(position="dodge", stat="identity") +
+  facet_grid(DS2 ~ ES2) +
+  ggtitle("Mean, continuous landscape") +
+  geom_hline(yintercept = pull(filter(real_stats, Gap == "0p"), Mean))
+ggplot(filter(Ler_summ, Gap == 0), 
+       aes(y = Variance, x = KS, fill = SS)) +
+  geom_bar(position="dodge", stat="identity") +
+  facet_grid(DS2 ~ ES2) +
+  ggtitle("Variance, continuous landscape") +
+  geom_hline(yintercept = pull(filter(real_stats, Gap == "0p"), Var))
+
+ggplot(filter(Ler_summ, Gap == 1), 
+       aes(y = Mean, x = KS, fill = SS)) +
+  geom_bar(position="dodge", stat="identity") +
+  facet_grid(DS2 ~ ES2) +
+  ggtitle("Mean, 1-pot gaps") +
+  geom_hline(yintercept = pull(filter(real_stats, Gap == "1p"), Mean))
+ggplot(filter(Ler_summ, Gap == 1), 
+       aes(y = Variance, x = KS, fill = SS)) +
+  geom_bar(position="dodge", stat="identity") +
+  facet_grid(DS2 ~ ES2) +
+  ggtitle("Variance, 1-pot gaps") +
+  geom_hline(yintercept = pull(filter(real_stats, Gap == "1p"), Var))
+
+ggplot(filter(Ler_summ, Gap == 2), 
+       aes(y = Mean, x = KS, fill = SS)) +
+  geom_bar(position="dodge", stat="identity") +
+  facet_grid(DS2 ~ ES2) +
+  ggtitle("Mean, 2-pot gaps") +
+  geom_hline(yintercept = pull(filter(real_stats, Gap == "2p"), Mean))
+ggplot(filter(Ler_summ, Gap == 2), 
+       aes(y = Variance, x = KS, fill = SS)) +
+  geom_bar(position="dodge", stat="identity") +
+  facet_grid(DS2 ~ ES2) +
+  ggtitle("Variance, 2-pot gaps") +
+  geom_hline(yintercept = pull(filter(real_stats, Gap == "2p"), Var))
+
+ggplot(filter(Ler_summ, Gap == 3), 
+       aes(y = Mean, x = KS, fill = SS)) +
+  geom_bar(position="dodge", stat="identity") +
+  facet_grid(DS2 ~ ES2) +
+  ggtitle("Mean, 3-pot gaps") +
+  geom_hline(yintercept = pull(filter(real_stats, Gap == "3p"), Mean))
+ggplot(filter(Ler_summ, Gap == 3), 
+       aes(y = Variance, x = KS, fill = SS)) +
+  geom_bar(position="dodge", stat="identity") +
+  facet_grid(DS2 ~ ES2) +
+  ggtitle("Variance, 3-pot gaps") +
+  geom_hline(yintercept = pull(filter(real_stats, Gap == "3p"), Var))
+
+
+```
+
+# RIL parameterization
+Jenn's code for fitting kernels to the sticky paper data is in FitKernels_RILs_13Aug2015.R. The data file is 2015_06_30_RilsDispersal.csv. I think that it has a similar shape as the Ler dispersal experiment, so hopefully I can adapt the code quickly.
+
+For seed production, there exists $a$ and $b$ for each RIL. Initially I thought I could use those directly, but I realized that these are probably not from the Gompertz model. I also don't know if the intercept is adjusted to account for dispersing seeds. So I may need to find the data and re-fit. At the very least, I need to find the code that generated these estimates.
+
+OK, I've dug things up. `a_seed` and `b_seed` are the Gompertz parameters, taking into account dispersal ("effective seed number"). So I can use those. I've put the relevant file into the data directory, so it will be auto-loaded as `RIL_stats`.
+
+For stochasticity, I'll just use the variance inflation factor for DS and spatiotemporal variances for ES that I derived for Ler. Perhaps there is sufficient data to get at the VIF, but since we can't get at RIL-specific seed production in the populations, there is no way to see the ES variance.
+
+So the only real chore is to fit the dispersal data.
