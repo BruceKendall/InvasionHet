@@ -33,6 +33,19 @@ sum(fiteach$AIC)
 ```
 Here, the improvement with individual-level kernels is more modest (10 AIC units). Also, although it's not printing out in the post, there is a "failed to fit" error being thrown, perhaps relevant to the high SEs in IDs 1 and 6.
 
+I've realized that there are quite a few replicates with very few seeds leaving the home pot. These are causing the "failure to fit" errors, and in one case (ID == 49) there is only a single dispersing seed, which causes a fatal error.
+
+I don't want to throw these out entirely in the data step, as those reps may still be useful for calculating the dispersal fraction. But for kernel estimation, we need to apply some filtering (if I were fitting all the data simultaneously using mixed models of some sort, then these could stay in and just be uninformative; but that requires writing a whole new fitting infrastructure that bypasses much of fitdistr).
+
+```{r filter}
+n_min <- 10 # Set the minimum number of dispersing seeds
+dispersing_seeds <- group_by(disperseRIL, ID) %>% 
+  filter(Distance > 4) %>% 
+  summarize(tot_seeds=sum(Seedlings))
+good_reps <- filter(dispersing_seeds, tot_seeds >= n_min) %>%
+  pull(ID)
+disperseRILgood <- filter(disperseRIL, ID %in% good_reps)
+```
 Let's go ahead and fit all of the models, to check:
 ```{r all_mods}
 #fiteach <- fiteach_disp_unt(disperseRILi)
@@ -43,13 +56,24 @@ I dunno what's going on with all those warnings, as the models are being fit...
 But the bottom line is that the AICs for gengamma are reasonable, even for the cases with big SEs. The one thing that is the big differences is that gengamma seems never to be "best" and sometimes the half-normal is best.
 
 Let's charge ahead and fit them all
-```{r all_RILS}
-RIL_list <- levels(disperseRIL$RIL)
+```{r all_RILS, message=TRUE}
+controls <- list(maxit = 1000)
+RIL_list <- levels(disperseRILgood$RIL)
 RIL_list 
 for (i in RIL_list) {
-disperseRILi <- filter(disperseRIL, RIL == i)
-fiteach <- fiteach_disp_unt(disperseRILi, model = "gengamma")
-fitall <- fit_dispersal_untruncated(disperseRILi, model = "gengamma")
-print(c(i, fitall$AIC - sum(fiteach$AIC)))
+  disperseRILi <- filter(disperseRILgood, RIL == i)
+  print(c(i, unique(disperseRILi$ID)))
+  fiteach <- fiteach_disp_unt(disperseRILi, model = "gengamma", control=controls)
+  fitall <- fit_dispersal_untruncated(disperseRILi, model = "gengamma", control=controls)
+  print(fiteach)
+  print(fitall)
+  print(c(i, fitall$AIC - sum(fiteach$AIC)))
 }
 ```
+Still getting quite a few failure messages, but at least the thing runs now. Some of the error codes are "1," which from the optim documentation indicates reaching maxit (which by default is 100). Others are error code "100" which I can't track down.
+
+Overall, note that the rep-specific model is better in most cases. There's one case with a delta of zero, which might mean only one rep; and the last RIL didn't return a value. So a bit more digging needed.
+
+EDIT: increasing maxit to 1000 got the error code 1's. The remainder seem to be ill-formed data: e.g., ID 77 only has values at 3 distances (so not enough df); and ID 40 has a spatially flat distribution of very low values. Note that for both these cases the 1 and 2 parameters dists fit just fine. The failure of fitall in RIL 187 is curious; if I add ID 80 back in (with 7 seeds) I do get a fit.
+
+Strategically, I'm not going to be able to get a covariance matrix for the RIL with only one rep; and while cov will calculate a matrix with two reps, it will be an aweful estimate (because the correlations will all be $\pm 1$). So for RIL 133 I think I just take the mean of the rest of the RIL-specific covariance matrices.
