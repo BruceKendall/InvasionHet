@@ -7,7 +7,7 @@ disperseRIL <- read.csv(file.path(data_dir, '2015_06_30_RilsDispersal.csv'),
 
 # Make some factor variables
 disperseRIL$ID <- as.factor(disperseRIL$ID)
-disperseRIL$RILS <- as.factor(disperseRIL$RILs)
+disperseRIL$RILs <- as.factor(disperseRIL$RILs)
 
 # Drop the columns with the (irrelevant) info about Ecotype and Replicate
 disperseRIL <- disperseRIL[, -c(2, 4)]

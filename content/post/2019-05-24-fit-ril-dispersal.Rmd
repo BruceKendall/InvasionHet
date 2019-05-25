@@ -1,0 +1,55 @@
+---
+title: Fit RIL dispersal
+author: Bruce Kendall
+date: '2019-05-24'
+slug: fit-ril-dispersal
+categories: []
+tags: []
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+I've just written a data script that creates `disperseRIL`, an analog to `disperseLer`. The main difference is that there is an extra column named `RIL` that gives the RIL number. 
+
+There is not nearly as much replication (6 reps per RIL).
+
+I should be able to analyze using the same functions I used for Ler:
+```{r test_fiteach}
+# Pick out one RIL
+disperseRILi <- filter(disperseRIL, RIL == "3")
+fiteach <- fiteach_disp_unt(disperseRILi, model = "gengamma")
+fiteach
+fitall <- fit_dispersal_untruncated(disperseRILi, model = "gengamma")
+fitall
+sum(fiteach$AIC)
+```
+Here, the improvement with individual-level kernels is more modest (10 AIC units). Also, although it's not printing out in the post, there is a "failed to fit" error being thrown, perhaps relevant to the high SEs in IDs 1 and 6.
+
+Let's go ahead and fit all of the models, to check:
+```{r all_mods}
+#fiteach <- fiteach_disp_unt(disperseRILi)
+#fiteach
+```
+I dunno what's going on with all those warnings, as the models are being fit...
+
+But the bottom line is that the AICs for gengamma are reasonable, even for the cases with big SEs. The one thing that is the big differences is that gengamma seems never to be "best" and sometimes the half-normal is best.
+
+Let's charge ahead and fit them all
+```{r all_RILS}
+RIL_list <- levels(disperseRIL$RIL)
+RIL_list 
+for (i in RIL_list) {
+disperseRILi <- filter(disperseRIL, RIL == i)
+fiteach <- fiteach_disp_unt(disperseRILi, model = "gengamma")
+fitall <- fit_dispersal_untruncated(disperseRILi, model = "gengamma")
+print(c(i, fitall$AIC - sum(fiteach$AIC)))
+}
+```
