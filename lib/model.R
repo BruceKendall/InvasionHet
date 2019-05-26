@@ -73,6 +73,7 @@
 #' density dependence).
 iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
   controls$n_pots <- ncol(Adults)
+  if (is.null(controls$max_pots)) controls$max_pots <- 10
   #### SEED PRODUCTION ####
   # Density dependence in seed production
   Seeds <- Gompertz_seeds(Adults, params, N_tot)
@@ -114,6 +115,15 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
     dispersed_seeds_by_pot <- 
       det_kernel(Seeds, kernel_params, params, controls) %>%
         lapply(round)
+  }
+  
+  ## Truncate ridiculous dispersal events
+  if (dispersed_seeds_by_pot$max_dist > controls$max_pots) {
+    dispersed_seeds_by_pot <- within(dispersed_seeds_by_pot, {
+      forward_dispersal <- forward_dispersal[, , 1:controls$max_pots, drop = FALSE]
+      backward_dispersal <- backward_dispersal[, , 1:controls$max_pots, drop = FALSE]
+      max_dist <- controls$max_pots
+    })
   }
   
   ## Combine all the dispersed seeds
