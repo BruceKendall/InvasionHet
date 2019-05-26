@@ -232,9 +232,9 @@ kernel_stoch <- function(params, controls) {
       indx <- kernel_params$gg_sigma <= 0
       new_rvs <- mvrnorm(neg_sigma + 3, c(gg_mu, gg_sigma, gg_Q), gg_cov, 
                          empirical = TRUE)[-(1:3), ]
-      kernel_params$gg_mu[indx] <- new_rvs[, 1]
-      kernel_params$gg_sigma[indx] <- new_rvs[, 2]
-      kernel_params$gg_Q[indx] <- new_rvs[, 3]
+      kernel_params$gg_mu[indx] <- matrix(new_rvs[, 1], n_reps, n_pots, byrow = FALSE)
+      kernel_params$gg_sigma[indx] <- matrix(new_rvs[, 2], n_reps, n_pots, byrow = FALSE)
+      kernel_params$gg_Q[indx] <- matrix(new_rvs[, 3], n_reps, n_pots, byrow = FALSE)
       neg_sigma <- sum(kernel_params$gg_sigma <= 0)
     }
     return(kernel_params)
