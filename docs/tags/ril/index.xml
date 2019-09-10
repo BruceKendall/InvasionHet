@@ -6,22 +6,10 @@
     <description>Recent content in Ril on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 24 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 22 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/tags/ril/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Fit RIL dispersal</title>
-      <link>/InvasionHet/2019/05/24/fit-ril-dispersal/</link>
-      <pubDate>Fri, 24 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/InvasionHet/2019/05/24/fit-ril-dispersal/</guid>
-      <description>I’ve just written a data script that creates disperseRIL, an analog to disperseLer. The main difference is that there is an extra column named RIL that gives the RIL number.
-There is not nearly as much replication (6 reps per RIL).
-I should be able to analyze using the same functions I used for Ler:
-# Pick out one RIL disperseRILi &amp;lt;- filter(disperseRIL, RIL == &amp;quot;3&amp;quot;) fiteach &amp;lt;- fiteach_disp_unt(disperseRILi, model = &amp;quot;gengamma&amp;quot;) fiteach  ID model AIC par1 par2 par3 se1 se2 1 1 gengamma 22.</description>
-    </item>
     
     <item>
       <title>Ler sims, and RIL parameterization plans</title>
