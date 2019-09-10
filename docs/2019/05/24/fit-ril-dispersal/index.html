@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>Fit RIL dispersal - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Fit RIL dispersal - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">12 min read</span>
+    
+
+    <h1 class="article-title">Fit RIL dispersal</h1>
+
+    
+    <span class="article-date">2019/05/24</span>
+    
+
+    <div class="article-content">
+      <p>I’ve just written a data script that creates <code>disperseRIL</code>, an analog to <code>disperseLer</code>. The main difference is that there is an extra column named <code>RIL</code> that gives the RIL number.</p>
+<p>There is not nearly as much replication (6 reps per RIL).</p>
+<p>I should be able to analyze using the same functions I used for Ler:</p>
+<pre class="r"><code># Pick out one RIL
+disperseRILi &lt;- filter(disperseRIL, RIL == &quot;3&quot;)
+fiteach &lt;- fiteach_disp_unt(disperseRILi, model = &quot;gengamma&quot;)
+fiteach</code></pre>
+<pre><code>  ID    model       AIC      par1      par2      par3       se1        se2
+1  1 gengamma  22.36640 1.2252671 0.1551575 7.0740943 1.7965469 2.66330966
+2  2 gengamma 461.23963 1.7278334 0.6198084 1.6890614 0.1471995 0.08855569
+3  3 gengamma 233.75954 0.9643855 0.7038311 0.7341382 0.1597774 0.07603567
+4  4 gengamma 557.43082 1.3303133 0.8380885 0.3506159 0.1596103 0.06147275
+5  5 gengamma 193.07350 1.1548166 0.8942826 0.5208017 0.2594169 0.11334787
+6  6 gengamma  40.32503 1.4246114 0.1056097 8.4216320 1.0679730 1.65332641
+          se3
+1 121.4344961
+2   0.4525130
+3   0.3961437
+4   0.3402050
+5   0.5223771
+6 131.8841613</code></pre>
+<pre class="r"><code>fitall &lt;- fit_dispersal_untruncated(disperseRILi, model = &quot;gengamma&quot;)
+fitall</code></pre>
+<pre><code>  ID    model     AIC     par1      par2      par3        se1        se2
+1  1 gengamma 1519.24 1.271899 0.8358498 0.6427917 0.09039553 0.03890965
+        se3
+1 0.1921725</code></pre>
+<pre class="r"><code>sum(fiteach$AIC)</code></pre>
+<pre><code>[1] 1508.195</code></pre>
+<p>Here, the improvement with individual-level kernels is more modest (10 AIC units). Also, although it’s not printing out in the post, there is a “failed to fit” error being thrown, perhaps relevant to the high SEs in IDs 1 and 6.</p>
+<p>I’ve realized that there are quite a few replicates with very few seeds leaving the home pot. These are causing the “failure to fit” errors, and in one case (ID == 49) there is only a single dispersing seed, which causes a fatal error.</p>
+<p>I don’t want to throw these out entirely in the data step, as those reps may still be useful for calculating the dispersal fraction. But for kernel estimation, we need to apply some filtering (if I were fitting all the data simultaneously using mixed models of some sort, then these could stay in and just be uninformative; but that requires writing a whole new fitting infrastructure that bypasses much of fitdistr).</p>
+<pre class="r"><code>n_min &lt;- 10 # Set the minimum number of dispersing seeds
+dispersing_seeds &lt;- group_by(disperseRIL, ID) %&gt;% 
+  filter(Distance &gt; 4) %&gt;% 
+  summarize(tot_seeds=sum(Seedlings))
+good_reps &lt;- filter(dispersing_seeds, tot_seeds &gt;= n_min) %&gt;%
+  pull(ID)
+disperseRILgood &lt;- filter(disperseRIL, ID %in% good_reps)</code></pre>
+<p>Let’s go ahead and fit all of the models, to check:</p>
+<pre class="r"><code>#fiteach &lt;- fiteach_disp_unt(disperseRILi)
+#fiteach</code></pre>
+<p>I dunno what’s going on with all those warnings, as the models are being fit…</p>
+<p>But the bottom line is that the AICs for gengamma are reasonable, even for the cases with big SEs. The one thing that is the big differences is that gengamma seems never to be “best” and sometimes the half-normal is best.</p>
+<p>Let’s charge ahead and fit them all</p>
+<pre class="r"><code>controls &lt;- list(maxit = 1000)
+RIL_list &lt;- levels(disperseRILgood$RIL)
+RIL_list </code></pre>
+<pre><code> [1] &quot;3&quot;   &quot;18&quot;  &quot;22&quot;  &quot;35&quot;  &quot;42&quot;  &quot;53&quot;  &quot;58&quot;  &quot;101&quot; &quot;133&quot; &quot;144&quot; &quot;147&quot;
+[12] &quot;148&quot; &quot;180&quot; &quot;187&quot;</code></pre>
+<pre class="r"><code>for (i in RIL_list) {
+  disperseRILi &lt;- filter(disperseRILgood, RIL == i)
+  print(c(i, unique(disperseRILi$ID)))
+  fiteach &lt;- fiteach_disp_unt(disperseRILi, model = &quot;gengamma&quot;, control=controls)
+  fitall &lt;- fit_dispersal_untruncated(disperseRILi, model = &quot;gengamma&quot;, control=controls)
+  print(fiteach)
+  print(fitall)
+  print(c(i, fitall$AIC - sum(fiteach$AIC)))
+}</code></pre>
+<pre><code>[1] &quot;3&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot; &quot;6&quot;
+  ID    model       AIC      par1      par2      par3       se1        se2
+1  2 gengamma 461.23963 1.7278334 0.6198084 1.6890614 0.1471995 0.08855569
+2  3 gengamma 233.75954 0.9643855 0.7038311 0.7341382 0.1597774 0.07603567
+3  4 gengamma 557.43082 1.3303133 0.8380885 0.3506159 0.1596103 0.06147275
+4  5 gengamma 193.07350 1.1548166 0.8942826 0.5208017 0.2594169 0.11334787
+5  6 gengamma  40.32503 1.4246114 0.1056097 8.4216320 1.0679730 1.65332641
+          se3
+1   0.4525130
+2   0.3961437
+3   0.3402050
+4   0.5223771
+5 131.8841613
+  ID    model      AIC     par1      par2      par3       se1        se2
+1  2 gengamma 1496.919 1.283954 0.8321763 0.6453733 0.0907257 0.03915315
+        se3
+1 0.1931778
+[1] &quot;3&quot;                &quot;11.0899959574704&quot;
+[1] &quot;18&quot; &quot;7&quot;  &quot;8&quot;  &quot;9&quot;  &quot;10&quot;
+  ID    model      AIC     par1      par2     par3       se1        se2
+1  7 gengamma 617.6707 2.024489 0.7700768 1.145463 0.1477791 0.08037200
+2  8 gengamma 648.6163 1.746894 0.7236056 1.070617 0.1283408 0.06740821
+3  9 gengamma 890.5776 1.878570 0.6793835 1.553553 0.1209982 0.07109519
+4 10 gengamma 147.0066 1.443729 0.4147349 2.784907 0.1898372 0.13639060
+        se3
+1 0.3246903
+2 0.3014041
+3 0.3297722
+4 1.2101335
+  ID    model      AIC     par1      par2     par3        se1        se2
+1  7 gengamma 2331.932 1.756478 0.7916559 1.092266 0.07390388 0.03863082
+        se3
+1 0.1600487
+[1] &quot;18&quot;               &quot;28.0608288801759&quot;
+[1] &quot;22&quot; &quot;11&quot; &quot;12&quot; &quot;13&quot; &quot;14&quot; &quot;15&quot; &quot;16&quot;
+  ID    model       AIC     par1       par2      par3        se1
+1 11 gengamma 1058.2799 1.769113 0.76530741  1.629011 0.11180555
+2 12 gengamma  507.2327 2.164209 0.27388850  3.922918 0.06934335
+3 13 gengamma  832.6574 1.780305 0.71352916  1.254374 0.12463540
+4 14 gengamma  711.5112 1.952632 0.56705828  1.216660 0.10399875
+5 15 gengamma  143.7280 1.803818 0.08634291 16.634141 0.22475918
+6 16 gengamma  440.0721 1.620353 0.82451653  1.116747 0.17938745
+         se2        se3
+1 0.06507175  0.2768596
+2 0.05677516  0.9113008
+3 0.06841995  0.3078828
+4 0.05961989  0.3089800
+5 0.45512024 87.7095420
+6 0.09202790  0.3826881
+  ID    model      AIC     par1      par2     par3        se1        se2
+1 11 gengamma 3737.017 1.811804 0.6938882 1.470848 0.05439478 0.03141013
+       se3
+1 0.141333
+[1] &quot;22&quot;               &quot;43.5352121335927&quot;
+[1] &quot;35&quot; &quot;17&quot; &quot;18&quot; &quot;19&quot; &quot;20&quot; &quot;21&quot; &quot;22&quot;
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+  ID    model      AIC     par1      par2       par3       se1        se2
+1 17 gengamma 182.1036 2.663246 0.1030779 18.0628155 0.4753930 0.99631225
+2 18 gengamma 127.5256 2.084347 0.2534518  4.8303363 0.6678691 0.61614958
+3 20 gengamma 210.9020 1.442899 0.7458770  0.8990239 0.2345407 0.11165711
+4 21 gengamma 463.1642 1.092500 0.7547178  0.3156867 0.1433143 0.05702971
+5 22 gengamma 137.7818 1.526589 0.2680838  1.7280388 0.1257836 0.08330980
+          se3
+1 174.7250592
+2  12.7006950
+3   0.5484743
+4   0.3399594
+5   0.9007936
+  ID    model      AIC    par1      par2     par3       se1        se2
+1 17 gengamma 1228.254 1.34481 0.7967839 0.745091 0.1017565 0.04476098
+        se3
+1 0.2259475
+[1] &quot;35&quot;               &quot;106.776723231003&quot;
+[1] &quot;42&quot; &quot;23&quot; &quot;24&quot; &quot;25&quot; &quot;26&quot; &quot;27&quot; &quot;28&quot;
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+  ID    model       AIC      par1      par2      par3       se1        se2
+1 23 gengamma 564.69066 1.5926594 0.7756917 1.0780307 0.1314701 0.06856613
+2 24 gengamma  56.04586 1.8224211 0.1190274 8.6298006 0.6818244 1.05583842
+3 25 gengamma 177.97745 2.3536462 0.3972487 3.5668910 0.1990586 0.15100252
+4 26 gengamma 328.71883 1.3375672 0.6831140 1.2365766 0.1682780 0.08816501
+5 27 gengamma 383.82205 1.3982076 0.5827706 1.2449128 0.1174725 0.06497981
+6 28 gengamma 113.85787 0.9216354 0.7379871 0.7167837 0.2880441 0.11973567
+         se3
+1  0.2880336
+2 76.5841153
+3  1.6109422
+4  0.4443124
+5  0.3448104
+6  0.7259135
+  ID    model      AIC    par1      par2     par3        se1        se2
+1 23 gengamma 1648.763 1.42393 0.7738406 1.009737 0.07825593 0.03912709
+        se3
+1 0.1752844
+[1] &quot;42&quot;               &quot;23.6503167933638&quot;
+[1] &quot;53&quot; &quot;29&quot; &quot;31&quot; &quot;33&quot; &quot;34&quot;
+  ID    model       AIC      par1      par2        par3       se1
+1 29 gengamma  60.59255 1.1911520 0.3798099  0.71666871 0.2357915
+2 31 gengamma 121.53493 1.0526618 0.3849393 -1.18361954 0.1447214
+3 33 gengamma  46.16282 0.8197345 0.3425022 -0.08215672 0.1764766
+4 34 gengamma 167.41309 1.3002689 0.6531572  1.32977385 0.2533561
+         se2       se3
+1 0.10889697 1.0848568
+2 0.10046424 0.6412374
+3 0.07971538 0.9329292
+4 0.13441587 0.7209839
+  ID    model      AIC     par1      par2      par3       se1        se2
+1 29 gengamma 410.5883 1.057587 0.6246299 0.1559369 0.1038779 0.04764835
+        se3
+1 0.2741321
+[1] &quot;53&quot;               &quot;14.8849515323947&quot;
+[1] &quot;58&quot; &quot;35&quot; &quot;36&quot; &quot;37&quot; &quot;39&quot; &quot;40&quot;
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+  ID    model       AIC     par1       par2       par3       se1
+1 35 gengamma  90.89634 1.069996 0.61022493  0.8572706 0.2943650
+2 36 gengamma 116.20471 0.798817 0.19461464 -3.6387068 0.3938943
+3 37 gengamma 165.04642 1.103665 0.69947353  0.3375901 0.2253743
+4 39 gengamma  52.29461 1.836463 0.09787628  9.9071205 0.5333491
+         se2        se3
+1 0.13131423  0.8652391
+2 0.35852315  7.3387628
+3 0.08851255  0.5701003
+4 0.86222046 87.2920870
+  ID    model      AIC     par1     par2     par3       se1        se2
+1 35 gengamma 523.0619 1.203356 0.769586 0.228497 0.1390129 0.05545398
+        se3
+1 0.3195632
+[1] &quot;58&quot;               &quot;98.6198040802837&quot;
+[1] &quot;101&quot; &quot;41&quot;  &quot;42&quot;  &quot;43&quot;  &quot;44&quot;  &quot;45&quot;  &quot;46&quot; 
+  ID    model       AIC     par1      par2       par3       se1        se2
+1 41 gengamma 222.94554 1.856175 0.6298980 1.17738588 0.1834897 0.10229913
+2 42 gengamma 119.70303 1.592317 0.6833304 1.14530344 0.3425708 0.18232669
+3 43 gengamma  44.33462 1.076805 0.4251714 0.88668166 0.2087354 0.11051137
+4 44 gengamma 165.52458 1.336526 0.6679114 0.59905075 0.2189274 0.09688699
+5 45 gengamma  86.22737 1.053369 0.6187292 0.48875616 0.2536616 0.10891620
+6 46 gengamma 199.56133 1.071901 0.6428720 0.06280545 0.1870046 0.07108644
+        se3
+1 0.4827945
+2 0.8860791
+3 0.7712068
+4 0.5580956
+5 0.7045099
+6 0.5134337
+  ID    model      AIC     par1      par2      par3       se1        se2
+1 41 gengamma 833.2313 1.297175 0.7166021 0.4397894 0.1035254 0.04247629
+       se3
+1 0.250715
+[1] &quot;101&quot;               &quot;-5.06519854379235&quot;
+[1] &quot;133&quot; &quot;48&quot; 
+  ID    model      AIC     par1      par2     par3      se1       se2
+1 48 gengamma 223.4773 1.596666 0.3879888 2.483792 0.146483 0.1016036
+        se3
+1 0.8935616
+  ID    model      AIC     par1      par2     par3      se1       se2
+1 48 gengamma 223.4773 1.596666 0.3879888 2.483792 0.146483 0.1016036
+        se3
+1 0.8935616
+[1] &quot;133&quot; &quot;0&quot;  
+[1] &quot;144&quot; &quot;53&quot;  &quot;54&quot;  &quot;55&quot;  &quot;56&quot;  &quot;57&quot;  &quot;58&quot; 
+  ID    model       AIC     par1      par2       par3       se1        se2
+1 53 gengamma 191.23981 1.625857 0.5872071  0.3918415 0.1483896 0.07174308
+2 54 gengamma 234.07556 1.384237 0.7633591  0.4007239 0.1896737 0.08559807
+3 55 gengamma  72.14081 1.643783 0.1332387 12.1122032 0.6045252 1.06193064
+4 56 gengamma 178.46781 1.559851 0.6458860  0.3471181 0.1822724 0.08251902
+5 57 gengamma 175.87357 1.151634 0.8847720  0.4463656 0.3167337 0.11764031
+6 58 gengamma 329.66084 1.013654 0.9051735  0.3473094 0.2283538 0.08540196
+         se3
+1  0.3873177
+2  0.4144141
+3 96.5271769
+4  0.4537938
+5  0.6667580
+6  0.4817818
+  ID    model      AIC    par1      par2      par3        se1        se2
+1 53 gengamma 1195.832 1.39868 0.8058457 0.7337897 0.09469526 0.04381884
+        se3
+1 0.2015349
+[1] &quot;144&quot;              &quot;14.3739955566307&quot;
+[1] &quot;147&quot; &quot;59&quot;  &quot;60&quot;  &quot;62&quot; 
+  ID    model      AIC     par1      par2      par3       se1        se2
+1 59 gengamma 213.1920 1.653212 0.6543264 1.6293972 0.2153280 0.12600891
+2 60 gengamma 287.1692 1.529921 0.6633226 0.5080427 0.1420315 0.06789947
+3 62 gengamma 148.4892 1.366350 0.6819904 0.7722064 0.2243729 0.10710571
+        se3
+1 0.6232494
+2 0.3392808
+3 0.5524015
+  ID    model      AIC     par1      par2      par3      se1       se2
+1 59 gengamma 644.3591 1.516077 0.6968445 0.8841672 0.104656 0.0530847
+        se3
+1 0.2459879
+[1] &quot;147&quot;               &quot;-4.49122712074166&quot;
+[1] &quot;148&quot; &quot;66&quot;  &quot;68&quot;  &quot;70&quot; 
+  ID    model      AIC     par1       par2       par3       se1       se2
+1 66 gengamma 90.59293 2.346869 0.09626952 13.9361562 0.3792235 0.6872008
+2 68 gengamma 85.91253 2.248477 0.10274424 14.4891755 0.5767031 1.0874215
+3 70 gengamma 63.13058 1.446596 0.76281567  0.7637282 0.4635412 0.2116593
+         se3
+1  99.581392
+2 153.426350
+3   1.055185
+  ID    model      AIC     par1      par2     par3       se1     se2
+1 66 gengamma 233.3121 1.841696 0.5849284 2.054365 0.2430033 0.15726
+        se3
+1 0.8707995
+[1] &quot;148&quot;               &quot;-6.32396496091243&quot;
+[1] &quot;180&quot; &quot;73&quot;  &quot;74&quot;  &quot;75&quot; 
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+  ID    model       AIC     par1      par2     par3       se1       se2
+1 73 gengamma 229.53446 1.937439 0.6034190 1.724475 0.1865057 0.1135445
+2 74 gengamma  50.90043 1.213799 0.1302438 3.177901 0.1965197 0.2402723
+3 75 gengamma  47.54043 1.219033 0.1233583 3.148747 0.2109082 0.2776897
+        se3
+1 0.5767455
+2 6.1447966
+3 7.3465353
+  ID    model      AIC     par1     par2     par3       se1        se2
+1 73 gengamma 370.7943 1.216838 0.719619 0.263283 0.1446475 0.06086707
+        se3
+1 0.3455521
+[1] &quot;180&quot;              &quot;42.8189577588738&quot;
+[1] &quot;187&quot; &quot;77&quot;  &quot;78&quot;  &quot;79&quot; 
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [1]&gt;
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
+  ID    model      AIC     par1      par2      par3       se1        se2
+1 78 gengamma 362.7390 1.383439 0.7688265 0.1301997 0.1646852 0.06786955
+2 79 gengamma 126.7605 1.506225 0.9226793 1.1529217 0.3780391 0.19033474
+        se3
+1 0.3652973
+2 0.7429830
+[1] ID    model AIC   par1  par2  par3  se1   se2   se3  
+&lt;0 rows&gt; (or 0-length row.names)
+[1] &quot;187&quot;</code></pre>
+<p>Still getting quite a few failure messages, but at least the thing runs now. Some of the error codes are “1,” which from the optim documentation indicates reaching maxit (which by default is 100). Others are error code “100” which I can’t track down.</p>
+<p>Overall, note that the rep-specific model is better in most cases. There’s one case with a delta of zero, which might mean only one rep; and the last RIL didn’t return a value. So a bit more digging needed.</p>
+<p>EDIT: increasing maxit to 1000 got the error code 1’s. The remainder seem to be ill-formed data: e.g., ID 77 only has values at 3 distances (so not enough df); and ID 40 has a spatially flat distribution of very low values. Note that for both these cases the 1 and 2 parameters dists fit just fine. The failure of fitall in RIL 187 is curious; if I add ID 80 back in (with 7 seeds) I do get a fit.</p>
+<p>Strategically, I’m not going to be able to get a covariance matrix for the RIL with only one rep; and while cov will calculate a matrix with two reps, it will be an aweful estimate (because the correlations will all be <span class="math inline">\(\pm 1\)</span>). So for RIL 133 I think I just take the mean of the rest of the RIL-specific covariance matrices.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

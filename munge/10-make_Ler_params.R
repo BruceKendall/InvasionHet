@@ -4,7 +4,7 @@
 
 ## Fraction dispersing
 nondispersers <- subset(disperseLer, Pot == 0, c("ID", "Seedlings"))
-dispersers <- filter(disperseLer, Pot == 1) %>% group_by(ID) %>% summarise(dispersers = sum(Seedlings))
+dispersers <- filter(disperseLer, Pot >= 1) %>% group_by(ID) %>% summarise(dispersers = sum(Seedlings))
 disperse_num <- merge(nondispersers, dispersers)
 names(disperse_num)[2] <- "nondispersers"
 disperse_num$dispersers <- round(2 * disperse_num$dispersers)

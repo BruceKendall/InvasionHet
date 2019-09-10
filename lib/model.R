@@ -73,6 +73,7 @@
 #' density dependence).
 iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
   controls$n_pots <- ncol(Adults)
+  if (is.null(controls$max_pots)) controls$max_pots <- 10
   #### SEED PRODUCTION ####
   # Density dependence in seed production
   Seeds <- Gompertz_seeds(Adults, params, N_tot)
@@ -106,7 +107,7 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
       gg_Q            = array(params$gg_Q,            array_dim)
     )
   }
-  
+  print(unlist(kernel_params))
   # Seed sampling?
   if (controls$seed_sampling) {
     dispersed_seeds_by_pot <- seed_sampling(Seeds, kernel_params, params, controls)
@@ -114,6 +115,15 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
     dispersed_seeds_by_pot <- 
       det_kernel(Seeds, kernel_params, params, controls) %>%
         lapply(round)
+  }
+  
+  ## Truncate ridiculous dispersal events
+  if (dispersed_seeds_by_pot$max_dist > controls$max_pots) {
+    dispersed_seeds_by_pot <- within(dispersed_seeds_by_pot, {
+      forward_dispersal <- forward_dispersal[, , 1:controls$max_pots, drop = FALSE]
+      backward_dispersal <- backward_dispersal[, , 1:controls$max_pots, drop = FALSE]
+      max_dist <- controls$max_pots
+    })
   }
   
   ## Combine all the dispersed seeds
@@ -231,7 +241,7 @@ kernel_stoch <- function(params, controls) {
     while(neg_sigma > 0) {
       indx <- kernel_params$gg_sigma <= 0
       new_rvs <- mvrnorm(neg_sigma + 3, c(gg_mu, gg_sigma, gg_Q), gg_cov, 
-                         empirical = TRUE)[-(1:3), ]
+                         empirical = TRUE)[-(1:3), , drop = FALSE]
       kernel_params$gg_mu[indx] <- new_rvs[, 1]
       kernel_params$gg_sigma[indx] <- new_rvs[, 2]
       kernel_params$gg_Q[indx] <- new_rvs[, 3]
@@ -306,23 +316,24 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   # Generate a vector of seed-specific dispersal distances for each pot/rep.
   # To get conformable dimensions, pad results for pots w/ less than max_ds 
   # seeds with zeros
-  disp_dist <- apply(ngg, c(1,2), 
+  disp_dist <- aaply(ngg, c(1,2), 
                      function(x) c(rgengamma(x[1], x[3], x[4], x[5]), 
-                                   rep(0, times = max_ds - x[1]))) %>%
-    aperm(c(2, 3, 1)) # apply puts the calculated value in the first dim
-  
+                                   rep(0, times = max_ds - x[1] + 1))) #%>%
+#    aperm(c(2, 3, 1)) # apply puts the calculated value in the first dim
+  disp_dist[disp_dist > controls$max_pots * controls$pot_width] <- controls$max_pots * controls$pot_width
   # Distribute seeds into forward and backward dispersal, and rescale distance to pots
   forward_draw <- rbernoulli(prod(dim(disp_dist)))
   disp_forward <- ceiling(forward_draw * disp_dist / controls$pot_width)
   disp_backward <- ceiling((!forward_draw) * disp_dist / controls$pot_width)
+  print(c(max(disp_backward), max(disp_forward)))
   max_dist <- max(c(disp_forward, disp_backward)) # farthest dispersing seed
   # Tabulate the number at each distance
-  forward_dispersal <- apply(disp_forward, c(1, 2), disp_table, 
-                             max_dist = max_dist) %>%
-    aperm(c(2, 3, 1))
-  backward_dispersal <- apply(disp_backward, c(1, 2), disp_table, 
-                              max_dist = max_dist) %>%
-    aperm(c(2, 3, 1))
+  forward_dispersal <- aaply(disp_forward, c(1, 2), disp_table, 
+                             max_dist = max_dist) #%>%
+ #   aperm(c(2, 3, 1))
+  backward_dispersal <- aaply(disp_backward, c(1, 2), disp_table, 
+                              max_dist = max_dist) #%>%
+ #   aperm(c(2, 3, 1))
   
   return(list(home_pot = home_pot, 
               forward_dispersal = forward_dispersal,
@@ -336,7 +347,7 @@ disp_table <- function(dists, max_dist) {
     raw_table <- raw_table[-1]
   }
   dist_vals <- as.numeric(names(raw_table))
-  dist_counts <- numeric(max_dist)
+  dist_counts <- numeric(max_dist+1)
   dist_counts[dist_vals] <- raw_table
   return(dist_counts)
 }

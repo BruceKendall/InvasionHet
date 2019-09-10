@@ -79,7 +79,7 @@ fit_dispersal_models <- function(dispersal_data, zero = 3.5, plot.it = TRUE) {
 fit_dispersal_untruncated <- function(dispersal_data, zero = 7,
                                       model_list = c("hnorm", "exp", "lnorm", "gamma",
                                                      "weibull", "invgauss", "logis",
-                                                     "invgamma", "gengamma")) {
+                                                     "invgamma", "gengamma"), ...) {
 # Fit untruncated dispersal models to data
 # dispersal_data must be a data frame containing columns
 #   ID, Density, Siliques, Seedlings, Distance
@@ -103,13 +103,13 @@ fit_dispersal_untruncated <- function(dispersal_data, zero = 7,
   
   for (model in model_list) {
     fit_i <- try(fitdistcens(cens_data_tble, model, 
-                             start = start_params(cens_data_tble, model)))
+                             start = start_params(cens_data_tble, model), ...))
     if (model == "gengamma") {
       start = start_params(cens_data_tble, model)
       start[3] <- 0
-      fit_0 <- try(fitdist(cens_data_tble[,2], model, start = start))
+      fit_0 <- try(fitdist(cens_data_tble[,2], model, start = start, ...))
       if (class(fit_0) != "try-error") start <- as.list(fit_0$est)
-      fit_i <- try(fitdistcens(cens_data_tble, model, start = start))
+      fit_i <- try(fitdistcens(cens_data_tble, model, start = start, ...))
     }
     if (class(fit_i) != "try-error") { 
       par_i <- rep(NA, 3)
