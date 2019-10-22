@@ -23,15 +23,21 @@
     </item>
     
     <item>
+      <title>Moving forward in fall</title>
+      <link>/InvasionHet/2019/10/22/moving-forward-in-fall/</link>
+      <pubDate>Tue, 22 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/10/22/moving-forward-in-fall/</guid>
+      <description>Warning in .load.config(override.config): Your configuration file is missing the following entries: tables_type. Defaults will be used. Warning in .load.config(override.config): Your configuration contains the following unused entries: data_tables. These will be ignored. Warning in .check.version(config): Your configuration is compatible with version 0.8.2 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.9.0. </description>
+    </item>
+    
+    <item>
       <title>Fit RIL dispersal</title>
       <link>/InvasionHet/2019/05/24/fit-ril-dispersal/</link>
       <pubDate>Fri, 24 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/InvasionHet/2019/05/24/fit-ril-dispersal/</guid>
-      <description>I’ve just written a data script that creates disperseRIL, an analog to disperseLer. The main difference is that there is an extra column named RIL that gives the RIL number.
-There is not nearly as much replication (6 reps per RIL).
-I should be able to analyze using the same functions I used for Ler:
-# Pick out one RIL disperseRILi &amp;lt;- filter(disperseRIL, RIL == &amp;quot;3&amp;quot;) fiteach &amp;lt;- fiteach_disp_unt(disperseRILi, model = &amp;quot;gengamma&amp;quot;) fiteach  ID model AIC par1 par2 par3 se1 se2 1 1 gengamma 22.</description>
+      <description>Warning in .load.config(override.config): Your configuration file is missing the following entries: tables_type. Defaults will be used. Warning in .load.config(override.config): Your configuration contains the following unused entries: data_tables. These will be ignored. Warning in .check.version(config): Your configuration is compatible with version 0.8.2 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.9.0. I’ve just written a data script that creates disperseRIL, an analog to disperseLer. The main difference is that there is an extra column named RIL that gives the RIL number.</description>
     </item>
     
     <item>
@@ -251,7 +257,7 @@ start_gengamma function (x, truncated = FALSE) { if (dim(as.matrix(x))[2] != 2) 
       <guid>/InvasionHet/2018/11/16/likely-looking-distributions/</guid>
       <description>Let’s think about which distributions could be good. We know what the (half-)normal, exponential, and log-normal look like.
 Nathan et al. (2012) also suggest:
- Exponential power 2Dt Inverse power Logistic Mixture models Inverse Gaussian (Wald) Wiebull Gamma  The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by \(2\pi r\), but that doesn’t seem right for e.</description>
+ Exponential power 2Dt Inverse power Logistic Mixture models Inverse Gaussian (Wald) Wiebull Gamma  The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by \(2\pi r\), but that doesn’t seem right for e.</description>
     </item>
     
     <item>
@@ -484,7 +490,7 @@ I fit negative exponential kernels, which I know isn&amp;rsquo;t necessarily the
       <pubDate>Wed, 13 Sep 2017 00:00:00 +0000</pubDate>
       
       <guid>/InvasionHet/2017/09/13/fitting-dispersal-kernels/</guid>
-      <description>Quick looks at dispersal. Lewis et al 2008 show how to calculate empirical moment generating functions, but I’m not sure how useful that is for us. Nathan et al. 2012 has a good review of kernels, but not much statistical info. I found Viana et al. 2016 which suggests fitting the CDF is better than fitting the PDF.
+      <description>Quick looks at dispersal. Lewis et al 2008 show how to calculate empirical moment generating functions, but I’m not sure how useful that is for us. Nathan et al. 2012 has a good review of kernels, but not much statistical info. I found Viana et al. 2016 which suggests fitting the CDF is better than fitting the PDF.
 Viana also led my to the fitdistrplus package, which fits standard distributions. I think this is what we need–I was increasinglyl unconfident im my home-rolled fitting routines.</description>
     </item>
     

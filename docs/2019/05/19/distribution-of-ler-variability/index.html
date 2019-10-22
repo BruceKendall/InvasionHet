@@ -235,7 +235,8 @@ ggplot(rep_spread_stats, aes(x = Mean)) + geom_histogram() +
 <pre class="r"><code>ggplot(rep_spread_stats, aes(x = Variance)) + geom_histogram() + 
   geom_vline(colour = &quot;red&quot;, xintercept = var(maxd_data))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="/InvasionHet/post/2019-05-19-distribution-of-ler-variability_files/figure-html/plot-2.png" width="672" /> So, the distibution of variances is really skewed and there are some really large values. but the data are right in there. Here is the data: 14, 14.4444444. And here is the mean of the simulations: 15.0927778, 19.5081111. If I trim the most extreme values we get 15.0477324, 14.4353741</p>
+<p><img src="/InvasionHet/post/2019-05-19-distribution-of-ler-variability_files/figure-html/plot-2.png" width="672" />
+So, the distibution of variances is really skewed and there are some really large values. but the data are right in there. Here is the data: 14, 14.4444444. And here is the mean of the simulations: 15.0927778, 19.5081111. If I trim the most extreme values we get 15.0477324, 14.4353741</p>
 <p>Just for grins, let’s see what happens if we turn off kernel stochasticity.</p>
 <pre class="r"><code>nruns &lt;- 100
 controls$kernel_stoch &lt;- FALSE
@@ -256,7 +257,8 @@ ggplot(rep_spread_stats, aes(x = Mean)) + geom_histogram() +
 <pre class="r"><code>ggplot(rep_spread_stats, aes(x = Variance)) + geom_histogram() + 
   geom_vline(colour = &quot;red&quot;, xintercept = var(maxd_data))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="/InvasionHet/post/2019-05-19-distribution-of-ler-variability_files/figure-html/plot2-2.png" width="672" /> That shoots it all to heck! Let’s try shutting off the others one at a time.</p>
+<p><img src="/InvasionHet/post/2019-05-19-distribution-of-ler-variability_files/figure-html/plot2-2.png" width="672" />
+That shoots it all to heck! Let’s try shutting off the others one at a time.</p>
 <p>No seed sampling:</p>
 <pre class="r"><code>nruns &lt;- 100
 controls$kernel_stoch &lt;- TRUE

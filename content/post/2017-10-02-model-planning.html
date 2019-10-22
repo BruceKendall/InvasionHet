@@ -18,11 +18,11 @@ tags:
 <li>Seed production</li>
 <li>Seed dispersal</li>
 </ol>
-Seed production is density dependent, with a Gompertz deterministic skeleton:
+<p>Seed production is density dependent, with a Gompertz deterministic skeleton:
 <span class="math display">\[\begin{equation}
 \log(S_{g,t,x}) = a_g + b_g \log(N_{g,t,x}),
 \end{equation}\]</span>
-<p>where <span class="math inline">\(S\)</span> is seed number and <span class="math inline">\(N\)</span> is adult number; <span class="math inline">\(g\)</span> is genotype, <span class="math inline">\(t\)</span> is generation and <span class="math inline">\(x\)</span> is location. In addition, there is demographic stochasticity (probably Poisson, but need to check); temporal environmental stochasticity; and among-replicate environmental stochasticity. Need to check how well correlated the latter are among RILs.</p>
+where <span class="math inline">\(S\)</span> is seed number and <span class="math inline">\(N\)</span> is adult number; <span class="math inline">\(g\)</span> is genotype, <span class="math inline">\(t\)</span> is generation and <span class="math inline">\(x\)</span> is location. In addition, there is demographic stochasticity (probably Poisson, but need to check); temporal environmental stochasticity; and among-replicate environmental stochasticity. Need to check how well correlated the latter are among RILs.</p>
 <p>Dispersal has two components: a fraction that stay in the maternal pot, and for the remainder, a left-truncated lognormal dispersal distance. There may be sampling stochasticity in the fraction dispersing, as well as in a finite number of seeds sampling the dispersal kernel. There may also be environmental stochasticity in the three dispersal parameters. In the data they are correlated, so we will look at them jointly and separately (and with or without correlations). We have no basis on which to assess whether the kernel stochasticity is independent among pots within a replicate, so we will try both with and without (I don’t expect it will make a lot of difference).</p>
 </div>
 <div id="data-structures" class="section level1">

@@ -51,7 +51,8 @@ No Hauck-Donner effect found in any of the estimates</code></pre>
 <pre><code>       mu       rho 
 0.5129148 0.1441117 </code></pre>
 <p>The parameterization in vgam is somewhat unconventional. mu is simply the mean of the beta distribution, alpha/(alpha + beta), but rho is 1/(1 + alpha + beta) where alpha and beta are the conventional shape parameters.</p>
-<p>To get to the variance parameter, we need to transform this. <span class="math display">\[\begin{align}
+<p>To get to the variance parameter, we need to transform this.
+<span class="math display">\[\begin{align}
 V &amp;= \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}\\
 &amp;= \mu (1-\mu) \rho.
 \end{align}\]</span></p>

@@ -70,8 +70,10 @@
 <p>Stacy and Mihram (1965: Technometrics 7, 349-58) give an expression for the raw moments:</p>
 <p><span class="math display">\[
 E(X^r) = \frac{a^r \Gamma \left[\nu + r/p \right]}{\Gamma(\nu)}.
-\]</span> This is only finite if <span class="math inline">\(r/p &gt; -\nu\)</span>.</p>
-<p>This uses the original parameterization that the flexsurv authors do not like; the density function is: <span class="math display">\[
+\]</span>
+This is only finite if <span class="math inline">\(r/p &gt; -\nu\)</span>.</p>
+<p>This uses the original parameterization that the flexsurv authors do not like; the density function is:
+<span class="math display">\[
 |p| x^{p \nu - 1} \frac{\exp \left[-(x/a)^p\right]}{a^{p \nu} \Gamma(\nu)}.
 \]</span></p>
 <p>This is close to the paramterization in gengamma.orig from flexsurv: their <span class="math inline">\(b\)</span> (“shape”, positive) is the positive half of <span class="math inline">\(p\)</span>; their <span class="math inline">\(k\)</span> is <span class="math inline">\(\nu\)</span>; their <span class="math inline">\(a\)</span> (“scale”, positive) is <span class="math inline">\(a\)</span>. So to get to the preferred parameterization we have:</p>
@@ -82,7 +84,8 @@ E(X^r) = \frac{a^r \Gamma \left[\nu + r/p \right]}{\Gamma(\nu)}.
 Q &amp;= 1/\sqrt{\nu}
 \end{aligned}
 \]</span></p>
-<p>Inverting this, we get <span class="math display">\[
+<p>Inverting this, we get
+<span class="math display">\[
 \begin{aligned}
 \nu &amp;= 1/Q^2\\
 p &amp;= 1/(\sigma \sqrt{\nu})\\
@@ -92,7 +95,8 @@ a &amp;= \exp\left[\mu - \log(\nu)/p \right]\\
   &amp;= \frac{e^{\mu}}{\nu^{1/p}}\\
   &amp;= e^{\mu} Q^{2 \sigma/Q}
 \end{aligned}
-\]</span> This looks a little different from the formulas I calculated last year, but I think that the previous ones had a mistake. I can test these using some random numbers.</p>
+\]</span>
+This looks a little different from the formulas I calculated last year, but I think that the previous ones had a mistake. I can test these using some random numbers.</p>
 
     </div>
   </article>

@@ -93,29 +93,47 @@ plot(xx, dhnorm(xx), type = &quot;l&quot;)</code></pre>
 </div>
 <div id="dt-distribution" class="section level2">
 <h2>2dt distribution</h2>
-<p>The formula for the density function of the 2dt distribution given by Nathan et al. (2012) is <span class="math display">\[
+<p>The formula for the density function of the 2dt distribution given by Nathan et al. (2012) is
+<span class="math display">\[
 f(x; a,b) = \frac{b-1}{\pi a^2}\left( 1 + \frac{x^2}{a^2}\right)^{-b}.
-\]</span> Bullock et al (2017) claim to be using Nathan’s formulations but omit the final exponent (although there’s no way of knowing whether that’s a typo in the table, as they don’t appear to provide their code): <span class="math display">\[
+\]</span>
+Bullock et al (2017) claim to be using Nathan’s formulations but omit the final exponent (although there’s no way of knowing whether that’s a typo in the table, as they don’t appear to provide their code):
+<span class="math display">\[
 f(x; a,b) = \frac{b-1}{\pi a^2}\left( 1 + \frac{x^2}{a^2}\right).
-\]</span> Clark’s (1999) original formula is <span class="math display">\[
+\]</span>
+Clark’s (1999) original formula is
+<span class="math display">\[
 f(x; u,p) = \frac{p}{\pi u} \left( 1 + \frac{x^2}{u}\right)^{-(p+1)}.
-\]</span> This is equivalent to the Nathan formulation if we let <span class="math inline">\(b = p+1\)</span> and <span class="math inline">\(a = \sqrt{u}\)</span>.</p>
+\]</span>
+This is equivalent to the Nathan formulation if we let <span class="math inline">\(b = p+1\)</span> and <span class="math inline">\(a = \sqrt{u}\)</span>.</p>
 <p>The Nathan formula is for what he calls <span class="math inline">\(k_L(r)\)</span>, the “location kernel.” In 2-d space (the primary focus of the paper), this will be quite different from the “distance kernel” (<span class="math inline">\(k_D(r)\)</span>) because of the increasing area at each distance. However, in one dimension with bi-directional dispersal <span class="math inline">\(k_D(r) = 2k_L(r)\)</span>, and in fact we are measuring half of that, or <span class="math inline">\(k_L(r)\)</span>. But there are factors of <span class="math inline">\(a\)</span> and 2 that look suspicious.</p>
-<p>Let’s compare Nelson’s formulations with the theoretical ones for some standard distribution. We’ll start with the exponential, which in the theoretical case is only has non-negative support. The theoretical distribution is <span class="math display">\[
+<p>Let’s compare Nelson’s formulations with the theoretical ones for some standard distribution. We’ll start with the exponential, which in the theoretical case is only has non-negative support. The theoretical distribution is
+<span class="math display">\[
 f(x; \lambda) = \lambda e^{-\lambda x}.
-\]</span> Nathan’s formulation is <span class="math display">\[
+\]</span>
+Nathan’s formulation is
+<span class="math display">\[
 f(x; a) = \frac{1}{2\pi a^2} e^{-x/a}.
-\]</span> From the term in the exponential we get <span class="math inline">\(a = 1/\lambda\)</span>; but then there is an extra <span class="math inline">\(1/2\pi a\)</span> in Norman’s normalization constant. This is different from Nathan’s claimed conversion from <span class="math inline">\(k_L(r)\)</span> to <span class="math inline">\(k_D(r)\)</span> in the 2D case, which is a factor of <span class="math inline">\(2 \pi x\)</span> (although note that the distributions are formulated such that <span class="math inline">\(a = E[x]\)</span>).</p>
-<p>Now let’s look at the normal distribution, which has support on the full real line (as would 2Dt, as it has terms only in <span class="math inline">\(x^2\)</span>). The theoretical distribution is <span class="math display">\[
+\]</span>
+From the term in the exponential we get <span class="math inline">\(a = 1/\lambda\)</span>; but then there is an extra <span class="math inline">\(1/2\pi a\)</span> in Norman’s normalization constant. This is different from Nathan’s claimed conversion from <span class="math inline">\(k_L(r)\)</span> to <span class="math inline">\(k_D(r)\)</span> in the 2D case, which is a factor of <span class="math inline">\(2 \pi x\)</span> (although note that the distributions are formulated such that <span class="math inline">\(a = E[x]\)</span>).</p>
+<p>Now let’s look at the normal distribution, which has support on the full real line (as would 2Dt, as it has terms only in <span class="math inline">\(x^2\)</span>). The theoretical distribution is
+<span class="math display">\[
 f(x; \mu, \sigma) = \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{(x - \mu)^2}{2 \sigma^2}}.
-\]</span> The half-normal is thus, for <span class="math inline">\(x \ge 0\)</span>, <span class="math display">\[
+\]</span>
+The half-normal is thus, for <span class="math inline">\(x \ge 0\)</span>,
+<span class="math display">\[
 f(x; \sigma) = \frac{2}{\sqrt{2 \pi \sigma^2}} e^{-\frac{x^2}{2 \sigma^2}}.
-\]</span> Nathan’s formula is <span class="math display">\[
+\]</span>
+Nathan’s formula is
+<span class="math display">\[
 f(x; a) = \frac{1}{\pi a^2} e^{-\frac{x^2}{a^2}}.
-\]</span> From the term in the exponential, we get that <span class="math inline">\(a = \sqrt{2\pi \sigma^2}\)</span>, and thus the normalization term is <span class="math inline">\(\frac{1}{\sqrt{2 \pi \sigma^2}} \frac{1}{\pi a} = \frac{2}{\sqrt{2 \pi \sigma^2}} \frac{1}{2 \pi a}\)</span>. So once again we have to multiply Nelson’s form by <span class="math inline">\(2 \pi a\)</span> to get the distribution we want.</p>
-<p>This means that the distribution function we want for the 2Dt is <span class="math display">\[
+\]</span>
+From the term in the exponential, we get that <span class="math inline">\(a = \sqrt{2\pi \sigma^2}\)</span>, and thus the normalization term is <span class="math inline">\(\frac{1}{\sqrt{2 \pi \sigma^2}} \frac{1}{\pi a} = \frac{2}{\sqrt{2 \pi \sigma^2}} \frac{1}{2 \pi a}\)</span>. So once again we have to multiply Nelson’s form by <span class="math inline">\(2 \pi a\)</span> to get the distribution we want.</p>
+<p>This means that the distribution function we want for the 2Dt is
+<span class="math display">\[
 f(x; a,b) = \frac{2(b-1)}{a}\left( 1 + \frac{x^2}{a^2}\right)^{-b},
-\]</span> with <span class="math inline">\(x \ge 0\)</span>.</p>
+\]</span>
+with <span class="math inline">\(x \ge 0\)</span>.</p>
 <p>However, there does not seem to be a straightforward analytical solution to the integral of this, for calculating the CDF, which is need by <code>fitdist</code> (the p form of the distribution). I could make a version with numerical integration; the question is, what sort of vectorization (if any) is required by fitdist? In fact, the built-in distribution functions seem to have rather unpredictable responses if vectors are provided for both x (or q) and one or more parameters. A quick google did not pull up any description; and since they use c code it’s not easy to see what’s going on.</p>
 <p>The numerical integration is not vectorized, I think. Furthermore, the function to be used by optim is supposed to return a scalar result, so I think that we don’t need to worry about vectorization over parameters. But there may well be vectorization over x and q. I think the approach could be to write some draft functions and include warning statements that show the the dimensions of various inputs. That’s for tomorrow.</p>
 </div>

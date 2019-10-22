@@ -61,7 +61,7 @@
 
   <article class="article">
     
-    <span class="article-duration">12 min read</span>
+    <span class="article-duration">14 min read</span>
     
 
     <h1 class="article-title">Fit RIL dispersal</h1>
@@ -71,13 +71,22 @@
     
 
     <div class="article-content">
-      <p>I’ve just written a data script that creates <code>disperseRIL</code>, an analog to <code>disperseLer</code>. The main difference is that there is an extra column named <code>RIL</code> that gives the RIL number.</p>
+      <pre><code>Warning in .load.config(override.config): Your configuration file is
+missing the following entries: tables_type. Defaults will be used.</code></pre>
+<pre><code>Warning in .load.config(override.config): Your configuration contains the
+following unused entries: data_tables. These will be ignored.</code></pre>
+<pre><code>Warning in .check.version(config): Your configuration is compatible with version 0.8.2 of the ProjectTemplate package.
+  Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.9.0.</code></pre>
+<p>I’ve just written a data script that creates <code>disperseRIL</code>, an analog to <code>disperseLer</code>. The main difference is that there is an extra column named <code>RIL</code> that gives the RIL number.</p>
 <p>There is not nearly as much replication (6 reps per RIL).</p>
 <p>I should be able to analyze using the same functions I used for Ler:</p>
 <pre class="r"><code># Pick out one RIL
 disperseRILi &lt;- filter(disperseRIL, RIL == &quot;3&quot;)
-fiteach &lt;- fiteach_disp_unt(disperseRILi, model = &quot;gengamma&quot;)
-fiteach</code></pre>
+fiteach &lt;- fiteach_disp_unt(disperseRILi, model = &quot;gengamma&quot;)</code></pre>
+<pre><code>Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 1</code></pre>
+<pre class="r"><code>fiteach</code></pre>
 <pre><code>  ID    model       AIC      par1      par2      par3       se1        se2
 1  1 gengamma  22.36640 1.2252671 0.1551575 7.0740943 1.7965469 2.66330966
 2  2 gengamma 461.23963 1.7278334 0.6198084 1.6890614 0.1471995 0.08855569
@@ -186,8 +195,18 @@ RIL_list </code></pre>
 [1] &quot;22&quot;               &quot;43.5352121335927&quot;
 [1] &quot;35&quot; &quot;17&quot; &quot;18&quot; &quot;19&quot; &quot;20&quot; &quot;21&quot; &quot;22&quot;
 &lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start_params(cens_data_tble,  : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
 &lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
 &lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
   ID    model      AIC     par1      par2       par3       se1        se2
 1 17 gengamma 182.1036 2.663246 0.1030779 18.0628155 0.4753930 0.99631225
 2 18 gengamma 127.5256 2.084347 0.2534518  4.8303363 0.6678691 0.61614958
@@ -196,7 +215,7 @@ RIL_list </code></pre>
 5 22 gengamma 137.7818 1.526589 0.2680838  1.7280388 0.1257836 0.08330980
           se3
 1 174.7250592
-2  12.7006950
+2  12.7006951
 3   0.5484743
 4   0.3399594
 5   0.9007936
@@ -207,6 +226,10 @@ RIL_list </code></pre>
 [1] &quot;35&quot;               &quot;106.776723231003&quot;
 [1] &quot;42&quot; &quot;23&quot; &quot;24&quot; &quot;25&quot; &quot;26&quot; &quot;27&quot; &quot;28&quot;
 &lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
   ID    model       AIC      par1      par2      par3       se1        se2
 1 23 gengamma 564.69066 1.5926594 0.7756917 1.0780307 0.1314701 0.06856613
 2 24 gengamma  56.04586 1.8224211 0.1190274 8.6298006 0.6818244 1.05583842
@@ -244,9 +267,23 @@ RIL_list </code></pre>
 [1] &quot;53&quot;               &quot;14.8849515323947&quot;
 [1] &quot;58&quot; &quot;35&quot; &quot;36&quot; &quot;37&quot; &quot;39&quot; &quot;40&quot;
 &lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
 &lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start_params(cens_data_tble,  : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
 &lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
 &lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
   ID    model       AIC     par1       par2       par3       se1
 1 35 gengamma  90.89634 1.069996 0.61022493  0.8572706 0.2943650
 2 36 gengamma 116.20471 0.798817 0.19461464 -3.6387068 0.3938943
@@ -342,7 +379,15 @@ RIL_list </code></pre>
 [1] &quot;148&quot;               &quot;-6.32396496091243&quot;
 [1] &quot;180&quot; &quot;73&quot;  &quot;74&quot;  &quot;75&quot; 
 &lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
 &lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
   ID    model       AIC     par1      par2     par3       se1       se2
 1 73 gengamma 229.53446 1.937439 0.6034190 1.724475 0.1865057 0.1135445
 2 74 gengamma  50.90043 1.213799 0.1302438 3.177901 0.1965197 0.2402723
@@ -358,8 +403,17 @@ RIL_list </code></pre>
 [1] &quot;180&quot;              &quot;42.8189577588738&quot;
 [1] &quot;187&quot; &quot;77&quot;  &quot;78&quot;  &quot;79&quot; 
 &lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [1]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start_params(cens_data_tble,  : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
 &lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
+Error in fitdistcens(cens_data_tble, model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
 &lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
+Error in fitdistcens(cens_data_tble, model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
   ID    model      AIC     par1      par2      par3       se1        se2
 1 78 gengamma 362.7390 1.383439 0.7688265 0.1301997 0.1646852 0.06786955
 2 79 gengamma 126.7605 1.506225 0.9226793 1.1529217 0.3780391 0.19033474

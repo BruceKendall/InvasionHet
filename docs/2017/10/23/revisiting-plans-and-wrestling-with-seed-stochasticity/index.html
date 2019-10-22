@@ -81,12 +81,16 @@
 <div id="prior-analysis" class="section level2">
 <h2>Prior analysis</h2>
 <p>Back in June, I did some analysis on the Ler population data, using treatment C (unmanipulated) and B (solitary plants each generation), and using the 1p and 2p gaps. The idea was to look at seedling production in the home pot as a function of adult number, generation, and runway; the selection of landscapes was to get populations that were advancing (so that multiple pots were occupied and I could look at variation among pots within a runway), while having a numerically small effect of seed immigration on local seedling number. It took a bit of work to reconstruct my logic, so here it is in more detail:</p>
-<p>There is a Gompertz relatinship between adult number (<span class="math inline">\(A\)</span>) and seedling number (<span class="math inline">\(S\)</span>): <span class="math display">\[
+<p>There is a Gompertz relatinship between adult number (<span class="math inline">\(A\)</span>) and seedling number (<span class="math inline">\(S\)</span>):
+<span class="math display">\[
 \log(S_t / A_{t-1}) = a + b \log A_{t-1} + \epsilon_t,
-\]</span> where <span class="math inline">\(\epsilon_t\)</span> includes both environmental and demographic stochasticity.</p>
-<p>This can be re-written as <span class="math display">\[
+\]</span>
+where <span class="math inline">\(\epsilon_t\)</span> includes both environmental and demographic stochasticity.</p>
+<p>This can be re-written as
+<span class="math display">\[
 \log S_t = a + (1+b) \log A_{t-1} + \epsilon_t.
-\]</span> The RHS is what would go into a GLM with a log link function.</p>
+\]</span>
+The RHS is what would go into a GLM with a log link function.</p>
 <p>I ran a quasi-Poisson GLM including generation, runway, and their interaction as controls (to soak up putative environmental stochasticity), and found significant effects of those (as well as for the density dependence). The dispersion parameter was very large (75). The question was, is the residual variance plausibly demographic stochasticity alone, or is there additional variation among pots within a runway? I reasoned that, under a model of of demographic stochasticity, the variance of <span class="math inline">\(S/A\)</span> should be proportional to <span class="math inline">\(1/A\)</span>. In order to do this analysis I had to remove the instances with a single pot in the runway (including all of the first generation), because the residual was, naturally, zero for those pots.</p>
 <p>I ended that post saying that I needed to create the relevant data in a munge script, which I still haven’t done.</p>
 </div>

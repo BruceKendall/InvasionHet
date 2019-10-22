@@ -135,7 +135,9 @@ dgengamma(numeric(0), mu,sigma, Q)</code></pre>
 <pre class="r"><code>plnorm(c(0, 1, NA))</code></pre>
 <pre><code>[1] 0.0 0.5  NA</code></pre>
 <pre class="r"><code>detach(startgg)</code></pre>
-<p>Things that need fixing in dgengamma: - Should return 0 instead of NaN when x = 0 - Should return 0 instead of NaN when x = Inf</p>
+<p>Things that need fixing in dgengamma:
+- Should return 0 instead of NaN when x = 0
+- Should return 0 instead of NaN when x = Inf</p>
 <p>pgengamma looks ok.</p>
 <p>So let’s try a wrapper:</p>
 <pre class="r"><code>dmygengamma &lt;- function(x, mu, sigma, Q, ...) {

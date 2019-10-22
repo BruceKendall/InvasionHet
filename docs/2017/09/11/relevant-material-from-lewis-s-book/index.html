@@ -87,9 +87,11 @@
 <div id="demographic-stochasticity" class="section level2">
 <h2>Demographic stochasticity</h2>
 <p>Starts with two lab examples: Tribolium from Melbourne and Hastings (2009), and ciliates from Giometto, A., Rinaldo, A., Carrara, F., Altermatt, F.: Emerging predictable features of replicated biological invasion fronts. Proc. Natl. Acad. Sci. U. S. A. 111(1), 297–301 (2014). <a href="doi:10.1073/pnas.1321167110" class="uri">doi:10.1073/pnas.1321167110</a> [this paper uses a stochastic PDE to fit the dynamics]. They accept the authors’ respective claims that Tribolium spread “could not be predicted precisely” but ciliate spread could be “predicted well.” But the former claim refers to a <em>single realization</em> whereas the latter refers to the mean and variance across replicates.</p>
-<p>Models henceforth focus on furthest-forward individual. Brief treatment of continuous-time linear branching process, which I don’t think is too relevant here. Then an extended treatment of Clark et al’s “invasion by extremes” paper. They use a 1-paremter simplification of the 2Dt kernel: <span class="math display">\[
+<p>Models henceforth focus on furthest-forward individual. Brief treatment of continuous-time linear branching process, which I don’t think is too relevant here. Then an extended treatment of Clark et al’s “invasion by extremes” paper. They use a 1-paremter simplification of the 2Dt kernel:
+<span class="math display">\[
 k(x) = \frac{1}{2\sqrt{2\beta} \left(1 + \frac{x^2}{2\beta}\right)^{3/2}};
-\]</span> not sure if this was Clark’s original choice. The section doesn’t treat variance in spread but instead focus on mean spread, with lower and upper bounds depending on assumptions about contributions from individuals behind the front.</p>
+\]</span>
+not sure if this was Clark’s original choice. The section doesn’t treat variance in spread but instead focus on mean spread, with lower and upper bounds depending on assumptions about contributions from individuals behind the front.</p>
 <p>They finish the chapter by talking about “patchy spread,” but here they mean something like stratified diffusion rather than a patchy environment. There’s probably some interesting stuff here but not needed for our current work.</p>
 </div>
 <div id="neubert-et-al-2000" class="section level2">

@@ -29,7 +29,7 @@
       <guid>/InvasionHet/2018/11/16/likely-looking-distributions/</guid>
       <description>Let’s think about which distributions could be good. We know what the (half-)normal, exponential, and log-normal look like.
 Nathan et al. (2012) also suggest:
- Exponential power 2Dt Inverse power Logistic Mixture models Inverse Gaussian (Wald) Wiebull Gamma  The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by \(2\pi r\), but that doesn’t seem right for e.</description>
+ Exponential power 2Dt Inverse power Logistic Mixture models Inverse Gaussian (Wald) Wiebull Gamma  The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by \(2\pi r\), but that doesn’t seem right for e.</description>
     </item>
     
     <item>

@@ -83,7 +83,7 @@
 <li>Wiebull</li>
 <li>Gamma</li>
 </ul>
-<p>The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by <span class="math inline">\(2\pi r\)</span>, but that doesn’t seem right for e.g. their Gaussian formulation.</p>
+<p>The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by <span class="math inline">\(2\pi r\)</span>, but that doesn’t seem right for e.g. their Gaussian formulation.</p>
 <p>Some notes:</p>
 <ul>
 <li>Gamma is generalization of exponential. It can have a mode at the origin or at positive values. Good candidate.</li>
@@ -211,15 +211,20 @@ shape 0.03855307 1.00000000</code></pre>
 <div id="generalized-gamma-distribution" class="section level2">
 <h2>Generalized gamma distribution</h2>
 <p>This is provided by <strong>flexsurv</strong>, with root <code>gengamma</code>. This implementation has parameters <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma\)</span>, and <span class="math inline">\(Q\)</span>.</p>
-<p>The Wikipedia definition (<a href="https://en.wikipedia.org/wiki/Generalized_gamma_distribution" class="uri">https://en.wikipedia.org/wiki/Generalized_gamma_distribution</a>) is <span class="math display">\[
+<p>The Wikipedia definition (<a href="https://en.wikipedia.org/wiki/Generalized_gamma_distribution" class="uri">https://en.wikipedia.org/wiki/Generalized_gamma_distribution</a>) is
+<span class="math display">\[
 f(x | a, d, p) = \frac{(p/a^d)x^{d -1}e^{-(x/a)^p}}{\Gamma(d/p)}
-\]</span> The Wikipedia article includes the conversion to the flexsurv definition: <span class="math display">\[
+\]</span>
+The Wikipedia article includes the conversion to the flexsurv definition:
+<span class="math display">\[
 \begin{aligned}
 \mu &amp;= \ln a + \frac{\ln d - \ln p}{p}\\
 \sigma &amp;= \frac{1}{\sqrt{pd}}\\
 Q &amp;= \sqrt{p/d}
 \end{aligned}
-\]</span> We actually need to invert these to do the substitutions in the moment calculations. We have <span class="math display">\[
+\]</span>
+We actually need to invert these to do the substitutions in the moment calculations. We have
+<span class="math display">\[
 \begin{aligned}
 d/p &amp;= Q^{-2}\\
 pd &amp;= \sigma^{-2}\\
@@ -229,7 +234,8 @@ d &amp;= 1/(\sigma Q)\\
 \ln a &amp;= \ln (d/p)^{-p} - \mu = \ln Q^{2 Q/\sigma} - \mu\\
 a &amp;= \exp\left[ \ln Q^{2 Q/\sigma} - \mu\right]
 \end{aligned}
-\]</span> But actually, this isn’t going to help much, because the terms for the mean and variance on Wikipedia aren’t going to be invertible (at least not easily).</p>
+\]</span>
+But actually, this isn’t going to help much, because the terms for the mean and variance on Wikipedia aren’t going to be invertible (at least not easily).</p>
 <p>From the description on the help page, it seems like <span class="math inline">\(\mu\)</span> is the mean of <span class="math inline">\(x\)</span> and <span class="math inline">\(\sigma\)</span> is the sd of <span class="math inline">\(\log(x)\)</span>. Let’s give this a try:</p>
 <pre class="r"><code>library(flexsurv)
 x &lt;- rgengamma(1000, 2, 3, 0)

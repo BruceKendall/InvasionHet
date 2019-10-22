@@ -155,7 +155,8 @@ qplot(Density, Total_seeds, data = Ler_dispersal_stats)</code></pre>
 <pre class="r"><code>qplot(Dispersal_fraction, Mean_dispersal, data = Ler_dispersal_stats)</code></pre>
 <p><img src="/InvasionHet/post/2017-09-19-fit-ler-dispersal-kernels_files/figure-html/disperse_number-3.png" width="672" /></p>
 <pre class="r"><code>qplot(Dispersal_fraction, RMS_dispersal, data = Ler_dispersal_stats)</code></pre>
-<p><img src="/InvasionHet/post/2017-09-19-fit-ler-dispersal-kernels_files/figure-html/disperse_number-4.png" width="672" /> Here we see a correlation with both. This could just be a sampling effect; once we fit kernel parameters we’ll have to see if they have correlations as well. If so, that suggests that the same variables (such as canopy height and structure, and intensity of simulated rainfall) that affect whether seeds leave the home pot also affect how far they go.</p>
+<p><img src="/InvasionHet/post/2017-09-19-fit-ler-dispersal-kernels_files/figure-html/disperse_number-4.png" width="672" />
+Here we see a correlation with both. This could just be a sampling effect; once we fit kernel parameters we’ll have to see if they have correlations as well. If so, that suggests that the same variables (such as canopy height and structure, and intensity of simulated rainfall) that affect whether seeds leave the home pot also affect how far they go.</p>
 <p>Here’s a multiple regression just to tease out the two variables:</p>
 <pre class="r"><code>summary(lm(Mean_dispersal ~ Dispersal_fraction + Dispersing_seeds, data = Ler_dispersal_stats))</code></pre>
 <pre><code>
@@ -269,7 +270,8 @@ Correlation matrix:
 mean  1.000000 -0.803976
 sd   -0.803976  1.000000</code></pre>
 <pre class="r"><code>cdfcompcens(fit_tnorm, Turnbull.confint = TRUE)</code></pre>
-<p><img src="/InvasionHet/post/2017-09-19-fit-ler-dispersal-kernels_files/figure-html/fit_trial-1.png" width="672" /> This looks like a pretty darn good fit!</p>
+<p><img src="/InvasionHet/post/2017-09-19-fit-ler-dispersal-kernels_files/figure-html/fit_trial-1.png" width="672" />
+This looks like a pretty darn good fit!</p>
 <p>Interestingly, using the non-censored method gives almost identical parameter estimates and CDF:</p>
 <pre class="r"><code>fit3&lt;-fitdist(data_vec - 4, &quot;tnorm&quot;, start = list(mean = 6, sd = 10))
 summary(fit3)</code></pre>
@@ -290,7 +292,8 @@ sd   -0.801385  1.000000</code></pre>
 <p><img src="/InvasionHet/post/2017-09-19-fit-ler-dispersal-kernels_files/figure-html/fit_trial_plots-1.png" width="672" /></p>
 <pre class="r"><code># qqcomp(fit3) # This one requires defining a quantile function!
 ppcomp(fit3)</code></pre>
-<p><img src="/InvasionHet/post/2017-09-19-fit-ler-dispersal-kernels_files/figure-html/fit_trial_plots-2.png" width="672" /> Unfortunately, we need additional work to get qqcomp working; and denscomp only gives a sensible looking histogram with tweaking (and even there, the bins are not centered appropriately, so the histogram is shifted).</p>
+<p><img src="/InvasionHet/post/2017-09-19-fit-ler-dispersal-kernels_files/figure-html/fit_trial_plots-2.png" width="672" />
+Unfortunately, we need additional work to get qqcomp working; and denscomp only gives a sensible looking histogram with tweaking (and even there, the bins are not centered appropriately, so the histogram is shifted).</p>
 <p>Here’s a rough draft of a better figure:</p>
 <pre class="r"><code>xx = seq(3.3, max(fit3$data) + 0.7, 0.1)
 plot(xx, (dtnorm(xx, fit3$estimate[1], fit3$estimate[2])), type = &quot;l&quot;, col=&quot;red&quot;)

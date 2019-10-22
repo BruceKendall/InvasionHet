@@ -168,7 +168,7 @@ start_gengamma function (x, truncated = FALSE) { if (dim(as.matrix(x))[2] != 2) 
       <guid>/InvasionHet/2018/11/16/likely-looking-distributions/</guid>
       <description>Let’s think about which distributions could be good. We know what the (half-)normal, exponential, and log-normal look like.
 Nathan et al. (2012) also suggest:
- Exponential power 2Dt Inverse power Logistic Mixture models Inverse Gaussian (Wald) Wiebull Gamma  The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by \(2\pi r\), but that doesn’t seem right for e.</description>
+ Exponential power 2Dt Inverse power Logistic Mixture models Inverse Gaussian (Wald) Wiebull Gamma  The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by \(2\pi r\), but that doesn’t seem right for e.</description>
     </item>
     
     <item>
@@ -236,7 +236,7 @@ I think that if I pass the whole data set to the analysis function it will combi
       <pubDate>Wed, 13 Sep 2017 00:00:00 +0000</pubDate>
       
       <guid>/InvasionHet/2017/09/13/fitting-dispersal-kernels/</guid>
-      <description>Quick looks at dispersal. Lewis et al 2008 show how to calculate empirical moment generating functions, but I’m not sure how useful that is for us. Nathan et al. 2012 has a good review of kernels, but not much statistical info. I found Viana et al. 2016 which suggests fitting the CDF is better than fitting the PDF.
+      <description>Quick looks at dispersal. Lewis et al 2008 show how to calculate empirical moment generating functions, but I’m not sure how useful that is for us. Nathan et al. 2012 has a good review of kernels, but not much statistical info. I found Viana et al. 2016 which suggests fitting the CDF is better than fitting the PDF.
 Viana also led my to the fitdistrplus package, which fits standard distributions. I think this is what we need–I was increasinglyl unconfident im my home-rolled fitting routines.</description>
     </item>
     

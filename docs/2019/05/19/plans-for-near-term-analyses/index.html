@@ -72,7 +72,8 @@
 <li>Both kernel stochasticity and seed sampling greatly increases the variance in spread rate</li>
 <li>Both ES and DS in seed production decrease the mean spread rate, but have little impact on the variance.</li>
 </ul>
-<p>What I want to do is run all combinations of ES, DS, KS (kernel stochasticity) and SS (seed sampling). 16 combinations in total, for each landscape. Then I can get at their direct effects on mean and variance as well as their interactions. There are two potential ways I could do the analysis:</p>
+<p>What I want to do is run all combinations of ES, DS, KS (kernel stochasticity) and SS (seed sampling). 16 combinations in total, for each landscape. Then I can get at their direct effects on mean and variance as well as their interactions.
+There are two potential ways I could do the analysis:</p>
 <ol style="list-style-type: decimal">
 <li>Run so many reps that the estimates of the mean and variance of spread are relatively precise, and just assemble the peices arithmetically (e.g., the interaction between ES and DS would be var(ES:DS) - (var(ES) + var(DS))). This could get rather squirrely for the higher-order terms.</li>
 <li>Following the logic in <a href="/2019/05/19/distribution-of-ler-variability/">this morning’s post</a>, I can generate <span class="math inline">\(m\)</span> copies of <span class="math inline">\(n\)</span>-rep runs (where <span class="math inline">\(n\)</span> is small, say 10 to match the data), treat the variance of each run as a data point, and do an lm with all interactions. The point estimates of the effects <em>should</em> be the same as doing the arithmetic calculations on all <span class="math inline">\(n \times m\)</span> reps, but the lm is less likely to have mistakes. There’s still the question of how to pick n and m, given a total sample size; primarily, m should be large enough to have useful residual df. In the short term I think I keep doing n=10, m=100.</li>

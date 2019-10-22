@@ -76,69 +76,30 @@ fit_dispersal_untruncated(temp) </code></pre>
 <p>And now, fitting all the reps:</p>
 <pre class="r"><code>library(tidyverse)
 result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
-<pre><code>[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [1]&gt;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [1]&gt;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
+<pre><code>&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [1]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start_params(cens_data_tble,  : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 1
+
 &lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
 &lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
-[1] &quot;Hello!!&quot;
-&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;</code></pre>
+Error in fitdistcens(cens_data_tble, model, start = start_params(cens_data_tble,  : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 1
+
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100</code></pre>
 <pre class="r"><code>result</code></pre>
 <pre><code>       ID    model        AIC       par1       par2       par3         se1
 1    73_0    hnorm 1530.80560  5.2670324         NA         NA 0.208822528
@@ -149,7 +110,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 6    73_0 invgauss 1559.18562  4.2410389  4.6609548         NA 0.226649615
 7    73_0    logis 1647.38554  3.8909332  1.7743866         NA 0.175184102
 8    73_0 invgamma 1600.88662  1.6604441  3.7678829         NA 0.130296466
-9    73_0 gengamma 1532.70991  1.5706080  0.7274440 1.11880704 0.092995761
+9    73_0 gengamma 1532.70991  1.5705188  0.7274812 1.11856834 0.092995355
 10   75_0    hnorm 1266.46463  5.8823017         NA         NA 0.262129280
 11   75_0      exp 1294.10823  0.2118871         NA         NA 0.013345864
 12   75_0    lnorm 1273.67374  1.2716292  0.8046662         NA 0.051362719
@@ -158,7 +119,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 15   75_0 invgauss 1278.53659  4.7459771  5.7039123         NA 0.272824232
 16   75_0    logis 1339.58670  4.3347955  1.8746783         NA 0.205226093
 17   75_0 invgamma 1311.98984  1.7428625  4.5892120         NA 0.152317546
-18   75_0 gengamma 1260.62837  1.5756685  0.7397276 0.80093052 0.087767344
+18   75_0 gengamma 1260.62837  1.5754181  0.7398792 0.80032607 0.087770126
 19   75_1    hnorm  713.51269  4.6564538         NA         NA 0.263788197
 20   75_1      exp  736.33735  0.2629533         NA         NA 0.021046162
 21   75_1    lnorm  717.33810  1.0826085  0.7626413         NA 0.062145603
@@ -167,7 +128,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 24   75_1 invgauss  717.47726  3.8316349  5.3201363         NA 0.260524891
 25   75_1    logis  756.87401  3.5504621  1.4884598         NA 0.209408290
 26   75_1 invgamma  735.12953  1.9710233  4.4631912         NA 0.222058642
-27   75_1 gengamma  711.43700  1.3894940  0.6990873 0.85069459 0.119595185
+27   75_1 gengamma  711.43701  1.3897357  0.6990100 0.85168137 0.119597740
 28   77_0    hnorm 1154.48392  4.3189682         NA         NA 0.189154205
 29   77_0      exp 1170.56727  0.2958300         NA         NA 0.018308036
 30   77_0    lnorm 1172.24716  0.9136948  0.8476576         NA 0.053957937
@@ -176,7 +137,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 33   77_0 invgauss 1175.67548  3.4199350  3.7724441         NA 0.201501391
 34   77_0    logis 1245.45180  3.1060397  1.4155404         NA 0.152701665
 35   77_0 invgamma 1207.42812  1.7151041  3.1804392         NA 0.154014252
-36   77_0 gengamma 1154.41988  1.3078423  0.7764624 1.02262656 0.093091025
+36   77_0 gengamma 1154.41987  1.3075839  0.7766100 1.02186949 0.093101704
 37   78_2    hnorm 3046.93081  6.6139223         NA         NA 0.194226822
 38   78_2      exp 3145.06731  0.1828970         NA         NA 0.007591670
 39   78_2    lnorm 3127.12893  1.4231437  0.8233190         NA 0.034550219
@@ -185,7 +146,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 42   78_2 invgauss 3151.26809  5.4934780  6.2368731         NA 0.214050922
 43   78_2    logis 3195.05558  5.1742481  2.1248106         NA 0.155477644
 44   78_2 invgamma 3252.73439  1.5886692  4.7076346         NA 0.090684976
-45   78_2 gengamma 3036.20612  1.9264361  0.6176698 1.39216808 0.054842673
+45   78_2 gengamma 3036.20618  1.9264567  0.6177754 1.39254074 0.054855243
 46   79_0    hnorm   14.83316  1.7220761         NA         NA 0.560050751
 47   79_0      exp   15.86294  0.6931392         NA         NA 0.316223283
 48   79_0    lnorm   17.55289  0.2481839  0.6295283         NA 0.319697138
@@ -202,7 +163,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 59   85_1 invgauss  729.46785  3.1323950  4.4126513         NA 0.201222265
 60   85_1    logis  772.11455  2.8722279  1.2100609         NA 0.160896075
 61   85_1 invgamma  746.07460  2.0722270  3.8977887         NA 0.229415494
-62   85_1 gengamma  723.56358  1.1043159  0.7435133 0.64475504 0.102192110
+62   85_1 gengamma  723.56359  1.1042957  0.7434504 0.64516097 0.102188725
 63   85_2    hnorm 4354.02345  5.8448366         NA         NA 0.140219055
 64   85_2      exp 4440.92061  0.2142905         NA         NA 0.007266362
 65   85_2    lnorm 4454.46718  1.2301652  0.8679806         NA 0.029914455
@@ -211,7 +172,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 68   85_2 invgauss 4482.50203  4.6979934  4.7706691         NA 0.158089927
 69   85_2    logis 4630.75167  4.3386426  1.9138172         NA 0.113579145
 70   85_2 invgamma 4619.41046  1.5251798  3.6897006         NA 0.072114229
-71   85_2 gengamma 4352.36534  1.6846356  0.7288177 1.16148868 0.046203221
+71   85_2 gengamma 4352.36537  1.6845414  0.7287975 1.16159040 0.046208322
 72   87_0    hnorm 2503.79534  7.6047246         NA         NA 0.252735336
 73   87_0      exp 2590.00982  0.1573617         NA         NA 0.007392674
 74   87_0    lnorm 2578.61752  1.5782654  0.8248604         NA 0.039086904
@@ -220,7 +181,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 77   87_0 invgauss 2604.62135  6.3774694  7.1027257         NA 0.283906960
 78   87_0    logis 2601.28315  6.0749106  2.3988895         NA 0.198717254
 79   87_0 invgamma 2692.59967  1.5242413  5.1844036         NA 0.097569355
-80   87_0 gengamma 2489.29666  2.1062211  0.5787593 1.50078618 0.057427199
+80   87_0 gengamma 2489.29664  2.1062651  0.5786449 1.50122029 0.057437468
 81   87_1    hnorm 4905.10445  7.2162328         NA         NA 0.169701800
 82   87_1      exp 5105.92649  0.1632436         NA         NA 0.005426232
 83   87_1    lnorm 5134.47298  1.5495997  0.8349219         NA 0.028023947
@@ -229,7 +190,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 86   87_1 invgauss 5210.56941  6.1530944  6.6769370         NA 0.196320365
 87   87_1    logis 5030.87876  6.0087778  2.2085551         NA 0.130136482
 88   87_1 invgamma 5411.28983  1.4486647  4.6995465         NA 0.065959691
-89   87_1 gengamma 4850.76136  2.0846277  0.5447781 1.61284558 0.029473620
+89   87_1 gengamma 4850.76142  2.0847454  0.5446348 1.61348967 0.029466389
 90   87_2    hnorm 2516.89447  4.6935381         NA         NA 0.141663698
 91   87_2      exp 2569.11285  0.2676448         NA         NA 0.011415256
 92   87_2    lnorm 2508.99452  1.0477988  0.7810924         NA 0.033959472
@@ -238,7 +199,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 95   87_2 invgauss 2511.86140  3.7663710  4.9251640         NA 0.140556947
 96   87_2    logis 2680.31432  3.4189352  1.5026720         NA 0.111728479
 97   87_2 invgamma 2568.42236  1.9286590  4.2017863         NA 0.116382767
-98   87_2 gengamma 2492.64086  1.2869995  0.7538953 0.64730698 0.062910487
+98   87_2 gengamma 2492.64091  1.2874927  0.7539517 0.64842787 0.062885393
 99   88_0    hnorm  503.56417  3.3185885         NA         NA 0.207358134
 100  88_0      exp  514.20774  0.3813670         NA         NA 0.033650928
 101  88_0    lnorm  498.07141  0.7269621  0.7289169         NA 0.066541296
@@ -247,7 +208,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 104  88_0 invgauss  498.38191  2.6648072  4.1483344         NA 0.188871197
 105  88_0    logis  538.33168  2.3952979  1.0198089         NA 0.155727422
 106  88_0 invgamma  506.75946  2.3306543  3.9009661         NA 0.305746998
-107  88_0 gengamma  498.30700  0.8764764  0.7375916 0.44543822 0.129941158
+107  88_0 gengamma  498.30700  0.8765649  0.7376402 0.44541340 0.129928529
 108  88_1    hnorm  631.99543  3.4971210         NA         NA 0.197435815
 109  88_1      exp  637.89035  0.3701054         NA         NA 0.029518856
 110  88_1    lnorm  630.01183  0.7128489  0.7969808         NA 0.065996373
@@ -256,7 +217,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 113  88_1 invgauss  629.79778  2.7454661  3.5016135         NA 0.194032404
 114  88_1    logis  688.63966  2.4444387  1.1349098         NA 0.157107412
 115  88_1 invgamma  641.66312  2.0232205  3.2367013         NA 0.240144148
-116  88_1 gengamma  628.53541  0.9387873  0.8007128 0.62059704 0.135375357
+116  88_1 gengamma  628.53541  0.9385477  0.8006707 0.62020914 0.135404074
 117  89_1    hnorm 2406.64126  6.7528483         NA         NA 0.224016131
 118  89_1      exp 2375.45389  0.2017406         NA         NA 0.009463167
 119  89_1    lnorm 2402.35380  1.1712851  1.0055974         NA 0.048196724
@@ -265,7 +226,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 122  89_1 invgauss 2412.58970  4.9876143  3.5287883         NA 0.277949039
 123  89_1    logis 2632.08142  4.3161100  2.3671299         NA 0.191894899
 124  89_1 invgamma 2473.13372  1.2764551  2.7267200         NA 0.083350747
-125  89_1 gengamma 2375.20833  1.6153842  0.9270443 0.96057711 0.088368844
+125  89_1 gengamma 2375.20833  1.6154394  0.9268213 0.96075654 0.088381462
 126  90_0    hnorm 1413.69021  4.6059305         NA         NA 0.184812145
 127  90_0      exp 1455.02807  0.2676296         NA         NA 0.015172293
 128  90_0    lnorm 1416.81321  1.0697293  0.7551657         NA 0.043607860
@@ -274,7 +235,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 131  90_0 invgauss 1421.17470  3.7679457  5.3276233         NA 0.179819181
 132  90_0    logis 1490.91010  3.4390995  1.4292062         NA 0.140492530
 133  90_0 invgamma 1456.95258  2.0050114  4.5119900         NA 0.161547552
-134  90_0 gengamma 1402.88944  1.3407710  0.7108251 0.76283936 0.076767908
+134  90_0 gengamma 1402.88945  1.3406103  0.7107653 0.76284388 0.076781418
 135  90_1    hnorm  127.80058  3.4429940         NA         NA 0.433390916
 136  90_1      exp  125.81210  0.3953127         NA         NA 0.070337532
 137  90_1    lnorm  130.90189  0.4470315  1.0844161         NA 0.212922474
@@ -291,7 +252,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 148  91_2 invgauss 3556.11901  5.3983976  4.1990234         NA 0.241747800
 149  91_2    logis 3646.80711  5.0094588  2.3383819         NA 0.163084836
 150  91_2 invgamma 3672.91525  1.2503176  3.0256371         NA 0.068443728
-151  91_2 gengamma 3389.31040  1.9958288  0.6804207 1.70678284 0.055956798
+151  91_2 gengamma 3389.31039  1.9958910  0.6802506 1.70706425 0.055953545
 152  93_0    hnorm 1028.47719  5.2006061         NA         NA 0.250984406
 153  93_0      exp 1043.15657  0.2447320         NA         NA 0.016693210
 154  93_0    lnorm 1050.85199  1.0734728  0.8925654         NA 0.062233784
@@ -300,7 +261,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 157  93_0 invgauss 1054.42448  4.1200027  3.9869572         NA 0.285532140
 158  93_0    logis 1118.26991  3.7318186  1.7834626         NA 0.213268651
 159  93_0 invgamma 1083.69104  1.5346292  3.2005757         NA 0.148184481
-160  93_0 gengamma 1031.95303  1.5858236  0.7521937 1.27265577 0.118251469
+160  93_0 gengamma 1031.95302  1.5857862  0.7520879 1.27259535 0.118267743
 161  95_0    hnorm  642.25865  4.3260645         NA         NA 0.254285091
 162  95_0      exp  641.01133  0.3058986         NA         NA 0.025414894
 163  95_0    lnorm  642.24906  0.8530255  0.8702175         NA 0.074649392
@@ -309,7 +270,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 166  95_0 invgauss  643.60798  3.3091662  3.4053797         NA 0.270936490
 167  95_0    logis  700.04115  2.9147223  1.4244254         NA 0.204031538
 168  95_0 invgamma  658.14252  1.6991297  2.9691256         NA 0.206316805
-169  95_0 gengamma  638.39670  1.1607974  0.8520221 0.77463293 0.141339442
+169  95_0 gengamma  638.39670  1.1606068  0.8520061 0.77401440 0.141358793
 170  98_0    hnorm 2074.09805 10.0952694         NA         NA 0.386884114
 171  98_0      exp 2191.32576  0.1097374         NA         NA 0.005945103
 172  98_0    lnorm 2069.63547  2.0584828  0.6247282         NA 0.033973773
@@ -318,7 +279,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 175  98_0 invgauss 2105.11072  9.1269851 18.5918087         NA 0.346592275
 176  98_0    logis 1978.55109  9.0849252  2.4803804         NA 0.236165721
 177  98_0 invgamma 2186.78091  2.2021134 13.5512067         NA 0.163924941
-178  98_0 gengamma 1962.85724  2.3951519  0.4238627 1.31217430 0.036198986
+178  98_0 gengamma 1962.85725  2.3950095  0.4239582 1.31165273 0.036203484
 179  99_0    hnorm 1251.19367  5.7069982         NA         NA 0.254355663
 180  99_0      exp 1269.35522  0.2225530         NA         NA 0.014020394
 181  99_0    lnorm 1291.71326  1.1440372  0.9424203         NA 0.060672705
@@ -327,7 +288,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 184  99_0 invgauss 1299.20833  4.5273743  3.8463231         NA 0.309198784
 185  99_0    logis 1358.41424  4.1493808  1.9821272         NA 0.219892733
 186  99_0 invgamma 1339.28917  1.3698891  2.9313040         NA 0.121360314
-187  99_0 gengamma 1254.03991  1.7936707  0.7040189 1.61467787 0.100991626
+187  99_0 gengamma 1254.03995  1.7933582  0.7040002 1.61320847 0.100951893
 188 100_0    hnorm  208.34117  2.8516928         NA         NA 0.267479682
 189 100_0      exp  215.09571  0.4364277         NA         NA 0.057761326
 190 100_0    lnorm  209.68575  0.6041551  0.7210309         NA 0.099634954
@@ -336,7 +297,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 193 100_0 invgauss  209.16416  2.3396175  3.8041283         NA 0.243715567
 194 100_0    logis  227.13026  2.1323049  0.9098716         NA 0.211935156
 195 100_0 invgamma  212.68120  2.4303818  3.6394255         NA 0.486074122
-196 100_0 gengamma  210.61427  0.8247101  0.7223562 0.66460493 0.234370371
+196 100_0 gengamma  210.61427  0.8246610  0.7224616 0.66411003 0.234275754
 197 101_0    hnorm  602.67375  4.0014761         NA         NA 0.238676167
 198 101_0      exp  624.22399  0.3051182         NA         NA 0.025704111
 199 101_0    lnorm  598.55615  0.9722046  0.7006145         NA 0.060295387
@@ -345,7 +306,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 202 101_0 invgauss  600.51498  3.3110917  5.5815670         NA 0.215262309
 203 101_0    logis  625.54876  3.0590793  1.1811405         NA 0.172990821
 204 101_0 invgamma  614.79721  2.3106725  4.8935321         NA 0.280843602
-205 101_0 gengamma  594.82608  1.1832165  0.6771739 0.63942592 0.101774787
+205 101_0 gengamma  594.82608  1.1830518  0.6772137 0.63878812 0.101784196
 206 104_0    hnorm 3987.89170  6.7494942         NA         NA 0.173894874
 207 104_0      exp 3917.40115  0.2043716         NA         NA 0.007445685
 208 104_0    lnorm 3949.34844  1.1378882  1.0213516         NA 0.038050245
@@ -354,7 +315,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 211 104_0 invgauss 3956.39504  4.9222558  3.3495073         NA 0.217238794
 212 104_0    logis 4385.37183  4.2303139  2.4083279         NA 0.151912730
 213 104_0 invgamma 4047.58285  1.2699648  2.6185271         NA 0.064249033
-214 104_0 gengamma 3917.41173  1.5461007  0.9658999 0.86267521 0.076023075
+214 104_0 gengamma 3917.41174  1.5464011  0.9657413 0.86335757 0.076024814
 215 105_0    hnorm 1748.68363  3.8993514         NA         NA 0.135599866
 216 105_0      exp 1799.62488  0.3178830         NA         NA 0.015613557
 217 105_0    lnorm 1776.27198  0.8880789  0.7799354         NA 0.039359768
@@ -363,7 +324,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 220 105_0 invgauss 1780.66928  3.1864124  4.2750467         NA 0.135253949
 221 105_0    logis 1868.01971  2.9234004  1.2439192         NA 0.106763098
 222 105_0 invgamma 1828.66578  1.9626282  3.6858121         NA 0.140659533
-223 105_0 gengamma 1746.71168  1.2619467  0.7064933 1.04733664 0.071102065
+223 105_0 gengamma 1746.71170  1.2620166  0.7064396 1.04740184 0.071100487
 224 106_0    hnorm  680.96551  6.3281652         NA         NA 0.390278320
 225 106_0      exp  644.04461  0.2394041         NA         NA 0.020886884
 226 106_0    lnorm  644.41140  0.8800214  1.1018863         NA 0.100065701
@@ -372,7 +333,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 229 106_0 invgauss  644.90963  4.2101155  2.3605804         NA 0.490099893
 230 106_0    logis  759.61548  3.3155272  2.2242110         NA 0.326708131
 231 106_0 invgamma  656.09025  1.2351717  1.9878564         NA 0.155327018
-232 106_0 gengamma  644.53368  1.1394256  1.1264752 0.52893765 0.216459145
+232 106_0 gengamma  644.53368  1.1390566  1.1264888 0.52882397 0.216466130
 233 107_0    hnorm  801.80911  4.8746427         NA         NA 0.262978883
 234 107_0      exp  783.70680  0.2848220         NA         NA 0.021727617
 235 107_0    lnorm  802.82923  0.7139231  1.1596380         NA 0.094417838
@@ -381,7 +342,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 238 107_0 invgauss  804.83472  3.5494815  1.9122132         NA 0.368241145
 239 107_0    logis  910.38511  3.0661486  1.8466923         NA 0.246363258
 240 107_0 invgamma  827.46894  1.1336422  1.5068482         NA 0.129733750
-241 107_0 gengamma  777.75283  1.7395518  0.8238824 2.26244603 0.170579043
+241 107_0 gengamma  777.75283  1.7401369  0.8236298 2.26415493 0.170559186
 242 107_2    hnorm 1086.10558  4.8985882         NA         NA 0.227216678
 243 107_2      exp 1061.54498  0.2834719         NA         NA 0.018593010
 244 107_2    lnorm 1034.83070  0.9323673  0.8222411         NA 0.055216988
@@ -399,7 +360,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 256 108_0 invgauss 3355.43247  5.2501724  5.3742311         NA 0.207863501
 257 108_0    logis 3433.98558  4.8786969  2.1182562         NA 0.149136693
 258 108_0 invgamma 3461.40276  1.5008780  4.0610115         NA 0.083054060
-259 108_0 gengamma 3239.24184  1.8564855  0.6757589 1.32605868 0.055331408
+259 108_0 gengamma 3239.24185  1.8564565  0.6758718 1.32637966 0.055343367
 260 109_0    hnorm  985.80177  5.4519083         NA         NA 0.271331789
 261 109_0      exp  995.33514  0.2359062         NA         NA 0.016595493
 262 109_0    lnorm 1006.05072  1.0757768  0.9366910         NA 0.067400331
@@ -408,7 +369,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 265 109_0 invgauss 1007.50890  4.2719399  3.6816970         NA 0.323619325
 266 109_0    logis 1084.52437  3.8398708  1.9478778         NA 0.241242000
 267 109_0 invgamma 1034.31580  1.4333519  2.9190477         NA 0.141585491
-268 109_0 gengamma  988.41156  1.7736611  0.6983560 1.70571019 0.223178665
+268 109_0 gengamma  988.41157  1.7736910  0.6983398 1.70628572 0.223675682
 269 118_0    hnorm  203.64892  3.4824357         NA         NA 0.347180724
 270 118_0      exp  211.81154  0.3492715         NA         NA 0.049156357
 271 118_0    lnorm  205.55393  0.8296223  0.7161233         NA 0.103629572
@@ -417,7 +378,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 274 118_0 invgauss  205.34059  2.9012580  4.7412230         NA 0.320277445
 275 118_0    logis  217.72179  2.6902964  1.0956236         NA 0.272167531
 276 118_0 invgamma  209.85353  2.3035521  4.2356323         NA 0.471711353
-277 118_0 gengamma  205.47627  1.1171937  0.6738232 0.85404647 0.217593106
+277 118_0 gengamma  205.47628  1.1173135  0.6736985 0.85511907 0.217675318
 278 119_0    hnorm  158.20206  7.1458548         NA         NA 0.939827488
 279 119_0      exp  158.42950  0.1834794         NA         NA 0.034118058
 280 119_0    lnorm  164.54442  1.2314662  1.0912705         NA 0.207885633
@@ -426,7 +387,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 283 119_0 invgauss  165.77340  5.4843957  3.2357461         NA 1.327039706
 284 119_0    logis  175.72063  4.9380821  2.6426074         NA 0.866486800
 285 119_0 invgamma  170.67629  1.0877697  2.2816739         NA 0.280334837
-286 119_0 gengamma  160.39279  2.2329325  0.6276653 2.46501873 0.389841362
+286 119_0 gengamma  160.39279  2.2336363  0.6272254 2.46752375 0.389684198
 287 125_0    hnorm 1534.59464  4.0806054         NA         NA 0.153047842
 288 125_0      exp 1577.39568  0.3041302         NA         NA 0.016113138
 289 125_0    lnorm 1562.39306  0.9226283  0.7959515         NA 0.043267881
@@ -435,7 +396,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 292 125_0 invgauss 1565.93340  3.3266516  4.2568798         NA 0.155888809
 293 125_0    logis 1642.70461  3.0632314  1.3179709         NA 0.122356151
 294 125_0 invgamma 1608.92007  1.8838035  3.6145106         NA 0.144560306
-295 125_0 gengamma 1534.82244  1.3245129  0.7060513 1.10687014 0.077639779
+295 125_0 gengamma 1534.82245  1.3243076  0.7062166 1.10682576 0.077650583
 296 128_1    hnorm 4471.27673  5.1285905         NA         NA 0.118176049
 297 128_1      exp 4389.93059  0.2681493         NA         NA 0.008744306
 298 128_1    lnorm 4415.89235  0.9337331  0.9369790         NA 0.031498362
@@ -444,7 +405,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 301 128_1 invgauss 4431.23458  3.7666763  3.2133349         NA 0.132892092
 302 128_1    logis 4845.95430  3.2750356  1.6906377         NA 0.094571256
 303 128_1 invgamma 4536.05603  1.4876423  2.6897829         NA 0.069943981
-304 128_1 gengamma 4374.84541  1.2674124  0.9128467 0.78216803 0.056245842
+304 128_1 gengamma 4374.84540  1.2674743  0.9127868 0.78235320 0.056245161
 305 131_0    hnorm  238.71892  3.7131332         NA         NA 0.346835462
 306 131_0      exp  237.96283  0.3574163         NA         NA 0.047180891
 307 131_0    lnorm  243.37916  0.6313429  0.9674197         NA 0.135089262
@@ -453,7 +414,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 310 131_0 invgauss  242.86639  2.8420477  2.3717026         NA 0.410159226
 311 131_0    logis  272.95212  2.4995971  1.3763649         NA 0.320805219
 312 131_0 invgamma  248.60149  1.5266664  2.0983904         NA 0.304937974
-313 131_0 gengamma  237.21995  2.0306996  0.2388069 7.76655704 0.286507781
+313 131_0 gengamma  237.21995  2.0302936  0.2393278 7.74987734 0.286522286
 314 133_0    hnorm  155.55114  4.6198641         NA         NA 0.562425408
 315 133_0      exp  160.47687  0.2651077         NA         NA 0.045598201
 316 133_0    lnorm  154.07497  1.0973166  0.7093776         NA 0.124120397
@@ -462,7 +423,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 319 133_0 invgauss  153.85982  3.7961040  6.1666910         NA 0.513106722
 320 133_0    logis  164.93451  3.4725511  1.4231825         NA 0.426662648
 321 133_0 invgamma  156.59749  2.2685882  5.3994100         NA 0.549342917
-322 133_0 gengamma  155.71217  1.2202578  0.7028360 0.35805456 0.236387290
+322 133_0 gengamma  155.71217  1.2203364  0.7027501 0.35803631 0.236419214
 323 134_0    hnorm  307.99006  4.2956617         NA         NA 0.364677459
 324 134_0      exp  314.00068  0.2937611         NA         NA 0.035237139
 325 134_0    lnorm  301.14332  0.9862677  0.7219355         NA 0.088425548
@@ -480,7 +441,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 337 135_0 invgauss 2109.27614  4.9875378  6.8399668         NA 0.210526793
 338 135_0    logis 2137.78387  4.7207944  1.8292676         NA 0.159135251
 339 135_0 invgamma 2175.15129  1.8344736  5.3604406         NA 0.125863899
-340 135_0 gengamma 2044.90371  1.7692580  0.6133154 1.18305553 0.060586466
+340 135_0 gengamma 2044.90370  1.7691996  0.6133321 1.18335981 0.060600788
            se2         se3
 1           NA          NA
 2           NA          NA
@@ -490,7 +451,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 6   0.41547646          NA
 7   0.08275183          NA
 8   0.36331315          NA
-9   0.04804731  0.22622363
+9   0.04804562  0.22620815
 10          NA          NA
 11          NA          NA
 12  0.03878895          NA
@@ -499,7 +460,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 15  0.55813242          NA
 16  0.09921562          NA
 17  0.48436603          NA
-18  0.04250066  0.19855417
+18  0.04251064  0.19854791
 19          NA          NA
 20          NA          NA
 21  0.04716303          NA
@@ -508,7 +469,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 24  0.66953867          NA
 25  0.09955148          NA
 26  0.59907003          NA
-27  0.05646306  0.29706715
+27  0.05647364  0.29710497
 28          NA          NA
 29          NA          NA
 30  0.04310527          NA
@@ -517,7 +478,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 33  0.39107713          NA
 34  0.07368185          NA
 35  0.35586860          NA
-36  0.04605741  0.21106800
+36  0.04607035  0.21107458
 37          NA          NA
 38          NA          NA
 39  0.02608888          NA
@@ -526,7 +487,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 42  0.40063932          NA
 43  0.07304418          NA
 44  0.32875183          NA
-45  0.03198303  0.15508301
+45  0.03200087  0.15514218
 46          NA          NA
 47          NA          NA
 48  0.29269885          NA
@@ -543,7 +504,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 59  0.55197109          NA
 60  0.07737419          NA
 61  0.51714374          NA
-62  0.04678127  0.23779501
+62  0.04677023  0.23777597
 63          NA          NA
 64          NA          NA
 65  0.02311644          NA
@@ -552,7 +513,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 68  0.25782185          NA
 69  0.05399171          NA
 70  0.21774459          NA
-71  0.02503353  0.10712919
+71  0.02503094  0.10713912
 72          NA          NA
 73          NA          NA
 74  0.02925577          NA
@@ -561,7 +522,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 77  0.51092800          NA
 78  0.09301558          NA
 79  0.40724047          NA
-80  0.03456683  0.17423265
+80  0.03455947  0.17428449
 81          NA          NA
 82          NA          NA
 83  0.02131751          NA
@@ -570,7 +531,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 86  0.34491853          NA
 87  0.06012294          NA
 88  0.26625316          NA
-89  0.01792894  0.09056127
+89  0.01791465  0.09055254
 90          NA          NA
 91          NA          NA
 92  0.02599841          NA
@@ -579,7 +540,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 95  0.33343345          NA
 96  0.05398582          NA
 97  0.30380521          NA
-98  0.02752283  0.14524720
+98  0.02753747  0.14519248
 99          NA          NA
 100         NA          NA
 101 0.05282021          NA
@@ -588,7 +549,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 104 0.61487494          NA
 105 0.07735657          NA
 106 0.60712462          NA
-107 0.05283657  0.32673703
+107 0.05284602  0.32670323
 108         NA          NA
 109         NA          NA
 110 0.05311654          NA
@@ -597,7 +558,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 113 0.47864716          NA
 114 0.07736072          NA
 115 0.46935699          NA
-116 0.05409368  0.31850361
+116 0.05408072  0.31858117
 117         NA          NA
 118         NA          NA
 119 0.03793000          NA
@@ -606,7 +567,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 122 0.27052238          NA
 123 0.09407164          NA
 124 0.23367626          NA
-125 0.04241044  0.16853493
+125 0.04239155  0.16856071
 126         NA          NA
 127         NA          NA
 128 0.03343266          NA
@@ -615,7 +576,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 131 0.47938616          NA
 132 0.06896055          NA
 133 0.43260955          NA
-134 0.03579556  0.18433878
+134 0.03578577  0.18436440
 135         NA          NA
 136         NA          NA
 137 0.18903195          NA
@@ -632,7 +593,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 148 0.26896417          NA
 149 0.07616162          NA
 150 0.21714941          NA
-151 0.03388764  0.15375404
+151 0.03387011  0.15375545
 152         NA          NA
 153         NA          NA
 154 0.04892087          NA
@@ -641,7 +602,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 157 0.44442827          NA
 158 0.10193754          NA
 159 0.38945515          NA
-160 0.06302806  0.28522656
+160 0.06301221  0.28525462
 161         NA          NA
 162         NA          NA
 163 0.06004384          NA
@@ -650,7 +611,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 166 0.48023163          NA
 167 0.10047427          NA
 168 0.45256722          NA
-169 0.06205970  0.30206152
+169 0.06204964  0.30210655
 170         NA          NA
 171         NA          NA
 172 0.02483601          NA
@@ -659,7 +620,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 175 1.49483488          NA
 176 0.11121738          NA
 177 1.15168247          NA
-178 0.02154603  0.13020232
+178 0.02155646  0.13019346
 179         NA          NA
 180         NA          NA
 181 0.04796199          NA
@@ -668,7 +629,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 184 0.39798269          NA
 185 0.10373226          NA
 186 0.33585272          NA
-187 0.05945488  0.26999324
+187 0.05940893  0.26973211
 188         NA          NA
 189         NA          NA
 190 0.08006517          NA
@@ -677,7 +638,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 193 0.86860251          NA
 194 0.10286232          NA
 195 0.86647284          NA
-196 0.08530162  0.62580880
+196 0.08531420  0.62555528
 197         NA          NA
 198         NA          NA
 199 0.04641870          NA
@@ -686,7 +647,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 202 0.75179090          NA
 203 0.08445015          NA
 204 0.69500385          NA
-205 0.04703887  0.25344900
+205 0.04704184  0.25347646
 206         NA          NA
 207         NA          NA
 208 0.02986596          NA
@@ -695,7 +656,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 211 0.19927970          NA
 212 0.07415305          NA
 213 0.17413529          NA
-214 0.03404877  0.14199098
+214 0.03404707  0.14200174
 215         NA          NA
 216         NA          NA
 217 0.03118866          NA
@@ -704,7 +665,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 220 0.34852895          NA
 221 0.05173629          NA
 222 0.32017375          NA
-223 0.03509129  0.17834476
+223 0.03508750  0.17834473
 224         NA          NA
 225         NA          NA
 226 0.08191775          NA
@@ -713,7 +674,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 229 0.35950668          NA
 230 0.16937174          NA
 231 0.34218025          NA
-232 0.08242122  0.37897952
+232 0.08242011  0.37899596
 233         NA          NA
 234         NA          NA
 235 0.08120997          NA
@@ -722,7 +683,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 238 0.27662260          NA
 239 0.11850328          NA
 240 0.25222754          NA
-241 0.10715451  0.48112921
+241 0.10716097  0.48143897
 242         NA          NA
 243         NA          NA
 244 0.04281822          NA
@@ -740,7 +701,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 256 0.33824034          NA
 257 0.07047167          NA
 258 0.27943348          NA
-259 0.03137396  0.14207128
+259 0.03138857  0.14211558
 260         NA          NA
 261         NA          NA
 262 0.05286879          NA
@@ -749,7 +710,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 265 0.42312474          NA
 266 0.11489950          NA
 267 0.36887488          NA
-268 0.13343003  0.64516264
+268 0.13372291  0.64672198
 269         NA          NA
 270         NA          NA
 271 0.08055441          NA
@@ -758,7 +719,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 274 1.08865369          NA
 275 0.13002865          NA
 276 1.02203122          NA
-277 0.09638356  0.58255358
+277 0.09639627  0.58280696
 278         NA          NA
 279         NA          NA
 280 0.16622188          NA
@@ -767,7 +728,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 283 1.00188349          NA
 284 0.40854848          NA
 285 0.81109462          NA
-286 0.26414707  1.47832874
+286 0.26407179  1.47971117
 287         NA          NA
 288         NA          NA
 289 0.03415129          NA
@@ -776,7 +737,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 292 0.37227524          NA
 293 0.05875731          NA
 294 0.33793453          NA
-295 0.03933970  0.19476870
+295 0.03935433  0.19478576
 296         NA          NA
 297         NA          NA
 298 0.02534405          NA
@@ -785,7 +746,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 301 0.17732655          NA
 302 0.04675641          NA
 303 0.16297196          NA
-304 0.02572410  0.11020636
+304 0.02572051  0.11020461
 305         NA          NA
 306         NA          NA
 307 0.11345750          NA
@@ -794,7 +755,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 310 0.57505290          NA
 311 0.15334633          NA
 312 0.55705621          NA
-313 0.34355302 11.48557719
+313 0.34289683 11.41698144
 314         NA          NA
 315         NA          NA
 316 0.09259501          NA
@@ -803,7 +764,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 319 1.63926577          NA
 320 0.20689775          NA
 321 1.52189903          NA
-322 0.09433084  0.58681132
+322 0.09430727  0.58690333
 323         NA          NA
 324         NA          NA
 325 0.06685443          NA
@@ -821,7 +782,7 @@ result &lt;- fiteach_disp_unt(disperseLer)</code></pre>
 337 0.52134514          NA
 338 0.07491888          NA
 339 0.43871945          NA
-340 0.03369430  0.16637098</code></pre>
+340 0.03369890  0.16641702</code></pre>
 <p>There they all are! The generalized gamma didn’t always converge, which is the source of the warnings and the fact that it is missing from many places.</p>
 <p>Now lets calculate the delta-AIC within each dataset:</p>
 <pre class="r"><code>result &lt;- group_by(result, ID) %&gt;% mutate(delta_AIC = AIC - min(AIC))
