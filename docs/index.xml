@@ -28,7 +28,7 @@
       <pubDate>Tue, 22 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>/InvasionHet/2019/10/22/moving-forward-in-fall/</guid>
-      <description>Warning in .load.config(override.config): Your configuration file is missing the following entries: tables_type. Defaults will be used. Warning in .load.config(override.config): Your configuration contains the following unused entries: data_tables. These will be ignored. Warning in .check.version(config): Your configuration is compatible with version 0.8.2 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.9.0. </description>
+      <description>Warning in .load.config(override.config): Your configuration file is missing the following entries: tables_type. Defaults will be used. Warning in .load.config(override.config): Your configuration contains the following unused entries: data_tables. These will be ignored. Warning in .check.version(config): Your configuration is compatible with version 0.8.2 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.9.0. So, after a hiatus on summer (for no particular reason, I just took a break after the Davis talk and never got it picked up), I’m returning to this project.</description>
     </item>
     
     <item>

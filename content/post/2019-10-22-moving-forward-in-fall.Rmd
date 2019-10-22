@@ -21,3 +21,34 @@ ProjectTemplate::load.project()
 ```
 
 
+So, after a hiatus on summer (for no particular reason, I just took a break after the Davis talk and never got it picked up), I'm returning to this project.
+Where are we?
+
+- The results for Ler are essentially complete. 
+The results as I presented them at Davis broadly make sense.
+The one thing I need to deal with is to truncate the populations (recall that I had occasional replicates that spread ridiculously far).
+However, I subsequently noticed in Williams & Levine (2018; p. 878) that only 8 pots were installed beyond the furthest seed.
+So I can implement that in the code, and rerun the simulations.
+Hopefully that won't change the results much! 
+- For RILs, it looks as though I still have some work to do to complete the dispersal parameterization.
+I'm also not sure if the model will run; I recall lots of things breaking right at the end.
+Indeed, I'm not even sure where the code that ran the model is; the functions are in lib/model.r
+It looks like the code is in src/make_Ler_sims.R and src/make_RIL_sims.R.
+The latter look very hacked up; when I try to run it I get an error that RIL_params is not found, so I'll have to dig into ProjectTemplate to see why the munge script isn't getting run.
+- There is a great deal left to write in both the parameter estimation document and the TRACE document.
+
+So here are some to-dos:
+
+- Ler
+  1. Find a place in the code to add the 8-pot truncation
+  2. Re-run the simulations and analyze the results
+  3. Complete the parameter estimation description for Ler (a big job!)
+- RIL
+  1. Check to see where things are with the kernel estimates
+  2. Write up the RIL parameterization (this will help get me back to an understanding of what we've done)
+  3. Try to get the existing simulation code running (this looks like it's just for the evolving populations)
+  4. Make simulation code for non-evolving populations
+  5. Generate some results for mean and var of spread
+- General principles
+  1. Look back at some of the other patterns in the data and think about trying to reproduce them
+  2. Review the TRACE elements and decide whether to proceed with this documentation.

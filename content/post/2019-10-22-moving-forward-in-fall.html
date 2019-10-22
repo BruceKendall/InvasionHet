@@ -17,3 +17,41 @@ missing the following entries: tables_type. Defaults will be used.</code></pre>
 following unused entries: data_tables. These will be ignored.</code></pre>
 <pre><code>Warning in .check.version(config): Your configuration is compatible with version 0.8.2 of the ProjectTemplate package.
   Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.9.0.</code></pre>
+<p>So, after a hiatus on summer (for no particular reason, I just took a break after the Davis talk and never got it picked up), I’m returning to this project.
+Where are we?</p>
+<ul>
+<li>The results for Ler are essentially complete.
+The results as I presented them at Davis broadly make sense.
+The one thing I need to deal with is to truncate the populations (recall that I had occasional replicates that spread ridiculously far).
+However, I subsequently noticed in Williams &amp; Levine (2018; p. 878) that only 8 pots were installed beyond the furthest seed.
+So I can implement that in the code, and rerun the simulations.
+Hopefully that won’t change the results much!</li>
+<li>For RILs, it looks as though I still have some work to do to complete the dispersal parameterization.
+I’m also not sure if the model will run; I recall lots of things breaking right at the end.
+Indeed, I’m not even sure where the code that ran the model is; the functions are in lib/model.r
+It looks like the code is in src/make_Ler_sims.R and src/make_RIL_sims.R.
+The latter look very hacked up; when I try to run it I get an error that RIL_params is not found, so I’ll have to dig into ProjectTemplate to see why the munge script isn’t getting run.</li>
+<li>There is a great deal left to write in both the parameter estimation document and the TRACE document.</li>
+</ul>
+<p>So here are some to-dos:</p>
+<ul>
+<li>Ler
+<ol style="list-style-type: decimal">
+<li>Find a place in the code to add the 8-pot truncation</li>
+<li>Re-run the simulations and analyze the results</li>
+<li>Complete the parameter estimation description for Ler (a big job!)</li>
+</ol></li>
+<li>RIL
+<ol style="list-style-type: decimal">
+<li>Check to see where things are with the kernel estimates</li>
+<li>Write up the RIL parameterization (this will help get me back to an understanding of what we’ve done)</li>
+<li>Try to get the existing simulation code running (this looks like it’s just for the evolving populations)</li>
+<li>Make simulation code for non-evolving populations</li>
+<li>Generate some results for mean and var of spread</li>
+</ol></li>
+<li>General principles
+<ol style="list-style-type: decimal">
+<li>Look back at some of the other patterns in the data and think about trying to reproduce them</li>
+<li>Review the TRACE elements and decide whether to proceed with this documentation.</li>
+</ol></li>
+</ul>
