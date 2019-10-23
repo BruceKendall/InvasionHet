@@ -1,7 +1,7 @@
 # make_Ler_sims.R
 ProjectTemplate::load.project()
 
-nruns <- 1000
+nruns <- 10
 n_reps <- 10
 
 n_init <- 50
@@ -12,7 +12,9 @@ controls <- list(
   kernel_stoch = TRUE,
   kernel_stoch_pots = TRUE,
   seed_sampling = TRUE,
-  pot_width = 7
+  pot_width = 7,
+  max_pots = 20,
+  new_pots = 8
 )
 sim_mean_var <- function() {
   Adults <- matrix(n_init, controls$n_reps, 1)
@@ -76,4 +78,4 @@ for(gap_size in 0:3) {
   }
 }
 
-ProjectTemplate::cache("Ler_spread_stats")
+#ProjectTemplate::cache("Ler_spread_stats")
