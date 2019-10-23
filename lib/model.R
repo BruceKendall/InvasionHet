@@ -328,8 +328,8 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   # seeds with zeros
   disp_dist <- aaply(ngg, c(1,2), 
                      function(x) c(rgengamma(x[1], x[3], x[4], x[5]), 
-                                   rep(0, times = max_ds - x[1] + 1))) #%>%
-#    aperm(c(2, 3, 1)) # apply puts the calculated value in the first dim
+                                   rep(0, times = max_ds - x[1] + 1)), .drop = FALSE) #%>%
+ #   aperm(c(2, 3, 1)) # apply puts the calculated value in the first dim
   disp_dist[disp_dist > controls$max_pots * controls$pot_width] <- controls$max_pots * controls$pot_width
   # Distribute seeds into forward and backward dispersal, and rescale distance to pots
   forward_draw <- rbernoulli(prod(dim(disp_dist)))
@@ -339,11 +339,11 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   max_dist <- max(c(disp_forward, disp_backward)) # farthest dispersing seed
   # Tabulate the number at each distance
   forward_dispersal <- aaply(disp_forward, c(1, 2), disp_table, 
-                             max_dist = max_dist) #%>%
- #   aperm(c(2, 3, 1))
+                             max_dist = max_dist, .drop = FALSE) #%>%
+ #   aperm(c(1, 3, 2))
   backward_dispersal <- aaply(disp_backward, c(1, 2), disp_table, 
-                              max_dist = max_dist) #%>%
- #   aperm(c(2, 3, 1))
+                              max_dist = max_dist, .drop = FALSE) #%>%
+ #   aperm(c(1, 3, 2))
   
   return(list(home_pot = home_pot, 
               forward_dispersal = forward_dispersal,
@@ -394,11 +394,12 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots, runway_end) {
         forward_dispersal[ , , dist]
     }
     # Zero out the seeds that dispersed beyond the end of the rep-specific runway
-    mask <- matrix(apply(as.matrix(runway_end), 
-                         1, 
-                         function(x) c(rep(1, x), rep(0, max_dist - x))), 
-                   n_reps, max_dist, byrow = TRUE)
-    disp_seeds <- disp_seeds * mask
+    disp_cols <- ncol(disp_seeds)
+    for (rep in 1:n_reps) {
+      if (disp_cols > runway_end[rep]) {
+        disp_seeds[rep, (runway_end[rep] + 1):disp_cols] <- 0
+      }
+    }
     # Truncate the all-zero columns to keep dimensions under control
     tot_seed_by_pot <- colSums(disp_seeds)
     max_dist <- max(seq_along(tot_seed_by_pot)[tot_seed_by_pot>0])
