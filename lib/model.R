@@ -60,6 +60,11 @@
 #' `FALSE`, then the number of seeds dispersing to each pot is the expected number
 #' rounded to the nearest integer.
 #' 
+#' `new_pots` (numeric)
+#' :    The number of new (empty) pots added to the end of each runway, beyond the 
+#' furthest dispersed seed from the prior generation. In the Ler experiments, this 
+#' value was 8. 
+#' 
 #' ### State variables
 #' The state variables are `Adults` and (internally) `Seeds`. These are structured as
 #' a matrix with each row being a replicate and each column a pot. 
@@ -74,6 +79,11 @@
 iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
   controls$n_pots <- ncol(Adults)
   if (is.null(controls$max_pots)) controls$max_pots <- 10
+  
+  #### SET LENGTH OF EACH RUNWAY ####
+  farthest_adult <- apply(Adults, 1, function(y) max(seq_along(y)[y>0]))
+  runway_end <- farthest_adult + controls$new_pots
+  
   #### SEED PRODUCTION ####
   # Density dependence in seed production
   Seeds <- Gompertz_seeds(Adults, params, N_tot)
