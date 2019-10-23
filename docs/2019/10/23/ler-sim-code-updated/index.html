@@ -6,8 +6,8 @@
 <meta name="generator" content="Hugo 0.29" />
 
 
-<title>Tags - Project notebook for the Invasion Heterogeneity project</title>
-<meta property="og:title" content="Tags - Project notebook for the Invasion Heterogeneity project">
+<title>Ler sim code updated - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Ler sim code updated - Project notebook for the Invasion Heterogeneity project">
 
 
 
@@ -16,8 +16,6 @@
 
 
 
-
-<link href="/InvasionHet/tags/index.xml" rel="alternate" type="application/rss+xml" title="Project notebook for the Invasion Heterogeneity project" />
 
 
 
@@ -55,30 +53,31 @@
 
 
 <main class="content" role="main">
-  <div>
-    <h1 id="title">Tags</h1>
-    <ul>
+
+  <article class="article">
     
+    <span class="article-duration">1 min read</span>
     
-    <article class="archive-item">
-      <a href="/InvasionHet/tags/blogdown">blogdown</a> 5
-    </article>
+
+    <h1 class="article-title">Ler sim code updated</h1>
+
     
-    <article class="archive-item">
-      <a href="/InvasionHet/tags/dispersal">dispersal</a> 24
-    </article>
+    <span class="article-date">2019/10/23</span>
     
-    <article class="archive-item">
-      <a href="/InvasionHet/tags/ler">ler</a> 24
-    </article>
-    
-    <article class="archive-item">
-      <a href="/InvasionHet/tags/ril">ril</a> 2
-    </article>
-    
-    </ul>
-  </div>
+
+    <div class="article-content">
+      <p>I&rsquo;ve gotten the 8-pot runway extension limit into the Ler simulation code.
+Along the way I tracked down some bugs that may have been causing problems when I abandoned the project last spring (I think when I was trying to run RIL models).
+After much chasing of strange errors and intermediate output, I discovered that most (all?) of the headaches arose from <code>aaply()</code> dropping array dimesions; I fixed these by using the <code>.drop = FALSE</code> argument.</p>
+
+    </div>
+  </article>
+
+  
+
+
 </main>
+
       <footer class="footer">
         <ul class="footer-links">
           <li>

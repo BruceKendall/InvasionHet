@@ -23,6 +23,15 @@
     </item>
     
     <item>
+      <title>Ler sim code updated</title>
+      <link>/InvasionHet/2019/10/23/ler-sim-code-updated/</link>
+      <pubDate>Wed, 23 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/10/23/ler-sim-code-updated/</guid>
+      <description>I&amp;rsquo;ve gotten the 8-pot runway extension limit into the Ler simulation code. Along the way I tracked down some bugs that may have been causing problems when I abandoned the project last spring (I think when I was trying to run RIL models). After much chasing of strange errors and intermediate output, I discovered that most (all?) of the headaches arose from aaply() dropping array dimesions; I fixed these by using the .</description>
+    </item>
+    
+    <item>
       <title>Moving forward in fall</title>
       <link>/InvasionHet/2019/10/22/moving-forward-in-fall/</link>
       <pubDate>Tue, 22 Oct 2019 00:00:00 +0000</pubDate>
