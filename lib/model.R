@@ -138,9 +138,9 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
   
   ## Combine all the dispersed seeds
   Seeds <- combine_dispersed_seeds(dispersed_seeds_by_pot, controls$n_reps, 
-                                   controls$n_pots)
+                                   controls$n_pots, runway_end)
   
-  controls$n_pots <- controls$n_pots + dispersed_seeds_by_pot$max_dist
+  controls$n_pots <- ncol(Seeds)
   
   # Zero out the seeds in the gaps
   Seeds <- gapify(Seeds, params, controls)
@@ -367,7 +367,7 @@ disp_table <- function(dists, max_dist) {
 #' Take the dispersed seeds from each pot and combine them to get net dispersal across
 #' the whole runway
 #' 
-combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots) {
+combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots, runway_end) {
   with(seeds_by_pot, {
     dist_x_reps <- max_dist * n_reps
     ### Non-dispersing seeds
@@ -393,6 +393,16 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots) {
       disp_seeds[ , dist + (1:n_pots)] <- disp_seeds[ , dist + (1:n_pots)] + 
         forward_dispersal[ , , dist]
     }
+    # Zero out the seeds that dispersed beyond the end of the rep-specific runway
+    mask <- matrix(apply(as.matrix(runway_end), 
+                         1, 
+                         function(x) c(rep(1, x), rep(0, max_dist - x))), 
+                   n_reps, max_dist, byrow = TRUE)
+    disp_seeds <- disp_seeds * mask
+    # Truncate the all-zero columns to keep dimensions under control
+    tot_seed_by_pot <- colSums(disp_seeds)
+    max_dist <- max(seq_along(tot_seed_by_pot)[tot_seed_by_pot>0])
+    disp_seeds <- disp_seeds[, 1:max_dist]
     
     return(disp_seeds)
   })
