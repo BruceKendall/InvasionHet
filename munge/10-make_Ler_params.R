@@ -3,14 +3,21 @@
 
 
 ## Fraction dispersing
+# Subset and organize the data
 nondispersers <- subset(disperseLer, Pot == 0, c("ID", "Seedlings"))
-dispersers <- filter(disperseLer, Pot >= 1) %>% group_by(ID) %>% summarise(dispersers = sum(Seedlings))
+dispersers <- filter(disperseLer, Pot >= 1) %>% 
+  group_by(ID) %>% 
+  summarise(dispersers = sum(Seedlings))
 disperse_num <- merge(nondispersers, dispersers)
 names(disperse_num)[2] <- "nondispersers"
+# Assume that as many seeds disperse backwards as forwards
 disperse_num$dispersers <- round(2 * disperse_num$dispersers)
 
+# Fit the beta-binomial model
 library(VGAM)
-bbfit <- vglm(cbind(dispersers, nondispersers) ~ 1, betabinomial, data = disperse_num)
+bbfit <- vglm(cbind(dispersers, nondispersers) ~ 1, 
+              betabinomial, 
+              data = disperse_num)
 frac_dispersing <- Coef(bbfit)[1]
 fd_stdev <- sqrt(frac_dispersing * (1 - frac_dispersing) * Coef(bbfit)[2])
 
@@ -22,7 +29,8 @@ gg_mean <- apply(fiteach[, 4:6], 2, mean)
 gg_cov <- cov(fiteach[, 4:6])
 
 ## Density dependent seed production
-# Ler_fecundity is the data; inflate the home seedlings by the average fraction dispersing
+# Ler_fecundity is the data; inflate the home seedlings by the average
+#     fraction dispersing
 Ler_fecundity$Seedlings <- round(Ler_fecundity$Seedlings / frac_dispersing)
 
 library(lme4)
@@ -35,7 +43,8 @@ Ler_params <- list(
   b_Gompertz = fixef(seeds_DD)[2] - 1,
   sigma_seed_time = as.data.frame(VarCorr(seeds_DD))$sdcor[2],
   sigma_seed_rep = as.data.frame(VarCorr(seeds_DD))$sdcor[1],
-  theta_seed = sum(residuals(seeds_DD, type="pearson")^2)/df.residual(seeds_DD),
+  theta_seed = sum(residuals(seeds_DD, type="pearson")^2) / 
+    df.residual(seeds_DD),
   frac_dispersing = frac_dispersing,
   fd_sdev = fd_stdev,
   gg_mu = gg_mean[1],
