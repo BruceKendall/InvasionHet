@@ -23,7 +23,7 @@ knitr::opts_knit$set(root.dir = project_root)
 rm(project_root)
 ```
 ```{r loadproject, echo=FALSE, message=FALSE}
-library(ProjectTemplate)
+library(ProjectTemplate) 
 load.project()
 ```
 
@@ -126,5 +126,27 @@ summary(bbfit)
 ```
 $\mu$ and $\rho$ are `r VGAM::Coef(bbfit)[1]` and `r VGAM::Coef(bbfit)[2]`, respectively.
 After transformation, the mean fraction dispersing is `r frac_dispersing` and the standard deviation in the fraction dispersing is `r fd_stdev`.
+
+### Comparing dispersal kernels
+For each of the dispersal replicates, fit each dispersal kernel and record the AICs. This is done assuming that "distance zero" is at the leading edge of the maternal pot.
+```{r fitallkernel, warning=FALSE, error=FALSE, message=FALSE}
+result <- fiteach_disp_unt(disperseLer) 
+```
+Here are the fits for the first few replicates:
+```{r, message=FALSE}
+library(tidyverse)
+result <- group_by(result, ID) %>% mutate(delta_AIC = AIC - min(AIC))
+print(result, n=27) 
+```
+
+Here's a plot of the $\Delta$-AIC values for each model:
+```{r, message=FALSE}
+ggplot(result, aes(x=delta_AIC, group = model)) + 
+  geom_histogram() + 
+  facet_wrap(~model, scales = "free") 
+```
+
+Notive that the $\Delta$-AIC values for the generalized gamma ("gengamma") distribution are all less than 3.5, whereas all the other distributions have a substantial number of values larger than 10, and often very large indeed.
+Thus, we select the generalized gamma distribution as the best distribution to use.
 
 # References {#references}

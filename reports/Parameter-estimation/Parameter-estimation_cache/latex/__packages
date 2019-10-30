@@ -10,3 +10,12 @@ lsei
 npsurv
 fitdistrplus
 VGAM
+tidyverse
+tibble
+tidyr
+readr
+purrr
+stringr
+forcats
+actuar
+flexsurv
