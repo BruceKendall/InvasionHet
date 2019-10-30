@@ -112,4 +112,19 @@ start_params
 start_gengamma
 ```
 
+### Fraction dispersing
+To estimate the mean and standard deviation of the beta-binomial model, we source the code listed above:
+```{r}
+frac_disp_script <- paste(readr::read_lines("munge/10-make_Ler_params.R", 
+                                            skip = 4, n_max = 19), 
+                          collapse = "\n")
+source(textConnection(frac_disp_script))
+```
+We can look at the full output of the vglm:
+```{r}
+summary(bbfit)
+```
+$\mu$ and $\rho$ are `r VGAM::Coef(bbfit)[1]` and `r VGAM::Coef(bbfit)[2]`, respectively.
+After transformation, the mean fraction dispersing is `r frac_dispersing` and the standard deviation in the fraction dispersing is `r fd_stdev`.
+
 # References {#references}
