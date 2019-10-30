@@ -180,7 +180,11 @@ start_params <- function(x, dist, ...) {
     gengamma = start_gengamma(x_orig, ...),
     NULL
   )
-  if (is.null(start_pars)) {
+  
+  default_dists <- c("norm", "lnorm", "exp", "pois", "cauchy", "gamma", "logis", 
+                     "nbinom", "geom", "beta", "weibull", "invgamma", "llogis", 
+                     "invweibull", "pareto1", "pareto", "lgamma", "trgamma", "invtrgamma")
+  if (is.null(start_pars) & !(dist %in% default_dists)) {
     warning("No method exists for setting start values for ", dist)
   }
   return(start_pars)
