@@ -149,4 +149,113 @@ ggplot(result, aes(x=delta_AIC, group = model)) +
 Notive that the $\Delta$-AIC values for the generalized gamma ("gengamma") distribution are all less than 3.5, whereas all the other distributions have a substantial number of values larger than 10, and often very large indeed.
 Thus, we select the generalized gamma distribution as the best distribution to use.
 
+There are two replicates that the generalized gamma distribution refuses to fit.
+These are 79_0 and 90_1.
+Let's take a look at them:
+```{r badfit}
+filter(disperseLer, ID =="79_0")
+filter(disperseLer, ID == "90_1")
+```
+The first problematic replicate only has 5 dispersing seeds, so it's not surprising that it doesn't find a good fit.
+It's unclear what the problem is with the second one, but continued fiddling has not been able to isolate and fix the problem.
+So for the remainder of the analysis we drop those two replicates.
+```{r dropbadfit}
+disperseLer2 <- filter(disperseLer, ID != "79_0", ID != "90_1")
+```
+
+### Replicate-specific kernel parameters
+Here are the replicate-specific fits:
+```{r fiteach}
+fiteach <- fiteach_disp_unt(disperseLer2, model = "gengamma")
+fiteach
+```
+
+The shapes of the kernels look quite different:
+```{r ploteach, warning=FALSE}
+p <- ggplot(data = data.frame(x = c(0, 20)), mapping = aes(x = x)) 
+for (i in 1:nrow(fiteach)) {
+  pvec <- as.numeric(fiteach[i, 4:6])
+  plist <- list(mu = pvec[1], sigma = pvec[2], Q= pvec[3])
+  p <- p + stat_function(fun = dgengamma, args = plist)
+}
+p + xlab("Distance (cm)") + ylab("Probability density")
+```
+
+And here is a scatterplot of the parameters:
+```{r fiteach_scatterplot}
+params <- fiteach[, 4:6]
+names(params) <- c("mu", "sigma", "Q")
+pairs(params)
+```
+
+Notice that one of the estimates looks like an outlier.
+It is replicate 131_0.
+Let's look at it:
+```{r wierdfit}
+filter(disperseLer, ID =="131_0")
+```
+There does not appear to be anything particularly odd about it, but it will have an outsized influence on the covariance between parameters, so we drop it.
+```{r fiteach2}
+disperseLer2 <- filter(disperseLer2, ID != "131_0")
+fiteach <- fiteach_disp_unt(disperseLer2, model = "gengamma")
+```
+
+To check for heterogeneity, compare the summed AIC of the individual fits to the AIC of a single fits to combined data.
+Here is the combined fit:
+```{r fitall}
+fitall <- fit_dispersal_untruncated(disperseLer2, model = "gengamma")
+fitall[, -(1:2)]
+```
+The summed AIC of the rep-specific fits is `r round(sum(fiteach$AIC))`, which is lower than the homogeneous fit by `r round(fitall$AIC[1] - sum(fiteach$AIC))` AIC units.
+Strong evidence for heterogeneity!
+
+### Density dependence in dispersal
+The maternal pots for this experiment had different densities of plants; this is recorded in the `Density` column of `disperseLer`.
+We can examine density-dependence in the fraction dispersing by including Density as an explanatory variable in the call to `vglm()`:
+```{r frac_dispersing_dd}
+nondispersers <- subset(disperseLer, Pot == 0, c("ID", "Seedlings", "Density"))
+dispersers <- filter(disperseLer, Pot >= 1) %>%
+  group_by(ID) %>%
+  summarise(dispersers = sum(Seedlings))
+disperse_num <- merge(nondispersers, dispersers)
+names(disperse_num)[2] <- "nondispersers"
+bbfit_dd <- vglm(cbind(dispersers, nondispersers) ~ Density,
+              betabinomial,
+              data = disperse_num)
+summary(bbfit_dd)
+```
+The coefficient on Density is clearly not different from zero.
+
+For the dispersal kernels, we can get a preliminary sense by looking at the relationship between density and each of the three parameters.
+```{r kernel_dd}
+fiteach_dens <- merge(fiteach, disperse_num)
+ggplot(fiteach_dens, aes(x = Density, y = par1)) + 
+  geom_point() + 
+  geom_smooth(method = lm) +
+  ylab("mu")
+ggplot(fiteach_dens, aes(x = Density, y = par2)) + 
+  geom_point() + 
+  geom_smooth(method = lm) +
+  ylab("sigma")
+ggplot(fiteach_dens, aes(x = Density, y = par3)) + 
+  geom_point() + 
+  geom_smooth(method = lm) +
+  ylab("Q")
+```
+
+It's pretty clear that there's nothing going on here, so no need for fancy modeling in the original fits.
+
+### Joint kernel parameters
+We will model the among-rep variability as multivariate normal (MVN), with the means of the three parameters and the covariances omong them.
+Add better names:
+```{r rename}
+names(fiteach)[4:6] <- c("mu", "sigma", "Q")
+```
+Calculate the mean and covariance matrix:
+```{r cov}
+apply(fiteach[, 4:6], 2, mean)
+cov(fiteach[, 4:6])
+```
+
+
 # References {#references}
