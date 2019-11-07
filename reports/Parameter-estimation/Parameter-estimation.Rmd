@@ -274,17 +274,48 @@ The third could be addressed using a quasi-Poisson link function, but that doesn
 Instead, we calculate a variance inflation factor, $\theta$, which can be used with the negative binomial distribution to approximate the quasi-Poisson.
 
 ### Data source
+This is the one place where we use data from the experimental populations to estimate parameters, as otherwise there would be no possibility of residual variation among pots depended on time or on location in the greenhouse.
+The population data are described by @Williams2018 (p. 878):
 
+> Plants were given the opportunity to spread across a linear series of soil-filled plastic planting pots that were 21 $\times$ 7.3 $\times$ 5.5 cm (Bachmann Plantec, Hochdorf, Switzerland), arranged so that each patch was 7.3 cm wide. The total length of each array was extended as the invasions moved, but always extended 58.4 cm (8 pots) past the last pot with reproducing individuals. To assess the influence of landscape patchiness on spread, we separated pots in the arrays by distances of 0 (continuous), 2, 4, or 6 $\times$ mean dispersal distance. Seeds that fell into gaps between patches died. Given the constant patch (pot) size in all patchiness treatments, when we altered the distance between suitable habitats, we also altered the total fraction of suitable habitat.
+
+> We evaluated the influence of density dependence in our experiment by creating the extreme case where density dependence is so strong that the population in a given pot, no matter how dense, can only produce a seed number equivalent to that produced by one individual, which in our experiment is equivalent to a carrying capacity of roughly 43 individuals. Our manipulation was equivalent to setting $\alpha = 1$ in the common annual plant population growth function with Beverton–Holt density dependence\dots. We achieved $\alpha = 1$ in our experiment by thinning all germinating seedlings in each pot down to one solitary individual, so that the number of seeds produced by each patch in this treatment was equivalent to the number of seeds produced by one individual. We refer to this treatment as "amplified density dependence" throughout the paper\dots. Where we did not manipulate density dependence ("control"), the empirically measured $\alpha$ was 0.078, or less than one twelfth of the amplified value.
+
+> The two treatments (4 gap sizes and 2 levels of density dependence) were applied in a factorial design to test for their interaction. For each combination, we established 10 replicate arrays, giving a total of 80 replicates, though one replicate was lost during the experiment due to a fallen pot. We started the experiment by sowing 50 seeds in the left-most pot in the unmanipulated density dependence arrays, and 3 seeds in the amplified density dependence arrays (thinned to 1 individual after germination). In subsequent generations in the amplified density dependence treatment, after germination, and after the number of seedlings was counted, we thinned all pots to one individual. Survival was nearly 100%, but if the remaining individual subsequently died, it was replaced with a new plant. When there were multiple individuals in the leading edge pot, we always chose the individual farthest from the origin that was in the center of the pot ($\pm 3$ cm from the midline). We chose the farthest so as to not truncate the distance seeds had dispersed, but we also chose based on centrality to prevent leading individuals growing in corners, where a large fraction of seeds would leave the arrays altogether. In pots behind the leading edge, we chose the central-most individual. In both treatments, germinants grew, made seeds, and seed dispersal was assisted with a simulated rain event that aided in both opening fruits through wetting and drying them and in dislodging seeds from the central partition of each fruit. Specifically, after plants were given 6 weeks to drop their seeds unassisted, we sprayed all patches from directly above with a spray bottle at a height of 60 cm in a systematic way to ensure each patch received exactly four sprays, and plants were then given a further week to disperse seeds. For more details on growing conditions, see @Williams2016b. We ran the experiment for 7 generations, allowing for 6 generations of dispersal.
+
+The population data are in a series of spreadsheets, one for each generation.
+First we process the data to get them into a single data frame that is amenable to analysis (this is used in other parts of the project as well).
+```{r popLer}
+cat(readr::read_file("data/popLer.R"))
+```
+
+Then we further process the resulting `popLer` data frame, to do several things:
+
+* Restrict data to treatments B ("augmented density dependence") and C ("control")
+* Focus on replicates having one- or two-pot gaps
+* Create a lagged seedling abundance variable
+* Select replicate $\times$ generation cases with $> 1$ pots (to allow for distinguishing between within-rep and among-rep variation)
+
+```{r Ler_fecundity}
+cat(readr::read_file("munge/05-Ler_fecundity.R"))
+summary(Ler_fecundity)
+head(Ler_fecundity)
+```
+
+The logic here is that in the fragmented landscapes, the vast majority of seedlings in pot $i$ in generation $t$ were produced by parents in the same pot the previous generation; the number of seeds dispersing from other pots is small enough and variable enoug that it can be treated as noise.
+We do not use the three-pot-gap treatment because very few populations spread beyond the first pot; while these pots could be useful contributions for estimating the mean density-dependent effect, they do not allow for distinguishing between among- and within-runway variation.
+
+Finally, the seedling numbers in this dataset represents the seeds that did not disperse.
+Since we don't have information on dispersal from these pots, we augment the seed production by the mean fraction dispersing, calculated above:
+```{r augment_seeds}
+Ler_fecundity$Seedlings <- round(Ler_fecundity$Seedlings / frac_dispersing)
+```
 
 ### Parameter estimates
 
 Here's the estimation.
 We use the **lme4** package [@Bates2015] to do the mixed effects model.
 ```{r Ler_seed}
-# Ler_fecundity is the data; inflate the home seedlings by the average
-#     fraction dispersing
-Ler_fecundity$Seedlings <- round(Ler_fecundity$Seedlings / frac_dispersing)
-
 # Fit model
 library(lme4)
 seeds_DD <- glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
