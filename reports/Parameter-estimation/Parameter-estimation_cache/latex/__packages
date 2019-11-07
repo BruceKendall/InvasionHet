@@ -19,3 +19,5 @@ stringr
 forcats
 actuar
 flexsurv
+Matrix
+lme4

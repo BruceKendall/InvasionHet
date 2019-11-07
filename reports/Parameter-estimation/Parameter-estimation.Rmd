@@ -257,5 +257,50 @@ apply(fiteach[, 4:6], 2, mean)
 cov(fiteach[, 4:6])
 ```
 
+## Seed production
+For seed production, we use the Gompertz model:
+$$\log \frac{N_{t+1}}{N_t} = a + b \log N_t.$$
+Now, in principle we could estimate these parameters by doing a GLM of $N_{t+1}$ on $\log N_t$ using a log link; subtracting one from the slope gives an estimate of $b$.
+However, preliminary exploration of tte data revealed three wrinkles [see plots and analysis from 5 June 2017, which could be added here]:
+
+1. There is temporal structure in the residuals, with the residual variance depending on generation. 
+This represents temporal variability in expected seed production (often called "environmental stochasticity") that needs to be both accounted for and estimated for the model.
+2. Even after accounting for generation, there is structure in the residuals related to replicate: the pots within a replicate are more similar to each other than they are to pots in other replicates. 
+This is a form of spatial variability that also needs to be estimated.
+3. After accounting for the temporal and spatial structure, the remaining residual variation among pots (which in the model we think of as representing demographic stochasticity) is hyperdispersed relative to Poisson residuals.
+
+The first two issues are addressed using random effects.
+The third could be addressed using a quasi-Poisson link function, but that doesn't play well with `glmer()`, and is not a distribution we can use in the simulation, as there is no `rquasi` function.
+Instead, we calculate a variance inflation factor, $\theta$, which can be used with the negative binomial distribution to approximate the quasi-Poisson.
+
+### Data source
+
+
+### Parameter estimates
+
+Here's the estimation.
+We use the **lme4** package [@Bates2015] to do the mixed effects model.
+```{r Ler_seed}
+# Ler_fecundity is the data; inflate the home seedlings by the average
+#     fraction dispersing
+Ler_fecundity$Seedlings <- round(Ler_fecundity$Seedlings / frac_dispersing)
+
+# Fit model
+library(lme4)
+seeds_DD <- glmer(Seedlings ~ log(Nm1) + (1 | Gen) + (1 | GenID), 
+                  data = Ler_fecundity, family = poisson)
+summary(seeds_DD)
+
+# Extract parameters
+Ler_params <- list(
+  a_Gompertz = fixef(seeds_DD)[1],
+  b_Gompertz = fixef(seeds_DD)[2] - 1,
+  sigma_seed_time = as.data.frame(VarCorr(seeds_DD))$sdcor[2],
+  sigma_seed_rep = as.data.frame(VarCorr(seeds_DD))$sdcor[1],
+  theta_seed = sum(residuals(seeds_DD, type="pearson")^2)/df.residual(seeds_DD)
+)
+
+Ler_params
+```
 
 # References {#references}
