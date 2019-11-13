@@ -334,4 +334,69 @@ Ler_params <- list(
 Ler_params
 ```
 
+# Multi-genotype model
+Here we work with 14 separate recombinant inbred lines (RILs), as described on p. 2 of the Supplement to @Williams2016b.
+
+## Dispersal kernel
+### Data sources
+The data again come from a dedicated seed dispersal experiment. This is described on pp. 4--5 of the Supplement to @Williams2016b:
+
+> We investigated dispersal of each genotype with 6 plants per genotype, grown one per pot. Once seeds began to mature, each plant was set up in a dispersal array, with a 21 × 50 cm board covered with sticky backed plastic film extending in one direction from the edge of the pot with the parent plant. Plants were given the same opportunity to disperse as in the main experiment, including the spray treatment described above, and then all seeds on the sticky paper were counted in 1 cm wide bins. Mature plants were clipped, pots scraped, and the scraped seeds were germinated to estimate how many seeds fell into the parental pot. 
+
+The primary data object for this analysis is called `disperseRIL`, which is derived from `2015_06_30_RilsDispersal.csv`:
+```{r disperseRIL}
+cat(readr::read_file("data/disperseRIL.R"))
+summary(disperseRIL)
+head(disperseRIL)
+```
+The `Seedlings` column records the number of seedlings that germinated in the home pot when associated with `Distance` value of 4; at other distance values it is the number of seeds found in the one-cm strip from `Distance` - 1 to `Distance`.
+Thus, `Distance` = 8 is the first strip on the sticky paper, and represents dispersal 0--1 cm beyond the maternal pot.
+The `RIL` column identifies the genotype.
+There are only 6 replicates per genotype, so estimates of both the mean and variance of dispersal will be more uncertain, on a per-genotype basis, than for the single genotype model above.
+
+### Methods
+The methods for estimating dispersal closely parallel those for the single-genotype experiments described above.
+Here is the code for estimating the parameters; it also draws in values for the seed production model from a separate source, which will be described below.
+
+```{r makeRIL}
+cat(readr::read_file("munge/20-make_RIL_params.R"))
+```
+
+### Fraction dispersing
+To confirm that there is overdispersion in the fraction dispersing for each RIL, justifying the beta-binomial model, we show the model summaries for each genotype.
+```{r frac_disp_RIL_each}
+RIL_list <- levels(disperseRIL$RIL)
+nRIL <- length(RIL_list)
+for (i in 1:nRIL) {
+  disperseRILi <- subset(disperseRIL, RIL == RIL_list[i])
+  
+  ## Fraction dispersing
+  nondispersers <- subset(disperseRILi, Pot == 0, c("ID", "Seedlings"))
+  dispersers <- filter(disperseRILi, Pot >= 1) %>% 
+    group_by(ID) %>% 
+    summarise(dispersers = sum(Seedlings))
+  disperse_num <- merge(nondispersers, dispersers)
+  names(disperse_num)[2] <- "nondispersers"
+  disperse_num$dispersers <- round(2 * disperse_num$dispersers)
+  
+  library(VGAM)
+  bbfit <- vglm(cbind(dispersers, nondispersers) ~ 1, 
+                betabinomial, 
+                data = disperse_num)
+  cat("===============================================================\n")
+  cat("RIL id", RIL_list[i], "\n")
+  print(summary(bbfit))
+  print(Coef(bbfit))
+  CI_logit <- confint(bbfit)
+  row.names(CI_logit) <- c("mu", "rho")
+  print(1 / (1 + exp(- CI_logit)))
+}
+```
+
+The indicator of overdispersion is $\rho > 0$.
+Unfortunately, the P-values in the model summary, being on the logit link scale, are testing whether $\rho$ is different from 0.5, so we back-transform the 95% CI to get an approximate CI on the natural scale.
+This is of necessity bounded away from 0, so we may view lower CI bounds very close to zero as representing lack of strong evidence for nonzero $\rho$.
+While some genotypes have small estimates of $\rho$ that we might not consider as different from zero (e.g., RIL 144), others have values as large as we found for the Ler experiments above.
+Thus, for generality, we assume that all RILs have beta-binomial dispersal fractions, with RIL-specific overdispersion parameters.
+
 # References {#references}
