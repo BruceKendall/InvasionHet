@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.29" />
+
+
+<title>RIL dispersal kernels - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="RIL dispersal kernels - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">7 min read</span>
+    
+
+    <h1 class="article-title">RIL dispersal kernels</h1>
+
+    
+    <span class="article-date">2019/11/14</span>
+    
+
+    <div class="article-content">
+      <p>I’m not entirely satisfied with the prior post on the RIL dispersal kernels.
+So let me re-run some things and see what we understand.</p>
+<p>First, we need to make sure that we are getting enough iterates in the fit:</p>
+<pre class="r"><code>controls &lt;- list(maxit = 1000)</code></pre>
+<p>We also clear out reps with not enough seeds (from 5/24/19):</p>
+<pre class="r"><code>n_min &lt;- 10 # Set the minimum number of dispersing seeds
+dispersing_seeds &lt;- group_by(disperseRIL, ID) %&gt;% 
+  filter(Distance &gt; 4) %&gt;% 
+  summarize(tot_seeds=sum(Seedlings))
+good_reps &lt;- filter(dispersing_seeds, tot_seeds &gt;= n_min) %&gt;%
+  pull(ID)
+disperseRILgood &lt;- filter(disperseRIL, ID %in% good_reps)</code></pre>
+<p>So now fit all the reps.</p>
+<pre class="r"><code>RIL_list &lt;- levels(disperseRILgood$RIL)
+fiteach &lt;- NULL 
+for (i in RIL_list) {
+  disperseRILi &lt;- filter(disperseRILgood, RIL == i)
+  fiteachi &lt;- cbind(RIL = i, 
+                    fiteach_disp_unt(disperseRILi,control=controls))
+  fiteach &lt;- rbind(fiteach, fiteachi)
+}</code></pre>
+<pre><code>&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start_params(cens_data_tble,  : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start_params(cens_data_tble,  : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
+&lt;simpleError in optim(par = vstart, fn = fnobj, fix.arg = fix.arg, obs = data,     gr = gradient, ddistnam = ddistname, hessian = TRUE, method = meth,     lower = lower, upper = upper, ...): non-finite finite-difference value [2]&gt;
+Error in fitdist(cens_data_tble[, 2], model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+                with the error code 100
+
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): non-finite finite-difference value [1]&gt;
+Error in fitdistcens(cens_data_tble, model, start = start_params(cens_data_tble,  : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100
+&lt;simpleError in optim(par = vstart, fn = fnobjcens, fix.arg = fix.arg, gr = gradient,     rcens = rcens, lcens = lcens, icens = icens, ncens = ncens,     ddistnam = ddistname, pdistnam = pdistname, hessian = TRUE,     method = meth, lower = lower, upper = upper, ...): function cannot be evaluated at initial parameters&gt;
+Error in fitdistcens(cens_data_tble, model, start = start, ...) : 
+  the function mle failed to estimate the parameters, 
+        with the error code 100</code></pre>
+<p>Now lets calculate the delta-AIC within each dataset:</p>
+<pre class="r"><code>result &lt;- group_by(fiteach, ID) %&gt;% mutate(delta_AIC = AIC - min(AIC))
+ggplot(result, aes(x=delta_AIC, group = model)) + geom_histogram() + 
+  facet_wrap(~model, scales = &quot;free&quot;) </code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/deltaAIC-1.png" width="672" /></p>
+<p>Once again, we confirm that the generalized gamma is the only model that always has a low <span class="math inline">\(\Delta\)</span>-AIC.</p>
+<p>Let’s look at the fitted kernels:</p>
+<pre class="r"><code>fiteachgg &lt;- filter(fiteach, model == &quot;gengamma&quot;)
+p &lt;- ggplot(data = data.frame(x = c(0, 20)), mapping = aes(x = x)) 
+for (i in 1:nrow(fiteachgg)) {
+  pvec &lt;- as.numeric(fiteachgg[i, 5:7])
+  plist &lt;- list(mu = pvec[1], sigma = pvec[2], Q= pvec[3])
+  p &lt;- p + stat_function(fun = dgengamma, args = plist, color = fiteachgg$RIL[i])
+}
+p + xlab(&quot;Distance (cm)&quot;) + ylab(&quot;Probability density&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>There are a lot of strongly squared-off distributions, which reflect datsets that have nearly uniform distance distributions.</p>
+<p>Let’s look at the scatter of parameters:</p>
+<pre class="r"><code>names(fiteachgg)[5:7] &lt;- c(&quot;mu&quot;, &quot;sigma&quot;, &quot;Q&quot;)
+library(GGally)
+ggpairs(fiteachgg, aes(color = RIL), columns = 5:7)</code></pre>
+<p><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot-1.png" width="672" /></p>
+<p>It’s somewhat hard to see from this what the within-RIL patterns look like.
+Make plots by RIL:</p>
+<pre class="r"><code>for (i in RIL_list) {
+  fegg &lt;- filter(fiteachgg, RIL == i)
+  print(ggpairs(fegg, columns = 5:7) + ggtitle(paste(&quot;RIL&quot;, i)))
+}</code></pre>
+<p><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-1.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-2.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-3.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-4.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-5.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-6.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-7.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-8.png" width="672" /></p>
+<pre><code>Warning: Groups with fewer than two data points have been dropped.
+
+Warning: Groups with fewer than two data points have been dropped.
+
+Warning: Groups with fewer than two data points have been dropped.</code></pre>
+<p><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-9.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-10.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-11.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-12.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-13.png" width="672" /><img src="/InvasionHet/post/2019-11-14-ril-dispersal-kernels_files/figure-html/pairplot2-14.png" width="672" /></p>
+<p>The within-RIL patterns seem reasonable, except for the fact that occasional large values of <span class="math inline">\(Q\)</span> seem like outliers.</p>
+<p>Let’s see if there’s evidence that the parameters vary across RIL:</p>
+<pre class="r"><code>summary(aov(cbind(mu, sigma, Q) ~ RIL, data = fiteachgg))</code></pre>
+<pre><code> Response mu :
+            Df Sum Sq Mean Sq F value  Pr(&gt;F)  
+RIL         13 3.6180 0.27830   2.076 0.03599 *
+Residuals   44 5.8984 0.13406                  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+ Response sigma :
+            Df  Sum Sq  Mean Sq F value Pr(&gt;F)
+RIL         13 0.97667 0.075128  1.1694 0.3324
+Residuals   44 2.82676 0.064245               
+
+ Response Q :
+            Df Sum Sq Mean Sq F value Pr(&gt;F)
+RIL         13 268.63  20.664  1.0762 0.4031
+Residuals   44 844.86  19.201               </code></pre>
+<p>It looks like there’s clear evidence for genotypic heterogeneity only in the mean dispersal distance, although there is a lot of non-normality in the other parameters.
+However, I don’t see an easy way to maintain the correlations when only having one of the parameters vary by RIL.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

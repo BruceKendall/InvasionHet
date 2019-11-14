@@ -6,10 +6,22 @@
     <description>Recent content in Parameter Estimation on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 22 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 14 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/categories/parameter-estimation/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>RIL dispersal kernels</title>
+      <link>/InvasionHet/2019/11/14/ril-dispersal-kernels/</link>
+      <pubDate>Thu, 14 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/11/14/ril-dispersal-kernels/</guid>
+      <description>I’m not entirely satisfied with the prior post on the RIL dispersal kernels. So let me re-run some things and see what we understand.
+First, we need to make sure that we are getting enough iterates in the fit:
+controls &amp;lt;- list(maxit = 1000) We also clear out reps with not enough seeds (from 5/24/19):
+n_min &amp;lt;- 10 # Set the minimum number of dispersing seeds dispersing_seeds &amp;lt;- group_by(disperseRIL, ID) %&amp;gt;% filter(Distance &amp;gt; 4) %&amp;gt;% summarize(tot_seeds=sum(Seedlings)) good_reps &amp;lt;- filter(dispersing_seeds, tot_seeds &amp;gt;= n_min) %&amp;gt;% pull(ID) disperseRILgood &amp;lt;- filter(disperseRIL, ID %in% good_reps) So now fit all the reps.</description>
+    </item>
     
     <item>
       <title>Ler sims, and RIL parameterization plans</title>
