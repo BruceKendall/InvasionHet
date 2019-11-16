@@ -23,7 +23,7 @@ ProjectTemplate::load.project()
 
 I'm not entirely satisfied with the prior post on the RIL dispersal kernels.
 So let me re-run some things and see what we understand.
-
+  
 First, we need to make sure that we are getting enough iterates in the fit:
 ```{r}
 controls <- list(maxit = 1000)
@@ -97,3 +97,33 @@ summary(aov(cbind(mu, sigma, Q) ~ RIL, data = fiteachgg))
 ```
 It looks like there's clear evidence for genotypic heterogeneity only in the mean dispersal distance, although there is a lot of non-normality in the other parameters.
 However, I don't see an easy way to maintain the correlations when only having one of the parameters vary by RIL.
+
+# Continuing November 15
+The last question involves checking that within-genotype heterogeneity exists by comparing AIC.
+First calculate summed AICs:
+```{r}
+AIC_sums <- group_by(fiteachgg, RIL) %>%
+  summarize(AIC_sum = sum(AIC))
+```
+And now calculate the AICs of the homogeneous models for each RIL:
+```{r RILall, cache=TRUE, eval=FALSE}
+RIL_list <- levels(disperseRILgood$RIL)
+fitall <- NULL 
+for (i in RIL_list) {
+  disperseRILi <- filter(disperseRILgood, RIL == i)
+  fitalli <- cbind(RIL = i, 
+                    fit_dispersal_untruncated(disperseRILi,
+                                              model = "gengamma",
+                                              control=controls))
+  fitall <- rbind(fitall, fitalli)
+}
+```
+This fails for RIL 187.
+Also, this has me looking back, and realizing that a number of replicates are failing also.
+These are: 19 (RIL 22), 40 (RIL 53), 77 (RIL 187).
+
+And finally, the Delta-AICs:
+```{r}
+fitall
+fitall$AIC - AIC_sums$AIC_sum
+```
