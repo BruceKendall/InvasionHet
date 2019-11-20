@@ -1,0 +1,111 @@
+---
+title: Try harder on RIL dispersal
+author: Bruce Kendall
+date: '2019-11-20'
+slug: try-harder-on-ril-dispersal
+categories:
+  - Parameter estimation
+tags:
+  - RIL
+  - dispersal
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+**BOTTOM LINE**: I can't figure out what is going on with the bad fits; there are too many layers of indirection between the inputs to fitidistr and what goes into the optimizer. So I'll need to drop the problematic reps.
+
+
+I think (from some of the error messages that pop up) that some of the issues may have to do with negative values of the spread parameter as the optimizer explores parameter space.
+So it turns out that we can put bounds on the parameter using the "L-BFGS-B" opimizer.
+I added one more fall-through to use this:
+```{r, eval=FALSE}
+      if (class(fit_i) == "try-error") {
+        fit_i <- try(fitdistcens(cens_data_tble, model, start = start, 
+                                 optim.method = "L-BFGS-B", lower = 0, ...))
+      }
+```
+Let's give this a a go.
+
+```{r fitall, cache=TRUE, warning=FALSE, message=FALSE, error=FALSE}
+controls <- list(maxit = 1000)
+n_min <- 10 # Set the minimum number of dispersing seeds
+dispersing_seeds <- group_by(disperseRIL, ID) %>% 
+  filter(Distance > 4) %>% 
+  summarize(tot_seeds=sum(Seedlings))
+good_reps <- filter(dispersing_seeds, tot_seeds >= n_min) %>%
+  pull(ID)
+disperseRILgood <- filter(disperseRIL, ID %in% good_reps)
+RIL_list <- levels(disperseRILgood$RIL)
+fiteach <- NULL 
+for (i in RIL_list) {
+  disperseRILi <- filter(disperseRILgood, RIL == i)
+  fiteachi <- cbind(RIL = i, 
+                    fiteach_disp_unt(disperseRILi,control=controls))
+  fiteach <- rbind(fiteach, fiteachi)
+} 
+```
+
+```{r}
+fiteach[, 1:7]
+```
+
+This is still not doing the trick.
+Let's dig into the fit directly, with trace on.
+
+```{r}
+dispersal_data <- filter(disperseRILgood, ID == "19")
+fiteach_disp_unt(dispersal_data, model = "gengamma",
+                 control=list(maxit = 2000, trace = 6))
+```
+
+Still failing, and the trace isn't telling us anything useful.
+We need to see the parameter values to understand what's going on....
+
+```{r}
+dgengamma <- function(x, mu, sigma, Q, ...) {
+  print(x)
+  print(c(mu, sigma, Q))
+  flexsurv::dgengamma(x, mu, sigma, Q, ...)
+}
+
+pgengamma <- function(q, mu, sigma, Q, ...) {
+  print(q)
+  print(c(mu, sigma, Q))
+  flexsurv::pgengamma(q, mu, sigma, Q, ...) 
+}
+```
+
+```{r}
+fiteach_disp_unt(dispersal_data, model = "gengamma",
+                 control=list(maxit = 2000, trace = 6))
+pgengamma
+```
+
+So it looks like, in the unconstrained optimization, $Q$ is going very negative. 
+In the constrained optimization, $\sigma$ is going to zero, which seems to lead to failure:
+```{r}
+flexsurv::dgengamma(c(0, 1, 10, 11), 2.614558, 0.000000, 4.498757)
+flexsurv::pgengamma(c(0, 1, 10, 11), 2.614558, 0.000000, 4.498757)
+flexsurv::dgengamma(c(0, 1, 10, 11), 2.614558, 0.000001, 4.498757)
+flexsurv::pgengamma(c(0, 1, 10, 11), 2.614558, 0.000001, 4.498757)
+```
+
+Let's try n0t-quite-zero lower bound:
+```{r}
+fiteach_disp_unt(dispersal_data, model = "gengamma",
+                 control=list(maxit = 2000))
+
+```
+
+
+```{r}
+flexsurv::dgengamma(c(0, 1, 10, 11), 1.797423, 0.950660, 2.310759)
+flexsurv::pgengamma(c(0, 1, 10, 11), 1.797423, 0.950660, 2.310759)

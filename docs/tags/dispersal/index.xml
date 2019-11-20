@@ -6,10 +6,31 @@
     <description>Recent content in Dispersal on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 14 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/tags/dispersal/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Drop bad RIL reps</title>
+      <link>/InvasionHet/2019/11/20/drop-bad-ril-reps/</link>
+      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/11/20/drop-bad-ril-reps/</guid>
+      <description>First, we need to make sure that we are getting enough iterates in the fit:
+controls &amp;lt;- list(maxit = 1000) We also clear out reps with not enough seeds (from 5/24/19), as well as dropping the reps that won’t converge on the generalized gamma (19, 40, and 77)
+n_min &amp;lt;- 10 # Set the minimum number of dispersing seeds dispersing_seeds &amp;lt;- group_by(disperseRIL, ID) %&amp;gt;% filter(Distance &amp;gt; 4) %&amp;gt;% filter(!(ID %in% c(&amp;quot;19&amp;quot;, &amp;quot;40&amp;quot;, &amp;quot;77&amp;quot;))) %&amp;gt;% summarize(tot_seeds=sum(Seedlings)) good_reps &amp;lt;- filter(dispersing_seeds, tot_seeds &amp;gt;= n_min) %&amp;gt;% pull(ID) good_reps  [1] 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20 21 22 23 24 25 [24] 26 27 28 29 31 33 34 35 36 37 39 41 42 43 44 45 46 48 53 54 55 56 57 [47] 58 59 60 62 66 68 70 73 74 75 78 79 80 Levels: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 .</description>
+    </item>
+    
+    <item>
+      <title>Try harder on RIL dispersal</title>
+      <link>/InvasionHet/2019/11/20/try-harder-on-ril-dispersal/</link>
+      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/11/20/try-harder-on-ril-dispersal/</guid>
+      <description>BOTTOM LINE: I can’t figure out what is going on with the bad fits; there are too many layers of indirection between the inputs to fitidistr and what goes into the optimizer. So I’ll need to drop the problematic reps.
+I think (from some of the error messages that pop up) that some of the issues may have to do with negative values of the spread parameter as the optimizer explores parameter space.</description>
+    </item>
     
     <item>
       <title>RIL dispersal kernels</title>

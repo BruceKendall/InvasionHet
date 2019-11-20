@@ -1,0 +1,105 @@
+---
+title: Drop bad RIL reps
+author: Bruce Kendall
+date: '2019-11-20'
+slug: drop-bad-ril-reps
+categories:
+  - Parameter estimation
+tags:
+  - dispersal
+  - RIL
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+First, we need to make sure that we are getting enough iterates in the fit:
+```{r}
+controls <- list(maxit = 1000)
+```
+We also clear out reps with not enough seeds (from 5/24/19), as well as dropping the reps that won't converge  on the generalized gamma (19, 40, and 77)
+```{r}
+n_min <- 10 # Set the minimum number of dispersing seeds
+dispersing_seeds <- group_by(disperseRIL, ID) %>% 
+  filter(Distance > 4) %>% 
+  filter(!(ID %in% c("19", "40", "77"))) %>%
+  summarize(tot_seeds=sum(Seedlings))
+good_reps <- filter(dispersing_seeds, tot_seeds >= n_min) %>%
+  pull(ID)
+good_reps
+disperseRILgood <- filter(disperseRIL, ID %in% good_reps)
+```
+So now fit all the reps.
+```{r fitall, cache=TRUE, warning=FALSE, message=FALSE, error=FALSE}
+RIL_list <- levels(disperseRILgood$RIL)
+fiteach <- NULL 
+for (i in RIL_list) {
+  disperseRILi <- filter(disperseRILgood, RIL == i)
+  fiteachi <- cbind(RIL = i, 
+                    fiteach_disp_unt(disperseRILi,control=controls))
+  fiteach <- rbind(fiteach, fiteachi)
+} 
+```
+
+```{r}
+fiteach[, 1:7]
+```
+
+
+Now lets calculate the delta-AIC within each dataset:
+```{r deltaAIC}
+result <- group_by(fiteach, ID) %>% mutate(delta_AIC = AIC - min(AIC))
+ggplot(result, aes(x=delta_AIC, group = model)) + geom_histogram() + 
+  facet_wrap(~model, scales = "free") 
+```
+
+Once again, we confirm that the generalized gamma is the only model that always has a low $\Delta$-AIC.
+
+Let's look at the fitted kernels:
+```{r, warning=FALSE}
+fiteachgg <- filter(fiteach, model == "gengamma")
+p <- ggplot(data = data.frame(x = c(0, 20)), mapping = aes(x = x)) 
+for (i in 1:nrow(fiteachgg)) {
+  pvec <- as.numeric(fiteachgg[i, 5:7])
+  plist <- list(mu = pvec[1], sigma = pvec[2], Q= pvec[3])
+  p <- p + stat_function(fun = dgengamma, args = plist, color = fiteachgg$RIL[i])
+}
+p + xlab("Distance (cm)") + ylab("Probability density")
+```
+
+
+The last question involves checking that within-genotype heterogeneity exists by comparing AIC.
+First calculate summed AICs:
+```{r}
+AIC_sums <- group_by(fiteachgg, RIL) %>%
+  summarize(AIC_sum = sum(AIC))
+head(disperseRILgood)
+```
+And now calculate the AICs of the homogeneous models for each RIL:
+```{r, cache=FALSE, eval=TRUE}
+RIL_list <- levels(disperseRILgood$RIL) 
+fitall <- NULL 
+for (i in RIL_list) {
+  disperseRILi <- filter(disperseRILgood, RIL == i)
+  fitalli <- cbind(RIL = i,
+                    fit_dispersal_untruncated(disperseRILi,
+                                              model = "gengamma",
+                                              control=controls))
+  fitall <- rbind(fitall, fitalli)
+}
+```
+
+And finally, the Delta-AICs:
+```{r}
+fitall
+fitall$AIC - AIC_sums$AIC_sum
+```
+Positive values mean that the heterogeneous model is better. 
+9 RILs show strong evidence of heterogeneity; in 3 RILs the homogeneous model is better; in 2 the two models are indistinguishable.

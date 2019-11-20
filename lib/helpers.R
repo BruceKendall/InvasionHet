@@ -87,7 +87,7 @@ fit_dispersal_untruncated <- function(dispersal_data, zero = 7,
 #   be analyzed, it should be subset outside this function
 
   if ("invgauss" %in% model_list) library(actuar)
-  if ("gengamma" %in% model_list) library(flexsurv)
+#  if ("gengamma" %in% model_list) library(flexsurv)
 
   cens_data_tble <- cens_dispersal_data(dispersal_data, zero)
   
@@ -106,10 +106,14 @@ fit_dispersal_untruncated <- function(dispersal_data, zero = 7,
                              start = start_params(cens_data_tble, model), ...))
     if (model == "gengamma") {
       start = start_params(cens_data_tble, model)
-      start[3] <- 0
+#      start[3] <- 0
       fit_0 <- try(fitdist(cens_data_tble[,2], model, start = start, ...))
       if (class(fit_0) != "try-error") start <- as.list(fit_0$est)
       fit_i <- try(fitdistcens(cens_data_tble, model, start = start, ...))
+      if (class(fit_i) == "try-error") {
+        fit_i <- try(fitdistcens(cens_data_tble, model, start = start, 
+                                 optim.method = "L-BFGS-B", lower = 0.00001, ...))
+      }
     }
     if (class(fit_i) != "try-error") { 
       par_i <- rep(NA, 3)
