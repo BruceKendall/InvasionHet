@@ -399,4 +399,106 @@ This is of necessity bounded away from 0, so we may view lower CI bounds very cl
 While some genotypes have small estimates of $\rho$ that we might not consider as different from zero (e.g., RIL 144), others have values as large as we found for the Ler experiments above.
 Thus, for generality, we assume that all RILs have beta-binomial dispersal fractions, with RIL-specific overdispersion parameters.
 
+### Dispersal kernels
+There three replicates that the generalized gamma model didn't converge to.
+There is nothing obviously strange about the empirical distributions; but I tried as many tweaks as I could within the constraints of `fitdistr()`. 
+Part of the problem is that, since the objective function is constructed within the package, it's not possible to dig as deeply into the problem as with a hand-rolled minimization.
+I'm not willing to take that extra effort!
+
+First, we need to make sure that we are getting enough iterates in the fit:
+```{r optim_controls}
+controls <- list(maxit = 1000)
+```
+We also clear out reps with not enough seeds (set to a somewhat arbitrary threshold of 10), as well as dropping the reps that won't converge  on the generalized gamma (19, 40, and 77).
+```{r RIL_data_subset}
+n_min <- 10 # Set the minimum number of dispersing seeds
+dispersing_seeds <- group_by(disperseRIL, ID) %>% 
+  filter(Distance > 4) %>% 
+  filter(!(ID %in% c("19", "40", "77"))) %>%
+  summarize(tot_seeds=sum(Seedlings))
+good_reps <- filter(dispersing_seeds, tot_seeds >= n_min) %>%
+  pull(ID)
+good_reps
+disperseRILgood <- filter(disperseRIL, ID %in% good_reps)
+```
+
+So now fit all the reps.
+```{r fitall_RIL, cache=TRUE, warning=FALSE, message=FALSE, error=FALSE, results=FALSE}
+RIL_list <- levels(disperseRILgood$RIL)
+fiteach <- NULL 
+for (i in RIL_list) {
+  disperseRILi <- filter(disperseRILgood, RIL == i)
+  fiteachi <- cbind(RIL = i, 
+                    fiteach_disp_unt(disperseRILi,control=controls))
+  fiteach <- rbind(fiteach, fiteachi)
+} 
+```
+
+Now lets calculate the delta-AIC within each dataset:
+```{r deltaAIC_RIL}
+result <- group_by(fiteach, ID) %>% mutate(delta_AIC = AIC - min(AIC))
+ggplot(result, aes(x=delta_AIC, group = model)) + geom_histogram() + 
+  facet_wrap(~model, scales = "free") 
+```
+
+Once again, we confirm that the generalized gamma is the only model that always has a low $\Delta$-AIC.
+
+Let's look at the fitted kernels:
+```{r kernel_plots_RIL, warning=FALSE}
+fiteachgg <- filter(fiteach, model == "gengamma")
+p <- ggplot(data = data.frame(x = c(0, 20)), mapping = aes(x = x)) 
+for (i in 1:nrow(fiteachgg)) {
+  pvec <- as.numeric(fiteachgg[i, 5:7])
+  plist <- list(mu = pvec[1], sigma = pvec[2], Q= pvec[3])
+  p <- p + stat_function(fun = dgengamma, args = plist, color = fiteachgg$RIL[i])
+}
+p + xlab("Distance (cm)") + ylab("Probability density")
+```
+
+
+The last question involves checking that within-genotype heterogeneity exists by comparing AIC.
+First calculate summed AICs:
+```{r AIC_het_RIL}
+AIC_sums <- group_by(fiteachgg, RIL) %>%
+  summarize(AIC_sum = sum(AIC))
+head(disperseRILgood)
+```
+And now calculate the AICs of the homogeneous models for each RIL:
+```{r AIC_het_RIL2, eval=TRUE}
+RIL_list <- levels(disperseRILgood$RIL) 
+fitall <- NULL 
+for (i in RIL_list) {
+  disperseRILi <- filter(disperseRILgood, RIL == i)
+  fitalli <- cbind(RIL = i,
+                    fit_dispersal_untruncated(disperseRILi,
+                                              model = "gengamma",
+                                              control=controls))
+  fitall <- rbind(fitall, fitalli)
+}
+```
+
+
+And finally, the Delta-AICs:
+```{r AIC_het_RIL3}
+fitall
+fitall$AIC - AIC_sums$AIC_sum
+```
+Positive values mean that the heterogeneous model is better. 
+9 RILs show strong evidence of heterogeneity; in 3 RILs the homogeneous model is better; in 2 the two models are indistinguishable.
+
+Since the majority of RILs have heterogeneity, we will apply the hetergeneous model to all.
+
+Once again, we use MVN to get the means, variances and covariances of the parameters:
+```{r MVN_RIL}
+gg_mean <- group_by(fiteachgg, RIL) %>%
+  summarize(mu = mean(par1),
+            sigma = mean(par2),
+            Q = mean(par3))
+gg_mean
+
+by(fiteachgg[, 5:7], fiteachgg$RIL, cov)
+```
+
+RIL 133 returns NAs for the covariance matrix because only one replicate was robust enough to be fit.
+For this case we set the variances and covariances to zero.
 # References {#references}
