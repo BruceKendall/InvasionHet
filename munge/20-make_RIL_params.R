@@ -28,6 +28,7 @@ for (i in 1:nRIL) {
   n_min <- 10 # Set the minimum number of dispersing seeds
   dispersing_seeds <- group_by(disperseRILi, ID) %>% 
     filter(Distance > 4) %>% 
+    filter(!(ID %in% c("19", "40", "77"))) %>%
     summarize(tot_seeds=sum(Seedlings))
   good_reps <- filter(dispersing_seeds, tot_seeds >= n_min) %>%
     pull(ID)
