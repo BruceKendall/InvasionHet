@@ -6,10 +6,19 @@
     <description>Recent content in Planning on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 22 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 11 Dec 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/InvasionHet/categories/planning/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Parameter file done (sort of); next steps</title>
+      <link>/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</link>
+      <pubDate>Wed, 11 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</guid>
+      <description>I have finished the parameter estimation report (sort of). I decided not to reconstruct the complex set of analyses that went into calculating the RIL-specific Gompertz parameters in the runup to the Science paper (which didn’t get used). This will probably have to be done if a version of this document goes into a manuscript submission, but I’m confident that the results won’t change and I should move on to running simulations and writing a paper.</description>
+    </item>
     
     <item>
       <title>Moving forward in fall</title>

@@ -501,4 +501,18 @@ by(fiteachgg[, 5:7], fiteachgg$RIL, cov)
 
 RIL 133 returns NAs for the covariance matrix because only one replicate was robust enough to be fit.
 For this case we set the variances and covariances to zero.
+
+## Seed production
+### Data source
+The seed production data are from an experiment described on p. 4 of the supplement to @Williams2016b:
+
+> To estimate the fecundity of each genotype, we grew each genotype alone and with
+4 densities of neighbors: 14 individuals (1 individual/genotype), 28 individuals (2/genotype), 100 individuals, and 500 individuals, with 8 replicates of each density/genotype. We used the same pots, soil and growing conditions as described above. After plants set seed, we recorded the height and silique (fruit) number of each target individual. From each target individual, we also harvested 5 siliques, from which we counted and weighed seeds (for assessing total fecundity and seed mass).
+
+**The estimation of Gompertz parameters was the result of a long and complex set of calculations that I did in 2015 and 2016, found in the "Ril fecundity and dispersal" files in the "DispersalVar" repository. I really don't want to try to reconstruct those now!** The results of that analysis are in the columns `a_seed` and `b_seed` in `RIL_stats`:
+```{r, echo=FALSE}
+print(RIL.stats[, 2:4])
+```
+The overall model is that a RIL's per-capita seed production is reduced by the total density of all plants in the pot, regardless of genotype. While it is plausible that there could be genotype-specific interaction coefficients (e.g., due to systematic height differences among RILs), the factorial experiment required to assess this was not performed.
+
 # References {#references}

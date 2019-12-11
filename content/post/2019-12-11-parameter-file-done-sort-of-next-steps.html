@@ -1,0 +1,32 @@
+---
+title: Parameter file done (sort of); next steps
+author: Bruce Kendall
+date: '2019-12-11'
+slug: parameter-file-done-sort-of-next-steps
+categories:
+  - Planning
+tags: []
+---
+
+
+
+<p>I have finished the parameter estimation report (sort of).
+I decided not to reconstruct the complex set of analyses that went into calculating the RIL-specific Gompertz parameters in the runup to the <em>Science</em> paper (which didn’t get used).
+This will probably have to be done if a version of this document goes into a manuscript submission, but I’m confident that the results won’t change and I should move on to running simulations and writing a paper.</p>
+<div id="next-steps" class="section level1">
+<h1>Next steps</h1>
+<p>In the run-up to the Davis talk, I generated a bunch of simulation results for Ler, but crashed and burned on RIL.
+In the attempt to get the RIL model working, I may have compromised the Ler model (I was trying to have one model for everything, I think).
+So here’s what I need to do:</p>
+<ol style="list-style-type: decimal">
+<li>Check that the model still runs as a single-genotype model</li>
+<li>Evaluate whether I need to rerun Ler (did parameter estimates change? Did I run enough replicates?)</li>
+<li>Evaluate whether I need to “validate” the Ler model against anything other than spread rate mean and variance</li>
+<li>Ensure that the codes for running the models are in reproducible scripts, and that the model functions themselves are adequately documented</li>
+<li>Get the multi-genotype models working</li>
+<li>Run RILs with and without evolution</li>
+<li>Run single-genotype model with mean RIL params to get a baseline for heterogeneity</li>
+</ol>
+<p>I’ve checked a few things. For (1), there is still some debugging to do, as the run I just did eventually generated a -Inf value for <code>runway_end</code>.
+For (2), yes, I need to re-run, as I’ve added a limit to the number of new pots, based on the description of the experiment.</p>
+</div>
