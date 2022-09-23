@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Distribution of Ler variability - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p>So, last night’s analysis suggests that there’s not enough spread variability in the model. But it varied from run to run. So lets do a bunch of runs using replicate and see how far off we are.</p>
+      
+
+
+<p>So, last night’s analysis suggests that there’s not enough spread variability in the model. But it varied from run to run. So lets do a bunch of runs using replicate and see how far off we are.</p>
 <pre class="r"><code>n_init &lt;- 50
 Ler_params$gap_size &lt;- 0 
 controls &lt;- list(

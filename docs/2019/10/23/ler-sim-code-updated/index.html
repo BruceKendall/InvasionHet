@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Ler sim code updated - Project notebook for the Invasion Heterogeneity project</title>
@@ -66,7 +66,7 @@
     
 
     <div class="article-content">
-      <p>I&rsquo;ve gotten the 8-pot runway extension limit into the Ler simulation code.
+      <p>I've gotten the 8-pot runway extension limit into the Ler simulation code.
 Along the way I tracked down some bugs that may have been causing problems when I abandoned the project last spring (I think when I was trying to run RIL models).
 After much chasing of strange errors and intermediate output, I discovered that most (all?) of the headaches arose from <code>aaply()</code> dropping array dimesions; I fixed these by using the <code>.drop = FALSE</code> argument.</p>
 

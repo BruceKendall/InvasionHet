@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Try harder on RIL dispersal - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p><strong>BOTTOM LINE</strong>: I can’t figure out what is going on with the bad fits; there are too many layers of indirection between the inputs to fitidistr and what goes into the optimizer. So I’ll need to drop the problematic reps.</p>
+      
+
+
+<p><strong>BOTTOM LINE</strong>: I can’t figure out what is going on with the bad fits; there are too many layers of indirection between the inputs to fitidistr and what goes into the optimizer. So I’ll need to drop the problematic reps.</p>
 <p>I think (from some of the error messages that pop up) that some of the issues may have to do with negative values of the spread parameter as the optimizer explores parameter space.
 So it turns out that we can put bounds on the parameter using the “L-BFGS-B” opimizer.
 I added one more fall-through to use this:</p>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Build site broken - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p>Yesterday I updated <strong>blogdown</strong>, from v. 0.1 to 0.4. This broke <code>build.site()</code>, because when it tries to compile an Rmd file that calls <code>projecttemplate</code>, the working directory is no longer being set to the project root, which presently is “/Users/kendall/Documents/Github/InvasionHet”. This was acheived by setting the knitr parameter <code>root.dir</code> in <code>.Rprofile</code> in the post directory.</p>
+      
+
+
+<p>Yesterday I updated <strong>blogdown</strong>, from v. 0.1 to 0.4. This broke <code>build.site()</code>, because when it tries to compile an Rmd file that calls <code>projecttemplate</code>, the working directory is no longer being set to the project root, which presently is “/Users/kendall/Documents/Github/InvasionHet”. This was acheived by setting the knitr parameter <code>root.dir</code> in <code>.Rprofile</code> in the post directory.</p>
 <p>Here’s what the knitr option currently is:</p>
 <pre class="r"><code>knitr::opts_knit$get()$root.dir</code></pre>
 <pre><code>[1] &quot;/Users/kendall/Documents/Github/InvasionHet&quot;</code></pre>

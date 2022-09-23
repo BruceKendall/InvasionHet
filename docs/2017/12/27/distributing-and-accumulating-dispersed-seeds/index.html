@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Distributing and accumulating dispersed seeds - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p>Here is what I think will be an efficient way of putting the dispersed seeds in the right place. Let <code>relDseeds</code> be a <span class="math inline">\((2 D_{max}+1)\times n_{pots}\)</span> matrix giving dispersal relative to the home pot (with row <code>Dmax + 1</code> being retention and rows above that being backwards dispersal). Then we can create an absolute dispersal matrix:</p>
+      
+
+
+<p>Here is what I think will be an efficient way of putting the dispersed seeds in the right place. Let <code>relDseeds</code> be a <span class="math inline">\((2 D_{max}+1)\times n_{pots}\)</span> matrix giving dispersal relative to the home pot (with row <code>Dmax + 1</code> being retention and rows above that being backwards dispersal). Then we can create an absolute dispersal matrix:</p>
 <pre class="r"><code># Lowest index of each column of relDseeds to include in Dseeds
 lower &lt;- pmax(1, Dmax - (1:npots) + 2) 
 

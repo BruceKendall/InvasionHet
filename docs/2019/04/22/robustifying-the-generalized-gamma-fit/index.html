@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Robustifying the generalized gamma fit - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p>I’m still a bit concerned about the generalized gamma, for two reasons: am I getting good enough starting values; and why do I get errors in the function evaluation.</p>
+      
+
+
+<p>I’m still a bit concerned about the generalized gamma, for two reasons: am I getting good enough starting values; and why do I get errors in the function evaluation.</p>
 <p>For the first, my previous work on moments was not helpful. So I think that the only robust approach is to start from lots of random start values. However, that brings up the second issue of rather frequent failures. I think the issue is that flexsurv is not quite standard in how it deals with edge conditions. So let’s look at this a bit more.</p>
 <p>First, generate the error:</p>
 <pre class="r"><code>library(flexsurv)

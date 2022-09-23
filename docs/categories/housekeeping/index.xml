@@ -1,33 +1,33 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Housekeeping on Project notebook for the Invasion Heterogeneity project</title>
-    <link>/InvasionHet/categories/housekeeping/</link>
+    <link>https://brucekendall.github.io/InvasionHet/categories/housekeeping/</link>
     <description>Recent content in Housekeeping on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 29 Sep 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 17 Apr 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/InvasionHet/categories/housekeeping/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://brucekendall.github.io/InvasionHet/categories/housekeeping/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Trying out BlogDown</title>
-      <link>/InvasionHet/2017/09/29/trying-out-blogdown/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/29/trying-out-blogdown/</link>
       <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/29/trying-out-blogdown/</guid>
-      <description>I&amp;rsquo;m trying out blogdown (https://bookdown.org/yihui/blogdown/) for serving up the project notebook. Advantages:
- Rebuilds only update changed files Dialog box for creating new posts Automatically shows posts in date order, presumably even if they&amp;rsquo;ve been edited Might be possible to automate serving it up on the github page, so Jenn can just look at it in a web browser  (Potential) Disadvantages:
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/29/trying-out-blogdown/</guid>
+      <description>I&#39;m trying out blogdown (https://bookdown.org/yihui/blogdown/) for serving up the project notebook. Advantages:
+ Rebuilds only update changed files Dialog box for creating new posts Automatically shows posts in date order, presumably even if they&#39;ve been edited Might be possible to automate serving it up on the github page, so Jenn can just look at it in a web browser  (Potential) Disadvantages:
  Whole new file structure to figure out (in particular, I may have to modify the knitr option for setting the working directory, which was based on a relative path) Presumably I can set up the post creation script to include my ProjectTemplate preamble, but that will take work/trial and error I will have to figure out how caching works with this.</description>
     </item>
     
     <item>
       <title>Test function printing</title>
-      <link>/InvasionHet/2019/04/17/test-function-printing/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/17/test-function-printing/</link>
       <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/17/test-function-printing/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/17/test-function-printing/</guid>
       <description>Function printing works as desired if the function is defined within the document. The issue is if it is defined externally, and loaded via source. It appears that if I use options(keep.source = TRUE) before the call to load.project this will be done correctly.
 Function setup:
 myfunc &amp;lt;- function(x, y) { # Here&amp;#39;s a function with a comment and custom spacing in the source code switch(x, one = 1, two = if (y) { 3 } else { 2 } ) } Print using print</description>
@@ -35,10 +35,10 @@ myfunc &amp;lt;- function(x, y) { # Here&amp;#39;s a function with a comment and
     
     <item>
       <title>fitdistrplus fixed</title>
-      <link>/InvasionHet/2018/11/15/fitdistrplus-fixed/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/15/fitdistrplus-fixed/</link>
       <pubDate>Thu, 15 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/15/fitdistrplus-fixed/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/15/fitdistrplus-fixed/</guid>
       <description>The developers of fitdistrplus got back to me already with a code fix. The new version (1.0-12) is available from R-forge using
 install.packages(&amp;quot;fitdistrplus&amp;quot;, repos=&amp;quot;http://R-Forge.R-project.org&amp;quot;) So now with fitdistrplus loaded in global.dcf I can run
 mydata &amp;lt;- rnorm(20, 0, 10) mydata_cens &amp;lt;- data.frame(left = floor(mydata), right = ceiling(mydata)) dmynorm &amp;lt;- function(x, mean, sd, log = FALSE) dnorm(x, mean, sd, log) pmynorm &amp;lt;- function(q, mean, sd, lower.tail = TRUE, log.p = FALSE) pnorm(q, mean, sd, lower.</description>
@@ -46,30 +46,30 @@ mydata &amp;lt;- rnorm(20, 0, 10) mydata_cens &amp;lt;- data.frame(left = floor(
     
     <item>
       <title>blogdown tweak</title>
-      <link>/InvasionHet/2018/11/14/blogdown-tweak/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/14/blogdown-tweak/</link>
       <pubDate>Wed, 14 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/14/blogdown-tweak/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/14/blogdown-tweak/</guid>
       <description>I’ve modified themes/hugo-lithium-theme/archetypes/default.md to include the setup2 chunk. Thus that chunk gets automatically added into a new blog post created with the addin. This goes into all new posts, so will need to be deleted in md files. I made a second archetype that was a copy of the original, but it doesn’t seem to be available from the addin menu.
 Looking into this, it seems like it should be available; I’ve posted a question on stackexchange.</description>
     </item>
     
     <item>
       <title>Getting back to work</title>
-      <link>/InvasionHet/2018/09/19/getting-back-to-work/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/09/19/getting-back-to-work/</link>
       <pubDate>Wed, 19 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/09/19/getting-back-to-work/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/09/19/getting-back-to-work/</guid>
       <description>Blogdown My last post from 9 months ago said that blogdown wasn’t working properly. I’m not sure if that’s still true, but my version of R at home is rather old, so I just updated to 3.5.1.
 This requires reinstalling libraries, which is probably a good idea as there are a number of helper libraries that need to be rebuilt even when they don’t have an update (and hence can’t get reinstalled automatically):</description>
     </item>
     
     <item>
       <title>Build site broken</title>
-      <link>/InvasionHet/2017/12/27/build-site-broken/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/12/27/build-site-broken/</link>
       <pubDate>Wed, 27 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/12/27/build-site-broken/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/12/27/build-site-broken/</guid>
       <description>Yesterday I updated blogdown, from v. 0.1 to 0.4. This broke build.site(), because when it tries to compile an Rmd file that calls projecttemplate, the working directory is no longer being set to the project root, which presently is “/Users/kendall/Documents/Github/InvasionHet”. This was acheived by setting the knitr parameter root.dir in .Rprofile in the post directory.
 Here’s what the knitr option currently is:
 knitr::opts_knit$get()$root.dir [1] &amp;quot;/Users/kendall/Documents/Github/InvasionHet&amp;quot; # Originally gave NULL and here’s what is being viewed as the working directory:</description>
@@ -77,30 +77,30 @@ knitr::opts_knit$get()$root.dir [1] &amp;quot;/Users/kendall/Documents/Github/In
     
     <item>
       <title>Customizing blogdown</title>
-      <link>/InvasionHet/2017/09/30/customizing-blogdown/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</link>
       <pubDate>Sat, 30 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/30/customizing-blogdown/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</guid>
       <description>I am now on my computer at home; after updating packages and rstudio, and installing blogdown and hugo, everything is running fine (although I still need to update my ~/.Rprofile).
 Tags and categories Getting links to tags and categories was as simple as editing the menu section of config.toml; the one trick is to add weight variables to get the order I want (the default is alphabetical). Here is the relevant bit of code:</description>
     </item>
     
     <item>
       <title>Housekeeping</title>
-      <link>/InvasionHet/2017/09/25/housekeeping/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/25/housekeeping/</link>
       <pubDate>Mon, 25 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/25/housekeeping/</guid>
-      <description>After repeated nagging from ProjectTemplate, I ran the script to update the project structure to v. 0.8. This changed the doc directory to docs, and added some new variables to global.dcf. Unfortunately the latter don&amp;rsquo;t seem to be documented&amp;hellip;. I&amp;rsquo;ll also need to make sure that I update the package on my computer at home.
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/25/housekeeping/</guid>
+      <description>After repeated nagging from ProjectTemplate, I ran the script to update the project structure to v. 0.8. This changed the doc directory to docs, and added some new variables to global.dcf. Unfortunately the latter don&#39;t seem to be documented&amp;hellip;. I&#39;ll also need to make sure that I update the package on my computer at home.
 I added a new munge script to calculate the dispersal stats and fits. To prevent this calculating every time, I cached the result; but now I need to add caching to all the munge scripts, and, after running once, turn off caching&amp;hellip; Done!</description>
     </item>
     
     <item>
       <title>Older journal entries</title>
-      <link>/InvasionHet/2017/09/01/older-journal-entries/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/01/older-journal-entries/</link>
       <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/01/older-journal-entries/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/01/older-journal-entries/</guid>
       <description>Before September 2017, the notebook was managed as a bookdown project. The source files are in the /notebook directory; the compiled notebook is here.</description>
     </item>
     

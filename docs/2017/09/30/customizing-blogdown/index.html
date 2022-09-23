@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Customizing blogdown - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,14 +71,9 @@
     
 
     <div class="article-content">
-      
-
-<p>I am now on my computer at home; after updating packages and rstudio, and installing <strong>blogdown</strong> and <strong>hugo</strong>, everything is running fine (although I still need to update my <code>~/.Rprofile</code>).</p>
-
+      <p>I am now on my computer at home; after updating packages and rstudio, and installing <strong>blogdown</strong> and <strong>hugo</strong>, everything is running fine (although I still need to update my <code>~/.Rprofile</code>).</p>
 <h1 id="tags-and-categories">Tags and categories</h1>
-
 <p>Getting links to tags and categories was as simple as editing the menu section of <code>config.toml</code>; the one trick is to add <code>weight</code> variables to get the order I want (the default is alphabetical). Here is the relevant bit of code:</p>
-
 <pre><code>[[menu.main]]
     name = &quot;About&quot;
     url = &quot;/about/&quot;
@@ -95,16 +90,10 @@
     name = &quot;GitHub&quot;
     url = &quot;https://github.com/BruceKendall/InvasionHet&quot;
     weight = 4
-</code></pre>
-
-<p>The one bit that is incomplete is that hugo is not building <code>index.html</code> files for the <code>categories</code> and <code>tags</code> directories.</p>
-
-<p>One thing to try is to explictly set the <code>taxonomies</code> section of the config file, although it should be using these values by default (see <a href="https://gohugo.io/getting-started/configuration/">https://gohugo.io/getting-started/configuration/</a>).</p>
-
-<p>Nope, that didn&rsquo;t do anything. Of note: the <code>index.xml</code> files <em>are</em> being updated; and the <code>index.html</code> files <em>within</em> each of the category and tag directories are being updated. I found a sample file at <a href="https://bwaycer.github.io/hugo_tutorial.hugo/templates/terms/">https://bwaycer.github.io/hugo_tutorial.hugo/templates/terms/</a>; I had to take out the <code>{{ .Site.LanguagePrefix }}</code> from the alphabetical example to get it to work. Now I have category and tag lists, although the formatting is inconsistent with the rest of template.</p>
-
+</code></pre><p>The one bit that is incomplete is that hugo is not building <code>index.html</code> files for the <code>categories</code> and <code>tags</code> directories.</p>
+<p>One thing to try is to explictly set the <code>taxonomies</code> section of the config file, although it should be using these values by default (see <a href="https://gohugo.io/getting-started/configuration/)">https://gohugo.io/getting-started/configuration/)</a>.</p>
+<p>Nope, that didn't do anything. Of note: the <code>index.xml</code> files <em>are</em> being updated; and the <code>index.html</code> files <em>within</em> each of the category and tag directories are being updated. I found a sample file at <a href="https://bwaycer.github.io/hugo_tutorial.hugo/templates/terms/;">https://bwaycer.github.io/hugo_tutorial.hugo/templates/terms/;</a> I had to take out the <code>{{ .Site.LanguagePrefix }}</code> from the alphabetical example to get it to work. Now I have category and tag lists, although the formatting is inconsistent with the rest of template.</p>
 <p>The code in <code>terms.html</code> is:</p>
-
 <pre><code>{{ partial &quot;header.html&quot; . }}
 
 &lt;section id=&quot;main&quot;&gt;
@@ -119,22 +108,14 @@
   &lt;/div&gt;
 &lt;/section&gt;
 {{ partial &quot;footer.html&quot; . }}
-</code></pre>
-
-<h1 id="setting-up-rprofile">Setting up <code>.Rprofile</code></h1>
-
+</code></pre><h1 id="setting-up-rprofile">Setting up <code>.Rprofile</code></h1>
 <p>There are a number of blogdown options that can be set in <code>.Rprofile</code>, including the default page author, the default file type, and whether to deamonize the server. I have set the following in my global <code>~/.Rprofile</code>:</p>
-
-<pre><code class="language-r global_Rprofile, eval = FALSE"># Blogdown options
+<pre><code class="language-{r" data-lang="{r"># Blogdown options
 options(blogdown.author = &quot;Bruce Kendall&quot;,
         blogdown.ext = &quot;.Rmd&quot;)
-</code></pre>
-
-<p>I tried moving the knitr options and the <strong>ProjectTemplate</strong> loading into a local <code>.Rprofile</code>. The first thing I found is that the <code>.Rprofile</code> needs ot be in the same directory as the <code>.Rmd</code> files (<code>content/posts/</code>). The second thing I found was that, while the knitr options from, e.g., <code>knitr::opts_knit$set()</code> work that way, the call to <code>ProjectTemplate::load.project()</code> didn&rsquo;t make the datasets and functions available to the chunks in the <code>.Rmd</code> file.</p>
-
+</code></pre><p>I tried moving the knitr options and the <strong>ProjectTemplate</strong> loading into a local <code>.Rprofile</code>. The first thing I found is that the <code>.Rprofile</code> needs ot be in the same directory as the <code>.Rmd</code> files (<code>content/posts/</code>). The second thing I found was that, while the knitr options from, e.g., <code>knitr::opts_knit$set()</code> work that way, the call to <code>ProjectTemplate::load.project()</code> didn't make the datasets and functions available to the chunks in the <code>.Rmd</code> file.</p>
 <p>So I can use the following local <code>.Rprofile</code>:</p>
-
-<pre><code class="language-r local_Rprofile, eval=FALSE"># Load global .Rprofile
+<pre><code class="language-{r" data-lang="{r"># Load global .Rprofile
 if (file.exists(&quot;~/.Rprofile&quot;)) {
   base::sys.source(&quot;~/.Rprofile&quot;, envir = environment())
 }
@@ -150,36 +131,20 @@ knitr::opts_knit$set(root.dir = project_root)
 
 # Clean up
 rm(project_root, local_dir)
-</code></pre>
-
-<p>However, I still need to start each Rmarkdown file with <code>ProjectTemplate::load.project()</code>.</p>
-
+</code></pre><p>However, I still need to start each Rmarkdown file with <code>ProjectTemplate::load.project()</code>.</p>
 <h1 id="setting-up-to-use-the-blogdown-notebook-as-a-project-webpage">Setting up to use the blogdown notebook as a project webpage</h1>
-
-<p>We can serve up the notebook as a githob project webpage if the html is published to the <code>/docs/</code> directory of the project. The easiest way to do this will be to move the <strong>blogdown</strong> directories to the top level of the project, and set Hugo to publish to <code>/docs/</code> instead of <code>/public/</code>. We may also want the local (preview) version of the html to go somewhere that is not under version control, to avoid delays with Rstudio&rsquo;s version control (although at the moment I can&rsquo;t find the place where I read that tip).</p>
-
+<p>We can serve up the notebook as a githob project webpage if the html is published to the <code>/docs/</code> directory of the project. The easiest way to do this will be to move the <strong>blogdown</strong> directories to the top level of the project, and set Hugo to publish to <code>/docs/</code> instead of <code>/public/</code>. We may also want the local (preview) version of the html to go somewhere that is not under version control, to avoid delays with Rstudio's version control (although at the moment I can't find the place where I read that tip).</p>
 <p>One benefit is that I can then launch the webserver without changing directory first.</p>
-
 <p>So the first step is to move all the contents of <code>/notebook2/</code> to the root directory &hellip;. Done.</p>
-
 <p>Then I need to reduce the upward movement in the local <code>.Rprofile</code> by one level &hellip; Done.</p>
-
 <p>I confirm that this works for the local build.</p>
-
 <p>I set <code>publishDir = &quot;docs/&quot;</code> in <code>config.toml</code>. This sends the local build there, which is perhaps not what I want.</p>
-
-<p>When I pushed this, and activated the website feature on github, I did have a home page at <a href="https://brucekendall.github.io/InvasionHet/">https://brucekendall.github.io/InvasionHet/</a>. But it didn&rsquo;t have any styling, and the links didn&rsquo;t work. I&rsquo;ve now changed the <code>baseurl</code> in <code>config.toml</code> to point to this site. Let&rsquo;s see how that works&hellip; It didn&rsquo;t, but I left the trailing slash off. Let&rsquo;s add that and try&hellip;</p>
-
+<p>When I pushed this, and activated the website feature on github, I did have a home page at <a href="https://brucekendall.github.io/InvasionHet/">https://brucekendall.github.io/InvasionHet/</a>. But it didn't have any styling, and the links didn't work. I've now changed the <code>baseurl</code> in <code>config.toml</code> to point to this site. Let's see how that works&hellip; It didn't, but I left the trailing slash off. Let's add that and try&hellip;</p>
 <p>Success! But the runway image got lost in the transition, I just moved that from <code>public</code> to <code>docs</code>. All is now good.</p>
-
 <h1 id="more-tweaks">More tweaks</h1>
-
-<p>I adjusted the line width in <code>main.css</code>, and borrowed material from <code>lists.html</code> to make <code>terms.html</code> look more like the rest of the theme. I think that&rsquo;s good enough on the look and feel.</p>
-
+<p>I adjusted the line width in <code>main.css</code>, and borrowed material from <code>lists.html</code> to make <code>terms.html</code> look more like the rest of the theme. I think that's good enough on the look and feel.</p>
 <p>I also figured out that setting <code>weight: 1</code> in the yaml header of a post will push it below unweighted posts with the same date. (This was to get the ordering right from yesterday).</p>
-
 <p>Finally, I discovered that I needed to make some more tweaks in <code>terms.html</code> to make the links within the term lists work on github. But it appears to break things for the local server!</p>
-
 <p>I do still need to write an &ldquo;about&rdquo; page (and for that matter a project readme), and make a pre-dated post that links to the bookdown version of the previous notebook (converting the individual posts would be more work than is warranted).</p>
 
     </div>

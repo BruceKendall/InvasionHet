@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Model iteration complete - Project notebook for the Invasion Heterogeneity project</title>
@@ -66,7 +66,10 @@
     
 
     <div class="article-content">
-      <p>Over the past few weeks I’ve finished writing and testing the dispersal modules, and have a complete model for iterating multiple reps for a single genotype. I’ve also done a bunch of debugging, most of which centered on dealing with situations where the number of adults or seeds were zero, or in the first generation where one of the array dimensions was one. I’ve set it up so that the “total” number of adults can be passed in separately, to allow this same routine to be used for each genotype in the multi-RIL simulations.</p>
+      
+
+
+<p>Over the past few weeks I’ve finished writing and testing the dispersal modules, and have a complete model for iterating multiple reps for a single genotype. I’ve also done a bunch of debugging, most of which centered on dealing with situations where the number of adults or seeds were zero, or in the first generation where one of the array dimensions was one. I’ve set it up so that the “total” number of adults can be passed in separately, to allow this same routine to be used for each genotype in the multi-RIL simulations.</p>
 <p>It now runs for all the cases I’ve tested. There are only a few limiting cases where I can actually demonstrate that it is fully correct; for that I rely on the tests I’ve done for the subroutines. But I have reasonably high confidence in the model code.</p>
 <p>For Ler, the next step is getting a complete parameterization. I should pull the bits of parameterization code from the journal and put them into a munge script. I’m actually not entirely sure how to get the right values from the DD seed production—the eyeballed parameters I used for the testing seemed not to be generating enough seeds (though in retrospect I realize that I might not have accounted for dispersal losses).</p>
 <p>For Ler simulations, I think there are two things I’d want:</p>

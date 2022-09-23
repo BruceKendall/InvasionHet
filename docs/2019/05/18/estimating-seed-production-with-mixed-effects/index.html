@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Estimating seed production with mixed effects - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p><strong>Warning</strong>: I need to see what the “seeds” here are—they may only be home pot seeds, in which case I need to adjust the intercept (and perhaps its variance) by the fraction dispersing from the dispersal analyses.</p>
+      
+
+
+<p><strong>Warning</strong>: I need to see what the “seeds” here are—they may only be home pot seeds, in which case I need to adjust the intercept (and perhaps its variance) by the fraction dispersing from the dispersal analyses.</p>
 <p>Returning to parameter estimation for density dependent seed production… This is based primarily on the post from 5 June 2017. The main change is that I want to use mixed effects to estimate the variance due to a random effect of generation, as well as a random effect of replicate within generation.</p>
 <p>Note that I could also estimate generation as a fixed effect to recreate the observed sequence of temporal variability in seed production.</p>
 <p>I will use <code>glmer</code> in the <strong>lme4</strong> package. To get the nesting, the reps need to have unique values within each gen; to do that I create a <code>genID</code> variable.</p>

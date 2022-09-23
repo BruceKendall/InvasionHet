@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Vectorization in fitdistrplus - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p>I need to figure out how <strong>fitdistr</strong> is vectorizing the calls to the distribution functions, so I can appropriately build the 2Dt function and think sensibly about the truncated distributions.</p>
+      
+
+
+<p>I need to figure out how <strong>fitdistr</strong> is vectorizing the calls to the distribution functions, so I can appropriately build the 2Dt function and think sensibly about the truncated distributions.</p>
 <p>The gory details are below, but in summary:</p>
 <ul>
 <li>The parameter values are never vectorized</li>

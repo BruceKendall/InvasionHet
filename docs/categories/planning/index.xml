@@ -1,89 +1,89 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Planning on Project notebook for the Invasion Heterogeneity project</title>
-    <link>/InvasionHet/categories/planning/</link>
+    <link>https://brucekendall.github.io/InvasionHet/categories/planning/</link>
     <description>Recent content in Planning on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 11 Dec 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/InvasionHet/categories/planning/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://brucekendall.github.io/InvasionHet/categories/planning/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Parameter file done (sort of); next steps</title>
-      <link>/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</link>
       <pubDate>Wed, 11 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</guid>
       <description>I have finished the parameter estimation report (sort of). I decided not to reconstruct the complex set of analyses that went into calculating the RIL-specific Gompertz parameters in the runup to the Science paper (which didn’t get used). This will probably have to be done if a version of this document goes into a manuscript submission, but I’m confident that the results won’t change and I should move on to running simulations and writing a paper.</description>
     </item>
     
     <item>
       <title>Moving forward in fall</title>
-      <link>/InvasionHet/2019/10/22/moving-forward-in-fall/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/10/22/moving-forward-in-fall/</link>
       <pubDate>Tue, 22 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/10/22/moving-forward-in-fall/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/10/22/moving-forward-in-fall/</guid>
       <description>Warning in .load.config(override.config): Your configuration file is missing the following entries: tables_type. Defaults will be used. Warning in .load.config(override.config): Your configuration contains the following unused entries: data_tables. These will be ignored. Warning in .check.version(config): Your configuration is compatible with version 0.8.2 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.9.0. So, after a hiatus on summer (for no particular reason, I just took a break after the Davis talk and never got it picked up), I’m returning to this project.</description>
     </item>
     
     <item>
       <title>Plans for near-term analyses</title>
-      <link>/InvasionHet/2019/05/19/plans-for-near-term-analyses/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/19/plans-for-near-term-analyses/</link>
       <pubDate>Sun, 19 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/19/plans-for-near-term-analyses/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/19/plans-for-near-term-analyses/</guid>
       <description>OK, so I’ve demonstrated that the Ler model with continuous runway generates plausible results for the mean and variance of spread, although the latter can have some really extreme values that I probably need to investigate. The substantive conclusions from turning off one type of stochasticity at a time in that model:
  Kernel stochasticity increases the mean spread rate Both kernel stochasticity and seed sampling greatly increases the variance in spread rate Both ES and DS in seed production decrease the mean spread rate, but have little impact on the variance.</description>
     </item>
     
     <item>
       <title>Yet more on dispersal distributions</title>
-      <link>/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</link>
       <pubDate>Tue, 16 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</guid>
       <description>Once again, here’s the list of distributions, with where we are on each:
  Distributions with modes at zero:  Exponential power (generalized normal): This is in the gnorm package, and getting start values is probably nontrivial. It is defined on the whole real line, so a “sensible” value for the location parameter (\(\mu\)) is zero. It is a generalization of the normal, Laplace, and uniform distributions. It might be better just to calculate the first two directly (I’ve already written code for a half-normal, and could do the same for the Laplace) 2Dt: This requires writing a function to get the CDF by numerical integration, unless I can figure out the sense in which it is related to the t distribution.</description>
     </item>
     
     <item>
       <title>Some thoughts on approaches</title>
-      <link>/InvasionHet/2018/09/26/some-thoughts-on-approaches/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/09/26/some-thoughts-on-approaches/</link>
       <pubDate>Wed, 26 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/09/26/some-thoughts-on-approaches/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/09/26/some-thoughts-on-approaches/</guid>
       <description>Some things I thought about before I got up:
- Testing array manipulation: I&amp;rsquo;m pretty confident in my accuracy in iterating the models using for loops, so I should write a (slow) version with loops that will be the check for faster apply() approaches. Another approach to code verification is to compare various outputs (e.g., seed production as a function of density) to the means and residual variances that are intended to go in.</description>
+ Testing array manipulation: I&#39;m pretty confident in my accuracy in iterating the models using for loops, so I should write a (slow) version with loops that will be the check for faster apply() approaches. Another approach to code verification is to compare various outputs (e.g., seed production as a function of density) to the means and residual variances that are intended to go in.</description>
     </item>
     
     <item>
       <title>Project goals</title>
-      <link>/InvasionHet/2018/09/19/project-goals/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/09/19/project-goals/</link>
       <pubDate>Wed, 19 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/09/19/project-goals/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/09/19/project-goals/</guid>
       <description>Here are the goals of this project, as I see them currently:
  Understand how variation in spread rate is affected by demographic and environmental stochasticity affecting demography; finite draws and kernel sampling affecting dispersal; and genetically driven heterogeneity in mean demography and dispersal. Understand how these contributions change as habitat becomes more fragmented. Understand how drift and selection lead to increases or decreases in spread variability.  </description>
     </item>
     
     <item>
       <title>Revisiting plans, and wrestling with seed stochasticity</title>
-      <link>/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</link>
       <pubDate>Mon, 23 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</guid>
       <description>Focus on Ler? As I look at various pieces of the model (which I’ve started to assemble in lib/model.R), I realize that there are a sufficient number of ways in which the RIL data are different (and not yet analyzed) that I may find it challenging to exactly mirror the Ler model. In particular, I’m going to find it rather challenging (I think) to estimate the environmental stochasticity in seed production among generations and replicates.</description>
     </item>
     
     <item>
       <title>Feedback from Jenn on June notebook</title>
-      <link>/InvasionHet/2017/10/03/feedback-from-jenn/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/10/03/feedback-from-jenn/</link>
       <pubDate>Tue, 03 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/10/03/feedback-from-jenn/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/10/03/feedback-from-jenn/</guid>
       <description>Jenn has sent a couple of emails in response to last spring’s work:
 September 29 Here’s some feedback on thhe Key Results (from June). More on Monday!
  Silique number does not seem to be a good proxy for the number of seeds actually released (e.g., p. 153)

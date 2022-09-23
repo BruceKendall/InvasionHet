@@ -1,60 +1,60 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Code Development on Project notebook for the Invasion Heterogeneity project</title>
-    <link>/InvasionHet/categories/code-development/</link>
-    <description>Recent content in Code Development on Project notebook for the Invasion Heterogeneity project</description>
+    <title>Code development on Project notebook for the Invasion Heterogeneity project</title>
+    <link>https://brucekendall.github.io/InvasionHet/categories/code-development/</link>
+    <description>Recent content in Code development on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 23 Oct 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/InvasionHet/categories/code-development/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://brucekendall.github.io/InvasionHet/categories/code-development/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Ler sim code updated</title>
-      <link>/InvasionHet/2019/10/23/ler-sim-code-updated/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/10/23/ler-sim-code-updated/</link>
       <pubDate>Wed, 23 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/10/23/ler-sim-code-updated/</guid>
-      <description>I&amp;rsquo;ve gotten the 8-pot runway extension limit into the Ler simulation code. Along the way I tracked down some bugs that may have been causing problems when I abandoned the project last spring (I think when I was trying to run RIL models). After much chasing of strange errors and intermediate output, I discovered that most (all?) of the headaches arose from aaply() dropping array dimesions; I fixed these by using the .</description>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/10/23/ler-sim-code-updated/</guid>
+      <description>I&#39;ve gotten the 8-pot runway extension limit into the Ler simulation code. Along the way I tracked down some bugs that may have been causing problems when I abandoned the project last spring (I think when I was trying to run RIL models). After much chasing of strange errors and intermediate output, I discovered that most (all?) of the headaches arose from aaply() dropping array dimesions; I fixed these by using the .</description>
     </item>
     
     <item>
       <title>Model iteration complete</title>
-      <link>/InvasionHet/2019/05/16/model-iteration-complete/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/16/model-iteration-complete/</link>
       <pubDate>Thu, 16 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/16/model-iteration-complete/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/16/model-iteration-complete/</guid>
       <description>Over the past few weeks I’ve finished writing and testing the dispersal modules, and have a complete model for iterating multiple reps for a single genotype. I’ve also done a bunch of debugging, most of which centered on dealing with situations where the number of adults or seeds were zero, or in the first generation where one of the array dimensions was one. I’ve set it up so that the “total” number of adults can be passed in separately, to allow this same routine to be used for each genotype in the multi-RIL simulations.</description>
     </item>
     
     <item>
       <title>Yet more on dispersal distributions</title>
-      <link>/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</link>
       <pubDate>Tue, 16 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</guid>
       <description>Once again, here’s the list of distributions, with where we are on each:
  Distributions with modes at zero:  Exponential power (generalized normal): This is in the gnorm package, and getting start values is probably nontrivial. It is defined on the whole real line, so a “sensible” value for the location parameter (\(\mu\)) is zero. It is a generalization of the normal, Laplace, and uniform distributions. It might be better just to calculate the first two directly (I’ve already written code for a half-normal, and could do the same for the Laplace) 2Dt: This requires writing a function to get the CDF by numerical integration, unless I can figure out the sense in which it is related to the t distribution.</description>
     </item>
     
     <item>
       <title>Getting start values from moments</title>
-      <link>/InvasionHet/2018/11/29/getting-start-values-form-moments/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/29/getting-start-values-form-moments/</link>
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/29/getting-start-values-form-moments/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/29/getting-start-values-form-moments/</guid>
       <description>It is possible to get start values from the matching moments fit. For example:
 library(fitdistrplus) Loading required package: MASS Loading required package: survival Loading required package: npsurv Loading required package: lsei library(actuar)  Attaching package: &amp;#39;actuar&amp;#39; The following object is masked from &amp;#39;package:grDevices&amp;#39;: cm x4 &amp;lt;- rpareto(1000, 6, 2) s4 &amp;lt;- fitdist(x4, &amp;quot;pareto&amp;quot;, &amp;quot;mme&amp;quot;, order=c(1, 2), memp=function(x, order) emm(x, order)) s4$estimate  shape scale 9.323582 3.527362  fitdist(x4, &amp;quot;pareto&amp;quot;, start = as.</description>
     </item>
     
     <item>
       <title>Vectorization in fitdistrplus</title>
-      <link>/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</link>
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</guid>
       <description>I need to figure out how fitdistr is vectorizing the calls to the distribution functions, so I can appropriately build the 2Dt function and think sensibly about the truncated distributions.
 The gory details are below, but in summary:
  The parameter values are never vectorized x and q (passed to ddist and pdist respectively) may be vectors x and q may have length zero (which will need to be trapped for when I’m not just passing them on to a predefined distribution) (I don’t know why!</description>
@@ -62,20 +62,20 @@ The gory details are below, but in summary:
     
     <item>
       <title>More on distributions</title>
-      <link>/InvasionHet/2018/11/20/more-on-distributions/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/20/more-on-distributions/</link>
       <pubDate>Tue, 20 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/20/more-on-distributions/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/20/more-on-distributions/</guid>
       <description>temp &amp;lt;- filter(disperseLer, ID == &amp;quot;100_0&amp;quot;) cens_data &amp;lt;- cens_dispersal_data(temp, 7) Generalized gamma I’ve made a specialized start function for gengamma:
 start_gengamma function (x, truncated = FALSE) { if (dim(as.matrix(x))[2] != 2) { stop(&amp;quot;Only interval-censored methods have been developed in start_gengamma&amp;quot;) } dist_list &amp;lt;- c(&amp;quot;lnorm&amp;quot;, &amp;quot;weibull&amp;quot;, &amp;quot;gamma&amp;quot;) n &amp;lt;- length(dist_list) base_fits &amp;lt;- data.frame(dist = dist_list, AIC = numeric(n), p1 = numeric(n), p2 = numeric(n), stringsAsFactors = FALSE) base_starts &amp;lt;- array(list(NULL), n) if (truncated) { stop(&amp;quot;Truncated methods have not yet been developed in start_gengamma&amp;quot;) } for (i in 1:n) { fit &amp;lt;- fitdistcens(x, base_fits$dist[i], base_starts[[i]]) base_fits$AIC[i] &amp;lt;- fit$aic base_fits$p1[i] &amp;lt;- coef(fit)[1] base_fits$p2[i] &amp;lt;- coef(fit)[2] } best &amp;lt;- base_fits[which.</description>
     </item>
     
     <item>
       <title>fitdistrplus fixed</title>
-      <link>/InvasionHet/2018/11/15/fitdistrplus-fixed/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/15/fitdistrplus-fixed/</link>
       <pubDate>Thu, 15 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/15/fitdistrplus-fixed/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/15/fitdistrplus-fixed/</guid>
       <description>The developers of fitdistrplus got back to me already with a code fix. The new version (1.0-12) is available from R-forge using
 install.packages(&amp;quot;fitdistrplus&amp;quot;, repos=&amp;quot;http://R-Forge.R-project.org&amp;quot;) So now with fitdistrplus loaded in global.dcf I can run
 mydata &amp;lt;- rnorm(20, 0, 10) mydata_cens &amp;lt;- data.frame(left = floor(mydata), right = ceiling(mydata)) dmynorm &amp;lt;- function(x, mean, sd, log = FALSE) dnorm(x, mean, sd, log) pmynorm &amp;lt;- function(q, mean, sd, lower.tail = TRUE, log.p = FALSE) pnorm(q, mean, sd, lower.</description>
@@ -83,20 +83,20 @@ mydata &amp;lt;- rnorm(20, 0, 10) mydata_cens &amp;lt;- data.frame(left = floor(
     
     <item>
       <title>fitdistrplus bug</title>
-      <link>/InvasionHet/2018/11/14/fitdistrplus-bug/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/14/fitdistrplus-bug/</link>
       <pubDate>Wed, 14 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/14/fitdistrplus-bug/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/14/fitdistrplus-bug/</guid>
       <description>I’ve sent a bug report to the maintainer of fitdistrplus. Here’s the MRE I provided:
 # Generate some data mydata &amp;lt;- rnorm(20, 0, 10) mydata_cens &amp;lt;- data.frame(left = floor(mydata), right = ceiling(mydata)) # Confirm that they can be fit by &amp;quot;norm&amp;quot; library(fitdistrplus) fitdist(mydata, &amp;quot;norm&amp;quot;) Fitting of the distribution &amp;#39; norm &amp;#39; by maximum likelihood Parameters: estimate Std. Error mean 0.9049781 2.634855 sd 11.7834301 1.863124 fitdistcens(mydata_cens, &amp;quot;norm&amp;quot;) Fitting of the distribution &amp;#39; norm &amp;#39; on censored data by maximum likelihood Parameters: estimate mean 0.</description>
     </item>
     
     <item>
       <title>rmutil and fitdistrplus</title>
-      <link>/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</link>
       <pubDate>Mon, 22 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</guid>
       <description>Warning in .check.version(config): Your configuration is compatible with version 0.8 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.8.2. So the fix I did last week to computegetparam() (to allow “y” as an argument to the distribution functions) does allow fitdist to work (sort of) with the rmutil distributions. However, there can still be failures in estimatation or SE calculation, because there are a number of other ways that the rmutil distributions work differntly from the base distribution functions.</description>
     </item>
     

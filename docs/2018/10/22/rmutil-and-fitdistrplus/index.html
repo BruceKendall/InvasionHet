@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>rmutil and fitdistrplus - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <pre><code>Warning in .check.version(config): Your configuration is compatible with version 0.8 of the ProjectTemplate package.
+      
+
+
+<pre><code>Warning in .check.version(config): Your configuration is compatible with version 0.8 of the ProjectTemplate package.
   Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.8.2.</code></pre>
 <p>So the fix I did last week to <code>computegetparam()</code> (to allow “y” as an argument to the distribution functions) does allow <code>fitdist</code> to work (sort of) with the <strong>rmutil</strong> distributions. However, there can still be failures in estimatation or SE calculation, because there are a number of other ways that the <strong>rmutil</strong> distributions work differntly from the base distribution functions. <strong>fitdistrplus</strong> expects that:</p>
 <ul>

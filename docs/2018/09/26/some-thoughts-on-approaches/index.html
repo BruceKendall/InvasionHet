@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Some thoughts on approaches - Project notebook for the Invasion Heterogeneity project</title>
@@ -67,13 +67,12 @@
 
     <div class="article-content">
       <p>Some things I thought about before I got up:</p>
-
 <ul>
-<li>Testing array manipulation: I&rsquo;m pretty confident in my accuracy in iterating the models using for loops, so I should write a (slow) version with loops that will be the check for faster <code>apply()</code> approaches.</li>
+<li>Testing array manipulation: I'm pretty confident in my accuracy in iterating the models using for loops, so I should write a (slow) version with loops that will be the check for faster <code>apply()</code> approaches.</li>
 <li>Another approach to code verification is to compare various outputs (e.g., seed production as a function of density) to the means and residual variances that are intended to go in. This can be built up incrementally with various sources of variability turned on or off.</li>
 <li>If I set a RNG seed, I should tie it to an R version number. I also need to look into the various generators to get a sense of which are better.</li>
 <li>When it comes to &ldquo;validating&rdquo; my models against the population data, I can generate multiple (200?) sets of <em>n</em> replicates (where <em>n</em> is the number of reps in the data), and compare those with the mean and variance of 1-step spread through time, and mean and variance of cumulative spread through time. I can even generate P values. Graphically, I think I show the time series (e.g., of mean 1-step spread vs. generation) for each simulation in light line, and then the data in a solid line.</li>
-<li>Although the TRACE document should have a table of parameters (and their SEs), it doesn&rsquo;t seem like there&rsquo;s a place to include the actual estimation in TRACE. So I probably need a separate supplementary document for that. EDIT: the section on data does say that it should include &ldquo;the observed patterns that were used to design the overall model structure.&rdquo; So perhaps that is sufficient. But it does seem that showing the data analysis code would be desireable? Maybe not, as then we would need to share the raw data. And the focus of the paper is not the empirical analysis per se, but the model analysis.</li>
+<li>Although the TRACE document should have a table of parameters (and their SEs), it doesn't seem like there's a place to include the actual estimation in TRACE. So I probably need a separate supplementary document for that. EDIT: the section on data does say that it should include &ldquo;the observed patterns that were used to design the overall model structure.&rdquo; So perhaps that is sufficient. But it does seem that showing the data analysis code would be desireable? Maybe not, as then we would need to share the raw data. And the focus of the paper is not the empirical analysis per se, but the model analysis.</li>
 </ul>
 
     </div>

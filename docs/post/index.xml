@@ -1,42 +1,42 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Project notebook for the Invasion Heterogeneity project</title>
-    <link>/InvasionHet/post/</link>
+    <link>https://brucekendall.github.io/InvasionHet/post/</link>
     <description>Recent content in Posts on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 29 Sep 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 11 Dec 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/InvasionHet/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://brucekendall.github.io/InvasionHet/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Trying out BlogDown</title>
-      <link>/InvasionHet/2017/09/29/trying-out-blogdown/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/29/trying-out-blogdown/</link>
       <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/29/trying-out-blogdown/</guid>
-      <description>I&amp;rsquo;m trying out blogdown (https://bookdown.org/yihui/blogdown/) for serving up the project notebook. Advantages:
- Rebuilds only update changed files Dialog box for creating new posts Automatically shows posts in date order, presumably even if they&amp;rsquo;ve been edited Might be possible to automate serving it up on the github page, so Jenn can just look at it in a web browser  (Potential) Disadvantages:
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/29/trying-out-blogdown/</guid>
+      <description>I&#39;m trying out blogdown (https://bookdown.org/yihui/blogdown/) for serving up the project notebook. Advantages:
+ Rebuilds only update changed files Dialog box for creating new posts Automatically shows posts in date order, presumably even if they&#39;ve been edited Might be possible to automate serving it up on the github page, so Jenn can just look at it in a web browser  (Potential) Disadvantages:
  Whole new file structure to figure out (in particular, I may have to modify the knitr option for setting the working directory, which was based on a relative path) Presumably I can set up the post creation script to include my ProjectTemplate preamble, but that will take work/trial and error I will have to figure out how caching works with this.</description>
     </item>
     
     <item>
       <title>Parameter file done (sort of); next steps</title>
-      <link>/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</link>
       <pubDate>Wed, 11 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</guid>
       <description>I have finished the parameter estimation report (sort of). I decided not to reconstruct the complex set of analyses that went into calculating the RIL-specific Gompertz parameters in the runup to the Science paper (which didn’t get used). This will probably have to be done if a version of this document goes into a manuscript submission, but I’m confident that the results won’t change and I should move on to running simulations and writing a paper.</description>
     </item>
     
     <item>
       <title>Drop bad RIL reps</title>
-      <link>/InvasionHet/2019/11/20/drop-bad-ril-reps/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/11/20/drop-bad-ril-reps/</link>
       <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/11/20/drop-bad-ril-reps/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/11/20/drop-bad-ril-reps/</guid>
       <description>First, we need to make sure that we are getting enough iterates in the fit:
 controls &amp;lt;- list(maxit = 1000) We also clear out reps with not enough seeds (from 5/24/19), as well as dropping the reps that won’t converge on the generalized gamma (19, 40, and 77)
 n_min &amp;lt;- 10 # Set the minimum number of dispersing seeds dispersing_seeds &amp;lt;- group_by(disperseRIL, ID) %&amp;gt;% filter(Distance &amp;gt; 4) %&amp;gt;% filter(!(ID %in% c(&amp;quot;19&amp;quot;, &amp;quot;40&amp;quot;, &amp;quot;77&amp;quot;))) %&amp;gt;% summarize(tot_seeds=sum(Seedlings)) good_reps &amp;lt;- filter(dispersing_seeds, tot_seeds &amp;gt;= n_min) %&amp;gt;% pull(ID) good_reps  [1] 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20 21 22 23 24 25 [24] 26 27 28 29 31 33 34 35 36 37 39 41 42 43 44 45 46 48 53 54 55 56 57 [47] 58 59 60 62 66 68 70 73 74 75 78 79 80 Levels: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 .</description>
@@ -44,20 +44,20 @@ n_min &amp;lt;- 10 # Set the minimum number of dispersing seeds dispersing_seeds
     
     <item>
       <title>Try harder on RIL dispersal</title>
-      <link>/InvasionHet/2019/11/20/try-harder-on-ril-dispersal/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/11/20/try-harder-on-ril-dispersal/</link>
       <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/11/20/try-harder-on-ril-dispersal/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/11/20/try-harder-on-ril-dispersal/</guid>
       <description>BOTTOM LINE: I can’t figure out what is going on with the bad fits; there are too many layers of indirection between the inputs to fitidistr and what goes into the optimizer. So I’ll need to drop the problematic reps.
 I think (from some of the error messages that pop up) that some of the issues may have to do with negative values of the spread parameter as the optimizer explores parameter space.</description>
     </item>
     
     <item>
       <title>RIL dispersal kernels</title>
-      <link>/InvasionHet/2019/11/14/ril-dispersal-kernels/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/11/14/ril-dispersal-kernels/</link>
       <pubDate>Thu, 14 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/11/14/ril-dispersal-kernels/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/11/14/ril-dispersal-kernels/</guid>
       <description>I’m not entirely satisfied with the prior post on the RIL dispersal kernels. So let me re-run some things and see what we understand.
 First, we need to make sure that we are getting enough iterates in the fit:
 controls &amp;lt;- list(maxit = 1000) We also clear out reps with not enough seeds (from 5/24/19):
@@ -66,67 +66,67 @@ n_min &amp;lt;- 10 # Set the minimum number of dispersing seeds dispersing_seeds
     
     <item>
       <title>Ler sim code updated</title>
-      <link>/InvasionHet/2019/10/23/ler-sim-code-updated/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/10/23/ler-sim-code-updated/</link>
       <pubDate>Wed, 23 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/10/23/ler-sim-code-updated/</guid>
-      <description>I&amp;rsquo;ve gotten the 8-pot runway extension limit into the Ler simulation code. Along the way I tracked down some bugs that may have been causing problems when I abandoned the project last spring (I think when I was trying to run RIL models). After much chasing of strange errors and intermediate output, I discovered that most (all?) of the headaches arose from aaply() dropping array dimesions; I fixed these by using the .</description>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/10/23/ler-sim-code-updated/</guid>
+      <description>I&#39;ve gotten the 8-pot runway extension limit into the Ler simulation code. Along the way I tracked down some bugs that may have been causing problems when I abandoned the project last spring (I think when I was trying to run RIL models). After much chasing of strange errors and intermediate output, I discovered that most (all?) of the headaches arose from aaply() dropping array dimesions; I fixed these by using the .</description>
     </item>
     
     <item>
       <title>Moving forward in fall</title>
-      <link>/InvasionHet/2019/10/22/moving-forward-in-fall/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/10/22/moving-forward-in-fall/</link>
       <pubDate>Tue, 22 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/10/22/moving-forward-in-fall/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/10/22/moving-forward-in-fall/</guid>
       <description>Warning in .load.config(override.config): Your configuration file is missing the following entries: tables_type. Defaults will be used. Warning in .load.config(override.config): Your configuration contains the following unused entries: data_tables. These will be ignored. Warning in .check.version(config): Your configuration is compatible with version 0.8.2 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.9.0. So, after a hiatus on summer (for no particular reason, I just took a break after the Davis talk and never got it picked up), I’m returning to this project.</description>
     </item>
     
     <item>
       <title>Fit RIL dispersal</title>
-      <link>/InvasionHet/2019/05/24/fit-ril-dispersal/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/24/fit-ril-dispersal/</link>
       <pubDate>Fri, 24 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/24/fit-ril-dispersal/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/24/fit-ril-dispersal/</guid>
       <description>Warning in .load.config(override.config): Your configuration file is missing the following entries: tables_type. Defaults will be used. Warning in .load.config(override.config): Your configuration contains the following unused entries: data_tables. These will be ignored. Warning in .check.version(config): Your configuration is compatible with version 0.8.2 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.9.0. I’ve just written a data script that creates disperseRIL, an analog to disperseLer. The main difference is that there is an extra column named RIL that gives the RIL number.</description>
     </item>
     
     <item>
       <title>Ler sims, and RIL parameterization plans</title>
-      <link>/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</link>
       <pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</guid>
       <description>Ler analysis I’ve got the complete set of gen 6 spread distances now. For a few of them there are some crazy high dispersal distances, so it can be easier to trim the most extreme ones
 options(tibble.print_max = Inf) Ler_spread_stats %&amp;gt;% group_by(Gap, DS, ES, KS, SS) %&amp;gt;% summarize(Mean = mean(Max_Dist), Var = var(Max_Dist)) # A tibble: 64 x 7 # Groups: Gap, DS, ES, KS [?] Gap DS ES KS SS Mean Var &amp;lt;int&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; 1 0 FALSE FALSE FALSE FALSE 14 0 2 0 FALSE FALSE FALSE TRUE 15.</description>
     </item>
     
     <item>
       <title>Distribution of Ler variability</title>
-      <link>/InvasionHet/2019/05/19/distribution-of-ler-variability/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/19/distribution-of-ler-variability/</link>
       <pubDate>Sun, 19 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/19/distribution-of-ler-variability/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/19/distribution-of-ler-variability/</guid>
       <description>So, last night’s analysis suggests that there’s not enough spread variability in the model. But it varied from run to run. So lets do a bunch of runs using replicate and see how far off we are.
 n_init &amp;lt;- 50 Ler_params$gap_size &amp;lt;- 0 controls &amp;lt;- list( n_reps = 10, DS_seeds = TRUE, ES_seeds = TRUE, kernel_stoch = TRUE, kernel_stoch_pots = TRUE, seed_sampling = TRUE, pot_width = 7 ) The iteration and analysis, as a function to pass to replicate:</description>
     </item>
     
     <item>
       <title>Plans for near-term analyses</title>
-      <link>/InvasionHet/2019/05/19/plans-for-near-term-analyses/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/19/plans-for-near-term-analyses/</link>
       <pubDate>Sun, 19 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/19/plans-for-near-term-analyses/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/19/plans-for-near-term-analyses/</guid>
       <description>OK, so I’ve demonstrated that the Ler model with continuous runway generates plausible results for the mean and variance of spread, although the latter can have some really extreme values that I probably need to investigate. The substantive conclusions from turning off one type of stochasticity at a time in that model:
  Kernel stochasticity increases the mean spread rate Both kernel stochasticity and seed sampling greatly increases the variance in spread rate Both ES and DS in seed production decrease the mean spread rate, but have little impact on the variance.</description>
     </item>
     
     <item>
       <title>Beta-binomial distribution of fraction dispersing</title>
-      <link>/InvasionHet/2019/05/18/beta-binomial-distribution-of-fraction-dispersing/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/18/beta-binomial-distribution-of-fraction-dispersing/</link>
       <pubDate>Sat, 18 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/18/beta-binomial-distribution-of-fraction-dispersing/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/18/beta-binomial-distribution-of-fraction-dispersing/</guid>
       <description>I never looked at how to calculate the parameters for the fraction dispersing. The trick may be the betabinomial function in the VGAM library.
 The first step is to amalgamate all the dispersing seeds from disperseLer:
 nondispersers &amp;lt;- subset(disperseLer, Pot == 0, c(&amp;quot;ID&amp;quot;, &amp;quot;Seedlings&amp;quot;)) dispersers &amp;lt;- filter(disperseLer, Pot == 1) %&amp;gt;% group_by(ID) %&amp;gt;% summarise(dispersers = sum(Seedlings)) disperse_num &amp;lt;- merge(nondispersers, dispersers) names(disperse_num)[2] &amp;lt;- &amp;quot;nondispersers&amp;quot; disperse_num$dispersers &amp;lt;- round(2 * disperse_num$dispersers) So now we make an intercept-only model with vgam.</description>
@@ -134,39 +134,39 @@ nondispersers &amp;lt;- subset(disperseLer, Pot == 0, c(&amp;quot;ID&amp;quot;, 
     
     <item>
       <title>Estimating seed production with mixed effects</title>
-      <link>/InvasionHet/2019/05/18/estimating-seed-production-with-mixed-effects/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/18/estimating-seed-production-with-mixed-effects/</link>
       <pubDate>Sat, 18 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/18/estimating-seed-production-with-mixed-effects/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/18/estimating-seed-production-with-mixed-effects/</guid>
       <description>Warning: I need to see what the “seeds” here are—they may only be home pot seeds, in which case I need to adjust the intercept (and perhaps its variance) by the fraction dispersing from the dispersal analyses.
 Returning to parameter estimation for density dependent seed production… This is based primarily on the post from 5 June 2017. The main change is that I want to use mixed effects to estimate the variance due to a random effect of generation, as well as a random effect of replicate within generation.</description>
     </item>
     
     <item>
       <title>Simulated Ler variability</title>
-      <link>/InvasionHet/2019/05/18/simulated-ler-variability/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/18/simulated-ler-variability/</link>
       <pubDate>Sat, 18 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/18/simulated-ler-variability/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/18/simulated-ler-variability/</guid>
       <description>So, we are now ready to do some analyses. Let’s look at simulated Ler mean and variability over 6 generations.
 n_init &amp;lt;- 50 Ler_params$gap_size &amp;lt;- 0 controls &amp;lt;- list( n_reps = 10, DS_seeds = TRUE, ES_seeds = TRUE, kernel_stoch = TRUE, kernel_stoch_pots = TRUE, seed_sampling = TRUE, pot_width = 7 ) Adults &amp;lt;- matrix(n_init, controls$n_reps, 1) for (i in 1:6) { Adults &amp;lt;- iterate_genotype(Adults, Ler_params, controls) } Adults  [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [1,] 119 182 181 192 228 277 138 219 186 113 123 60 10 [2,] 586 374 679 944 378 886 858 612 975 439 607 336 144 [3,] 112 158 108 90 123 299 220 193 94 87 40 19 6 [4,] 757 524 688 719 338 642 968 878 448 799 529 482 211 [5,] 285 353 313 461 219 389 165 401 195 461 316 210 64 [6,] 342 661 743 608 924 649 811 811 551 485 398 731 311 [7,] 351 539 524 630 437 756 376 703 373 613 296 316 103 [8,] 331 464 288 314 282 442 442 439 482 339 200 179 50 [9,] 229 231 300 188 240 115 134 112 197 136 130 52 28 [10,] 307 580 424 688 416 636 756 386 444 393 340 139 58 [,14] [,15] [,16] [,17] [1,] 2 0 0 0 [2,] 28 13 1 0 [3,] 0 0 0 0 [4,] 115 22 9 1 [5,] 207 41 20 3 [6,] 321 155 60 12 [7,] 10 0 0 0 [8,] 20 2 3 0 [9,] 6 0 0 0 [10,] 13 2 0 0 The densities do not seem to be getting nearly large enough.</description>
     </item>
     
     <item>
       <title>Model iteration complete</title>
-      <link>/InvasionHet/2019/05/16/model-iteration-complete/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/16/model-iteration-complete/</link>
       <pubDate>Thu, 16 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/16/model-iteration-complete/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/16/model-iteration-complete/</guid>
       <description>Over the past few weeks I’ve finished writing and testing the dispersal modules, and have a complete model for iterating multiple reps for a single genotype. I’ve also done a bunch of debugging, most of which centered on dealing with situations where the number of adults or seeds were zero, or in the first generation where one of the array dimensions was one. I’ve set it up so that the “total” number of adults can be passed in separately, to allow this same routine to be used for each genotype in the multi-RIL simulations.</description>
     </item>
     
     <item>
       <title>Final final dispersal</title>
-      <link>/InvasionHet/2019/04/26/final-final-dispersal/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/26/final-final-dispersal/</link>
       <pubDate>Fri, 26 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/26/final-final-dispersal/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/26/final-final-dispersal/</guid>
       <description>A few things.
 On further reflection, I think that I do indeed want to use multivariate normal for generating dispersal kernels. I need to find the “odd” fit and drop that from the analysis For “fitall,” I need to check the other distributions; maybe one of them is better.  Eliminate odd fit First replicate yesterday’s analysis and print them out with IDs:
 disperseLer2 &amp;lt;- filter(disperseLer, ID != &amp;quot;79_0&amp;quot;, ID !</description>
@@ -174,10 +174,10 @@ disperseLer2 &amp;lt;- filter(disperseLer, ID != &amp;quot;79_0&amp;quot;, ID !<
     
     <item>
       <title>Finalizing dispersal (for now)</title>
-      <link>/InvasionHet/2019/04/25/finalizing-dispersal-for-now/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/25/finalizing-dispersal-for-now/</link>
       <pubDate>Thu, 25 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/25/finalizing-dispersal-for-now/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/25/finalizing-dispersal-for-now/</guid>
       <description>Time is running short for the Davis presentation. So, at least for now, I will accept the generalized gamma distribution and the subset of data to which it fits, and move forward with creating the model.
 What I need to do:
  Double check that that the replicate-specific model fits better than a single set of parameters for all the data Plot the resulting dispersal kernels Plot the patterns of covariance in parameters Quantify the meta-distribution of parameters, to use in the model  Evidence of heterogeneity The replicates to which gengamma didn’t fit were 79_0 and 90_1.</description>
@@ -185,30 +185,30 @@ What I need to do:
     
     <item>
       <title>Robustifying the generalized gamma fit</title>
-      <link>/InvasionHet/2019/04/22/robustifying-the-generalized-gamma-fit/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/22/robustifying-the-generalized-gamma-fit/</link>
       <pubDate>Mon, 22 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/22/robustifying-the-generalized-gamma-fit/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/22/robustifying-the-generalized-gamma-fit/</guid>
       <description>I’m still a bit concerned about the generalized gamma, for two reasons: am I getting good enough starting values; and why do I get errors in the function evaluation.
 For the first, my previous work on moments was not helpful. So I think that the only robust approach is to start from lots of random start values. However, that brings up the second issue of rather frequent failures. I think the issue is that flexsurv is not quite standard in how it deals with edge conditions.</description>
     </item>
     
     <item>
       <title>A general moment generator</title>
-      <link>/InvasionHet/2019/04/19/a-general-moment-generator/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/19/a-general-moment-generator/</link>
       <pubDate>Fri, 19 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/19/a-general-moment-generator/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/19/a-general-moment-generator/</guid>
       <description>I’m close to having the formulas needed to create an “mgengamma”, allowing us to use the method of moments to fit that distribution. But that doesn’t get us closer to a broader problem: the need to get good start values for truncated distributions, as well as, potentially, bespoke distributions such as 2Dt.
 For this, I think I can write a function to generate random numbers under the distribution, then calculate the moments and return them in a form useful to the moment matching algorithm.</description>
     </item>
     
     <item>
       <title>Moments of generalized gamma</title>
-      <link>/InvasionHet/2019/04/18/moments-of-generalized-gamma/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/18/moments-of-generalized-gamma/</link>
       <pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/18/moments-of-generalized-gamma/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/18/moments-of-generalized-gamma/</guid>
       <description>The fact that we are still having trouble fitting the generalized gamma suggests that we should move to a method of moments. Because the distribution has three parameters we need three moments. Wikipedia gives the mean and variance, but not the skew; and anywy it may be easier to use raw moments.
 Stacy and Mihram (1965: Technometrics 7, 349-58) give an expression for the raw moments:
 \[ E(X^r) = \frac{a^r \Gamma \left[\nu + r/p \right]}{\Gamma(\nu)}.</description>
@@ -216,20 +216,20 @@ Stacy and Mihram (1965: Technometrics 7, 349-58) give an expression for the raw 
     
     <item>
       <title>Fitting the distributions</title>
-      <link>/InvasionHet/2019/04/17/fitting-the-distributions/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/17/fitting-the-distributions/</link>
       <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/17/fitting-the-distributions/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/17/fitting-the-distributions/</guid>
       <description>I’ve written the code to automatically fit all the untruncated distributions. Here it is, in helpers.R:
 fit_dispersal_untruncated  function(dispersal_data, zero = 7, model_list = c(&amp;quot;hnorm&amp;quot;, &amp;quot;exp&amp;quot;, &amp;quot;lnorm&amp;quot;, &amp;quot;gamma&amp;quot;, &amp;quot;weibull&amp;quot;, &amp;quot;invgauss&amp;quot;, &amp;quot;logis&amp;quot;, &amp;quot;invgamma&amp;quot;)) { # Fit untruncated dispersal models to data # dispersal_data must be a data frame containing columns # ID, Density, Siliques, Seedlings, Distance # All data in dispersal_data are used in a single fit, so if only a single rep is to # be analyzed, it should be subset outside this function if (&amp;quot;invgauss&amp;quot; %in% model_list) library(actuar) if (&amp;quot;gengamma&amp;quot; %in% model_list) library(flexsurv) cens_data_tble &amp;lt;- cens_dispersal_data(dispersal_data, zero) result &amp;lt;- data.</description>
     </item>
     
     <item>
       <title>Half-normal distribution</title>
-      <link>/InvasionHet/2019/04/17/half-normal-distribution/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/17/half-normal-distribution/</link>
       <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/17/half-normal-distribution/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/17/half-normal-distribution/</guid>
       <description>Last year I wrote a half-normal distribution but didn’t actually test its fitness for fitting the data. So let’s try it out.
 Our usual data:
 temp &amp;lt;- filter(disperseLer, ID == &amp;quot;100_0&amp;quot;) cens_data &amp;lt;- cens_dispersal_data(temp, 7) Let’s give it a try:
@@ -239,21 +239,21 @@ try(fitdistcens(cens_data, &amp;quot;hnorm&amp;quot;, start = start_params(cens_
     
     <item>
       <title>Restricting the list of distributions</title>
-      <link>/InvasionHet/2019/04/17/restricting-the-list-of-distributions/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/17/restricting-the-list-of-distributions/</link>
       <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/17/restricting-the-list-of-distributions/</guid>
-      <description>I&amp;rsquo;ve just realized that any dispersal distribution that I&amp;rsquo;m actually going to use in the model requires the ability to generate random numbers. Thus, for the &amp;ldquo;custom&amp;rdquo; distributions I&amp;rsquo;d have to write a RNG, which I really don&amp;rsquo;t want to do.
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/17/restricting-the-list-of-distributions/</guid>
+      <description>I&#39;ve just realized that any dispersal distribution that I&#39;m actually going to use in the model requires the ability to generate random numbers. Thus, for the &amp;ldquo;custom&amp;rdquo; distributions I&#39;d have to write a RNG, which I really don&#39;t want to do.
 So I think that means ditching the 2Dt, log-sech, and inverse power models.
 If the best fit is a truncated distribution then I might need to write a simple wrapper to discard the truncated bit.</description>
     </item>
     
     <item>
       <title>Test function printing</title>
-      <link>/InvasionHet/2019/04/17/test-function-printing/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/17/test-function-printing/</link>
       <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/17/test-function-printing/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/17/test-function-printing/</guid>
       <description>Function printing works as desired if the function is defined within the document. The issue is if it is defined externally, and loaded via source. It appears that if I use options(keep.source = TRUE) before the call to load.project this will be done correctly.
 Function setup:
 myfunc &amp;lt;- function(x, y) { # Here&amp;#39;s a function with a comment and custom spacing in the source code switch(x, one = 1, two = if (y) { 3 } else { 2 } ) } Print using print</description>
@@ -261,30 +261,30 @@ myfunc &amp;lt;- function(x, y) { # Here&amp;#39;s a function with a comment and
     
     <item>
       <title>Yet more on dispersal distributions</title>
-      <link>/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</link>
       <pubDate>Tue, 16 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</guid>
       <description>Once again, here’s the list of distributions, with where we are on each:
  Distributions with modes at zero:  Exponential power (generalized normal): This is in the gnorm package, and getting start values is probably nontrivial. It is defined on the whole real line, so a “sensible” value for the location parameter (\(\mu\)) is zero. It is a generalization of the normal, Laplace, and uniform distributions. It might be better just to calculate the first two directly (I’ve already written code for a half-normal, and could do the same for the Laplace) 2Dt: This requires writing a function to get the CDF by numerical integration, unless I can figure out the sense in which it is related to the t distribution.</description>
     </item>
     
     <item>
       <title>Getting start values from moments</title>
-      <link>/InvasionHet/2018/11/29/getting-start-values-form-moments/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/29/getting-start-values-form-moments/</link>
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/29/getting-start-values-form-moments/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/29/getting-start-values-form-moments/</guid>
       <description>It is possible to get start values from the matching moments fit. For example:
 library(fitdistrplus) Loading required package: MASS Loading required package: survival Loading required package: npsurv Loading required package: lsei library(actuar)  Attaching package: &amp;#39;actuar&amp;#39; The following object is masked from &amp;#39;package:grDevices&amp;#39;: cm x4 &amp;lt;- rpareto(1000, 6, 2) s4 &amp;lt;- fitdist(x4, &amp;quot;pareto&amp;quot;, &amp;quot;mme&amp;quot;, order=c(1, 2), memp=function(x, order) emm(x, order)) s4$estimate  shape scale 9.323582 3.527362  fitdist(x4, &amp;quot;pareto&amp;quot;, start = as.</description>
     </item>
     
     <item>
       <title>Vectorization in fitdistrplus</title>
-      <link>/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</link>
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</guid>
       <description>I need to figure out how fitdistr is vectorizing the calls to the distribution functions, so I can appropriately build the 2Dt function and think sensibly about the truncated distributions.
 The gory details are below, but in summary:
  The parameter values are never vectorized x and q (passed to ddist and pdist respectively) may be vectors x and q may have length zero (which will need to be trapped for when I’m not just passing them on to a predefined distribution) (I don’t know why!</description>
@@ -292,20 +292,20 @@ The gory details are below, but in summary:
     
     <item>
       <title>More on distributions</title>
-      <link>/InvasionHet/2018/11/20/more-on-distributions/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/20/more-on-distributions/</link>
       <pubDate>Tue, 20 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/20/more-on-distributions/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/20/more-on-distributions/</guid>
       <description>temp &amp;lt;- filter(disperseLer, ID == &amp;quot;100_0&amp;quot;) cens_data &amp;lt;- cens_dispersal_data(temp, 7) Generalized gamma I’ve made a specialized start function for gengamma:
 start_gengamma function (x, truncated = FALSE) { if (dim(as.matrix(x))[2] != 2) { stop(&amp;quot;Only interval-censored methods have been developed in start_gengamma&amp;quot;) } dist_list &amp;lt;- c(&amp;quot;lnorm&amp;quot;, &amp;quot;weibull&amp;quot;, &amp;quot;gamma&amp;quot;) n &amp;lt;- length(dist_list) base_fits &amp;lt;- data.frame(dist = dist_list, AIC = numeric(n), p1 = numeric(n), p2 = numeric(n), stringsAsFactors = FALSE) base_starts &amp;lt;- array(list(NULL), n) if (truncated) { stop(&amp;quot;Truncated methods have not yet been developed in start_gengamma&amp;quot;) } for (i in 1:n) { fit &amp;lt;- fitdistcens(x, base_fits$dist[i], base_starts[[i]]) base_fits$AIC[i] &amp;lt;- fit$aic base_fits$p1[i] &amp;lt;- coef(fit)[1] base_fits$p2[i] &amp;lt;- coef(fit)[2] } best &amp;lt;- base_fits[which.</description>
     </item>
     
     <item>
       <title>Likely-looking distributions</title>
-      <link>/InvasionHet/2018/11/16/likely-looking-distributions/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/16/likely-looking-distributions/</link>
       <pubDate>Fri, 16 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/16/likely-looking-distributions/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/16/likely-looking-distributions/</guid>
       <description>Let’s think about which distributions could be good. We know what the (half-)normal, exponential, and log-normal look like.
 Nathan et al. (2012) also suggest:
  Exponential power 2Dt Inverse power Logistic Mixture models Inverse Gaussian (Wald) Wiebull Gamma  The scaling factors in Nathan et al. are for two-dimensional dispersal expressed in radial distance (I think). They suggest that this can be converted to a “distance kernel” by multiplying by \(2\pi r\), but that doesn’t seem right for e.</description>
@@ -313,10 +313,10 @@ Nathan et al. (2012) also suggest:
     
     <item>
       <title>fitdistrplus fixed</title>
-      <link>/InvasionHet/2018/11/15/fitdistrplus-fixed/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/15/fitdistrplus-fixed/</link>
       <pubDate>Thu, 15 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/15/fitdistrplus-fixed/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/15/fitdistrplus-fixed/</guid>
       <description>The developers of fitdistrplus got back to me already with a code fix. The new version (1.0-12) is available from R-forge using
 install.packages(&amp;quot;fitdistrplus&amp;quot;, repos=&amp;quot;http://R-Forge.R-project.org&amp;quot;) So now with fitdistrplus loaded in global.dcf I can run
 mydata &amp;lt;- rnorm(20, 0, 10) mydata_cens &amp;lt;- data.frame(left = floor(mydata), right = ceiling(mydata)) dmynorm &amp;lt;- function(x, mean, sd, log = FALSE) dnorm(x, mean, sd, log) pmynorm &amp;lt;- function(q, mean, sd, lower.tail = TRUE, log.p = FALSE) pnorm(q, mean, sd, lower.</description>
@@ -324,97 +324,97 @@ mydata &amp;lt;- rnorm(20, 0, 10) mydata_cens &amp;lt;- data.frame(left = floor(
     
     <item>
       <title>blogdown tweak</title>
-      <link>/InvasionHet/2018/11/14/blogdown-tweak/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/14/blogdown-tweak/</link>
       <pubDate>Wed, 14 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/14/blogdown-tweak/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/14/blogdown-tweak/</guid>
       <description>I’ve modified themes/hugo-lithium-theme/archetypes/default.md to include the setup2 chunk. Thus that chunk gets automatically added into a new blog post created with the addin. This goes into all new posts, so will need to be deleted in md files. I made a second archetype that was a copy of the original, but it doesn’t seem to be available from the addin menu.
 Looking into this, it seems like it should be available; I’ve posted a question on stackexchange.</description>
     </item>
     
     <item>
       <title>fitdistrplus bug</title>
-      <link>/InvasionHet/2018/11/14/fitdistrplus-bug/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/11/14/fitdistrplus-bug/</link>
       <pubDate>Wed, 14 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/11/14/fitdistrplus-bug/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/11/14/fitdistrplus-bug/</guid>
       <description>I’ve sent a bug report to the maintainer of fitdistrplus. Here’s the MRE I provided:
 # Generate some data mydata &amp;lt;- rnorm(20, 0, 10) mydata_cens &amp;lt;- data.frame(left = floor(mydata), right = ceiling(mydata)) # Confirm that they can be fit by &amp;quot;norm&amp;quot; library(fitdistrplus) fitdist(mydata, &amp;quot;norm&amp;quot;) Fitting of the distribution &amp;#39; norm &amp;#39; by maximum likelihood Parameters: estimate Std. Error mean 0.9049781 2.634855 sd 11.7834301 1.863124 fitdistcens(mydata_cens, &amp;quot;norm&amp;quot;) Fitting of the distribution &amp;#39; norm &amp;#39; on censored data by maximum likelihood Parameters: estimate mean 0.</description>
     </item>
     
     <item>
       <title>rmutil and fitdistrplus</title>
-      <link>/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</link>
       <pubDate>Mon, 22 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</guid>
       <description>Warning in .check.version(config): Your configuration is compatible with version 0.8 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.8.2. So the fix I did last week to computegetparam() (to allow “y” as an argument to the distribution functions) does allow fitdist to work (sort of) with the rmutil distributions. However, there can still be failures in estimatation or SE calculation, because there are a number of other ways that the rmutil distributions work differntly from the base distribution functions.</description>
     </item>
     
     <item>
       <title>Working with fitdistrcens</title>
-      <link>/InvasionHet/2018/10/18/working-with-fitdistrplus/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/10/18/working-with-fitdistrplus/</link>
       <pubDate>Thu, 18 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/10/18/working-with-fitdistrplus/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/10/18/working-with-fitdistrplus/</guid>
       <description>Warning in .check.version(config): Your configuration is compatible with version 0.8 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.8.2. So here’s what happens if we try to run fitdistrcens on a non-standard distribution:
 library(rmutil) temp &amp;lt;- filter(disperseLer, ID == &amp;quot;100_0&amp;quot;) cens_data &amp;lt;- cens_dispersal_data(temp, 7) try(fitdistcens(cens_data, &amp;quot;ggamma&amp;quot;, start = list(s = 5, m = 4, f = 2)), outFile = stdout()) Error in checkparamlist(arg_startfix$start.arg, arg_startfix$fix.arg, : argument &amp;quot;hasnodefaultval&amp;quot; is missing, with no default Does it work with fitdist, which doesn’t account for the censoring?</description>
     </item>
     
     <item>
       <title>fitdistrplus</title>
-      <link>/InvasionHet/2018/10/04/fitdistrplus/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/10/04/fitdistrplus/</link>
       <pubDate>Thu, 04 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/10/04/fitdistrplus/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/10/04/fitdistrplus/</guid>
       <description>Warning in .check.version(config): Your configuration is compatible with version 0.8 of the ProjectTemplate package. Please run ProjectTemplate::migrate.project() to migrate to the installed version 0.8.2. I’ve modified the helper functions to separate out the creation of the censored data frame from the fitting, and to allow setting the origin. Note that setting zero = 7 only looks at the runway, and allows use of non-truncated distributions when the distribution only has support for non-negative values.</description>
     </item>
     
     <item>
       <title>Parameterization data</title>
-      <link>/InvasionHet/2018/10/02/parameterization-data/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/10/02/parameterization-data/</link>
       <pubDate>Tue, 02 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/10/02/parameterization-data/</guid>
-      <description>In trying to write up the data section of the TRACE document, I&amp;rsquo;ve realized that the TRACE section is really about data quality, not the actual parameterization. Furthermore, I&amp;rsquo;m having trouble keeping track of what I actually did. So I&amp;rsquo;m now writing a &amp;ldquo;Parameter estimation&amp;rdquo; document. For now I&amp;rsquo;m going to write a version that shows all the guts; we may want a cleaned up one (if at all) for publication.</description>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/10/02/parameterization-data/</guid>
+      <description>In trying to write up the data section of the TRACE document, I&#39;ve realized that the TRACE section is really about data quality, not the actual parameterization. Furthermore, I&#39;m having trouble keeping track of what I actually did. So I&#39;m now writing a &amp;ldquo;Parameter estimation&amp;rdquo; document. For now I&#39;m going to write a version that shows all the guts; we may want a cleaned up one (if at all) for publication.</description>
     </item>
     
     <item>
       <title>Some thoughts on approaches</title>
-      <link>/InvasionHet/2018/09/26/some-thoughts-on-approaches/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/09/26/some-thoughts-on-approaches/</link>
       <pubDate>Wed, 26 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/09/26/some-thoughts-on-approaches/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/09/26/some-thoughts-on-approaches/</guid>
       <description>Some things I thought about before I got up:
- Testing array manipulation: I&amp;rsquo;m pretty confident in my accuracy in iterating the models using for loops, so I should write a (slow) version with loops that will be the check for faster apply() approaches. Another approach to code verification is to compare various outputs (e.g., seed production as a function of density) to the means and residual variances that are intended to go in.</description>
+ Testing array manipulation: I&#39;m pretty confident in my accuracy in iterating the models using for loops, so I should write a (slow) version with loops that will be the check for faster apply() approaches. Another approach to code verification is to compare various outputs (e.g., seed production as a function of density) to the means and residual variances that are intended to go in.</description>
     </item>
     
     <item>
       <title>Getting back to work</title>
-      <link>/InvasionHet/2018/09/19/getting-back-to-work/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/09/19/getting-back-to-work/</link>
       <pubDate>Wed, 19 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/09/19/getting-back-to-work/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/09/19/getting-back-to-work/</guid>
       <description>Blogdown My last post from 9 months ago said that blogdown wasn’t working properly. I’m not sure if that’s still true, but my version of R at home is rather old, so I just updated to 3.5.1.
 This requires reinstalling libraries, which is probably a good idea as there are a number of helper libraries that need to be rebuilt even when they don’t have an update (and hence can’t get reinstalled automatically):</description>
     </item>
     
     <item>
       <title>Project goals</title>
-      <link>/InvasionHet/2018/09/19/project-goals/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2018/09/19/project-goals/</link>
       <pubDate>Wed, 19 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2018/09/19/project-goals/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2018/09/19/project-goals/</guid>
       <description>Here are the goals of this project, as I see them currently:
  Understand how variation in spread rate is affected by demographic and environmental stochasticity affecting demography; finite draws and kernel sampling affecting dispersal; and genetically driven heterogeneity in mean demography and dispersal. Understand how these contributions change as habitat becomes more fragmented. Understand how drift and selection lead to increases or decreases in spread variability.  </description>
     </item>
     
     <item>
       <title>Build site broken</title>
-      <link>/InvasionHet/2017/12/27/build-site-broken/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/12/27/build-site-broken/</link>
       <pubDate>Wed, 27 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/12/27/build-site-broken/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/12/27/build-site-broken/</guid>
       <description>Yesterday I updated blogdown, from v. 0.1 to 0.4. This broke build.site(), because when it tries to compile an Rmd file that calls projecttemplate, the working directory is no longer being set to the project root, which presently is “/Users/kendall/Documents/Github/InvasionHet”. This was acheived by setting the knitr parameter root.dir in .Rprofile in the post directory.
 Here’s what the knitr option currently is:
 knitr::opts_knit$get()$root.dir [1] &amp;quot;/Users/kendall/Documents/Github/InvasionHet&amp;quot; # Originally gave NULL and here’s what is being viewed as the working directory:</description>
@@ -422,20 +422,20 @@ knitr::opts_knit$get()$root.dir [1] &amp;quot;/Users/kendall/Documents/Github/In
     
     <item>
       <title>Distributing and accumulating dispersed seeds</title>
-      <link>/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</link>
       <pubDate>Wed, 27 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</guid>
       <description>Here is what I think will be an efficient way of putting the dispersed seeds in the right place. Let relDseeds be a \((2 D_{max}+1)\times n_{pots}\) matrix giving dispersal relative to the home pot (with row Dmax + 1 being retention and rows above that being backwards dispersal). Then we can create an absolute dispersal matrix:
 # Lowest index of each column of relDseeds to include in Dseeds lower &amp;lt;- pmax(1, Dmax - (1:npots) + 2) # Add an index row, available in the applied function as x[1] relDseeds&amp;lt;-rbind(1:npots, relDseeds) # Function to construct a column of Dseeds from a column of relDseeds padCol &amp;lt;- function(x, lower, Dmax, npots) { leading_zeros &amp;lt;- rep(0, max(0, x[1] - Dmax - 1)) dispersed_seeds &amp;lt;- x[-(1:lower[x[1]])] trailing_zeros &amp;lt;- rep(0, npots-x[1]) c(leading_zeros, dispersed_seeds, trailing_zeros) } # Make a list of vectors for each column of Dseeds Dseeds &amp;lt;- apply(relDseeds, 2, padCol, lower=lower, Dmax=Dmax, npots=npots) # Convert the list to a matrix Dseeds &amp;lt;- matrix(unlist(Dseeds), npots + Dmax, npots) Finally, we can get the total number of seeds dispersed to each pot using apply:</description>
     </item>
     
     <item>
       <title>Array dimensions</title>
-      <link>/InvasionHet/2017/12/26/array-dimensions/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/12/26/array-dimensions/</link>
       <pubDate>Tue, 26 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/12/26/array-dimensions/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/12/26/array-dimensions/</guid>
       <description>In a previous post, I said that
  A generation’s adult and seed distributions will be a \(R \times X \times G\) array, where \(R\) is the number of replicate simulations, \(X\) is the number of spatial locations, and \(G\) is the number of genotypes.
  However, the easiest way to multiply the array by a vector of genotype-specific parameters (of length \(G\)) is to have the genotype be in the first dimension.</description>
@@ -443,19 +443,19 @@ knitr::opts_knit$get()$root.dir [1] &amp;quot;/Users/kendall/Documents/Github/In
     
     <item>
       <title>Revisiting plans, and wrestling with seed stochasticity</title>
-      <link>/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</link>
       <pubDate>Mon, 23 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</guid>
       <description>Focus on Ler? As I look at various pieces of the model (which I’ve started to assemble in lib/model.R), I realize that there are a sufficient number of ways in which the RIL data are different (and not yet analyzed) that I may find it challenging to exactly mirror the Ler model. In particular, I’m going to find it rather challenging (I think) to estimate the environmental stochasticity in seed production among generations and replicates.</description>
     </item>
     
     <item>
       <title>Feedback from Jenn on June notebook</title>
-      <link>/InvasionHet/2017/10/03/feedback-from-jenn/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/10/03/feedback-from-jenn/</link>
       <pubDate>Tue, 03 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/10/03/feedback-from-jenn/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/10/03/feedback-from-jenn/</guid>
       <description>Jenn has sent a couple of emails in response to last spring’s work:
 September 29 Here’s some feedback on thhe Key Results (from June). More on Monday!
  Silique number does not seem to be a good proxy for the number of seeds actually released (e.g., p. 153)
@@ -464,50 +464,50 @@ September 29 Here’s some feedback on thhe Key Results (from June). More on Mon
     
     <item>
       <title>Model planning</title>
-      <link>/InvasionHet/2017/10/02/model-planning/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</link>
       <pubDate>Mon, 02 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/10/02/model-planning/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</guid>
       <description>Conceptual overview The model has two fundamental steps:
-Seed production Seed dispersal  Seed production is density dependent, with a Gompertz deterministic skeleton: \[\begin{equation} \log(S_{g,t,x}) = a_g + b_g \log(N_{g,t,x}), \end{equation}\] where \(S\) is seed number and \(N\) is adult number; \(g\) is genotype, \(t\) is generation and \(x\) is location. In addition, there is demographic stochasticity (probably Poisson, but need to check); temporal environmental stochasticity; and among-replicate environmental stochasticity. Need to check how well correlated the latter are among RILs.</description>
+Seed production Seed dispersal  Seed production is density dependent, with a Gompertz deterministic skeleton: \[\begin{equation} \log(S_{g,t,x}) = a_g + b_g \log(N_{g,t,x}), \end{equation}\] where \(S\) is seed number and \(N\) is adult number; \(g\) is genotype, \(t\) is generation and \(x\) is location. In addition, there is demographic stochasticity (probably Poisson, but need to check); temporal environmental stochasticity; and among-replicate environmental stochasticity.</description>
     </item>
     
     <item>
       <title>Customizing blogdown</title>
-      <link>/InvasionHet/2017/09/30/customizing-blogdown/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</link>
       <pubDate>Sat, 30 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/30/customizing-blogdown/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</guid>
       <description>I am now on my computer at home; after updating packages and rstudio, and installing blogdown and hugo, everything is running fine (although I still need to update my ~/.Rprofile).
 Tags and categories Getting links to tags and categories was as simple as editing the menu section of config.toml; the one trick is to add weight variables to get the order I want (the default is alphabetical). Here is the relevant bit of code:</description>
     </item>
     
     <item>
       <title>Directional dispersal in Ler</title>
-      <link>/InvasionHet/2017/09/29/directional-dispersal-in-ler/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/29/directional-dispersal-in-ler/</link>
       <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/29/directional-dispersal-in-ler/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/29/directional-dispersal-in-ler/</guid>
       <description>The correlation between the fraction dispersing and the mean dispersal distance of the dispersers could be mean one of two things:
 Simulated rain that makes more seeds go makes them go further in all directions Simulated rain that makes more seeds go is pushing them in the direction of the receiving runway  This matters because in case 2, the dispersal kernel in the negative direction will, presumably, have its absolute mean reduced.</description>
     </item>
     
     <item>
       <title>Housekeeping</title>
-      <link>/InvasionHet/2017/09/25/housekeeping/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/25/housekeeping/</link>
       <pubDate>Mon, 25 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/25/housekeeping/</guid>
-      <description>After repeated nagging from ProjectTemplate, I ran the script to update the project structure to v. 0.8. This changed the doc directory to docs, and added some new variables to global.dcf. Unfortunately the latter don&amp;rsquo;t seem to be documented&amp;hellip;. I&amp;rsquo;ll also need to make sure that I update the package on my computer at home.
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/25/housekeeping/</guid>
+      <description>After repeated nagging from ProjectTemplate, I ran the script to update the project structure to v. 0.8. This changed the doc directory to docs, and added some new variables to global.dcf. Unfortunately the latter don&#39;t seem to be documented&amp;hellip;. I&#39;ll also need to make sure that I update the package on my computer at home.
 I added a new munge script to calculate the dispersal stats and fits. To prevent this calculating every time, I cached the result; but now I need to add caching to all the munge scripts, and, after running once, turn off caching&amp;hellip; Done!</description>
     </item>
     
     <item>
       <title>Ler kernel heterogeneity</title>
-      <link>/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</link>
       <pubDate>Fri, 22 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</guid>
       <description>The next steps in the Ler dispersal analysis are to confirm statistical support for among-rep heterogeneity and see if the kernel parameters are correlated with the fraction dispersing.
 Housekeeping Added the functions for the truncated distributions and to fit the models to lib/helpers.R.
  Kernel heterogeneity The total AIC for the rep-specific fits was 58230.28 and 58366.17 for the normal and lognormal models, respectively.
@@ -516,51 +516,51 @@ I think that if I pass the whole data set to the analysis function it will combi
     
     <item>
       <title>Dispersal data</title>
-      <link>/InvasionHet/2017/09/19/dispersal-data/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/19/dispersal-data/</link>
       <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/19/dispersal-data/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/19/dispersal-data/</guid>
       <description>Jenn sent info about the Ler and RIL dispersal data.
-Ler  The data from the sticky paper kernels for Ler are called 2013_08_08_Exp1_Spray.csv. And I&amp;rsquo;m attaching the script I used to analyze them [FitKernels_Exp1_SPRAY_aug2013.R (in Arabidopsis/analysis)].
-I fit negative exponential kernels, which I know isn&amp;rsquo;t necessarily the best fit, but is what I needed for the simulations I ran (for the density dependence paper). For reasons I don&amp;rsquo;t know, the mean dispersal distance on sticky paper was further than in Generation 1.</description>
+Ler  The data from the sticky paper kernels for Ler are called 2013_08_08_Exp1_Spray.csv. And I&#39;m attaching the script I used to analyze them [FitKernels_Exp1_SPRAY_aug2013.R (in Arabidopsis/analysis)].
+  I fit negative exponential kernels, which I know isn&#39;t necessarily the best fit, but is what I needed for the simulations I ran (for the density dependence paper). For reasons I don&#39;t know, the mean dispersal distance on sticky paper was further than in Generation 1.</description>
     </item>
     
     <item>
       <title>Fit Ler dispersal kernels</title>
-      <link>/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</link>
       <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</guid>
       <description>File to load Ler dispersal data Here is the new file data/disperseLer.R:
 ### Creates the data object disperseLer, representing the Ler dispersal experiment # Get data from Jenn&amp;#39;s file data_dir &amp;lt;- &amp;quot;~/Dropbox/Arabidopsis/analysis&amp;quot; disperseLer &amp;lt;- read.csv(file.path(data_dir, &amp;#39;2013_08_08_Exp1_Spray.csv&amp;#39;), header = TRUE) # Drop the &amp;quot;clipped&amp;quot; treatment disperseLer &amp;lt;- droplevels(subset(disperseLer, new_trt != &amp;quot;clipped&amp;quot;, drop = TRUE)) # Drop the columns with the (irrelevant) info about where the mom pots came from disperseLer &amp;lt;- disperseLer[, -c(1:4, 6)] # Clean up column names names(disperseLer) &amp;lt;- c(&amp;quot;ID&amp;quot;, &amp;quot;Pot&amp;quot;, &amp;quot;Distance&amp;quot;, &amp;quot;Seedlings&amp;quot;, &amp;quot;Siliques&amp;quot;, &amp;quot;Density&amp;quot;, &amp;quot;Treatment&amp;quot;) # Make some factor variables disperseLer$ID &amp;lt;- as.</description>
     </item>
     
     <item>
       <title>Fitting dispersal kernels</title>
-      <link>/InvasionHet/2017/09/13/fitting-dispersal-kernels/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/13/fitting-dispersal-kernels/</link>
       <pubDate>Wed, 13 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/13/fitting-dispersal-kernels/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/13/fitting-dispersal-kernels/</guid>
       <description>Quick looks at dispersal. Lewis et al 2008 show how to calculate empirical moment generating functions, but I’m not sure how useful that is for us. Nathan et al. 2012 has a good review of kernels, but not much statistical info. I found Viana et al. 2016 which suggests fitting the CDF is better than fitting the PDF.
-Viana also led my to the fitdistrplus package, which fits standard distributions. I think this is what we need–I was increasinglyl unconfident im my home-rolled fitting routines.</description>
+Viana also led my to the fitdistrplus package, which fits standard distributions.</description>
     </item>
     
     <item>
       <title>Relevant material from Lewis’s book</title>
-      <link>/InvasionHet/2017/09/11/relevant-material-from-lewis-s-book/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/11/relevant-material-from-lewis-s-book/</link>
       <pubDate>Mon, 11 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/11/relevant-material-from-lewis-s-book/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/11/relevant-material-from-lewis-s-book/</guid>
       <description>Mark Lewis’s new book has a whole chapter on “stochastic spread:”
  Our focus is on the rate at which such processes spread spatially. We first examine the effects of environmental stochasticity on spatial spread by means of stochastic integrodifference and reaction–diffusion models. Here, we analyze both the wave solution for the expected density of individuals and the wave solution for a given realization of the stochastic process, as well as the variability that this can exhibit.</description>
     </item>
     
     <item>
       <title>Older journal entries</title>
-      <link>/InvasionHet/2017/09/01/older-journal-entries/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2017/09/01/older-journal-entries/</link>
       <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2017/09/01/older-journal-entries/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2017/09/01/older-journal-entries/</guid>
       <description>Before September 2017, the notebook was managed as a bookdown project. The source files are in the /notebook directory; the compiled notebook is here.</description>
     </item>
     

@@ -1,94 +1,94 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Project notebook for the Invasion Heterogeneity project</title>
-    <link>/InvasionHet/categories/</link>
+    <link>https://brucekendall.github.io/InvasionHet/categories/</link>
     <description>Recent content in Categories on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 22 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 11 Dec 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/InvasionHet/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://brucekendall.github.io/InvasionHet/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Planning</title>
+      <link>https://brucekendall.github.io/InvasionHet/categories/planning/</link>
+      <pubDate>Wed, 11 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/categories/planning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Parameter estimation</title>
+      <link>https://brucekendall.github.io/InvasionHet/categories/parameter-estimation/</link>
+      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/categories/parameter-estimation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Code development</title>
+      <link>https://brucekendall.github.io/InvasionHet/categories/code-development/</link>
+      <pubDate>Wed, 23 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/categories/code-development/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Analysis</title>
-      <link>/InvasionHet/categories/analysis/</link>
+      <link>https://brucekendall.github.io/InvasionHet/categories/analysis/</link>
       <pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/categories/analysis/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Code Development</title>
-      <link>/InvasionHet/categories/code-development/</link>
-      <pubDate>Wed, 23 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/InvasionHet/categories/code-development/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Conceptual Model Evaluation</title>
-      <link>/InvasionHet/categories/conceptual-model-evaluation/</link>
-      <pubDate>Tue, 16 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/InvasionHet/categories/conceptual-model-evaluation/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Data Evaluation</title>
-      <link>/InvasionHet/categories/data-evaluation/</link>
-      <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/InvasionHet/categories/data-evaluation/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/categories/analysis/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Housekeeping</title>
-      <link>/InvasionHet/categories/housekeeping/</link>
-      <pubDate>Fri, 29 Sep 2017 00:00:00 +0000</pubDate>
+      <link>https://brucekendall.github.io/InvasionHet/categories/housekeeping/</link>
+      <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/categories/housekeeping/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/categories/housekeeping/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Conceptual model evaluation</title>
+      <link>https://brucekendall.github.io/InvasionHet/categories/conceptual-model-evaluation/</link>
+      <pubDate>Tue, 16 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/categories/conceptual-model-evaluation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Model description</title>
+      <link>https://brucekendall.github.io/InvasionHet/categories/model-description/</link>
+      <pubDate>Wed, 27 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/categories/model-description/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Data evaluation</title>
+      <link>https://brucekendall.github.io/InvasionHet/categories/data-evaluation/</link>
+      <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/categories/data-evaluation/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Literature</title>
-      <link>/InvasionHet/categories/literature/</link>
+      <link>https://brucekendall.github.io/InvasionHet/categories/literature/</link>
       <pubDate>Mon, 11 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/categories/literature/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Model Description</title>
-      <link>/InvasionHet/categories/model-description/</link>
-      <pubDate>Wed, 27 Dec 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/InvasionHet/categories/model-description/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Parameter Estimation</title>
-      <link>/InvasionHet/categories/parameter-estimation/</link>
-      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/InvasionHet/categories/parameter-estimation/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Planning</title>
-      <link>/InvasionHet/categories/planning/</link>
-      <pubDate>Wed, 11 Dec 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/InvasionHet/categories/planning/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/categories/literature/</guid>
       <description></description>
     </item>
     

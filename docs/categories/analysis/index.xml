@@ -1,52 +1,52 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Analysis on Project notebook for the Invasion Heterogeneity project</title>
-    <link>/InvasionHet/categories/analysis/</link>
+    <link>https://brucekendall.github.io/InvasionHet/categories/analysis/</link>
     <description>Recent content in Analysis on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 22 May 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/InvasionHet/categories/analysis/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://brucekendall.github.io/InvasionHet/categories/analysis/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Ler sims, and RIL parameterization plans</title>
-      <link>/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</link>
       <pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</guid>
       <description>Ler analysis I’ve got the complete set of gen 6 spread distances now. For a few of them there are some crazy high dispersal distances, so it can be easier to trim the most extreme ones
 options(tibble.print_max = Inf) Ler_spread_stats %&amp;gt;% group_by(Gap, DS, ES, KS, SS) %&amp;gt;% summarize(Mean = mean(Max_Dist), Var = var(Max_Dist)) # A tibble: 64 x 7 # Groups: Gap, DS, ES, KS [?] Gap DS ES KS SS Mean Var &amp;lt;int&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; 1 0 FALSE FALSE FALSE FALSE 14 0 2 0 FALSE FALSE FALSE TRUE 15.</description>
     </item>
     
     <item>
       <title>Distribution of Ler variability</title>
-      <link>/InvasionHet/2019/05/19/distribution-of-ler-variability/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/19/distribution-of-ler-variability/</link>
       <pubDate>Sun, 19 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/19/distribution-of-ler-variability/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/19/distribution-of-ler-variability/</guid>
       <description>So, last night’s analysis suggests that there’s not enough spread variability in the model. But it varied from run to run. So lets do a bunch of runs using replicate and see how far off we are.
 n_init &amp;lt;- 50 Ler_params$gap_size &amp;lt;- 0 controls &amp;lt;- list( n_reps = 10, DS_seeds = TRUE, ES_seeds = TRUE, kernel_stoch = TRUE, kernel_stoch_pots = TRUE, seed_sampling = TRUE, pot_width = 7 ) The iteration and analysis, as a function to pass to replicate:</description>
     </item>
     
     <item>
       <title>Plans for near-term analyses</title>
-      <link>/InvasionHet/2019/05/19/plans-for-near-term-analyses/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/19/plans-for-near-term-analyses/</link>
       <pubDate>Sun, 19 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/19/plans-for-near-term-analyses/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/19/plans-for-near-term-analyses/</guid>
       <description>OK, so I’ve demonstrated that the Ler model with continuous runway generates plausible results for the mean and variance of spread, although the latter can have some really extreme values that I probably need to investigate. The substantive conclusions from turning off one type of stochasticity at a time in that model:
  Kernel stochasticity increases the mean spread rate Both kernel stochasticity and seed sampling greatly increases the variance in spread rate Both ES and DS in seed production decrease the mean spread rate, but have little impact on the variance.</description>
     </item>
     
     <item>
       <title>Simulated Ler variability</title>
-      <link>/InvasionHet/2019/05/18/simulated-ler-variability/</link>
+      <link>https://brucekendall.github.io/InvasionHet/2019/05/18/simulated-ler-variability/</link>
       <pubDate>Sat, 18 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/InvasionHet/2019/05/18/simulated-ler-variability/</guid>
+      <guid>https://brucekendall.github.io/InvasionHet/2019/05/18/simulated-ler-variability/</guid>
       <description>So, we are now ready to do some analyses. Let’s look at simulated Ler mean and variability over 6 generations.
 n_init &amp;lt;- 50 Ler_params$gap_size &amp;lt;- 0 controls &amp;lt;- list( n_reps = 10, DS_seeds = TRUE, ES_seeds = TRUE, kernel_stoch = TRUE, kernel_stoch_pots = TRUE, seed_sampling = TRUE, pot_width = 7 ) Adults &amp;lt;- matrix(n_init, controls$n_reps, 1) for (i in 1:6) { Adults &amp;lt;- iterate_genotype(Adults, Ler_params, controls) } Adults  [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [1,] 119 182 181 192 228 277 138 219 186 113 123 60 10 [2,] 586 374 679 944 378 886 858 612 975 439 607 336 144 [3,] 112 158 108 90 123 299 220 193 94 87 40 19 6 [4,] 757 524 688 719 338 642 968 878 448 799 529 482 211 [5,] 285 353 313 461 219 389 165 401 195 461 316 210 64 [6,] 342 661 743 608 924 649 811 811 551 485 398 731 311 [7,] 351 539 524 630 437 756 376 703 373 613 296 316 103 [8,] 331 464 288 314 282 442 442 439 482 339 200 179 50 [9,] 229 231 300 188 240 115 134 112 197 136 130 52 28 [10,] 307 580 424 688 416 636 756 386 444 393 340 139 58 [,14] [,15] [,16] [,17] [1,] 2 0 0 0 [2,] 28 13 1 0 [3,] 0 0 0 0 [4,] 115 22 9 1 [5,] 207 41 20 3 [6,] 321 155 60 12 [7,] 10 0 0 0 [8,] 20 2 3 0 [9,] 6 0 0 0 [10,] 13 2 0 0 The densities do not seem to be getting nearly large enough.</description>
     </item>

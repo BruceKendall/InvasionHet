@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Fitting the distributions - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p>I’ve written the code to automatically fit all the untruncated distributions. Here it is, in <code>helpers.R</code>:</p>
+      
+
+
+<p>I’ve written the code to automatically fit all the untruncated distributions. Here it is, in <code>helpers.R</code>:</p>
 <pre class="r"><code>fit_dispersal_untruncated </code></pre>
 <pre><code>function(dispersal_data, zero = 7,
                                       model_list = c(&quot;hnorm&quot;, &quot;exp&quot;, &quot;lnorm&quot;, &quot;gamma&quot;,

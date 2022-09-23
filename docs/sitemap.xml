@@ -1,382 +1,365 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/InvasionHet/2017/09/29/trying-out-blogdown/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/29/trying-out-blogdown/</loc>
     <lastmod>2017-09-29T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/</loc>
     <lastmod>2019-12-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/11/20/drop-bad-ril-reps/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/12/11/parameter-file-done-sort-of-next-steps/</loc>
+    <lastmod>2019-12-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/planning/</loc>
+    <lastmod>2019-12-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/post/</loc>
+    <lastmod>2019-12-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/</loc>
+    <lastmod>2019-12-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/tags/dispersal/</loc>
     <lastmod>2019-11-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/11/20/try-harder-on-ril-dispersal/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/11/20/drop-bad-ril-reps/</loc>
     <lastmod>2019-11-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/11/14/ril-dispersal-kernels/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/parameter-estimation/</loc>
+    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/tags/ril/</loc>
+    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/tags/</loc>
+    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/11/20/try-harder-on-ril-dispersal/</loc>
+    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/11/14/ril-dispersal-kernels/</loc>
     <lastmod>2019-11-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/10/23/ler-sim-code-updated/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/code-development/</loc>
     <lastmod>2019-10-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/10/22/moving-forward-in-fall/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/tags/ler/</loc>
+    <lastmod>2019-10-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/10/23/ler-sim-code-updated/</loc>
+    <lastmod>2019-10-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/10/22/moving-forward-in-fall/</loc>
     <lastmod>2019-10-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/05/24/fit-ril-dispersal/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/05/24/fit-ril-dispersal/</loc>
     <lastmod>2019-05-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/analysis/</loc>
     <lastmod>2019-05-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/05/19/distribution-of-ler-variability/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/05/22/ler-sims-and-ril-parameterization-plans/</loc>
+    <lastmod>2019-05-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/05/19/distribution-of-ler-variability/</loc>
     <lastmod>2019-05-19T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/05/19/plans-for-near-term-analyses/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/05/19/plans-for-near-term-analyses/</loc>
     <lastmod>2019-05-19T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/05/18/beta-binomial-distribution-of-fraction-dispersing/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/05/18/beta-binomial-distribution-of-fraction-dispersing/</loc>
     <lastmod>2019-05-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/05/18/estimating-seed-production-with-mixed-effects/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/05/18/estimating-seed-production-with-mixed-effects/</loc>
     <lastmod>2019-05-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/05/18/simulated-ler-variability/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/05/18/simulated-ler-variability/</loc>
     <lastmod>2019-05-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/05/16/model-iteration-complete/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/05/16/model-iteration-complete/</loc>
     <lastmod>2019-05-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/04/26/final-final-dispersal/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/04/26/final-final-dispersal/</loc>
     <lastmod>2019-04-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/04/25/finalizing-dispersal-for-now/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/04/25/finalizing-dispersal-for-now/</loc>
     <lastmod>2019-04-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/04/22/robustifying-the-generalized-gamma-fit/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/04/22/robustifying-the-generalized-gamma-fit/</loc>
     <lastmod>2019-04-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/04/19/a-general-moment-generator/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/04/19/a-general-moment-generator/</loc>
     <lastmod>2019-04-19T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/04/18/moments-of-generalized-gamma/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/04/18/moments-of-generalized-gamma/</loc>
     <lastmod>2019-04-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/04/17/fitting-the-distributions/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/tags/blogdown/</loc>
     <lastmod>2019-04-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/04/17/half-normal-distribution/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/04/17/fitting-the-distributions/</loc>
     <lastmod>2019-04-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/04/17/restricting-the-list-of-distributions/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/04/17/half-normal-distribution/</loc>
     <lastmod>2019-04-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/04/17/test-function-printing/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/housekeeping/</loc>
     <lastmod>2019-04-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/04/17/restricting-the-list-of-distributions/</loc>
+    <lastmod>2019-04-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/04/17/test-function-printing/</loc>
+    <lastmod>2019-04-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/conceptual-model-evaluation/</loc>
     <lastmod>2019-04-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/11/29/getting-start-values-form-moments/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2019/04/16/yet-more-on-dispersal-distributions/</loc>
+    <lastmod>2019-04-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/11/29/getting-start-values-form-moments/</loc>
     <lastmod>2018-11-29T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/11/29/vectorization-in-fitdistrplus/</loc>
     <lastmod>2018-11-29T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/11/20/more-on-distributions/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/11/20/more-on-distributions/</loc>
     <lastmod>2018-11-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/11/16/likely-looking-distributions/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/11/16/likely-looking-distributions/</loc>
     <lastmod>2018-11-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/11/15/fitdistrplus-fixed/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/11/15/fitdistrplus-fixed/</loc>
     <lastmod>2018-11-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/11/14/blogdown-tweak/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/11/14/blogdown-tweak/</loc>
     <lastmod>2018-11-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/11/14/fitdistrplus-bug/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/11/14/fitdistrplus-bug/</loc>
     <lastmod>2018-11-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/10/22/rmutil-and-fitdistrplus/</loc>
     <lastmod>2018-10-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/10/18/working-with-fitdistrplus/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/10/18/working-with-fitdistrplus/</loc>
     <lastmod>2018-10-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/10/04/fitdistrplus/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/10/04/fitdistrplus/</loc>
     <lastmod>2018-10-04T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/10/02/parameterization-data/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/10/02/parameterization-data/</loc>
     <lastmod>2018-10-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/09/26/some-thoughts-on-approaches/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/09/26/some-thoughts-on-approaches/</loc>
     <lastmod>2018-09-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/09/19/getting-back-to-work/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/09/19/getting-back-to-work/</loc>
     <lastmod>2018-09-19T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2018/09/19/project-goals/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2018/09/19/project-goals/</loc>
     <lastmod>2018-09-19T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/12/27/build-site-broken/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/12/27/build-site-broken/</loc>
     <lastmod>2017-12-27T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/12/27/distributing-and-accumulating-dispersed-seeds/</loc>
     <lastmod>2017-12-27T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/12/26/array-dimensions/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/model-description/</loc>
+    <lastmod>2017-12-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/12/26/array-dimensions/</loc>
     <lastmod>2017-12-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/10/23/revisiting-plans-and-wrestling-with-seed-stochasticity/</loc>
     <lastmod>2017-10-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/10/03/feedback-from-jenn/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/10/03/feedback-from-jenn/</loc>
     <lastmod>2017-10-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/10/02/model-planning/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/10/02/model-planning/</loc>
     <lastmod>2017-10-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/09/30/customizing-blogdown/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/30/customizing-blogdown/</loc>
     <lastmod>2017-09-30T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/09/29/directional-dispersal-in-ler/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/29/directional-dispersal-in-ler/</loc>
     <lastmod>2017-09-29T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/09/25/housekeeping/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/25/housekeeping/</loc>
     <lastmod>2017-09-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/22/ler-kernel-heterogeneity/</loc>
     <lastmod>2017-09-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/09/19/dispersal-data/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/data-evaluation/</loc>
     <lastmod>2017-09-19T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/19/dispersal-data/</loc>
     <lastmod>2017-09-19T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/09/13/fitting-dispersal-kernels/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/19/fit-ler-dispersal-kernels/</loc>
+    <lastmod>2017-09-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/13/fitting-dispersal-kernels/</loc>
     <lastmod>2017-09-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/09/11/relevant-material-from-lewis-s-book/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/categories/literature/</loc>
     <lastmod>2017-09-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/2017/09/01/older-journal-entries/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/11/relevant-material-from-lewis-s-book/</loc>
+    <lastmod>2017-09-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://brucekendall.github.io/InvasionHet/2017/09/01/older-journal-entries/</loc>
     <lastmod>2017-09-01T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/InvasionHet/about/</loc>
+    <loc>https://brucekendall.github.io/InvasionHet/about/</loc>
     <lastmod>2016-05-05T21:48:51-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/categories/analysis/</loc>
-    <lastmod>2019-05-22T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/tags/blogdown/</loc>
-    <lastmod>2017-09-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/categories/</loc>
-    <lastmod>2019-05-22T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/categories/code-development/</loc>
-    <lastmod>2019-10-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/categories/conceptual-model-evaluation/</loc>
-    <lastmod>2019-04-16T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/categories/data-evaluation/</loc>
-    <lastmod>2017-09-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/tags/dispersal/</loc>
-    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/categories/housekeeping/</loc>
-    <lastmod>2017-09-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/tags/ler/</loc>
-    <lastmod>2019-10-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/categories/literature/</loc>
-    <lastmod>2017-09-11T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/categories/model-description/</loc>
-    <lastmod>2017-12-27T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/categories/parameter-estimation/</loc>
-    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/categories/planning/</loc>
-    <lastmod>2019-12-11T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/post/</loc>
-    <lastmod>2017-09-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/</loc>
-    <lastmod>2017-09-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/tags/ril/</loc>
-    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/InvasionHet/tags/</loc>
-    <lastmod>2017-09-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
 </urlset>

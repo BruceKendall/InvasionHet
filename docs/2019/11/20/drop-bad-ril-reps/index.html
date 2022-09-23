@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Drop bad RIL reps - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p>First, we need to make sure that we are getting enough iterates in the fit:</p>
+      
+
+
+<p>First, we need to make sure that we are getting enough iterates in the fit:</p>
 <pre class="r"><code>controls &lt;- list(maxit = 1000)</code></pre>
 <p>We also clear out reps with not enough seeds (from 5/24/19), as well as dropping the reps that won’t converge on the generalized gamma (19, 40, and 77)</p>
 <pre class="r"><code>n_min &lt;- 10 # Set the minimum number of dispersing seeds

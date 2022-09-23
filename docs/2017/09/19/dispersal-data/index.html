@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Dispersal data - Project notebook for the Invasion Heterogeneity project</title>
@@ -66,49 +66,35 @@
     
 
     <div class="article-content">
-      
-
-<p>Jenn sent info about the Ler and RIL dispersal data.</p>
-
+      <p>Jenn sent info about the Ler and RIL dispersal data.</p>
 <h3 id="ler">Ler</h3>
-
 <blockquote>
-<p>The data from the sticky paper kernels for Ler are called <code>2013_08_08_Exp1_Spray.csv</code>. And I&rsquo;m attaching the script I used to analyze them [<code>FitKernels_Exp1_SPRAY_aug2013.R</code> (in <code>Arabidopsis/analysis</code>)].</p>
-
-<p>I fit negative exponential kernels, which I know isn&rsquo;t necessarily the best fit, but is what I needed for the simulations I ran (for the density dependence paper). For reasons I don&rsquo;t know, the mean dispersal distance on sticky paper was further than in Generation 1. This of course assumes all seeds would have germinated, but we know mostly they do. Number of moms in control ranged from 2- 1200, but I found no significant relationship between density and dispersal distance. I used the estimate from the sticky paper data to keep m = 2 in my models (mean dispersal distance of ~0.5 pots). Otherwise, my simulated invasions moved much more slowly than they did in reality.</p>
+<p>The data from the sticky paper kernels for Ler are called <code>2013_08_08_Exp1_Spray.csv</code>. And I'm attaching the script I used to analyze them [<code>FitKernels_Exp1_SPRAY_aug2013.R</code> (in <code>Arabidopsis/analysis</code>)].</p>
 </blockquote>
-
+<blockquote>
+<p>I fit negative exponential kernels, which I know isn't necessarily the best fit, but is what I needed for the simulations I ran (for the density dependence paper). For reasons I don't know, the mean dispersal distance on sticky paper was further than in Generation 1. This of course assumes all seeds would have germinated, but we know mostly they do. Number of moms in control ranged from 2- 1200, but I found no significant relationship between density and dispersal distance. I used the estimate from the sticky paper data to keep m = 2 in my models (mean dispersal distance of ~0.5 pots). Otherwise, my simulated invasions moved much more slowly than they did in reality.</p>
+</blockquote>
 <p>I then asked</p>
-
 <blockquote>
-<p>I&rsquo;m not quite sure how to interpret the Ler data you sent &ndash; e.g., sometimes &ldquo;pot&rdquo; is &gt; 0, but most of the seeds in &ldquo;pot_gen3&rdquo; are in pot 0.</p>
+<p>I'm not quite sure how to interpret the Ler data you sent &ndash; e.g., sometimes &ldquo;pot&rdquo; is &gt; 0, but most of the seeds in &ldquo;pot_gen3&rdquo; are in pot 0.</p>
 </blockquote>
-
 <p>Jenn replied</p>
-
 <blockquote>
 <p>As for the Ler data, we had started the experiment several generations earlier and then for a number of reasons decided to scrap it and start over. So we then took pots from a wide range of densities (from different places in the runways) to put next to the sticky paper. This means they weren’t all pot 0. Shouldn’t matter which pot they are (at least that was the idea). The pot numbers are just relics of this past.</p>
 </blockquote>
-
 <h3 id="rils">RILs</h3>
-
 <blockquote>
-<p>You also asked about sticky paper data for the RILs. I don&rsquo;t think we ever dispersed the RILs onto sticky paper, but we did have 2 trials onto empty pots (with solitary moms). Script that I used attached, which references the appropriate csv files. [<code>FitDispersal_RILs_30May2016.R</code> (in <code>Arabidopsis/analysis</code>)]</p>
+<p>You also asked about sticky paper data for the RILs. I don't think we ever dispersed the RILs onto sticky paper, but we did have 2 trials onto empty pots (with solitary moms). Script that I used attached, which references the appropriate csv files. [<code>FitDispersal_RILs_30May2016.R</code> (in <code>Arabidopsis/analysis</code>)]</p>
 </blockquote>
-
 <p>I asked</p>
-
 <blockquote>
-<p>It looks like I&rsquo;ve already used &ldquo;2015_06_30_RilsDispersal.csv&rdquo;; I&rsquo;ll add the 2016 data (is there any reason not to combine them?).</p>
+<p>It looks like I've already used &ldquo;2015_06_30_RilsDispersal.csv&rdquo;; I'll add the 2016 data (is there any reason not to combine them?).</p>
 </blockquote>
-
 <p>Jenn replied</p>
-
 <blockquote>
 <p>I don’t recall any reason not to combine the 2015 &amp; 2016 RIL data. That said, when I ran through that script, it definitely looks like you can get a really different set of ranks depending on which data you use. I’ll look in the morning (at my paper notes) to see if there’s anything obviously different about how the data were collected.</p>
 </blockquote>
-
-<p>I think that the RIL data were the ones where I identified some data entry issues when I was in Zurich. I&rsquo;ll need to double check that this file has the corrected data.</p>
+<p>I think that the RIL data were the ones where I identified some data entry issues when I was in Zurich. I'll need to double check that this file has the corrected data.</p>
 
     </div>
   </article>

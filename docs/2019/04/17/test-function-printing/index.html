@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Test function printing - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p>Function printing works as desired if the function is defined within the document. The issue is if it is defined externally, and loaded via <code>source</code>. It appears that if I use <code class="R">options(keep.source = TRUE)</code> before the call to <code>load.project</code> this will be done correctly.</p>
+      
+
+
+<p>Function printing works as desired if the function is defined within the document. The issue is if it is defined externally, and loaded via <code>source</code>. It appears that if I use <code class="R">options(keep.source = TRUE)</code> before the call to <code>load.project</code> this will be done correctly.</p>
 <p>Function setup:</p>
 <pre class="r"><code>myfunc &lt;- function(x, y) {
   # Here&#39;s a function with a comment and custom spacing in the source code

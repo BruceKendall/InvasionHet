@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>A general moment generator - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p>I’m close to having the formulas needed to create an “mgengamma”, allowing us to use the method of moments to fit that distribution. But that doesn’t get us closer to a broader problem: the need to get good start values for truncated distributions, as well as, potentially, bespoke distributions such as 2Dt.</p>
+      
+
+
+<p>I’m close to having the formulas needed to create an “mgengamma”, allowing us to use the method of moments to fit that distribution. But that doesn’t get us closer to a broader problem: the need to get good start values for truncated distributions, as well as, potentially, bespoke distributions such as 2Dt.</p>
 <p>For this, I think I can write a function to generate random numbers under the distribution, then calculate the moments and return them in a form useful to the moment matching algorithm. The trick is to ensure repeatability, which will entail always having the same random seed.</p>
 <p>It could look something like this:</p>
 <pre class="r"><code>mgengamma &lt;- function(order, mu, sigma, Q, seed = 1066, ndraw = 100) {

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Restricting the list of distributions - Project notebook for the Invasion Heterogeneity project</title>
@@ -66,10 +66,8 @@
     
 
     <div class="article-content">
-      <p>I&rsquo;ve just realized that any dispersal distribution that I&rsquo;m actually going to use in the model requires the ability to generate random numbers. Thus, for the &ldquo;custom&rdquo; distributions I&rsquo;d have to write a RNG, which I really don&rsquo;t want to do.</p>
-
+      <p>I've just realized that any dispersal distribution that I'm actually going to use in the model requires the ability to generate random numbers. Thus, for the &ldquo;custom&rdquo; distributions I'd have to write a RNG, which I really don't want to do.</p>
 <p>So I think that means ditching the 2Dt, log-sech, and inverse power models.</p>
-
 <p>If the best fit is a truncated distribution then I might need to write a simple wrapper to discard the truncated bit.</p>
 
     </div>

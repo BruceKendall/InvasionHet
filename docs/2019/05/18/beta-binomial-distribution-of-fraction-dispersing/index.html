@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.29" />
+<meta name="generator" content="Hugo 0.61.0" />
 
 
 <title>Beta-binomial distribution of fraction dispersing - Project notebook for the Invasion Heterogeneity project</title>
@@ -71,7 +71,10 @@
     
 
     <div class="article-content">
-      <p>I never looked at how to calculate the parameters for the fraction dispersing. The trick may be the <code>betabinomial</code> function in the <strong>VGAM</strong> library.</p>
+      
+
+
+<p>I never looked at how to calculate the parameters for the fraction dispersing. The trick may be the <code>betabinomial</code> function in the <strong>VGAM</strong> library.</p>
 <p>The first step is to amalgamate all the dispersing seeds from <code>disperseLer</code>:</p>
 <pre class="r"><code>nondispersers &lt;- subset(disperseLer, Pot == 0, c(&quot;ID&quot;, &quot;Seedlings&quot;))
 dispersers &lt;- filter(disperseLer, Pot == 1) %&gt;% group_by(ID) %&gt;% summarise(dispersers = sum(Seedlings))
