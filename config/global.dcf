@@ -1,4 +1,4 @@
-version: 0.9.0
+version: 0.10.2
 data_loading: TRUE
 cache_loading: TRUE
 recursive_loading: FALSE
@@ -14,3 +14,5 @@ logging_level: INFO
 cache_loaded_data: FALSE
 sticky_variables: NONE
 tables_type: data_frame
+underscore_variables: FALSE
+cache_file_format: RData
