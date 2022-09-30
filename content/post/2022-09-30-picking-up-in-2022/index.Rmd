@@ -18,3 +18,45 @@ One note I made during our conversation was to experiment with allowing all pots
 
 This week I read carefully through `lib/model.R`, which contains `iterate_genotype()` (the function that carries a single genotype forward one time step across all replicates) and its supporting functions (except for a distribution or two). There are some random print statements that suggest I may have still be debugging things; but there are also a bunch of unit tests in `lib/tests.R` that I need to explore (these aren't coded using **testthat**, instead relying on visual inspection of results; perhaps because of the challenge of creating meaningful absolute tests when random numbers are involved).
 
+# Next steps
+Looking back at the the last post from 2019, I see that the single-genotype model was still throwing some errors (item 1). And the code to run the model (e.g., `src/make_Ler_sims.R`) is not documented (item 5). But first, here are my notes on working through the code.
+
+## `model.R` notes
+### Conceptual issues
+* Do we actually have all the parameter values for RIL? E.g, spatial and temporal stochasticity in seed production? I don't see any mention of the latter in the parameter estimation document (and I certainly wasn't thinking about this when I generated RIL density dependence parameters in summer 2015). Actually, I've just looked at the parameter generation code, and I simply assumed that every RIL had the same random effects and variance inflation as Ler. A heroic assumption, but experience with Ler suggests that these details don't matter much.
+* Sometimes the state variable in the data is seeds (e.g., for the dedicated dispersal experiments) and sometimes it is seedlings (e.g., for some/all of the population data). I have treated these interchangeably. Does this matter? I vaguely recall long-ago discussions of germination rates (very high; the Science paper just says "> 95%") and seedling death before they are large enough to be counted (potentially an issue at high densities?) **[Queried Jenn about this]**
+* All `n_rep` runways are subjected to completely correlated temporal environmental stochasticity in seed production, meaning that `n_rep` represents the number of replicate runways *in the greenhouse.* Monte Carlo replication needs to happen at a higher level (in `make_Ler_sims` I called that `nruns`)
+* In the greenhouse, all four landscapes were run simultaneously (and also so for evolving and non-evolving populations). In the simulations, each landscape is run separately, losing the correlation in temporal environmental stochasticity. I think this is ok as long as we are not directly comparing the landscapes. However, this could be an issue for evolving vs. non-evolving, where we might well need to look at pairwise differences (if there's a lot of variability between MC replicates). Thus there may be call for setting up the model to simulate the entire greenhouse. 
+  * This is an even bigger issue for the RIL experiments, for if I follow the current model of iterating each genotype independently, they will get independent temporal stochasticity.
+  * Perhaps the easiest approach is to generate the temporal deviation outside of `iterate_genotype` and pass it in, keeping it fixed for all RILs/landscapes in an indvidual generation and MC rep
+
+### Documentation
+* Add documentation of the inputs and outputs of the helper functions, where they are not obvious
+* Add documentation for `max_pots` and `kernel_stoch_pots` elements of `controls`
+* Add documentation for kernel parameters
+* Simplify description of parameter dimensions in Ler vs. RIL
+* Describe `N_tot`, exactly what `Adults` and `Seeds` represent, and the return value from `iterate_genotype()`. The names are potentially misleading, as seeds become next generation adults, and perhaps neither were directly measured.
+* Fix typos in comments, as well as corrections noted on printout
+* Documentation of `Gompertz_seeds()` doesn't quite get to the equation as used
+* Need better commenting on forward/backward dispersal in `seed_sampling`
+* Need some documentation for `disp_table()`
+
+### Code concerns, inconsistencies, and redundancies
+* There are some commented-out `aperm` statements in `seed_sampling`. Can these be deleted, or was this part of my incomplete debugging work?
+* In `iterate_genotype`, dispersal further than `max_pots` is truncated. However, this only affects the output from `det_kernel`; in `seed_sampling` there's a line that effectively puts all the super-dispersers into the last pot. I think I should delete that line for consistency.
+
+### Code organization
+* `n_reps` and `new_pots` are features of the experimental design, so should really be in `params` rather than `controls`. The same would be for `max_pots` if there is any empirical basis for putting an upper bound on dispersal distance.
+  * Actually, it seems like we really should separate "biological parameters," "experiment parameters," and "model settings." 
+* Helper functions for probability distributions are scattered across `model.R`, `helpers.R` and `dists.R`. They should all be in the latter (and better documented!)
+* Add a `dispersal_buffer()` helper in `combine_dispersed_seeds()`
+
+### Efficiency and clarity
+* When using no kernel stochasticity in `iterate_genotype()`, the parameters are replicated across a large array. This leads to inefficiencies in `det_kernel()` and `seed_sampling()` (unless the generalized gamma functions take parameter vectors, see below). The benefit (which is not trivial) is that the exact same code is being run, whether or not there is kernel sampling.
+* The way that the calculations in `det_kernel` are repeated until the furthest tail gets below 0.5 seems quite inefficient
+* Calls to distribution functions are awkward--I seem to have been assuming that they can't take vectors (or matrices in this case) of parameters. However, some experiments with `rbinom` indicate that, as of October 2020 (the version currently on my iMac), it *could* take parameter matrices (the result comes back as a vector, but reshapes properly using the dimensions of the input matrices). I should check this for gengamma, as this will make the code cleaner and probably faster.
+  * If gengamma doesn't have this capacity, then I should write helper functions so that the code is cleaner
+* The last section of `gapify()` seems redundant to the last section of `combine_dispersed_seeds()`. 
+  * I guess the exception is for an endpoint that would be in a gap. And the cost here is probably small
+* *Before taking any of this on, I should do some profiling to see what if any of this represents a limiting factor*
+
