@@ -1,0 +1,20 @@
+---
+title: Picking up in 2022
+author: Bruce Kendall
+date: '2022-09-30'
+slug: picking-up-in-2022
+categories:
+  - Planning
+tags: []
+---
+
+Last week Jenn Williams got in touch with me again. She wrote:
+
+> I thought again about the project you did looking at variability across the Arabidopsis replicates when I was at a small working group at the Fields Institute this summer (more spread stuff, this time with mathematicians). We had some interesting discussions about how to partition variability in these kinds of experiments, and then I remembered that of course you’d already taken one approach to doing so with the Arabidopsis data. There is a little momentum (although more interest and enthusiasm than anything), and I wondered if you would be interested in getting back into this. I would like to dive back in - on my current hectic teaching term, that means just a little bit now, and then picking up in more seriousness in December and the start of the new year.
+
+I went back to look at where I had left things (way back in Dec. 2019!), and then we had a Zoom call. It turns out that she's been almost as unplugged from new research as I have over the past few years (because of kids and Covid), and is excited to get back into this. She'll be busy teaching until December, than has more time in January (the opposite of me!). We agreed that I would work on getting the code running to re-do the Ler results (from spring 2019) and get new RIL results. I will send intermediate outputs and other updates to Jenn as I go, to have accountability for myself and to keep her engaged.
+
+One note I made during our conversation was to experiment with allowing all pots within a replicate at a given time to have the same kernels; in looking through my code I've found that I have already implemented an (undocumented) switch for this called `kernel_stoch_pots`.
+
+This week I read carefully through `lib/model.R`, which contains `iterate_genotype()` (the function that carries a single genotype forward one time step across all replicates) and its supporting functions (except for a distribution or two). There are some random print statements that suggest I may have still be debugging things; but there are also a bunch of unit tests in `lib/tests.R` that I need to explore (these aren't coded using **testthat**, instead relying on visual inspection of results; perhaps because of the challenge of creating meaningful absolute tests when random numbers are involved).
+
