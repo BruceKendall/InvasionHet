@@ -1,0 +1,102 @@
+---
+title: Picking up in 2022
+author: Bruce Kendall
+date: '2022-09-30'
+slug: picking-up-in-2022
+categories:
+  - Planning
+tags: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>Last week Jenn Williams got in touch with me again. She wrote:</p>
+<blockquote>
+<p>I thought again about the project you did looking at variability across the Arabidopsis replicates when I was at a small working group at the Fields Institute this summer (more spread stuff, this time with mathematicians). We had some interesting discussions about how to partition variability in these kinds of experiments, and then I remembered that of course you’d already taken one approach to doing so with the Arabidopsis data. There is a little momentum (although more interest and enthusiasm than anything), and I wondered if you would be interested in getting back into this. I would like to dive back in - on my current hectic teaching term, that means just a little bit now, and then picking up in more seriousness in December and the start of the new year.</p>
+</blockquote>
+<p>I went back to look at where I had left things (way back in Dec. 2019!), and then we had a Zoom call. It turns out that she’s been almost as unplugged from new research as I have over the past few years (because of kids and Covid), and is excited to get back into this. She’ll be busy teaching until December, than has more time in January (the opposite of me!). We agreed that I would work on getting the code running to re-do the Ler results (from spring 2019) and get new RIL results. I will send intermediate outputs and other updates to Jenn as I go, to have accountability for myself and to keep her engaged.</p>
+<p>One note I made during our conversation was to experiment with allowing all pots within a replicate at a given time to have the same kernels; in looking through my code I’ve found that I have already implemented an (undocumented) switch for this called <code>kernel_stoch_pots</code>.</p>
+<p>This week I read carefully through <code>lib/model.R</code>, which contains <code>iterate_genotype()</code> (the function that carries a single genotype forward one time step across all replicates) and its supporting functions (except for a distribution or two). There are some random print statements that suggest I may have still be debugging things; but there are also a bunch of unit tests in <code>lib/tests.R</code> that I need to explore (these aren’t coded using <strong>testthat</strong>, instead relying on visual inspection of results; perhaps because of the challenge of creating meaningful absolute tests when random numbers are involved).</p>
+<div id="next-steps" class="section level1">
+<h1>Next steps</h1>
+<p>Looking back at the the last post from 2019, I see that the single-genotype model was still throwing some errors (item 1). And the code to run the model (e.g., <code>src/make_Ler_sims.R</code>) is not documented (item 5). But first, here are my notes on working through the code.</p>
+<div id="model.r-notes" class="section level2">
+<h2><code>model.R</code> notes</h2>
+<div id="conceptual-issues" class="section level3">
+<h3>Conceptual issues</h3>
+<ul>
+<li>Do we actually have all the parameter values for RIL? E.g, spatial and temporal stochasticity in seed production? I don’t see any mention of the latter in the parameter estimation document (and I certainly wasn’t thinking about this when I generated RIL density dependence parameters in summer 2015). Actually, I’ve just looked at the parameter generation code, and I simply assumed that every RIL had the same random effects and variance inflation as Ler. A heroic assumption, but experience with Ler suggests that these details don’t matter much.</li>
+<li>Sometimes the state variable in the data is seeds (e.g., for the dedicated dispersal experiments) and sometimes it is seedlings (e.g., for some/all of the population data). I have treated these interchangeably. Does this matter? I vaguely recall long-ago discussions of germination rates (very high; the Science paper just says “&gt; 95%”) and seedling death before they are large enough to be counted (potentially an issue at high densities?) <strong>[Queried Jenn about this]</strong></li>
+<li>All <code>n_rep</code> runways are subjected to completely correlated temporal environmental stochasticity in seed production, meaning that <code>n_rep</code> represents the number of replicate runways <em>in the greenhouse.</em> Monte Carlo replication needs to happen at a higher level (in <code>make_Ler_sims</code> I called that <code>nruns</code>)</li>
+<li>In the greenhouse, all four landscapes were run simultaneously (and also so for evolving and non-evolving populations). In the simulations, each landscape is run separately, losing the correlation in temporal environmental stochasticity. I think this is ok as long as we are not directly comparing the landscapes. However, this could be an issue for evolving vs. non-evolving, where we might well need to look at pairwise differences (if there’s a lot of variability between MC replicates). Thus there may be call for setting up the model to simulate the entire greenhouse.
+<ul>
+<li>This is an even bigger issue for the RIL experiments, for if I follow the current model of iterating each genotype independently, they will get independent temporal stochasticity.</li>
+<li>Perhaps the easiest approach is to generate the temporal deviation outside of <code>iterate_genotype</code> and pass it in, keeping it fixed for all RILs/landscapes in an indvidual generation and MC rep</li>
+</ul></li>
+</ul>
+</div>
+<div id="documentation" class="section level3">
+<h3>Documentation</h3>
+<ul>
+<li>Add documentation of the inputs and outputs of the helper functions, where they are not obvious</li>
+<li>Add documentation for <code>max_pots</code> and <code>kernel_stoch_pots</code> elements of <code>controls</code></li>
+<li>Add documentation for kernel parameters</li>
+<li>Simplify description of parameter dimensions in Ler vs. RIL</li>
+<li>Describe <code>N_tot</code>, exactly what <code>Adults</code> and <code>Seeds</code> represent, and the return value from <code>iterate_genotype()</code>. The names are potentially misleading, as seeds become next generation adults, and perhaps neither were directly measured.</li>
+<li>Fix typos in comments, as well as corrections noted on printout</li>
+<li>Documentation of <code>Gompertz_seeds()</code> doesn’t quite get to the equation as used</li>
+<li>Need better commenting on forward/backward dispersal in <code>seed_sampling</code></li>
+<li>Need some documentation for <code>disp_table()</code></li>
+</ul>
+</div>
+<div id="code-concerns-inconsistencies-and-redundancies" class="section level3">
+<h3>Code concerns, inconsistencies, and redundancies</h3>
+<ul>
+<li>There are some commented-out <code>aperm</code> statements in <code>seed_sampling</code>. Can these be deleted, or was this part of my incomplete debugging work?</li>
+<li>In <code>iterate_genotype</code>, dispersal further than <code>max_pots</code> is truncated. However, this only affects the output from <code>det_kernel</code>; in <code>seed_sampling</code> there’s a line that effectively puts all the super-dispersers into the last pot. I think I should delete that line for consistency.</li>
+</ul>
+</div>
+<div id="code-organization" class="section level3">
+<h3>Code organization</h3>
+<ul>
+<li><code>n_reps</code> and <code>new_pots</code> are features of the experimental design, so should really be in <code>params</code> rather than <code>controls</code>. The same would be for <code>max_pots</code> if there is any empirical basis for putting an upper bound on dispersal distance.
+<ul>
+<li>Actually, it seems like we really should separate “biological parameters,” “experiment parameters,” and “model settings.”</li>
+</ul></li>
+<li>Helper functions for probability distributions are scattered across <code>model.R</code>, <code>helpers.R</code> and <code>dists.R</code>. They should all be in the latter (and better documented!)</li>
+<li>Add a <code>dispersal_buffer()</code> helper in <code>combine_dispersed_seeds()</code></li>
+</ul>
+</div>
+<div id="efficiency-and-clarity" class="section level3">
+<h3>Efficiency and clarity</h3>
+<ul>
+<li>When using no kernel stochasticity in <code>iterate_genotype()</code>, the parameters are replicated across a large array. This leads to inefficiencies in <code>det_kernel()</code> and <code>seed_sampling()</code> (unless the generalized gamma functions take parameter vectors, see below). The benefit (which is not trivial) is that the exact same code is being run, whether or not there is kernel sampling.</li>
+<li>The way that the calculations in <code>det_kernel</code> are repeated until the furthest tail gets below 0.5 seems quite inefficient</li>
+<li>Calls to distribution functions are awkward–I seem to have been assuming that they can’t take vectors (or matrices in this case) of parameters. However, some experiments with <code>rbinom</code> indicate that, as of October 2020 (the version currently on my iMac), it <em>could</em> take parameter matrices (the result comes back as a vector, but reshapes properly using the dimensions of the input matrices). I should check this for gengamma, as this will make the code cleaner and probably faster.
+<ul>
+<li>If gengamma doesn’t have this capacity, then I should write helper functions so that the code is cleaner</li>
+</ul></li>
+<li>The last section of <code>gapify()</code> seems redundant to the last section of <code>combine_dispersed_seeds()</code>.
+<ul>
+<li>I guess the exception is for an endpoint that would be in a gap. And the cost here is probably small</li>
+</ul></li>
+<li><em>Before taking any of this on, I should do some profiling to see what if any of this represents a limiting factor</em></li>
+</ul>
+</div>
+</div>
+<div id="general-housecleaning" class="section level2">
+<h2>General housecleaning</h2>
+<ul>
+<li>Update to current versions of R in both my iMac and MacBook. This will certainly require migrating the ProjectTemplate material (it is already throwing warnings); the real question is whether all the data munging will still work at all</li>
+<li>At some point blogdown moved to a new structure where each post has its own folder and the Rmd is named “index.Rmd”, This is annoying, especially if I’m looking at source from previous posts! And also it creates unneccsary folder bloat, given the simplicity of my work. I recall seeing a way to revert this (I think I ran into it previously with the coral project)–I need to do this.</li>
+</ul>
+</div>
+<div id="debugging" class="section level2">
+<h2>Debugging</h2>
+<ul>
+<li>When I try to run <code>make_Ler_sims</code> I get an Rcpp error thrown from deep within <code>rgengamma</code>. I don’t think it’s anything to do with my code; I’m sending in reasonable values. I hope that updating everything will fix this.</li>
+<li>There are some comprehensive (though undocumented) test routines that I had written in <code>tests.R</code>, that exercise the various functions in <code>model.R</code>. When running the first one, <code>test_kernel_stoch()</code>, I noticed that the sample means and covariances for the parameters generated from the multivariate normal exactly match the input values. I had used the <code>empirical = TRUE</code> flag, as from the help for <code>mvrnorm</code> that seemed like the thing to do. But that forces this rescaling, which is not what I want. The function is from <strong>MASS</strong>, but Venables &amp; Ripley say nothing about it; I can only imagine it has value in preserving structure in some bootstrapping applications. At any rate, I need to take that out.</li>
+</ul>
+</div>
+</div>
