@@ -60,3 +60,7 @@ Looking back at the the last post from 2019, I see that the single-genotype mode
   * I guess the exception is for an endpoint that would be in a gap. And the cost here is probably small
 * *Before taking any of this on, I should do some profiling to see what if any of this represents a limiting factor*
 
+## General housecleaning
+* Update to current versions of R in both my iMac and MacBook. This will certainly require migrating the ProjectTemplate material (it is already throwing warnings); the real question is whether all the data munging will still work at all
+* At some point blogdown moved to a new structure where each post has its own folder and the Rmd is named "index.Rmd", This is annoying, especially if I'm looking at source from previous posts! And also it creates unneccsary folder bloat, given the simplicity of my work. I recall seeing a way to revert this (I think I ran into it previously with the coral project)--I need to do this.
+
