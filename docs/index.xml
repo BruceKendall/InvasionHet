@@ -6,7 +6,7 @@
     <description>Recent content on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 11 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 30 Sep 2022 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://brucekendall.github.io/InvasionHet/index.xml" rel="self" type="application/rss+xml" />
     
@@ -20,6 +20,16 @@
       <description>I&#39;m trying out blogdown (https://bookdown.org/yihui/blogdown/) for serving up the project notebook. Advantages:
  Rebuilds only update changed files Dialog box for creating new posts Automatically shows posts in date order, presumably even if they&#39;ve been edited Might be possible to automate serving it up on the github page, so Jenn can just look at it in a web browser  (Potential) Disadvantages:
  Whole new file structure to figure out (in particular, I may have to modify the knitr option for setting the working directory, which was based on a relative path) Presumably I can set up the post creation script to include my ProjectTemplate preamble, but that will take work/trial and error I will have to figure out how caching works with this.</description>
+    </item>
+    
+    <item>
+      <title>Picking up in 2022</title>
+      <link>https://brucekendall.github.io/InvasionHet/2022/09/30/picking-up-in-2022/</link>
+      <pubDate>Fri, 30 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/2022/09/30/picking-up-in-2022/</guid>
+      <description>Last week Jenn Williams got in touch with me again. She wrote:
+ I thought again about the project you did looking at variability across the Arabidopsis replicates when I was at a small working group at the Fields Institute this summer (more spread stuff, this time with mathematicians). We had some interesting discussions about how to partition variability in these kinds of experiments, and then I remembered that of course you’d already taken one approach to doing so with the Arabidopsis data.</description>
     </item>
     
     <item>
