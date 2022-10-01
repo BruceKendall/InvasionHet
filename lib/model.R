@@ -117,7 +117,7 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
       gg_Q            = array(params$gg_Q,            array_dim)
     )
   }
-  print(unlist(kernel_params))
+  # print(unlist(kernel_params))
   # Seed sampling?
   if (controls$seed_sampling) {
     dispersed_seeds_by_pot <- seed_sampling(Seeds, kernel_params, params, controls)
@@ -401,9 +401,9 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots, runway_end) {
       }
     }
     # Truncate the all-zero columns to keep dimensions under control
-    tot_seed_by_pot <- colSums(disp_seeds)
-    max_dist <- max(seq_along(tot_seed_by_pot)[tot_seed_by_pot>0])
-    disp_seeds <- disp_seeds[, 1:max_dist]
+    # tot_seed_by_pot <- colSums(disp_seeds)
+    # max_dist <- max(seq_along(tot_seed_by_pot)[tot_seed_by_pot>0])
+    # disp_seeds <- disp_seeds[, 1:max_dist]
     
     return(disp_seeds)
   })
