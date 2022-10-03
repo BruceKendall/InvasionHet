@@ -26,3 +26,15 @@ Here's where I'll keep a running tab of the incremental code updates and fixes
 I've fixed the error thrown when trying to evalueate the furthest occupied pot in an extinct replicate. This uses a new function, `last_occupied_pot()`, in `helpers.R`, which is called from within the model function but can also be called from the analysis code (see example usage in `make_Ler_sims.R`). The optional argument `zero` allows the return value for an empty replicate to be something other than zero (to avoid the risk of zero-index values).
 
 I ran `make_Ler_sims` successfully, and the warnings indicated that it ran into 26 instances of an extinct replicate.
+
+## Code profiling
+I've profiled the model using `make_Ler_sims`. The results are in `logs/make_Ler_sims-2022-10-03.Rprofvis` (not on git as it's large!)
+
+* Total time in `iterage_genotype()`: 139300 ms
+* The bulk of that is in `seed_sampling()`: 134360
+* Within that, the bulk is in the `aaply` call to `rgengamma` (25k), and the `aaply`s to `disp_table` (50k each)
+* Within `dist_table()`, 75k is in the line `raw_table <- table(dists)`. This is more than half the total time!
+
+So the first thing to do is to find a faster replacement for `table`. [This StackOverflow page](https://stackoverflow.com/questions/68604367/is-there-an-efficient-alternative-to-table) suggests that `tabulate()` (in base R) is about 14 times faster than `table()`, which would bring this operation down to 5-6k ms. According to the help page, "tabulate is the workhorse for the table function." So the time is spent in all the robustness of table. It may take some work to figure out exactly how to call tabulate.
+
+Note that this is not one of the issues I flagged in my manual code review!
