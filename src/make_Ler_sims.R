@@ -28,8 +28,7 @@ sim_mean_var <- function() {
   } else {
     rep_sum <- t(rep_sum)[, npot:1]
   }
-  maxd <- apply(rep_sum, 1, function(x) max((1:length(x))[x > 0]))
-  maxd <- maxd[is.finite(maxd)]
+  maxd <- last_occupied_pot(Adults, zero = 0)
   #result <- c(mean(maxd), var(maxd))
   #names(result) <- c("Mean", "Variance")
   #result

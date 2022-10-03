@@ -81,7 +81,7 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
   if (is.null(controls$max_pots)) controls$max_pots <- 10
   
   #### SET LENGTH OF EACH RUNWAY ####
-  farthest_adult <- apply(Adults, 1, function(y) max(seq_along(y)[y>0]))
+  farthest_adult <- last_occupied_pot(Adults, zero = 1) 
   runway_end <- farthest_adult + controls$new_pots
   
   #### SEED PRODUCTION ####
@@ -401,9 +401,10 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots, runway_end) {
       }
     }
     # Truncate the all-zero columns to keep dimensions under control
-    # tot_seed_by_pot <- colSums(disp_seeds)
-    # max_dist <- max(seq_along(tot_seed_by_pot)[tot_seed_by_pot>0])
-    # disp_seeds <- disp_seeds[, 1:max_dist]
+    tot_seed_by_pot <- colSums(disp_seeds)
+    max_dist <- max(seq_along(tot_seed_by_pot)[tot_seed_by_pot>0])
+    if(is.infinite((max_dist))) max_dist <- 1
+    disp_seeds <- disp_seeds[, 1:max_dist]
     
     return(disp_seeds)
   })
@@ -429,3 +430,4 @@ gapify <- function(Seeds, params, controls) {
   
   Seeds[, rep_sum > 0, drop = FALSE]
 }
+

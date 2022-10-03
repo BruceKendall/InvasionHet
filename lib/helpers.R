@@ -230,3 +230,19 @@ start_gengamma <- function(x, truncated = FALSE) {
   
   return(start_pars)
 }
+
+
+########################################################################################
+# Calculate the vector of occupied runway lengths
+# Adults is a matrix with each row being a replicate and each column being a pot
+# zero determines the value to return when all pots are empty. This should be 0 (the 
+#   default) when calculating spread statistics, but should be set to 1 when called
+#   from within the model (to avoid indexing errors)
+#
+# Returns a vector of length nrow(Adults) containing the index of the furthest 
+#   occupied pot for each replicate
+last_occupied_pot <- function(Adults, zero = 0) {
+  x <- apply(Adults, 1, function(y) max(seq_along(y)[y>0]))
+  x[is.infinite(x)] <- zero
+  x
+}

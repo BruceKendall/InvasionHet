@@ -1,0 +1,28 @@
+---
+title: October updates
+author: Bruce Kendall
+date: '2022-10-03'
+slug: october-updates
+categories:
+  - Code development
+tags: []
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+
+Here's where I'll keep a running tab of the incremental code updates and fixes
+
+# Oct 3
+## Fixed empty runway bug
+I've fixed the error thrown when trying to evalueate the furthest occupied pot in an extinct replicate. This uses a new function, `last_occupied_pot()`, in `helpers.R`, which is called from within the model function but can also be called from the analysis code (see example usage in `make_Ler_sims.R`). The optional argument `zero` allows the return value for an empty replicate to be something other than zero (to avoid the risk of zero-index values).
+
+I ran `make_Ler_sims` successfully, and the warnings indicated that it ran into 26 instances of an extinct replicate.
