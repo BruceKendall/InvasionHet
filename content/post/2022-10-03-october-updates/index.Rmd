@@ -38,3 +38,9 @@ I've profiled the model using `make_Ler_sims`. The results are in `logs/make_Ler
 So the first thing to do is to find a faster replacement for `table`. [This StackOverflow page](https://stackoverflow.com/questions/68604367/is-there-an-efficient-alternative-to-table) suggests that `tabulate()` (in base R) is about 14 times faster than `table()`, which would bring this operation down to 5-6k ms. According to the help page, "tabulate is the workhorse for the table function." So the time is spent in all the robustness of table. It may take some work to figure out exactly how to call tabulate.
 
 Note that this is not one of the issues I flagged in my manual code review!
+
+# Oct 4
+## Code profiling
+I've changed `disp_table()` to use `tabulate` rather than `table`, and confirmed that they return the same results. Microbenchmarking (see `test_disp_table()`) suggests that there is a 100-fold speedup in that function!
+
+Profiling `make_Ler_sims.R` with this change now speeds things up a lot (make_Ler_sims-2022-10-04.Rprofvis). About half of the total time is in calculating the gengamma random numbers, which doesn't make use of the internal vectorizing, instead using `aaply` to go across parameters. Table building now takes about 40% of total time, but less than 10% of that seems to be actually inside `disp_table`; apparently `aaply` has a huge performance overhead! It seems that the base `apply` may be much faster, but I wonder whether the bugs I was trapping by using `.drop = FALSE` will reappear. It might also be that those commented-our `aperm` statments were applied to an earlier attempt at using `apply`.

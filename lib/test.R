@@ -151,6 +151,53 @@ test_seed_sampling <- function() {
   print(d3)
 }
 
+test_disp_table <- function(nseed = 1000, npot = 3, nrep1 = 2, nrep2 = 100000, 
+                            max_dist = 10, profile = TRUE) {
+  kernel_params <- list(frac_dispersing = 0.75,
+                        gg_mu = 1.5,
+                        gg_sigma = 0.75,
+                        gg_Q = 1)
+
+  # Test whether the methods give the same result
+  ngg <- array(c(matrix(nseed, nrow = nrep1, ncol = npot), 
+                 rep(unlist(kernel_params), each = nrep1 * npot)), 
+               dim = c(nrep1, npot, 5))
+  
+  dists <- round(aaply(ngg, c(1,2), 
+                  function(x) rgengamma(x[1], x[3], x[4], x[5]), .drop = FALSE))
+
+  cat("The next two results should be identical.\n")
+  cat("\nUsing method 'table':")
+  dist_vec_table <- aaply(dists, 1, disp_table, 
+                          max_dist = max(dists), method = "table", .drop = FALSE)
+  print(dist_vec_table)
+  
+  cat("\nUsing method 'tabulate':")
+  dist_vec_tabulate <- aaply(dists, 1, disp_table, 
+                          max_dist = max(dists), method = "tabulate", .drop = FALSE)
+  print(dist_vec_tabulate)
+  
+  if (profile) {
+    # Benchmark the two methods
+    # ngg <- array(c(matrix(nseed, nrow = nrep2, ncol = npot), 
+    #                rep(unlist(kernel_params), each = nrep2 * npot)), 
+    #              dim = c(nrep1, npot, 5))
+    # 
+    # dists <- round(aaply(ngg, c(1,2), 
+    #                      function(x) rgengamma(x[1], x[3], x[4], x[5]), .drop = FALSE))
+    dists <- dists[1,,]
+    max_dist <- max(dists)
+    run_disp_table <- function(method, dists = dists, max_dist = max_dist) {
+      disp_table( dists, max_dist, method ) 
+    }
+    res <- microbenchmark::microbenchmark(disp_table(dists,max_dist,"tabulate"),
+                                          disp_table(dists,max_dist,"table")
+            )
+    print(res)
+    
+  }
+}
+
 test_combine_dispersed_seeds <- function(n_rep = 2, n_pot = 3, max_dist = 4) {
   xy <- n_rep * n_pot
   xyz <- xy * max_dist

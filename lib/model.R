@@ -339,10 +339,10 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   max_dist <- max(c(disp_forward, disp_backward)) # farthest dispersing seed
   # Tabulate the number at each distance
   forward_dispersal <- aaply(disp_forward, c(1, 2), disp_table, 
-                             max_dist = max_dist, .drop = FALSE) #%>%
+                             max_dist = max_dist, method = "tabulate", .drop = FALSE) #%>%
  #   aperm(c(1, 3, 2))
   backward_dispersal <- aaply(disp_backward, c(1, 2), disp_table, 
-                              max_dist = max_dist, .drop = FALSE) #%>%
+                              max_dist = max_dist, method = "tabulate", .drop = FALSE) #%>%
  #   aperm(c(1, 3, 2))
   
   return(list(home_pot = home_pot, 
@@ -351,14 +351,19 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
               max_dist = max_dist))
 }
 
-disp_table <- function(dists, max_dist) {
-  raw_table <- table(dists)
-  if (names(raw_table)[1] == "0") { # Drop the zeros, if any
-    raw_table <- raw_table[-1]
+disp_table <- function(dists, max_dist, method = "table") {
+  dist_counts <- numeric(max_dist)
+  if (method == "table") {
+    raw_table <- table(dists)
+    if (names(raw_table)[1] == "0") { # Drop the zeros, if any
+      raw_table <- raw_table[-1]
+    }
+    dist_vals <- as.numeric(names(raw_table))
+    dist_counts[dist_vals] <- raw_table
+  } else if (method == "tabulate") {
+    raw_table <- tabulate(dists)
+    dist_counts[1:length(raw_table)] <- raw_table
   }
-  dist_vals <- as.numeric(names(raw_table))
-  dist_counts <- numeric(max_dist+1)
-  dist_counts[dist_vals] <- raw_table
   return(dist_counts)
 }
 
