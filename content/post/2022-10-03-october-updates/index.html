@@ -1,0 +1,43 @@
+---
+title: October updates
+author: Bruce Kendall
+date: '2022-10-03'
+slug: october-updates
+categories:
+  - Code development
+tags: []
+---
+
+
+
+<pre><code>Warning in options(stringsAsFactors = config$as_factors):
+&#39;options(stringsAsFactors = TRUE)&#39; is deprecated and will be disabled</code></pre>
+<p>Here’s where I’ll keep a running tab of the incremental code updates and fixes</p>
+<div id="oct-3" class="section level1">
+<h1>Oct 3</h1>
+<div id="fixed-empty-runway-bug" class="section level2">
+<h2>Fixed empty runway bug</h2>
+<p>I’ve fixed the error thrown when trying to evalueate the furthest occupied pot in an extinct replicate. This uses a new function, <code>last_occupied_pot()</code>, in <code>helpers.R</code>, which is called from within the model function but can also be called from the analysis code (see example usage in <code>make_Ler_sims.R</code>). The optional argument <code>zero</code> allows the return value for an empty replicate to be something other than zero (to avoid the risk of zero-index values).</p>
+<p>I ran <code>make_Ler_sims</code> successfully, and the warnings indicated that it ran into 26 instances of an extinct replicate.</p>
+</div>
+<div id="code-profiling" class="section level2">
+<h2>Code profiling</h2>
+<p>I’ve profiled the model using <code>make_Ler_sims</code>. The results are in <code>logs/make_Ler_sims-2022-10-03.Rprofvis</code> (not on git as it’s large!)</p>
+<ul>
+<li>Total time in <code>iterage_genotype()</code>: 139300 ms</li>
+<li>The bulk of that is in <code>seed_sampling()</code>: 134360</li>
+<li>Within that, the bulk is in the <code>aaply</code> call to <code>rgengamma</code> (25k), and the <code>aaply</code>s to <code>disp_table</code> (50k each)</li>
+<li>Within <code>dist_table()</code>, 75k is in the line <code>raw_table &lt;- table(dists)</code>. This is more than half the total time!</li>
+</ul>
+<p>So the first thing to do is to find a faster replacement for <code>table</code>. <a href="https://stackoverflow.com/questions/68604367/is-there-an-efficient-alternative-to-table">This StackOverflow page</a> suggests that <code>tabulate()</code> (in base R) is about 14 times faster than <code>table()</code>, which would bring this operation down to 5-6k ms. According to the help page, “tabulate is the workhorse for the table function.” So the time is spent in all the robustness of table. It may take some work to figure out exactly how to call tabulate.</p>
+<p>Note that this is not one of the issues I flagged in my manual code review!</p>
+</div>
+</div>
+<div id="oct-4" class="section level1">
+<h1>Oct 4</h1>
+<div id="code-profiling-1" class="section level2">
+<h2>Code profiling</h2>
+<p>I’ve changed <code>disp_table()</code> to use <code>tabulate</code> rather than <code>table</code>, and confirmed that they return the same results. Microbenchmarking (see <code>test_disp_table()</code>) suggests that there is a 100-fold speedup in that function!</p>
+<p>Profiling <code>make_Ler_sims.R</code> with this change now speeds things up a lot (make_Ler_sims-2022-10-04.Rprofvis). About half of the total time is in calculating the gengamma random numbers, which doesn’t make use of the internal vectorizing, instead using <code>aaply</code> to go across parameters. Table building now takes about 40% of total time, but less than 10% of that seems to be actually inside <code>disp_table</code>; apparently <code>aaply</code> has a huge performance overhead! It seems that the base <code>apply</code> may be much faster, but I wonder whether the bugs I was trapping by using <code>.drop = FALSE</code> will reappear. It might also be that those commented-out <code>aperm</code> statements were applied to an earlier attempt at using <code>apply</code>.</p>
+</div>
+</div>
