@@ -237,7 +237,7 @@ kernel_stoch <- function(params, controls) {
       ndraw <- n_reps
     }
     fd_draws <- rbeta2(ndraw, frac_dispersing, fd_sdev)
-    mv_draws <- mvrnorm(ndraw, c(gg_mu, gg_sigma, gg_Q), gg_cov, empirical = TRUE)
+    mv_draws <- mvrnorm(ndraw, c(gg_mu, gg_sigma, gg_Q), gg_cov)
     array_dim <- c(n_reps, n_pots)
     kernel_params <- list(
       frac_dispersing = matrix(fd_draws, n_reps, n_pots, byrow = FALSE),
@@ -250,8 +250,8 @@ kernel_stoch <- function(params, controls) {
     neg_sigma <- sum(kernel_params$gg_sigma <= 0)
     while(neg_sigma > 0) {
       indx <- kernel_params$gg_sigma <= 0
-      new_rvs <- mvrnorm(neg_sigma + 3, c(gg_mu, gg_sigma, gg_Q), gg_cov, 
-                         empirical = TRUE)[-(1:3), , drop = FALSE]
+      new_rvs <- mvrnorm(neg_sigma + 3, c(gg_mu, gg_sigma, gg_Q), gg_cov)[-(1:3), , 
+                                                                          drop = FALSE]
       kernel_params$gg_mu[indx] <- new_rvs[, 1]
       kernel_params$gg_sigma[indx] <- new_rvs[, 2]
       kernel_params$gg_Q[indx] <- new_rvs[, 3]
