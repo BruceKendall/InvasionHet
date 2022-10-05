@@ -53,3 +53,83 @@ I found the code to revert blogdown posts to their old structure, and added it t
 
 ## Bugs
 I removed the `empirical = TRUE` arguments to `mvrnorm()`.
+
+## Efficiency
+Let's look at replacing `aaply` with `apply`. Things to check include the shape of the returned function and what happens to dimensions with value 1. The output uses up lots of space so I don't show it; the comments below summarize the results of running the code.
+```{r test_apply1, cache=TRUE, eval=FALSE}
+xx <- array(1:24, dim = c(3,4,2))
+# Scalar function return
+y1 <- aaply(xx, c(1,2), sum)
+y2 <- apply(xx, c(1,2), sum)
+y1
+y2
+class(y1)
+class(y2)
+# Vector function return
+y1 <- aaply(xx, c(1,2), function(x) c(sum(x), prod(x)))
+y2 <- apply(xx, c(1,2), function(x) c(sum(x), prod(x)))
+y1
+y2
+aperm(y2, c(2, 3, 1))
+class(y1)
+class(y2)
+
+xx <- array(1:8, dim = c(1,4,2))
+xx
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)), .drop = FALSE)
+apply(xx, c(1,2), function(x) c(sum(x), prod(x))) %>% aperm(c(2, 3, 1))
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)))
+
+xx <- array(1:8, dim = c(4,1,2))
+xx
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)), .drop = FALSE)
+apply(xx, c(1,2), function(x) c(sum(x), prod(x))) %>% aperm(c(2, 3, 1))
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)))
+
+xx <- array(1:8, dim = c(2,4,1))
+xx
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)), .drop = FALSE)
+apply(xx, c(1,2), function(x) c(sum(x), prod(x))) %>% aperm(c(2, 3, 1))
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)))
+```
+
+* When the function returns a scalar, the outcomes are the same, except that rows and columns from `apply` are unnamed. The latter should not be an issue for me.
+* When the function returns a vector, that vector is put into the leading dimension of the returned array by `apply`, whereas it remains in its original position under `aaply`. This is clearly why I had those `aperm` statements.
+* When one of the dimensions being parsed has value 1, then `aaply` with the defaults drops a dimension. But `apply` by itself seems fine.
+
+So it seems that `apply %>% aperm` should be a drop-in replacement for `aaply(.drop = FALSE)`. So why did I make the switch in the first place? Was I just trying to be modern, or does `aaply` have some other advantage? I made the change on 5/29/19, in a commit that has massive numbers of code updates, with no comments on individual changes. It may just be that I liked the elegance of skipping the `aperm` step.
+
+I've tried adding the apply version back in (I had to fix the order of indices in aperm); compared with aaply, it's about 2.5 times faster. It's still the case that most of that time is in the overhead. `apply` has a lot of cases, but if I've parsed it correctly, in my use case it's doing a `for` loop over the nreps x npots cases. Further, rather than calling the function directly in that loop, it's calling something called `forceAndCall` which is trapping for closures, which may add more time. And it's hard to know how much is being added by aperm. [This post](https://stackoverflow.com/questions/32237923/plyraaply-is-very-slow-compared-to-nested-loops) suggests that apply is as fast as a for loop, but the system times were very crude (0.02 sec vs. 0.00 sec). I run a microbenchmark based on their example:
+```{r test_apply2, cache=TRUE, eval=FALSE}
+obs <- array(rnorm(10*13*12), c(10,13,12))
+floop <- function(obs) {
+  l2 = dim(obs)[2] 
+  l3 = dim(obs)[3]
+  minObs<-matrix(nrow=dim(obs)[2],ncol=dim(obs)[3])
+  for (i in 1:l2) 
+    for (j in 1:l3) 
+      minObs[i,j]<-min(obs[,i,j],na.rm = TRUE)
+  return(minObs)
+}
+mbm <- microbenchmark(aaply(obs, c(2,3), min), floop(obs), apply(obs, c(2,3), min))
+```
+```
+Unit: microseconds
+                     expr       min        lq       mean     median        uq       max neval
+ aaply(obs, c(2, 3), min) 26991.818 27617.330 29557.6689 29839.2335 30930.627 35212.618   100
+               floop(obs)   219.243   245.001   285.7647   264.8650   303.561   439.593   100
+ apply(obs, c(2, 3), min)   281.425   317.083   353.9656   341.7015   372.688   573.770   100
+```
+In this case, there's only a 20% speedup of the for loop vs apply. So maybe it's in the aperm call?
+```{r test_aperm, cache=TRUE, eval=FALSE}
+mbm2 <- microbenchmark(apply(obs, c(2,3), min), apply(obs, c(2,3), min) %>% aperm(c(2,1)))
+```
+```
+Unit: microseconds
+                                        expr     min       lq     mean  median       uq     max neval
+                    apply(obs, c(2, 3), min) 273.826 288.7125 324.2954 299.926 339.1565 482.853   100
+ apply(obs, c(2, 3), min) %>% aperm(c(2, 1)) 293.200 310.4655 345.1462 324.005 343.2050 554.648   100
+```
+Here there's basically no difference. So the overhead is all in the for loop, and we probably can't get away from it without working out a direct vectorization. But it is curious that the speedup from aaply to apply in the microbenchmark is so much greater than it is in the profile. 
+
+At any rate, I finalize the code with apply and aperm.

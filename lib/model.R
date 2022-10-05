@@ -338,12 +338,12 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   print(c(max(disp_backward), max(disp_forward)))
   max_dist <- max(c(disp_forward, disp_backward)) # farthest dispersing seed
   # Tabulate the number at each distance
-  forward_dispersal <- aaply(disp_forward, c(1, 2), disp_table, 
-                             max_dist = max_dist, method = "tabulate", .drop = FALSE) #%>%
- #   aperm(c(1, 3, 2))
-  backward_dispersal <- aaply(disp_backward, c(1, 2), disp_table, 
-                              max_dist = max_dist, method = "tabulate", .drop = FALSE) #%>%
- #   aperm(c(1, 3, 2))
+  forward_dispersal <- apply(disp_forward, c(1, 2), disp_table, 
+                             max_dist = max_dist, method = "tabulate") %>%
+     aperm(c(2, 3, 1))
+  backward_dispersal <- apply(disp_backward, c(1, 2), disp_table, 
+                              max_dist = max_dist, method = "tabulate") %>%
+     aperm(c(2, 3, 1))
   
   return(list(home_pot = home_pot, 
               forward_dispersal = forward_dispersal,
