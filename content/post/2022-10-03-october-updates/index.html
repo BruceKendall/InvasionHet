@@ -41,3 +41,15 @@ tags: []
 <p>Profiling <code>make_Ler_sims.R</code> with this change now speeds things up a lot (make_Ler_sims-2022-10-04.Rprofvis). About half of the total time is in calculating the gengamma random numbers, which doesn’t make use of the internal vectorizing, instead using <code>aaply</code> to go across parameters. Table building now takes about 40% of total time, but less than 10% of that seems to be actually inside <code>disp_table</code>; apparently <code>aaply</code> has a huge performance overhead! It seems that the base <code>apply</code> may be much faster, but I wonder whether the bugs I was trapping by using <code>.drop = FALSE</code> will reappear. It might also be that those commented-out <code>aperm</code> statements were applied to an earlier attempt at using <code>apply</code>.</p>
 </div>
 </div>
+<div id="oct-5" class="section level1">
+<h1>Oct 5</h1>
+<div id="general" class="section level2">
+<h2>General</h2>
+<p>I updated my home mac to R 4.4.1, and updated all libraries.</p>
+<p>I found the code to revert blogdown posts to their old structure, and added it to the project’s <code>.Rprofile</code>. I also added the option not to automatically rebuild the website every time a file is saved, as that is problematic if there are code errors and also takes nontrivial time with the (uncached) ProjectTemplate loading.</p>
+</div>
+<div id="bugs" class="section level2">
+<h2>Bugs</h2>
+<p>I removed the <code>empirical = TRUE</code> arguments to <code>mvrnorm()</code>.</p>
+</div>
+</div>
