@@ -326,10 +326,10 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   # Generate a vector of seed-specific dispersal distances for each pot/rep.
   # To get conformable dimensions, pad results for pots w/ less than max_ds 
   # seeds with zeros
-  disp_dist <- aaply(ngg, c(1,2), 
+  disp_dist <- apply(ngg, c(1,2), 
                      function(x) c(rgengamma(x[1], x[3], x[4], x[5]), 
-                                   rep(0, times = max_ds - x[1] + 1)), .drop = FALSE) #%>%
- #   aperm(c(2, 3, 1)) # apply puts the calculated value in the first dim
+                                   rep(0, times = max_ds - x[1] + 1))) %>%
+     aperm(c(2, 3, 1)) # apply puts the calculated value in the first dim
   disp_dist[disp_dist > controls$max_pots * controls$pot_width] <- controls$max_pots * controls$pot_width
   # Distribute seeds into forward and backward dispersal, and rescale distance to pots
   forward_draw <- rbernoulli(prod(dim(disp_dist)))

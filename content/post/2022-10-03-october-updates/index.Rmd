@@ -133,3 +133,7 @@ Unit: microseconds
 Here there's basically no difference. So the overhead is all in the for loop, and we probably can't get away from it without working out a direct vectorization. But it is curious that the speedup from aaply to apply in the microbenchmark is so much greater than it is in the profile. 
 
 At any rate, I finalize the code with apply and aperm.
+
+# Oct 10
+## Efficiency
+I just profiled `apply` vs `aaply` for the random number generation, and the former takes about half as long. So I'll go with that.
