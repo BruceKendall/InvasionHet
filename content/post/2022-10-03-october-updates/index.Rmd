@@ -137,3 +137,5 @@ At any rate, I finalize the code with apply and aperm.
 # Oct 10
 ## Efficiency
 I just profiled `apply` vs `aaply` for the random number generation, and the former takes about half as long. So I'll go with that.
+
+Next, I compared a single call to rgengamma with a long vector of parameters to the apply call. Even with for loops before and after to simulate preparing and parsing the data, there was more than a 10-fold speedup (see `test_rgengamma()`). So it seems worthwhile to pursue this.

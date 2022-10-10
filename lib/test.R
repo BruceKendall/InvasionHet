@@ -260,3 +260,26 @@ test_iterate_genotype <- function(n_gens = 6, n_init = 10, nreps = 3, ES_seeds =
     print(Adults)
   }
 }
+
+test_rgengamma <- function(n=10, nn=1000) {
+    mu = 1.5
+    sigma = 0.75
+    Q = 1
+  
+  f1 <- function(nn, n, mu, sigma, Q) {
+    x <- matrix(c(n, mu, sigma, Q), nn, 4, byrow = TRUE)
+    z <- apply(x, 1, function(x) rgengamma(x[1], x[2], x[3], x[4]))
+    #print(dim(z))
+    NULL
+  }
+  f2 <- function(nn, n, mu, sigma, Q) {
+    for (i in 1:nn) x <- 1:n
+    z <- rgengamma(n*nn, rep(mu, n*nn), rep(sigma, n*nn), rep(Q, n*nn))
+    #print(length(z))
+    for (i in 1:nn) x <- 1:n
+    NULL
+  }
+  microbenchmark::microbenchmark(
+  f1(nn, n, mu, sigma, Q),
+  f2(nn, n, mu, sigma, Q))
+}
