@@ -139,3 +139,14 @@ At any rate, I finalize the code with apply and aperm.
 I just profiled `apply` vs `aaply` for the random number generation, and the former takes about half as long. So I'll go with that.
 
 Next, I compared a single call to rgengamma with a long vector of parameters to the apply call. Even with for loops before and after to simulate preparing and parsing the data, there was more than a 10-fold speedup (see `test_rgengamma()`). So it seems worthwhile to pursue this.
+
+Haven't quite gotten there, but here are some code snippets that point where I'm heading:
+```{r test_GG, eval=FALSE}
+disp_seeds <- matrix(c(5, 4, 0, 2, 10, 3), nrow = 2, byrow = TRUE)
+QQ <- matrix(1:6, nrow = 2, byrow = TRUE)
+x <- array(c(disp_seeds, QQ), dim = c(2,3,2))
+y <- unlist(apply(x, c(1,2), function(x) rep(x[2], x[1]), simplify = FALSE))
+max_ds <- max(disp_seeds) # to set the array dimension to pad to
+yy <- array(0, dim = c(2,3,max_ds))
+```
+Then a double for loop to fill in appropriate parts of yy with appropriate parts of y. Note that the apply has the dimensions reversed to ensure that y comes out row-wise.
