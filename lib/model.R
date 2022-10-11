@@ -321,15 +321,38 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   disp_seeds <- Seeds - home_pot
   max_ds <- max(disp_seeds) # to set the array dimension to pad to
   
-  # Put dispersing seeds and all params into a common array
-  ngg <- array(c(disp_seeds, unlist(kernel_params)), dim = c(dim(Seeds), 5))
   # Generate a vector of seed-specific dispersal distances for each pot/rep.
   # To get conformable dimensions, pad results for pots w/ less than max_ds 
   # seeds with zeros
-  disp_dist <- apply(ngg, c(1,2), 
-                     function(x) c(rgengamma(x[1], x[3], x[4], x[5]), 
-                                   rep(0, times = max_ds - x[1] + 1))) %>%
-     aperm(c(2, 3, 1)) # apply puts the calculated value in the first dim
+
+  # Put dispersing seeds and all params into a common array
+  ngg <- array(c(disp_seeds, unlist(kernel_params[2:5])), dim = c(dim(Seeds), 4))
+
+  # Make unwrapped vectors of all the parameter values.
+  # Requires multiple calls because apply can only return a vector
+  mu_vec <-    unlist(apply(ngg, c(2,1), function(x) rep(x[2], x[1]), simplify = FALSE))
+  sigma_vec <- unlist(apply(ngg, c(2,1), function(x) rep(x[3], x[1]), simplify = FALSE))
+  Q_vec <-     unlist(apply(ngg, c(2,1), function(x) rep(x[4], x[1]), simplify = FALSE))
+  n_seed_tot <- length(Q_vec)
+  
+  # Get the random numbers
+  disp_dist_vec <- rgengamma(n_seed_tot, mu_vec, sigma_vec, Q_vec)
+
+  # Fill the RNs into an array, with all zeros for empty pots and padded zeros to get
+  #   to max_ds
+  disp_dist <- array(0, dim = c(dim(Seeds), max_ds))
+  k_end <- 0
+  for (rep in 1:controls$n_reps) {
+    occupied_pots <- (1:controls$n_pots)[disp_seeds[rep,] > 0]
+    for (pot in occupied_pots) {
+      k_start <- k_end + 1
+      ndisp <- disp_seeds[rep, pot]
+      k_end <- k_end + ndisp
+      disp_dist[rep, pot, 1:ndisp] <- disp_dist_vec[k_start:k_end]
+    }
+  }
+      
+      
   disp_dist[disp_dist > controls$max_pots * controls$pot_width] <- controls$max_pots * controls$pot_width
   # Distribute seeds into forward and backward dispersal, and rescale distance to pots
   forward_draw <- rbernoulli(prod(dim(disp_dist)))
