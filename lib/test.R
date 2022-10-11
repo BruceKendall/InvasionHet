@@ -226,14 +226,15 @@ test_gapify <- function() {
 test_iterate_genotype <- function(n_gens = 6, n_init = 10, nreps = 3, ES_seeds = TRUE, 
                                   DS_seeds = TRUE, kernel_stoch = TRUE, 
                                   seed_sampling = TRUE, gap_size = 0,
-                                  kernel_stoch_pots = TRUE) {
+                                  kernel_stoch_pots = TRUE, new_pots = 8) {
   controls <- list(n_reps = nreps,
                    ES_seeds = ES_seeds,
                    DS_seeds = DS_seeds,
                    kernel_stoch = kernel_stoch,
                    seed_sampling = seed_sampling,
                    kernel_stoch_pots = kernel_stoch_pots,
-                   pot_width = 7)
+                   pot_width = 7,
+                   new_pots = new_pots)
   cov_mat <- matrix(c(0.15, -0.026, 0.17,
                       -0.026, 0.015, -0.025,
                       0.17, -0.025, 0.28),
