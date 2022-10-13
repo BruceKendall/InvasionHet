@@ -50,7 +50,7 @@ test_det_kernel <- function() {
                  gg_sigma = 0.75,
                  gg_Q = 1,
                  frac_dispersing = 0.75)
-  controls <- list(pot_width = 7)
+  controls <- list(pot_width = 7, max_pots = 10)
   
   ### Tests for constant kernel
   with(params, plot(dgengamma(0:30, gg_mu, gg_sigma, gg_Q)))
@@ -90,6 +90,7 @@ test_det_kernel <- function() {
   controls <- list(pot_width = 7,
                    n_pots = 2,
                    n_reps = 3,
+                   max_pots = 10,
                    kernel_stoch_pots = TRUE)
   kernel_params <- kernel_stoch(params, controls)
   Seeds <- with(controls, matrix(100, n_reps, n_pots))
@@ -137,6 +138,7 @@ test_seed_sampling <- function() {
                  frac_dispersing = 0.75,
                  fd_sdev = 0.1)
   controls <- list(pot_width = 7,
+                   max_pots = 10,
                    n_pots = 2,
                    n_reps = 3,
                    kernel_stoch_pots = TRUE)

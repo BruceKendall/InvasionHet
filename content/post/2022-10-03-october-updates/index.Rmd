@@ -154,3 +154,7 @@ Then a double for loop to fill in appropriate parts of yy with appropriate parts
 # Oct 11
 ## Efficiency
 OK, I've implemented the revised code. The savings aren't as dramatic as microbenchmark had suggested (perhaps because of memory issues?); maybe a 2-fold speedup. But it's something!
+
+# Oct 13
+## Code inconsistencies
+I've rationalized the way dispersal tails are handled by making `det_kernel` simply calculate out to the value of `controls$max_pots` and getting rid of the reflection in `seed_sampling`. We still need a rationalized value of maximum dispersal distance.
