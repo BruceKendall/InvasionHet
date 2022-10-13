@@ -52,10 +52,11 @@ Looking back at the the last post from 2019, I see that the single-genotype mode
 * Add a `dispersal_buffer()` helper in `combine_dispersed_seeds()`
 
 ### Efficiency and clarity
-* When using no kernel stochasticity in `iterate_genotype()`, the parameters are replicated across a large array. This leads to inefficiencies in `det_kernel()` and `seed_sampling()` (unless the generalized gamma functions take parameter vectors, see below). The benefit (which is not trivial) is that the exact same code is being run, whether or not there is kernel sampling.
+* ~~When using no kernel stochasticity in `iterate_genotype()`, the parameters are replicated across a large array. This leads to inefficiencies in `det_kernel()` and `seed_sampling()` (unless the generalized gamma functions take parameter vectors, see below). The benefit (which is not trivial) is that the exact same code is being run, whether or not there is kernel sampling.~~
+  * **It turns out that `rgengamma` replicates the parameter values internally anyway, so this is not an issue.**
 * The way that the calculations in `det_kernel` are repeated until the furthest tail gets below 0.5 seems quite inefficient
-* Calls to distribution functions are awkward--I seem to have been assuming that they can't take vectors (or matrices in this case) of parameters. However, some experiments with `rbinom` indicate that, as of October 2020 (the version currently on my iMac), it *could* take parameter matrices (the result comes back as a vector, but reshapes properly using the dimensions of the input matrices). I should check this for gengamma, as this will make the code cleaner and probably faster.
-  * If gengamma doesn't have this capacity, then I should write helper functions so that the code is cleaner
+* ~~Calls to distribution functions are awkward--I seem to have been assuming that they can't take vectors (or matrices in this case) of parameters. However, some experiments with `rbinom` indicate that, as of October 2020 (the version currently on my iMac), it *could* take parameter matrices (the result comes back as a vector, but reshapes properly using the dimensions of the input matrices). I should check this for gengamma, as this will make the code cleaner and probably faster.~~
+  * ~~If gengamma doesn't have this capacity, then I should write helper functions so that the code is cleaner~~
 * The last section of `gapify()` seems redundant to the last section of `combine_dispersed_seeds()`. 
   * I guess the exception is for an endpoint that would be in a gap. And the cost here is probably small
 * *Before taking any of this on, I should do some profiling to see what if any of this represents a limiting factor*
