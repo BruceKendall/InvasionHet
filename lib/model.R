@@ -352,8 +352,6 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
     }
   }
       
-      
-  disp_dist[disp_dist > controls$max_pots * controls$pot_width] <- controls$max_pots * controls$pot_width
   # Distribute seeds into forward and backward dispersal, and rescale distance to pots
   forward_draw <- rbernoulli(prod(dim(disp_dist)))
   disp_forward <- ceiling(forward_draw * disp_dist / controls$pot_width)
