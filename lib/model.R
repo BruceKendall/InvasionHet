@@ -103,7 +103,7 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
   
   #### SEED PRODUCTION ####
   # Density dependence in seed production
-  Seeds <- Gompertz_seeds(Adults, plant_params, N_tot)
+  Seeds <- Gompertz_seeds(Adults, plant_params$a_Gompertz, plant_params$b_Gompertz, N_tot)
   
   # Environmental stochasticity in seed production?
   if (sim_settings$ES_seeds) {
@@ -176,12 +176,10 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
 #' $$\log(S/A) = a + b \log A$$
 #' $$\log S = \log A + a + b \log A$$
 #' $$S = \exp[a + (b+1) \log A].$$
-Gompertz_seeds <- function(Adults, plant_params, N_tot) {
-  with(plant_params, {
-    expected_seeds <- Adults * exp(a_Gompertz) * N_tot ^ b_Gompertz
-    expected_seeds[Adults * N_tot == 0] <- 0
-    return(expected_seeds)
-  })
+Gompertz_seeds <- function(Adults, a_Gompertz, b_Gompertz, N_tot) {
+  expected_seeds <- Adults * exp(a_Gompertz) * N_tot ^ b_Gompertz
+  expected_seeds[Adults * N_tot == 0] <- 0
+  return(expected_seeds)
 }
 
 #' <!-- ############################################################################# --> 

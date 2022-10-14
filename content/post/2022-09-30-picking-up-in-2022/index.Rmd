@@ -46,8 +46,8 @@ Looking back at the the last post from 2019, I see that the single-genotype mode
 * ~~In `iterate_genotype`, dispersal further than `max_pots` is truncated. However, this only affects the output from `det_kernel`; in `seed_sampling` there's a line that effectively puts all the super-dispersers into the last pot. I think I should delete that line for consistency.~~
 
 ### Code organization
-* `n_reps` and `new_pots` are features of the experimental design, so should really be in `params` rather than `controls`. The same would be for `max_pots` if there is any empirical basis for putting an upper bound on dispersal distance.
-  * Actually, it seems like we really should separate "biological parameters," "experiment parameters," and "model settings." 
+* ~~`n_reps` and `new_pots` are features of the experimental design, so should really be in `params` rather than `controls`. The same would be for `max_pots` if there is any empirical basis for putting an upper bound on dispersal distance.~~
+  * ~~Actually, it seems like we really should separate "biological parameters," "experiment parameters," and "model settings."~~
 * Helper functions for probability distributions are scattered across `model.R`, `helpers.R` and `dists.R`. They should all be in the latter (and better documented!)
 * Add a `dispersal_buffer()` helper in `combine_dispersed_seeds()`
 
