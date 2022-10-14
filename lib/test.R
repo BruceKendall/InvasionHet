@@ -260,7 +260,7 @@ test_iterate_genotype <- function(n_gens = 6, n_init = 10, nreps = 3, ES_seeds =
   print(Adults)
   for (i in 1:n_gens) {
     print(cat("Generation", i))
-    Adults <- iterate_genotype(Adults, params, controls)
+    Adults <- iterate_genotype(Adults, params, controls, rnorm(1,0,params$sigma_seed_time))
     print(Adults)
   }
 }

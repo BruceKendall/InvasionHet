@@ -76,9 +76,13 @@
 #' it should be the summed
 #' numbers of individuals across all genotypes in each pot/rep (to use for 
 #' density dependence).
-iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
+iterate_genotype <- function(Adults, params, controls, 
+                             ES_seed_time = NULL, N_tot = Adults) {
   controls$n_pots <- ncol(Adults)
   if (is.null(controls$max_pots)) controls$max_pots <- 10
+  if (controls$ES_seeds & is.null(ES_seed_time)) {
+    ES_seed_time <- rnorm(1, 0, params$sigma_seed_time)
+  }
   
   #### SET LENGTH OF EACH RUNWAY ####
   farthest_adult <- last_occupied_pot(Adults, zero = 1) 
@@ -90,7 +94,7 @@ iterate_genotype <- function(Adults, params, controls, N_tot = Adults) {
   
   # Environmental stochasticicy in seed production?
   if (controls$ES_seeds) {
-    Seeds <- ES_seeds(Seeds, params, controls$n_reps)
+    Seeds <- ES_seeds(Seeds, params, controls$n_reps, ES_seed_time)
   }
   
   # Demographic stochasticity in seed production?
@@ -172,14 +176,14 @@ Gompertz_seeds <- function(Adults, params, N_tot) {
 #' 
 #' The variation is assumed to be log-normal; the sigma parameters are on the 
 #' log-transformed scale.
-ES_seeds <- function(Seeds, params, n_rep) {
+ES_seeds <- function(Seeds, params, n_rep, ES_seed_time) {
   with(params, {
     ## Log-transform and apply temporal ES equally to all reps
     lseeds <- log(Seeds) + rnorm(1, 0, sigma_seed_time)
     
     ## Apply inter-rep ES equally to all pots within each rep
     ## This uses recyling, and depends on each row being a rep
-    lseeds <- lseeds + rnorm(n_rep, 0, sigma_seed_rep)
+    lseeds <- lseeds + ES_seed_time
     
     ## Return anti-log-transformed result
     return(exp(lseeds))

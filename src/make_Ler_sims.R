@@ -16,10 +16,10 @@ controls <- list(
   max_pots = 20,
   new_pots = 8
 )
-sim_mean_var <- function() {
+sim_mean_var <- function(ES_seed_time = NULL) {
   Adults <- matrix(n_init, controls$n_reps, 1)
   for (i in 1:6) {
-    Adults <- iterate_genotype(Adults, Ler_params, controls)
+    Adults <- iterate_genotype(Adults, Ler_params, controls, ES_seed_time[i])
   }
   npot <- ncol(Adults)
   rep_sum <- apply(Adults[, npot:1, drop = FALSE], 1, cummax)
@@ -44,32 +44,33 @@ Ler_spread_stats <- data.frame(
   Mean = numeric(),
   Variance = numeric()
 )
-for(gap_size in 0:3) {
-  Ler_params$gap_size <- gap_size
-  for (DS in c(TRUE, FALSE)) {
-    controls$DS_seeds <- DS
-    for (ES in c(TRUE, FALSE)) {
-      controls$ES_seeds <- ES
-      for (KS in c(TRUE, FALSE)) {
-        controls$kernel_stoch <- KS
-        for (SS in c(TRUE, FALSE)) {
-          controls$seed_sampling <- SS
-          print(c(gap_size, DS, ES, KS, SS))
-          for (i in 1:nruns) {
-            rep_spread_stats <- sim_mean_var()
-#          rep_spread_stats <- t(replicate(nruns, sim_mean_var(), 
-#                                          simplify = TRUE))
-         # print(rep_spread_stats)
+for (DS in c(TRUE, FALSE)) {
+  controls$DS_seeds <- DS
+  for (ES in c(TRUE, FALSE)) {
+    controls$ES_seeds <- ES
+    for (KS in c(TRUE, FALSE)) {
+      controls$kernel_stoch <- KS
+      for (SS in c(TRUE, FALSE)) {
+        controls$seed_sampling <- SS
+        print(c(gap_size, DS, ES, KS, SS))
+        for (i in 1:nruns) {
+          ES_seed_time <- rnorm(6, 0, Ler_params$sigma_seed_time)
+          for(gap_size in 0:3) {
+            Ler_params$gap_size <- gap_size
+            rep_spread_stats <- sim_mean_var(ES_seed_time)
+            #          rep_spread_stats <- t(replicate(nruns, sim_mean_var(), 
+            #                                          simplify = TRUE))
+            # print(rep_spread_stats)
             Ler_spread_stats <- rbind(Ler_spread_stats,
-                                    data.frame(Gap = gap_size,
-                                               DS = DS,
-                                               ES = ES,
-                                               KS = KS,
-                                               SS = SS,
-                                            #   Mean = rep_spread_stats[, 1],
-                                            #   Variance = rep_spread_stats[, 2]
-                                               Max_Dist = rep_spread_stats
-                                    ))
+                                      data.frame(Gap = gap_size,
+                                                 DS = DS,
+                                                 ES = ES,
+                                                 KS = KS,
+                                                 SS = SS,
+                                                 #   Mean = rep_spread_stats[, 1],
+                                                 #   Variance = rep_spread_stats[, 2]
+                                                 Max_Dist = rep_spread_stats
+                                      ))
           }
         }
       }
