@@ -173,9 +173,10 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
 #' # `Gompertz_seeds()`
 #' Uses the Gompertz model to create density dependence in seed production. 
 #' The model is:
-#' $$\log(S/A) = a + b \log A$$
-#' $$\log S = \log A + a + b \log A$$
-#' $$S = \exp[a + (b+1) \log A].$$
+#' $$\log(S/A) = a + b \log N$$
+#' $$\log S = \log A + a + b \log N$$
+#' $$S = \exp[\log A + a + b \log N]$$
+#' $$S = A e^a N^b$$.
 Gompertz_seeds <- function(Adults, a_Gompertz, b_Gompertz, N_tot) {
   expected_seeds <- Adults * exp(a_Gompertz) * N_tot ^ b_Gompertz
   expected_seeds[Adults * N_tot == 0] <- 0

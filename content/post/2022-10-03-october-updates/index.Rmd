@@ -165,6 +165,7 @@ I've added a value to pass into `iterate_genotype` to use for the temporal compo
 # Oct 14
 ## Documentation
 * Cleaned up comments
+* Fixed equation derivation in `gompertz_seeds()`
 
 ## Code structure
 I have separated the model inputs into `plant_params`, `expt_params`, and `sim_settings`. Everything is appropriately propagated through `model.R`, and I have updated `test_iterate_genotype()` to work with the new structure. I'll need to update some of the other test functions, as well as the simulation drivers.
