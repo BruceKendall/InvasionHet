@@ -137,8 +137,8 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
 
   # Seed sampling?
   if (sim_settings$seed_sampling) {
-    dispersed_seeds_by_pot <- seed_sampling(Seeds, kernel_params, plant_params,
-                                            expt_params, sim_settings, n_pots)
+    dispersed_seeds_by_pot <- seed_sampling(Seeds, kernel_params, expt_params$n_reps,
+                                            expt_params$pot_width, n_pots)
   } else {
     dispersed_seeds_by_pot <- 
       det_kernel(Seeds, kernel_params, plant_params, expt_params, sim_settings) %>%
@@ -322,7 +322,7 @@ det_kernel <- function(Seeds, kernel_params, plant_params, expt_params, sim_sett
 #' # `seed_sampling()`
 #' Distribute seeds according to independent draws from a kernel
 #' 
-seed_sampling <- function(Seeds, kernel_params, plant_params, expt_params, sim_settings, n_pots) {
+seed_sampling <- function(Seeds, kernel_params, n_reps, pot_width, n_pots) {
   #### Seeds staying in maternal (home) pot ####
   np <- array(c(Seeds, (1 - kernel_params$frac_dispersing)), dim = c(dim(Seeds), 2))
   home_pot <- apply(np, c(1, 2), function(x) rbinom(1, x[1], x[2]))
@@ -352,7 +352,7 @@ seed_sampling <- function(Seeds, kernel_params, plant_params, expt_params, sim_s
   #   to max_ds
   disp_dist <- array(0, dim = c(dim(Seeds), max_ds))
   k_end <- 0
-  for (rep in 1:expt_params$n_reps) {
+  for (rep in 1:n_reps) {
     occupied_pots <- (1:n_pots)[disp_seeds[rep,] > 0]
     for (pot in occupied_pots) {
       k_start <- k_end + 1
@@ -364,8 +364,8 @@ seed_sampling <- function(Seeds, kernel_params, plant_params, expt_params, sim_s
       
   # Distribute seeds into forward and backward dispersal, and rescale distance to pots
   forward_draw <- rbernoulli(prod(dim(disp_dist)))
-  disp_forward <- ceiling(forward_draw * disp_dist / expt_params$pot_width)
-  disp_backward <- ceiling((!forward_draw) * disp_dist / expt_params$pot_width)
+  disp_forward <- ceiling(forward_draw * disp_dist / pot_width)
+  disp_backward <- ceiling((!forward_draw) * disp_dist / pot_width)
   print(c(max(disp_backward), max(disp_forward)))
   max_dist <- max(c(disp_forward, disp_backward)) # farthest dispersing seed
 

@@ -173,6 +173,7 @@ I did realize on doing this that I'm often passing the entire list through simpl
 
 * I've pulled `n_pots` out of the control arrays, as it is only used internally and is updated dynamically.
 * I've simplified the call to `gapify()`
+* Simplified call to `seed_sampling()`
 
 ## New bugs
 * There seems to be an issue with `apply()` dropping an array dimension if there is only one replicate that hasn't gone extinct.
