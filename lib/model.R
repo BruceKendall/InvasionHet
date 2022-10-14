@@ -12,10 +12,6 @@
 #' 
 #' ### Elements of `params`
 #'  
-#' `n_types` (integer)
-#' :    Number of genotypes. Ignored by `iterate_model_ler()`; for this model, all 
-#' remaining parameters should be scalars (other than the matrix of kernel parameters)
-#' 
 #' `a_Gompertz` (scalar, or vector of length `n_types`)
 #' :    Intercept of the Gompertz model of density dependence. 
 #' Should be positive (or else the population will not grow from a single individual)
@@ -83,7 +79,7 @@ iterate_genotype <- function(Adults, params, controls,
     ES_seed_time <- rnorm(1, 0, params$sigma_seed_time)
   }
   
-  #### SET LENGTH OF EACH RUNWAY ####
+  #### RECORD ACTUAL LENGTH OF EACH RUNWAY ####
   farthest_adult <- last_occupied_pot(Adults, zero = 1) 
   runway_end <- farthest_adult + controls$new_pots
   

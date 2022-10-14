@@ -36,7 +36,7 @@ Looking back at the the last post from 2019, I see that the single-genotype mode
 * Add documentation for kernel parameters
 * Simplify description of parameter dimensions in Ler vs. RIL
 * Describe `N_tot`, exactly what `Adults` and `Seeds` represent, and the return value from `iterate_genotype()`. The names are potentially misleading, as seeds become next generation adults, and perhaps neither were directly measured.
-* Fix typos in comments, as well as corrections noted on printout
+* ~~Fix typos in comments, as well as corrections noted on printout~~
 * Documentation of `Gompertz_seeds()` doesn't quite get to the equation as used
 * Need better commenting on forward/backward dispersal in `seed_sampling`
 * Need some documentation for `disp_table()`

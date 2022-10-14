@@ -161,3 +161,7 @@ I've rationalized the way dispersal tails are handled by making `det_kernel` sim
 
 ## Conceptual issues
 I've added a value to pass into `iterate_genotype` to use for the temporal component of environmental stochasticity in seed production, with a sensible default. This then gets passed through to `ES_seeds`. This runs with both `test_iterate_genotype` and with an appropriately updated `make_Ler_sims`
+
+# Oct 14
+## Documentation
+* Cleaned up comments
