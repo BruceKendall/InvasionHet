@@ -123,7 +123,8 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
   ## Calculated dispersal from each pot
   # Kernel stochasticity?
   if (sim_settings$kernel_stoch) {
-    kernel_params <- kernel_stoch(plant_params, expt_params, sim_settings, n_pots)
+    kernel_params <- kernel_stoch(plant_params, sim_settings$kernel_stoch_pots,
+                                  expt_params$n_reps, n_pots)
   } else { # Distribute the genotype-specific parameters across pots and reps
     array_dim <- c(expt_params$n_reps,
                    n_pots)
@@ -246,9 +247,9 @@ DS_seeds <- function(Seeds, plant_params) {
 #' <!-- ############################################################################# --> 
 #' # `kernel_stoch()`
 #' Calculate rep- and pot-specific dispersal kernels
-kernel_stoch <- function(plant_params, expt_params, sim_settings, n_pots) {
+kernel_stoch <- function(plant_params, kernel_stoch_pots, n_reps, n_pots) {
   library(MASS)
-  with(sim_settings, with(expt_params, with(plant_params, {
+  with(plant_params, {
     if (kernel_stoch_pots) { # Each pot gets different parameters
       ndraw <-  n_pots * n_reps
       
@@ -277,7 +278,7 @@ kernel_stoch <- function(plant_params, expt_params, sim_settings, n_pots) {
       neg_sigma <- sum(kernel_params$gg_sigma <= 0)
     }
     return(kernel_params)
-  })))
+  })
 }
 
 #' <!-- ############################################################################# --> 
