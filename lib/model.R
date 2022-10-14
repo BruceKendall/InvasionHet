@@ -107,7 +107,8 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
   
   # Environmental stochasticity in seed production?
   if (sim_settings$ES_seeds) {
-    Seeds <- ES_seeds(Seeds, plant_params, expt_params$n_reps, ES_seed_time)
+    Seeds <- ES_seeds(Seeds, plant_params$sigma_seed_rep, expt_params$n_reps, 
+                      ES_seed_time)
   }
   
   # Demographic stochasticity in seed production?
@@ -192,18 +193,18 @@ Gompertz_seeds <- function(Adults, plant_params, N_tot) {
 #' 
 #' The variation is assumed to be log-normal; the sigma parameters are on the 
 #' log-transformed scale.
-ES_seeds <- function(Seeds, plant_params, n_rep, ES_seed_time) {
-  with(plant_params, {
-    ## Log-transform and apply temporal ES equally to all reps
-    lseeds <- log(Seeds) + rnorm(1, 0, sigma_seed_time)
-    
-    ## Apply inter-rep ES equally to all pots within each rep
-    ## This uses recycling, and depends on each row being a rep
-    lseeds <- lseeds + ES_seed_time
-    
-    ## Return anti-log-transformed result
-    return(exp(lseeds))
-  })
+ES_seeds <- function(Seeds, sigma_seed_rep, n_rep, ES_seed_time) {
+  
+  ## Log-transform and apply temporal ES equally to all reps
+  lseeds <- log(Seeds) + ES_seed_time
+  
+  ## Apply inter-rep ES equally to all pots within each rep
+  ## This uses recycling, and depends on each row being a rep
+  lseeds <- lseeds + rnorm(n_rep, 0, sigma_seed_rep)
+  
+  ## Return anti-log-transformed result
+  return(exp(lseeds))
+  
 }
 
 #' <!-- ############################################################################# --> 

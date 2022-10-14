@@ -177,6 +177,7 @@ I did realize on doing this that I'm often passing the entire list through simpl
 * Simplified call to `det_kernel()`
 * Simplified call to `kernel_stoch()`
 * Simplified call to `DS_seeds()`
+* Simplified call to `ES_seeds()`, and fixed mistake in application of ES_seed_time
 
 ## New bugs
 * There seems to be an issue with `apply()` dropping an array dimension if there is only one replicate that hasn't gone extinct.
