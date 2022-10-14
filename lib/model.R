@@ -112,7 +112,7 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
   
   # Demographic stochasticity in seed production?
   if (sim_settings$DS_seeds) {
-    Seeds <- DS_seeds(Seeds, plant_params)
+    Seeds <- DS_seeds(Seeds, plant_params$theta)
   } else {
     Seeds <- round(Seeds)
   }
@@ -236,10 +236,10 @@ rqpois <- function(n, mu, theta) {
 #' # `DS_seeds()`
 #' Add demographic stochasticity to the seed production, using the negative binomial
 #' approximation to the quasi-Poisson.
-DS_seeds <- function(Seeds, plant_params) {
+DS_seeds <- function(Seeds, theta) {
   n <- prod(dim(Seeds))
   # Don't want to see the warnings thrown when mu = 0
-  rand_seeds <- array(suppressWarnings(rqpois(n, Seeds, plant_params$theta)), dim(Seeds))
+  rand_seeds <- array(suppressWarnings(rqpois(n, Seeds, theta)), dim(Seeds))
   rand_seeds[Seeds == 0] <- 0 # rqpois returns NA for these cases
   rand_seeds
 }
