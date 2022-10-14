@@ -36,7 +36,25 @@
 #' `theta_seed` (must be positive)
 #' :    Variance inflation factor for quasi-Poisson demographic stochasticity
 #' 
-#' <!--Need to add kernel parameters, max_pots. Also need to add max_pots to munge scripts --> 
+#' `frac_dispersing` (must be in [0, 1])
+#' :    The average fraction of seeds that leave the home pot
+#' 
+#' `fd_sdev` (must be in [0, 0.5], and possibly less)
+#' :    Among-pot standard deviation in the fraction dispersing
+#' 
+#' `gg_mu`, `gg_sigma`, and `gg_Q`
+#' :    Average values of the three parameters of the generalized gamma distribution 
+#'      describing the dispersal kernel
+#' 
+#' `gg_cov` (3 x 3 matrix)
+#' :    Variance-covariance matrix for the three generalized gamma parameters
+#' 
+#' `max_pots`
+#' :    The maximum distance (measured in pots) that a seed may disperse. Any simulated
+#'      dispersal beyond this is truncated. This is separate from `new_pots` (below)
+#'      because it affects seeds dispersing from the back of the runway as well as
+#'      those in the back. If not specified, it defaults to 10, which is probably longer
+#'      than it needs to be.
 #' 
 #' ## `expt_params`
 #' A list of values that describe the experimental setup in the greenhouse. 
@@ -70,6 +88,9 @@
 #' `kernel_stoch` (logical)
 #' :    Set to `TRUE` to include dispersal kernel heterogeneity.
 #' 
+#' `kernel_stoch_pots` (logical)
+#' :    Set to `TRUE` for every pot to have its own kernel; otherwise all pots within a
+#'      replicate have the same kernel
 #' `seed_sampling` (logical)
 #' :    Set to `TRUE` to have each seed sample the dispersal kernel independently. If
 #' `FALSE`, then the number of seeds dispersing to each pot is the expected number
