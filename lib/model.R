@@ -388,7 +388,6 @@ seed_sampling <- function(Seeds, kernel_params, n_reps, pot_width, n_pots) {
   forward_draw <- rbernoulli(prod(dim(disp_dist)))
   disp_forward <- ceiling(forward_draw * disp_dist / pot_width)
   disp_backward <- ceiling((!forward_draw) * disp_dist / pot_width)
-  print(c(max(disp_backward), max(disp_forward)))
   max_dist <- max(c(disp_forward, disp_backward)) # farthest dispersing seed
 
   # Tabulate the number at each distance
