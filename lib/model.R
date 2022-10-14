@@ -161,7 +161,7 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
   n_pots <- ncol(Seeds)
   
   # Zero out the seeds in the gaps
-  Seeds <- gapify(Seeds, plant_params, expt_params, sim_settings, n_pots)
+  Seeds <- gapify(Seeds, sim_settings$gap_size, expt_params$n_reps, n_pots)
   
   return(Seeds)
 }
@@ -452,10 +452,8 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots, runway_end) {
 #' # `gapify()`
 #' Set the seed abundance to zero in the "pots" that are actually gaps 
 #' 
-gapify <- function(Seeds, plant_params, expt_params, sim_settings, n_pot) {
-  gap <- sim_settings$gap_size
+gapify <- function(Seeds, gap, n_rep, n_pot) {
   if (gap > 0) { 
-    n_rep <- expt_params$n_reps
     gap_mask <- rep(c(1, rep(0, gap)), length = n_pot)
     gap_mask <- matrix(gap_mask, n_rep, n_pot, byrow = TRUE)
     Seeds <- Seeds * gap_mask
