@@ -91,7 +91,7 @@
 #' use for density dependence).
 iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings, 
                              ES_seed_time = NULL, N_tot = Adults) {
-  sim_settings$n_pots <- ncol(Adults)
+  n_pots <- ncol(Adults)
   if (is.null(sim_settings$max_pots)) sim_settings$max_pots <- 10
   if (sim_settings$ES_seeds & is.null(ES_seed_time)) {
     ES_seed_time <- rnorm(1, 0, plant_params$sigma_seed_time)
@@ -123,10 +123,10 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
   ## Calculated dispersal from each pot
   # Kernel stochasticity?
   if (sim_settings$kernel_stoch) {
-    kernel_params <- kernel_stoch(plant_params, expt_params, sim_settings)
+    kernel_params <- kernel_stoch(plant_params, expt_params, sim_settings, n_pots)
   } else { # Distribute the genotype-specific parameters across pots and reps
     array_dim <- c(expt_params$n_reps,
-                   sim_settings$n_pots)
+                   n_pots)
     kernel_params <- list(
       frac_dispersing = array(plant_params$frac_dispersing, array_dim),
       gg_mu           = array(plant_params$gg_mu,           array_dim),
@@ -137,7 +137,8 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
 
   # Seed sampling?
   if (sim_settings$seed_sampling) {
-    dispersed_seeds_by_pot <- seed_sampling(Seeds, kernel_params, plant_params, expt_params, sim_settings)
+    dispersed_seeds_by_pot <- seed_sampling(Seeds, kernel_params, plant_params,
+                                            expt_params, sim_settings, n_pots)
   } else {
     dispersed_seeds_by_pot <- 
       det_kernel(Seeds, kernel_params, plant_params, expt_params, sim_settings) %>%
@@ -155,12 +156,12 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
   
   ## Combine all the dispersed seeds
   Seeds <- combine_dispersed_seeds(dispersed_seeds_by_pot, expt_params$n_reps, 
-                                   sim_settings$n_pots, runway_end)
+                                   n_pots, runway_end)
   
-  sim_settings$n_pots <- ncol(Seeds)
+  n_pots <- ncol(Seeds)
   
   # Zero out the seeds in the gaps
-  Seeds <- gapify(Seeds, plant_params, expt_params, sim_settings)
+  Seeds <- gapify(Seeds, plant_params, expt_params, sim_settings, n_pots)
   
   return(Seeds)
 }
@@ -244,7 +245,7 @@ DS_seeds <- function(Seeds, plant_params) {
 #' <!-- ############################################################################# --> 
 #' # `kernel_stoch()`
 #' Calculate rep- and pot-specific dispersal kernels
-kernel_stoch <- function(plant_params, expt_params, sim_settings) {
+kernel_stoch <- function(plant_params, expt_params, sim_settings, n_pots) {
   library(MASS)
   with(sim_settings, with(expt_params, with(plant_params, {
     if (kernel_stoch_pots) { # Each pot gets different parameters
@@ -321,7 +322,7 @@ det_kernel <- function(Seeds, kernel_params, plant_params, expt_params, sim_sett
 #' # `seed_sampling()`
 #' Distribute seeds according to independent draws from a kernel
 #' 
-seed_sampling <- function(Seeds, kernel_params, plant_params, expt_params, sim_settings) {
+seed_sampling <- function(Seeds, kernel_params, plant_params, expt_params, sim_settings, n_pots) {
   #### Seeds staying in maternal (home) pot ####
   np <- array(c(Seeds, (1 - kernel_params$frac_dispersing)), dim = c(dim(Seeds), 2))
   home_pot <- apply(np, c(1, 2), function(x) rbinom(1, x[1], x[2]))
@@ -352,7 +353,7 @@ seed_sampling <- function(Seeds, kernel_params, plant_params, expt_params, sim_s
   disp_dist <- array(0, dim = c(dim(Seeds), max_ds))
   k_end <- 0
   for (rep in 1:expt_params$n_reps) {
-    occupied_pots <- (1:sim_settings$n_pots)[disp_seeds[rep,] > 0]
+    occupied_pots <- (1:n_pots)[disp_seeds[rep,] > 0]
     for (pot in occupied_pots) {
       k_start <- k_end + 1
       ndisp <- disp_seeds[rep, pot]
@@ -451,19 +452,17 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots, runway_end) {
 #' # `gapify()`
 #' Set the seed abundance to zero in the "pots" that are actually gaps 
 #' 
-gapify <- function(Seeds, plant_params, expt_params, sim_settings) {
+gapify <- function(Seeds, plant_params, expt_params, sim_settings, n_pot) {
   gap <- sim_settings$gap_size
   if (gap > 0) { 
     n_rep <- expt_params$n_reps
-    n_pot <- sim_settings$n_pots
     gap_mask <- rep(c(1, rep(0, gap)), length = n_pot)
     gap_mask <- matrix(gap_mask, n_rep, n_pot, byrow = TRUE)
     Seeds <- Seeds * gap_mask
   }
   
   # Drop any trailing zeros
-  npot <- sim_settings$n_pots
-  rep_sum <- cummax(apply(Seeds, 2, sum)[npot:1])[npot:1]
+  rep_sum <- cummax(apply(Seeds, 2, sum)[n_pot:1])[n_pot:1]
   
   Seeds[, rep_sum > 0, drop = FALSE]
 }
