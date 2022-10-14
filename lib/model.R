@@ -141,7 +141,8 @@ iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings,
                                             expt_params$pot_width, n_pots)
   } else {
     dispersed_seeds_by_pot <- 
-      det_kernel(Seeds, kernel_params, plant_params, expt_params, sim_settings) %>%
+      det_kernel(Seeds, kernel_params, sim_settings$max_pots, 
+                 expt_params$n_reps, n_pots) %>%
         lapply(round)
   }
   
@@ -282,14 +283,13 @@ kernel_stoch <- function(plant_params, expt_params, sim_settings, n_pots) {
 #' <!-- ############################################################################# --> 
 #' # `det_kernel()`
 #' Distribute seeds according to a deterministic kernel
-det_kernel <- function(Seeds, kernel_params, plant_params, expt_params, sim_settings){
+det_kernel <- function(Seeds, kernel_params, max_dist, n_reps, n_pots){
   #### Seeds staying in maternal (home) pot ####
   home_pot <- Seeds * (1 - kernel_params$frac_dispersing)
   
   #### Seeds dispersing forward ####
   disp_seeds <- Seeds * kernel_params$frac_dispersing/2
   
-  max_dist <- sim_settings$max_pots
   
   # `forward_dispersal` is a 3-d array, with dimensions `n_reps`, `n_pots`, `max_dist`
   # It will hold the expected dispersal number at each distance for each rep x pot
@@ -301,8 +301,8 @@ det_kernel <- function(Seeds, kernel_params, plant_params, expt_params, sim_sett
   
   # There might be a clever way to do this with apply(), but it would take 
   # lots of brain power to figure it out...
-  for (pot in 1:ncol(Seeds)) {
-    for (rep in 1:nrow(Seeds)) {
+  for (pot in 1:n_pots) {
+    for (rep in 1:n_reps) {
       forward_dispersal[rep, pot, ] <- diff(pgengamma(dvec,
                                                       kernel_params$gg_mu[rep, pot],
                                                       kernel_params$gg_sigma[rep, pot],
