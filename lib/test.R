@@ -229,20 +229,18 @@ test_iterate_genotype <- function(n_gens = 6, n_init = 10, nreps = 3, ES_seeds =
                                   DS_seeds = TRUE, kernel_stoch = TRUE, 
                                   seed_sampling = TRUE, gap_size = 0,
                                   kernel_stoch_pots = TRUE, new_pots = 8, max_pots = 10) {
-  controls <- list(n_reps = nreps,
+  sim_settings <- list(n_reps = nreps,
                    ES_seeds = ES_seeds,
                    DS_seeds = DS_seeds,
                    kernel_stoch = kernel_stoch,
                    seed_sampling = seed_sampling,
                    kernel_stoch_pots = kernel_stoch_pots,
-                   pot_width = 7,
-                   new_pots = new_pots,
-                   max_pots = max_pots)
+                   gap_size = gap_size)
   cov_mat <- matrix(c(0.15, -0.026, 0.17,
                       -0.026, 0.015, -0.025,
                       0.17, -0.025, 0.28),
                     3, 3)
-  params <- list(a_Gompertz = 4,
+  plant_params <- list(a_Gompertz = 4,
                  b_Gompertz = -0.75,
                  sigma_seed_time = 0.75,
                  sigma_seed_rep = 0.25,
@@ -253,14 +251,18 @@ test_iterate_genotype <- function(n_gens = 6, n_init = 10, nreps = 3, ES_seeds =
                  gg_cov = cov_mat,
                  frac_dispersing = 0.75,
                  fd_sdev = 0.1,
-                 gap_size = gap_size)
+                 max_pots = max_pots)
+  expt_params <- list(n_reps = nreps,
+                      new_pots = new_pots,
+                      pot_width = 7)
   Adults <- matrix(n_init, nreps, 1)
   
   print("Generation 0:")
   print(Adults)
   for (i in 1:n_gens) {
     print(cat("Generation", i))
-    Adults <- iterate_genotype(Adults, params, controls, rnorm(1,0,params$sigma_seed_time))
+    Adults <- iterate_genotype(Adults, plant_params, expt_params, sim_settings, 
+                               rnorm(1,0,plant_params$sigma_seed_time))
     print(Adults)
   }
 }

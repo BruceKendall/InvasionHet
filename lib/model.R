@@ -7,39 +7,58 @@
 #' with more easily readable documentation, compile the document using
 #' `rmarkdown::render("model.R")`
 #' 
-#' The functions all use elements of lists called `params` and `controls`. 
-#' The elements of these lists are:
+#' The biological parameters, experimental design parameters, and simulation settings are
+#' passed in (and around) through the lists `plant_params`, `expt_params`, and
+#' `sim_settings`, respectively.
 #' 
-#' ### Elements of `params`
+#' ## `plant_params`
+#' This is a list containing all of the biological parameters for single genotype. For
+#' Ler, this is identical to the `Ler_params` list that is produced by
+#' `munge/10-make-Ler-params.R`. For the RILs, this is identical to a top-level subset of
+#' the `RIL_params` list that is produced by `munge/20-make-RIL-params.R` (e.g.,
+#' `RIL_params[[1]]` gives the parameter list for the first RIL).
+#' 
+#' All elements are real-valued scalars, except as noted
 #'  
-#' `a_Gompertz` (scalar, or vector of length `n_types`)
+#' `a_Gompertz` 
 #' :    Intercept of the Gompertz model of density dependence. 
 #' Should be positive (or else the population will not grow from a single individual)
 #' 
-#' `b_Gompertz` (scalar, or vector of length `n_types`)
+#' `b_Gompertz` 
 #' :    Slope of the Gompertz model of density dependence. Should be between -1 and zero
 #' 
-#' `sigma_seed_time` (positive scalar)
+#' `sigma_seed_time` (must be positive)
 #' :    Standard deviation of temporal stochasticity in log seed production
 #' 
-#' `sigma_seed_rep` (positive scalar)
+#' `sigma_seed_rep` (must be positive)
 #' :    Standard deviation of among-rep stochasticity in log seed production
 #' 
-#' `theta_seed` (positive scalar)
+#' `theta_seed` (must be positive)
 #' :    Variance inflation factor for quasi-Poisson demographic stochasticity
 #' 
-#' <!--Need to add kernel parameters, pot_width --> 
+#' <!--Need to add kernel parameters, max_pots. Also need to add max_pots to munge scripts --> 
 #' 
-#' `gap_size` (non-negative integer)
-#' :    Size of gaps, measured in number of pots. Set to zero for continuous landscape
+#' ## `expt_params`
+#' A list of values that describe the experimental setup in the greenhouse. 
+#' All are scalar.
 #' 
-#' ### Elements of `controls`
+#' `n_reps` (integer)
+#' :    Number of replicate populations of each design
+#' 
+#' `new_pots` (integer)
+#' :    The number of new (empty) pots added to the end of each runway, beyond the 
+#' furthest dispersed seed from the prior generation. In the Ler experiments, this 
+#' value was 8. 
+#' 
+#' `pot_width` (numeric)
+#' :    Width of a pot in cm. Was 7 in all experiments
+#' 
+#' ## `sim_settings`
+#' A list of settings that turn the various sources of stochasticity on and off, as well
+#' as setting which landscape is being simulated.
 #' 
 #' `n_pots` (integer; calculated by model)
 #' :    Number of pots in the array
-#' 
-#' `n_reps` (integer)
-#' :    Number of replicate simulations
 #' 
 #' `ES_seeds` (logical)
 #' :    Set to `TRUE` to include environmental stochasticity in seed production
@@ -56,10 +75,9 @@
 #' `FALSE`, then the number of seeds dispersing to each pot is the expected number
 #' rounded to the nearest integer.
 #' 
-#' `new_pots` (numeric)
-#' :    The number of new (empty) pots added to the end of each runway, beyond the 
-#' furthest dispersed seed from the prior generation. In the Ler experiments, this 
-#' value was 8. 
+#' `gap_size` (non-negative integer)
+#' :    Size of gaps, measured in number of pots. Set to zero for continuous landscape
+#' 
 #' 
 #' ### State variables
 #' The state variables are `Adults` and (internally) `Seeds`. These are structured as
@@ -71,30 +89,30 @@
 #' If this is part of a multi-genotype simulation, then `N_tot` needs to provided; it
 #' should be the summed numbers of individuals across all genotypes in each pot/rep (to
 #' use for density dependence).
-iterate_genotype <- function(Adults, params, controls, 
+iterate_genotype <- function(Adults, plant_params, expt_params, sim_settings, 
                              ES_seed_time = NULL, N_tot = Adults) {
-  controls$n_pots <- ncol(Adults)
-  if (is.null(controls$max_pots)) controls$max_pots <- 10
-  if (controls$ES_seeds & is.null(ES_seed_time)) {
-    ES_seed_time <- rnorm(1, 0, params$sigma_seed_time)
+  sim_settings$n_pots <- ncol(Adults)
+  if (is.null(sim_settings$max_pots)) sim_settings$max_pots <- 10
+  if (sim_settings$ES_seeds & is.null(ES_seed_time)) {
+    ES_seed_time <- rnorm(1, 0, plant_params$sigma_seed_time)
   }
   
   #### RECORD ACTUAL LENGTH OF EACH RUNWAY ####
   farthest_adult <- last_occupied_pot(Adults, zero = 1) 
-  runway_end <- farthest_adult + controls$new_pots
+  runway_end <- farthest_adult + expt_params$new_pots
   
   #### SEED PRODUCTION ####
   # Density dependence in seed production
-  Seeds <- Gompertz_seeds(Adults, params, N_tot)
+  Seeds <- Gompertz_seeds(Adults, plant_params, N_tot)
   
   # Environmental stochasticity in seed production?
-  if (controls$ES_seeds) {
-    Seeds <- ES_seeds(Seeds, params, controls$n_reps, ES_seed_time)
+  if (sim_settings$ES_seeds) {
+    Seeds <- ES_seeds(Seeds, plant_params, expt_params$n_reps, ES_seed_time)
   }
   
   # Demographic stochasticity in seed production?
-  if (controls$DS_seeds) {
-    Seeds <- DS_seeds(Seeds, params)
+  if (sim_settings$DS_seeds) {
+    Seeds <- DS_seeds(Seeds, plant_params)
   } else {
     Seeds <- round(Seeds)
   }
@@ -104,45 +122,45 @@ iterate_genotype <- function(Adults, params, controls,
   
   ## Calculated dispersal from each pot
   # Kernel stochasticity?
-  if (controls$kernel_stoch) {
-    kernel_params <- kernel_stoch(params, controls)
+  if (sim_settings$kernel_stoch) {
+    kernel_params <- kernel_stoch(plant_params, expt_params, sim_settings)
   } else { # Distribute the genotype-specific parameters across pots and reps
-    array_dim <- c(controls$n_reps,
-                   controls$n_pots)
+    array_dim <- c(expt_params$n_reps,
+                   sim_settings$n_pots)
     kernel_params <- list(
-      frac_dispersing = array(params$frac_dispersing, array_dim),
-      gg_mu           = array(params$gg_mu,           array_dim),
-      gg_sigma        = array(params$gg_sigma,        array_dim),
-      gg_Q            = array(params$gg_Q,            array_dim)
+      frac_dispersing = array(plant_params$frac_dispersing, array_dim),
+      gg_mu           = array(plant_params$gg_mu,           array_dim),
+      gg_sigma        = array(plant_params$gg_sigma,        array_dim),
+      gg_Q            = array(plant_params$gg_Q,            array_dim)
     )
   }
 
   # Seed sampling?
-  if (controls$seed_sampling) {
-    dispersed_seeds_by_pot <- seed_sampling(Seeds, kernel_params, params, controls)
+  if (sim_settings$seed_sampling) {
+    dispersed_seeds_by_pot <- seed_sampling(Seeds, kernel_params, plant_params, expt_params, sim_settings)
   } else {
     dispersed_seeds_by_pot <- 
-      det_kernel(Seeds, kernel_params, params, controls) %>%
+      det_kernel(Seeds, kernel_params, plant_params, expt_params, sim_settings) %>%
         lapply(round)
   }
   
   ## Truncate ridiculous dispersal events
-  if (dispersed_seeds_by_pot$max_dist > controls$max_pots) {
+  if (dispersed_seeds_by_pot$max_dist > sim_settings$max_pots) {
     dispersed_seeds_by_pot <- within(dispersed_seeds_by_pot, {
-      forward_dispersal <- forward_dispersal[, , 1:controls$max_pots, drop = FALSE]
-      backward_dispersal <- backward_dispersal[, , 1:controls$max_pots, drop = FALSE]
-      max_dist <- controls$max_pots
+      forward_dispersal <- forward_dispersal[, , 1:sim_settings$max_pots, drop = FALSE]
+      backward_dispersal <- backward_dispersal[, , 1:sim_settings$max_pots, drop = FALSE]
+      max_dist <- sim_settings$max_pots
     })
   }
   
   ## Combine all the dispersed seeds
-  Seeds <- combine_dispersed_seeds(dispersed_seeds_by_pot, controls$n_reps, 
-                                   controls$n_pots, runway_end)
+  Seeds <- combine_dispersed_seeds(dispersed_seeds_by_pot, expt_params$n_reps, 
+                                   sim_settings$n_pots, runway_end)
   
-  controls$n_pots <- ncol(Seeds)
+  sim_settings$n_pots <- ncol(Seeds)
   
   # Zero out the seeds in the gaps
-  Seeds <- gapify(Seeds, params, controls)
+  Seeds <- gapify(Seeds, plant_params, expt_params, sim_settings)
   
   return(Seeds)
 }
@@ -154,8 +172,8 @@ iterate_genotype <- function(Adults, params, controls,
 #' $$\log(S/A) = a + b \log A$$
 #' $$\log S = \log A + a + b \log A$$
 #' $$S = \exp[a + (b+1) \log A].$$
-Gompertz_seeds <- function(Adults, params, N_tot) {
-  with(params, {
+Gompertz_seeds <- function(Adults, plant_params, N_tot) {
+  with(plant_params, {
     expected_seeds <- Adults * exp(a_Gompertz) * N_tot ^ b_Gompertz
     expected_seeds[Adults * N_tot == 0] <- 0
     return(expected_seeds)
@@ -171,8 +189,8 @@ Gompertz_seeds <- function(Adults, params, N_tot) {
 #' 
 #' The variation is assumed to be log-normal; the sigma parameters are on the 
 #' log-transformed scale.
-ES_seeds <- function(Seeds, params, n_rep, ES_seed_time) {
-  with(params, {
+ES_seeds <- function(Seeds, plant_params, n_rep, ES_seed_time) {
+  with(plant_params, {
     ## Log-transform and apply temporal ES equally to all reps
     lseeds <- log(Seeds) + rnorm(1, 0, sigma_seed_time)
     
@@ -215,10 +233,10 @@ rqpois <- function(n, mu, theta) {
 #' # `DS_seeds()`
 #' Add demographic stochasticity to the seed production, using the negative binomial
 #' approximation to the quasi-Poisson.
-DS_seeds <- function(Seeds, params) {
+DS_seeds <- function(Seeds, plant_params) {
   n <- prod(dim(Seeds))
   # Don't want to see the warnings thrown when mu = 0
-  rand_seeds <- array(suppressWarnings(rqpois(n, Seeds, params$theta)), dim(Seeds))
+  rand_seeds <- array(suppressWarnings(rqpois(n, Seeds, plant_params$theta)), dim(Seeds))
   rand_seeds[Seeds == 0] <- 0 # rqpois returns NA for these cases
   rand_seeds
 }
@@ -226,9 +244,9 @@ DS_seeds <- function(Seeds, params) {
 #' <!-- ############################################################################# --> 
 #' # `kernel_stoch()`
 #' Calculate rep- and pot-specific dispersal kernels
-kernel_stoch <- function(params, controls) {
+kernel_stoch <- function(plant_params, expt_params, sim_settings) {
   library(MASS)
-  with(controls, with(params, {
+  with(sim_settings, with(expt_params, with(plant_params, {
     if (kernel_stoch_pots) { # Each pot gets different parameters
       ndraw <-  n_pots * n_reps
       
@@ -257,20 +275,20 @@ kernel_stoch <- function(params, controls) {
       neg_sigma <- sum(kernel_params$gg_sigma <= 0)
     }
     return(kernel_params)
-  }))
+  })))
 }
 
 #' <!-- ############################################################################# --> 
 #' # `det_kernel()`
 #' Distribute seeds according to a deterministic kernel
-det_kernel <- function(Seeds, kernel_params, params, controls){
+det_kernel <- function(Seeds, kernel_params, plant_params, expt_params, sim_settings){
   #### Seeds staying in maternal (home) pot ####
   home_pot <- Seeds * (1 - kernel_params$frac_dispersing)
   
   #### Seeds dispersing forward ####
   disp_seeds <- Seeds * kernel_params$frac_dispersing/2
   
-  max_dist <- controls$max_pots
+  max_dist <- sim_settings$max_pots
   
   # `forward_dispersal` is a 3-d array, with dimensions `n_reps`, `n_pots`, `max_dist`
   # It will hold the expected dispersal number at each distance for each rep x pot
@@ -278,7 +296,7 @@ det_kernel <- function(Seeds, kernel_params, params, controls){
   
   # `dvec` is the vector of pot boundaries. We use `diff(pgengamma(dvec, ...))` to get the
   # fraction of the distribution in each pot.
-  dvec <- controls$pot_width * (0:max_dist)
+  dvec <- expt_params$pot_width * (0:max_dist)
   
   # There might be a clever way to do this with apply(), but it would take 
   # lots of brain power to figure it out...
@@ -303,7 +321,7 @@ det_kernel <- function(Seeds, kernel_params, params, controls){
 #' # `seed_sampling()`
 #' Distribute seeds according to independent draws from a kernel
 #' 
-seed_sampling <- function(Seeds, kernel_params, params, controls) {
+seed_sampling <- function(Seeds, kernel_params, plant_params, expt_params, sim_settings) {
   #### Seeds staying in maternal (home) pot ####
   np <- array(c(Seeds, (1 - kernel_params$frac_dispersing)), dim = c(dim(Seeds), 2))
   home_pot <- apply(np, c(1, 2), function(x) rbinom(1, x[1], x[2]))
@@ -333,8 +351,8 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   #   to max_ds
   disp_dist <- array(0, dim = c(dim(Seeds), max_ds))
   k_end <- 0
-  for (rep in 1:controls$n_reps) {
-    occupied_pots <- (1:controls$n_pots)[disp_seeds[rep,] > 0]
+  for (rep in 1:expt_params$n_reps) {
+    occupied_pots <- (1:sim_settings$n_pots)[disp_seeds[rep,] > 0]
     for (pot in occupied_pots) {
       k_start <- k_end + 1
       ndisp <- disp_seeds[rep, pot]
@@ -345,8 +363,8 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
       
   # Distribute seeds into forward and backward dispersal, and rescale distance to pots
   forward_draw <- rbernoulli(prod(dim(disp_dist)))
-  disp_forward <- ceiling(forward_draw * disp_dist / controls$pot_width)
-  disp_backward <- ceiling((!forward_draw) * disp_dist / controls$pot_width)
+  disp_forward <- ceiling(forward_draw * disp_dist / expt_params$pot_width)
+  disp_backward <- ceiling((!forward_draw) * disp_dist / expt_params$pot_width)
   print(c(max(disp_backward), max(disp_forward)))
   max_dist <- max(c(disp_forward, disp_backward)) # farthest dispersing seed
 
@@ -433,18 +451,18 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots, runway_end) {
 #' # `gapify()`
 #' Set the seed abundance to zero in the "pots" that are actually gaps 
 #' 
-gapify <- function(Seeds, params, controls) {
-  gap <- params$gap_size
+gapify <- function(Seeds, plant_params, expt_params, sim_settings) {
+  gap <- sim_settings$gap_size
   if (gap > 0) { 
-    n_rep <- controls$n_reps
-    n_pot <- controls$n_pots
+    n_rep <- expt_params$n_reps
+    n_pot <- sim_settings$n_pots
     gap_mask <- rep(c(1, rep(0, gap)), length = n_pot)
     gap_mask <- matrix(gap_mask, n_rep, n_pot, byrow = TRUE)
     Seeds <- Seeds * gap_mask
   }
   
   # Drop any trailing zeros
-  npot <- controls$n_pots
+  npot <- sim_settings$n_pots
   rep_sum <- cummax(apply(Seeds, 2, sum)[npot:1])[npot:1]
   
   Seeds[, rep_sum > 0, drop = FALSE]
