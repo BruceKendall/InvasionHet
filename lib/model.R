@@ -72,10 +72,9 @@
 #' <!-- ############################################################################# --> 
 #' # `iterate_genotype()`
 #' Iterates the single genotype model one time step.
-#' If this is part of a multi-genotype simulation, then `N_tot` needs to provided; 
-#' it should be the summed
-#' numbers of individuals across all genotypes in each pot/rep (to use for 
-#' density dependence).
+#' If this is part of a multi-genotype simulation, then `N_tot` needs to provided; it
+#' should be the summed numbers of individuals across all genotypes in each pot/rep (to
+#' use for density dependence).
 iterate_genotype <- function(Adults, params, controls, 
                              ES_seed_time = NULL, N_tot = Adults) {
   controls$n_pots <- ncol(Adults)
@@ -92,7 +91,7 @@ iterate_genotype <- function(Adults, params, controls,
   # Density dependence in seed production
   Seeds <- Gompertz_seeds(Adults, params, N_tot)
   
-  # Environmental stochasticicy in seed production?
+  # Environmental stochasticity in seed production?
   if (controls$ES_seeds) {
     Seeds <- ES_seeds(Seeds, params, controls$n_reps, ES_seed_time)
   }
@@ -121,7 +120,7 @@ iterate_genotype <- function(Adults, params, controls,
       gg_Q            = array(params$gg_Q,            array_dim)
     )
   }
-  # print(unlist(kernel_params))
+
   # Seed sampling?
   if (controls$seed_sampling) {
     dispersed_seeds_by_pot <- seed_sampling(Seeds, kernel_params, params, controls)
@@ -170,8 +169,8 @@ Gompertz_seeds <- function(Adults, params, N_tot) {
 #' <!-- ############################################################################# --> 
 #' # `ES_seeds()`
 #' Add environmental stochasticity to the seed production. There are two components: a
-#' temporal component (with standarad deviation `sigma_seed_time`) that applies equally
-#' to all reps, and an among-rep component (with standarad deviation `sigma_seed_rep`)
+#' temporal component (with standard deviation `sigma_seed_time`) that applies equally
+#' to all reps, and an among-rep component (with standard deviation `sigma_seed_rep`)
 #' that applies equally to all pots within each rep.
 #' 
 #' The variation is assumed to be log-normal; the sigma parameters are on the 
@@ -182,7 +181,7 @@ ES_seeds <- function(Seeds, params, n_rep, ES_seed_time) {
     lseeds <- log(Seeds) + rnorm(1, 0, sigma_seed_time)
     
     ## Apply inter-rep ES equally to all pots within each rep
-    ## This uses recyling, and depends on each row being a rep
+    ## This uses recycling, and depends on each row being a rep
     lseeds <- lseeds + ES_seed_time
     
     ## Return anti-log-transformed result
@@ -277,12 +276,14 @@ det_kernel <- function(Seeds, kernel_params, params, controls){
   
   max_dist <- controls$max_pots
   
-  # forward_dispersal is a 3-d array, with dimensions n_reps, n_pots, max_dist
+  # `forward_dispersal` is a 3-d array, with dimensions `n_reps`, `n_pots`, `max_dist`
   # It will hold the expected dispersal number at each distance for each rep x pot
   forward_dispersal <- array(dim=c(dim(Seeds), max_dist)) 
-  # dvec is the pot boundaries. We use diff(pgengamma(dvec, ...)) to get the 
+  
+  # `dvec` is the vector of pot boundaries. We use `diff(pgengamma(dvec, ...))` to get the
   # fraction of the distribution in each pot.
   dvec <- controls$pot_width * (0:max_dist)
+  
   # There might be a clever way to do this with apply(), but it would take 
   # lots of brain power to figure it out...
   for (pot in 1:ncol(Seeds)) {
@@ -316,7 +317,7 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   max_ds <- max(disp_seeds) # to set the array dimension to pad to
   
   # Generate a vector of seed-specific dispersal distances for each pot/rep.
-  # To get conformable dimensions, pad results for pots w/ less than max_ds 
+  # To get conformable dimensions, pad results for pots w/ less than `max_ds` 
   # seeds with zeros
 
   # Put dispersing seeds and all params into a common array
@@ -352,6 +353,7 @@ seed_sampling <- function(Seeds, kernel_params, params, controls) {
   disp_backward <- ceiling((!forward_draw) * disp_dist / controls$pot_width)
   print(c(max(disp_backward), max(disp_forward)))
   max_dist <- max(c(disp_forward, disp_backward)) # farthest dispersing seed
+
   # Tabulate the number at each distance
   forward_dispersal <- apply(disp_forward, c(1, 2), disp_table, 
                              max_dist = max_dist, method = "tabulate") %>%
@@ -393,7 +395,7 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots, runway_end) {
     ### Non-dispersing seeds
     disp_seeds <- home_pot
   
-    ### Backwards dispersing seeds
+    #### Backwards dispersing seeds  ####
     # Add a temporary buffer to hold the seeds that disperse off the back end of 
     # the runway
     disp_seeds <- matrix(c(rep(0, dist_x_reps), disp_seeds), n_reps, max_dist + n_pots)
@@ -405,7 +407,7 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots, runway_end) {
     # Get rid of the temporary buffer
     disp_seeds <- disp_seeds[ , -(1:max_dist), drop = FALSE]
     
-    ### forwards dispersing seeds
+    #### Forwards dispersing seeds  ####
     # Add a buffer for seeds dispersing into new territory
     disp_seeds <- matrix(c(disp_seeds, rep(0, dist_x_reps)), n_reps, max_dist + n_pots)
     # Sum up the seeds, with an appropriate forward shift
@@ -420,7 +422,8 @@ combine_dispersed_seeds <- function(seeds_by_pot, n_reps, n_pots, runway_end) {
         disp_seeds[rep, (runway_end[rep] + 1):disp_cols] <- 0
       }
     }
-    # Truncate the all-zero columns to keep dimensions under control
+    
+    #### Truncate the all-zero columns to keep dimensions under control  ####
     tot_seed_by_pot <- colSums(disp_seeds)
     max_dist <- max(seq_along(tot_seed_by_pot)[tot_seed_by_pot>0])
     if(is.infinite((max_dist))) max_dist <- 1
