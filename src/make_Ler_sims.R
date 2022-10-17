@@ -1,7 +1,7 @@
 # make_Ler_sims.R
 ProjectTemplate::load.project()
 
-nruns <- 1000
+nruns <- 10
 n_reps <- 10
 
 n_init <- 50
@@ -45,8 +45,7 @@ Ler_spread_stats <- data.frame(
   ES = logical(),
   KS = logical(),
   SS = logical(),
-  Mean = numeric(),
-  Variance = numeric()
+  run = numeric()
 )
 for (DS in c(TRUE, FALSE)) {
   expt_params$DS_seeds <- DS
@@ -59,7 +58,7 @@ for (DS in c(TRUE, FALSE)) {
         for (i in 1:nruns) {
           ES_seed_time <- rnorm(6, 0, Ler_params$sigma_seed_time)
           for(gap_size in 0:3) {
-            print(c(gap_size, DS, ES, KS, SS))
+            print(c(gap_size, DS, ES, KS, SS, i))
             sim_settings$gap_size <- gap_size
             rep_spread_stats <- sim_mean_var(ES_seed_time)
             #          rep_spread_stats <- t(replicate(nruns, sim_mean_var(), 
@@ -71,6 +70,7 @@ for (DS in c(TRUE, FALSE)) {
                                                  ES = ES,
                                                  KS = KS,
                                                  SS = SS,
+                                                 run = i,
                                                  #   Mean = rep_spread_stats[, 1],
                                                  #   Variance = rep_spread_stats[, 2]
                                                  Max_Dist = rep_spread_stats
