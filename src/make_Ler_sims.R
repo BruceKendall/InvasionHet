@@ -1,25 +1,29 @@
 # make_Ler_sims.R
 ProjectTemplate::load.project()
 
-nruns <- 10
+nruns <- 1000
 n_reps <- 10
 
 n_init <- 50
-controls <- list(
-  n_reps = n_reps,
+sim_settings <- list(
   DS_seeds = TRUE,
   ES_seeds = TRUE,
   kernel_stoch = TRUE,
   kernel_stoch_pots = TRUE,
-  seed_sampling = TRUE,
+  seed_sampling = TRUE
+)
+expt_params <- list(
+  n_reps = n_reps,  
   pot_width = 7,
-  max_pots = 20,
   new_pots = 8
 )
+
+Ler_params$max_pots <- 20
+
 sim_mean_var <- function(ES_seed_time = NULL) {
-  Adults <- matrix(n_init, controls$n_reps, 1)
+  Adults <- matrix(n_init, expt_params$n_reps, 1)
   for (i in 1:6) {
-    Adults <- iterate_genotype(Adults, Ler_params, controls, ES_seed_time[i])
+    Adults <- iterate_genotype(Adults, Ler_params, expt_params, sim_settings, ES_seed_time[i])
   }
   npot <- ncol(Adults)
   rep_sum <- apply(Adults[, npot:1, drop = FALSE], 1, cummax)
@@ -45,18 +49,18 @@ Ler_spread_stats <- data.frame(
   Variance = numeric()
 )
 for (DS in c(TRUE, FALSE)) {
-  controls$DS_seeds <- DS
+  expt_params$DS_seeds <- DS
   for (ES in c(TRUE, FALSE)) {
-    controls$ES_seeds <- ES
+    expt_params$ES_seeds <- ES
     for (KS in c(TRUE, FALSE)) {
-      controls$kernel_stoch <- KS
+      expt_params$kernel_stoch <- KS
       for (SS in c(TRUE, FALSE)) {
-        controls$seed_sampling <- SS
-        print(c(gap_size, DS, ES, KS, SS))
+        expt_params$seed_sampling <- SS
         for (i in 1:nruns) {
           ES_seed_time <- rnorm(6, 0, Ler_params$sigma_seed_time)
           for(gap_size in 0:3) {
-            Ler_params$gap_size <- gap_size
+            print(c(gap_size, DS, ES, KS, SS))
+            sim_settings$gap_size <- gap_size
             rep_spread_stats <- sim_mean_var(ES_seed_time)
             #          rep_spread_stats <- t(replicate(nruns, sim_mean_var(), 
             #                                          simplify = TRUE))
