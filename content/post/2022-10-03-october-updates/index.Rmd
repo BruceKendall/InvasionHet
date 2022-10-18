@@ -185,3 +185,12 @@ I did realize on doing this that I'm often passing the entire list through simpl
 
 ## New bugs
 * There seems to be an issue with `apply()` dropping an array dimension if there is only one replicate that hasn't gone extinct.
+
+# Oct 17
+I updated make_Ler_sims to work with the updated version of the model. I also add a recording of the run number, so that we can get means and variances for each run.
+
+I have started a new library script, `viz.R`, with functions to provide visualizations. I have made a quick modification of the Ler plots to show violin plots of the multiple runs.
+
+## New bugs
+In trying to run the visualization code, I was getting errors about on out-of-date grouping scheme for LerC_spread. I tried re-munging, but that threw an error in `04-Ler_dispersal_stats.R`. So apparently the package updated have left something non-functional in the munge code that I'll need to update!
+
