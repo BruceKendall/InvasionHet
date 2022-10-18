@@ -1,7 +1,7 @@
 # make_Ler_sims.R
 ProjectTemplate::load.project()
 
-nruns <- 10
+nruns <- 1000
 n_reps <- 10
 
 n_init <- 50
@@ -82,4 +82,5 @@ for (DS in c(TRUE, FALSE)) {
   }
 }
 
-#ProjectTemplate::cache("Ler_spread_stats")
+Ler_sim_maxd_1000 <- Ler_spread_stats
+ProjectTemplate::cache("Ler_sim_maxd_1000")
