@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.61.0" />
+
+
+<title>October updates - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="October updates - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">6 min read</span>
+    
+
+    <h1 class="article-title">October updates</h1>
+
+    
+    <span class="article-date">2022/10/03</span>
+    
+
+    <div class="article-content">
+      
+
+
+<pre><code>Warning in options(stringsAsFactors = config$as_factors):
+&#39;options(stringsAsFactors = TRUE)&#39; is deprecated and will be disabled</code></pre>
+<p>Here’s where I’ll keep a running tab of the incremental code updates and fixes</p>
+<div id="oct-3" class="section level1">
+<h1>Oct 3</h1>
+<div id="fixed-empty-runway-bug" class="section level2">
+<h2>Fixed empty runway bug</h2>
+<p>I’ve fixed the error thrown when trying to evalueate the furthest occupied pot in an extinct replicate. This uses a new function, <code>last_occupied_pot()</code>, in <code>helpers.R</code>, which is called from within the model function but can also be called from the analysis code (see example usage in <code>make_Ler_sims.R</code>). The optional argument <code>zero</code> allows the return value for an empty replicate to be something other than zero (to avoid the risk of zero-index values).</p>
+<p>I ran <code>make_Ler_sims</code> successfully, and the warnings indicated that it ran into 26 instances of an extinct replicate.</p>
+</div>
+<div id="code-profiling" class="section level2">
+<h2>Code profiling</h2>
+<p>I’ve profiled the model using <code>make_Ler_sims</code>. The results are in <code>logs/make_Ler_sims-2022-10-03.Rprofvis</code> (not on git as it’s large!)</p>
+<ul>
+<li>Total time in <code>iterage_genotype()</code>: 139300 ms</li>
+<li>The bulk of that is in <code>seed_sampling()</code>: 134360</li>
+<li>Within that, the bulk is in the <code>aaply</code> call to <code>rgengamma</code> (25k), and the <code>aaply</code>s to <code>disp_table</code> (50k each)</li>
+<li>Within <code>dist_table()</code>, 75k is in the line <code>raw_table &lt;- table(dists)</code>. This is more than half the total time!</li>
+</ul>
+<p>So the first thing to do is to find a faster replacement for <code>table</code>. <a href="https://stackoverflow.com/questions/68604367/is-there-an-efficient-alternative-to-table">This StackOverflow page</a> suggests that <code>tabulate()</code> (in base R) is about 14 times faster than <code>table()</code>, which would bring this operation down to 5-6k ms. According to the help page, “tabulate is the workhorse for the table function.” So the time is spent in all the robustness of table. It may take some work to figure out exactly how to call tabulate.</p>
+<p>Note that this is not one of the issues I flagged in my manual code review!</p>
+</div>
+</div>
+<div id="oct-4" class="section level1">
+<h1>Oct 4</h1>
+<div id="code-profiling-1" class="section level2">
+<h2>Code profiling</h2>
+<p>I’ve changed <code>disp_table()</code> to use <code>tabulate</code> rather than <code>table</code>, and confirmed that they return the same results. Microbenchmarking (see <code>test_disp_table()</code>) suggests that there is a 100-fold speedup in that function!</p>
+<p>Profiling <code>make_Ler_sims.R</code> with this change now speeds things up a lot (make_Ler_sims-2022-10-04.Rprofvis). About half of the total time is in calculating the gengamma random numbers, which doesn’t make use of the internal vectorizing, instead using <code>aaply</code> to go across parameters. Table building now takes about 40% of total time, but less than 10% of that seems to be actually inside <code>disp_table</code>; apparently <code>aaply</code> has a huge performance overhead! It seems that the base <code>apply</code> may be much faster, but I wonder whether the bugs I was trapping by using <code>.drop = FALSE</code> will reappear. It might also be that those commented-out <code>aperm</code> statements were applied to an earlier attempt at using <code>apply</code>.</p>
+</div>
+</div>
+<div id="oct-5" class="section level1">
+<h1>Oct 5</h1>
+<div id="general" class="section level2">
+<h2>General</h2>
+<p>I updated my home mac to R 4.4.1, and updated all libraries.</p>
+<p>I found the code to revert blogdown posts to their old structure, and added it to the project’s <code>.Rprofile</code>. I also added the option not to automatically rebuild the website every time a file is saved, as that is problematic if there are code errors and also takes nontrivial time with the (uncached) ProjectTemplate loading.</p>
+</div>
+<div id="bugs" class="section level2">
+<h2>Bugs</h2>
+<p>I removed the <code>empirical = TRUE</code> arguments to <code>mvrnorm()</code>.</p>
+</div>
+<div id="efficiency" class="section level2">
+<h2>Efficiency</h2>
+<p>Let’s look at replacing <code>aaply</code> with <code>apply</code>. Things to check include the shape of the returned function and what happens to dimensions with value 1. The output uses up lots of space so I don’t show it; the comments below summarize the results of running the code.</p>
+<pre class="r"><code>xx &lt;- array(1:24, dim = c(3,4,2))
+# Scalar function return
+y1 &lt;- aaply(xx, c(1,2), sum)
+y2 &lt;- apply(xx, c(1,2), sum)
+y1
+y2
+class(y1)
+class(y2)
+# Vector function return
+y1 &lt;- aaply(xx, c(1,2), function(x) c(sum(x), prod(x)))
+y2 &lt;- apply(xx, c(1,2), function(x) c(sum(x), prod(x)))
+y1
+y2
+aperm(y2, c(2, 3, 1))
+class(y1)
+class(y2)
+
+xx &lt;- array(1:8, dim = c(1,4,2))
+xx
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)), .drop = FALSE)
+apply(xx, c(1,2), function(x) c(sum(x), prod(x))) %&gt;% aperm(c(2, 3, 1))
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)))
+
+xx &lt;- array(1:8, dim = c(4,1,2))
+xx
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)), .drop = FALSE)
+apply(xx, c(1,2), function(x) c(sum(x), prod(x))) %&gt;% aperm(c(2, 3, 1))
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)))
+
+xx &lt;- array(1:8, dim = c(2,4,1))
+xx
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)), .drop = FALSE)
+apply(xx, c(1,2), function(x) c(sum(x), prod(x))) %&gt;% aperm(c(2, 3, 1))
+aaply(xx, c(1,2), function(x) c(sum(x), prod(x)))</code></pre>
+<ul>
+<li>When the function returns a scalar, the outcomes are the same, except that rows and columns from <code>apply</code> are unnamed. The latter should not be an issue for me.</li>
+<li>When the function returns a vector, that vector is put into the leading dimension of the returned array by <code>apply</code>, whereas it remains in its original position under <code>aaply</code>. This is clearly why I had those <code>aperm</code> statements.</li>
+<li>When one of the dimensions being parsed has value 1, then <code>aaply</code> with the defaults drops a dimension. But <code>apply</code> by itself seems fine.</li>
+</ul>
+<p>So it seems that <code>apply %&gt;% aperm</code> should be a drop-in replacement for <code>aaply(.drop = FALSE)</code>. So why did I make the switch in the first place? Was I just trying to be modern, or does <code>aaply</code> have some other advantage? I made the change on 5/29/19, in a commit that has massive numbers of code updates, with no comments on individual changes. It may just be that I liked the elegance of skipping the <code>aperm</code> step.</p>
+<p>I’ve tried adding the apply version back in (I had to fix the order of indices in aperm); compared with aaply, it’s about 2.5 times faster. It’s still the case that most of that time is in the overhead. <code>apply</code> has a lot of cases, but if I’ve parsed it correctly, in my use case it’s doing a <code>for</code> loop over the nreps x npots cases. Further, rather than calling the function directly in that loop, it’s calling something called <code>forceAndCall</code> which is trapping for closures, which may add more time. And it’s hard to know how much is being added by aperm. <a href="https://stackoverflow.com/questions/32237923/plyraaply-is-very-slow-compared-to-nested-loops">This post</a> suggests that apply is as fast as a for loop, but the system times were very crude (0.02 sec vs. 0.00 sec). I run a microbenchmark based on their example:</p>
+<pre class="r"><code>obs &lt;- array(rnorm(10*13*12), c(10,13,12))
+floop &lt;- function(obs) {
+  l2 = dim(obs)[2] 
+  l3 = dim(obs)[3]
+  minObs&lt;-matrix(nrow=dim(obs)[2],ncol=dim(obs)[3])
+  for (i in 1:l2) 
+    for (j in 1:l3) 
+      minObs[i,j]&lt;-min(obs[,i,j],na.rm = TRUE)
+  return(minObs)
+}
+mbm &lt;- microbenchmark(aaply(obs, c(2,3), min), floop(obs), apply(obs, c(2,3), min))</code></pre>
+<pre><code>Unit: microseconds
+                     expr       min        lq       mean     median        uq       max neval
+ aaply(obs, c(2, 3), min) 26991.818 27617.330 29557.6689 29839.2335 30930.627 35212.618   100
+               floop(obs)   219.243   245.001   285.7647   264.8650   303.561   439.593   100
+ apply(obs, c(2, 3), min)   281.425   317.083   353.9656   341.7015   372.688   573.770   100</code></pre>
+<p>In this case, there’s only a 20% speedup of the for loop vs apply. So maybe it’s in the aperm call?</p>
+<pre class="r"><code>mbm2 &lt;- microbenchmark(apply(obs, c(2,3), min), apply(obs, c(2,3), min) %&gt;% aperm(c(2,1)))</code></pre>
+<pre><code>Unit: microseconds
+                                        expr     min       lq     mean  median       uq     max neval
+                    apply(obs, c(2, 3), min) 273.826 288.7125 324.2954 299.926 339.1565 482.853   100
+ apply(obs, c(2, 3), min) %&gt;% aperm(c(2, 1)) 293.200 310.4655 345.1462 324.005 343.2050 554.648   100</code></pre>
+<p>Here there’s basically no difference. So the overhead is all in the for loop, and we probably can’t get away from it without working out a direct vectorization. But it is curious that the speedup from aaply to apply in the microbenchmark is so much greater than it is in the profile.</p>
+<p>At any rate, I finalize the code with apply and aperm.</p>
+</div>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

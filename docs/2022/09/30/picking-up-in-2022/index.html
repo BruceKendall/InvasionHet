@@ -67,7 +67,6 @@
 
     <div class="article-content">
       
-<script src="https://brucekendall.github.io/InvasionHet/2022/09/30/picking-up-in-2022/index_files/header-attrs/header-attrs.js"></script>
 
 
 <p>Last week Jenn Williams got in touch with me again. She wrote:</p>
@@ -112,7 +111,7 @@
 <div id="code-concerns-inconsistencies-and-redundancies" class="section level3">
 <h3>Code concerns, inconsistencies, and redundancies</h3>
 <ul>
-<li>There are some commented-out <code>aperm</code> statements in <code>seed_sampling</code>. Can these be deleted, or was this part of my incomplete debugging work?</li>
+<li><del>There are some commented-out <code>aperm</code> statements in <code>seed_sampling</code>. Can these be deleted, or was this part of my incomplete debugging work?</del></li>
 <li>In <code>iterate_genotype</code>, dispersal further than <code>max_pots</code> is truncated. However, this only affects the output from <code>det_kernel</code>; in <code>seed_sampling</code> there’s a line that effectively puts all the super-dispersers into the last pot. I think I should delete that line for consistency.</li>
 </ul>
 </div>
@@ -147,17 +146,23 @@
 <div id="general-housecleaning" class="section level2">
 <h2>General housecleaning</h2>
 <ul>
-<li>Update to current versions of R in both my iMac and MacBook. This will certainly require migrating the ProjectTemplate material (it is already throwing warnings); the real question is whether all the data munging will still work at all</li>
-<li>At some point blogdown moved to a new structure where each post has its own folder and the Rmd is named “index.Rmd”, This is annoying, especially if I’m looking at source from previous posts! And also it creates unneccsary folder bloat, given the simplicity of my work. I recall seeing a way to revert this (I think I ran into it previously with the coral project)–I need to do this.</li>
+<li><del>Update to current versions of R in both my iMac and MacBook. This will certainly require migrating the ProjectTemplate material (it is already throwing warnings); the real question is whether all the data munging will still work at all</del></li>
+<li><del>At some point blogdown moved to a new structure where each post has its own folder and the Rmd is named “index.Rmd”, This is annoying, especially if I’m looking at source from previous posts! And also it creates unneccsary folder bloat, given the simplicity of my work. I recall seeing a way to revert this (I think I ran into it previously with the coral project)–I need to do this.</del></li>
 </ul>
 </div>
 <div id="debugging" class="section level2">
 <h2>Debugging</h2>
 <ul>
-<li>When I try to run <code>make_Ler_sims</code> I get an Rcpp error thrown from deep within <code>rgengamma</code>. I don’t think it’s anything to do with my code; I’m sending in reasonable values. I hope that updating everything will fix this.</li>
-<li>There are some comprehensive (though undocumented) test routines that I had written in <code>tests.R</code>, that exercise the various functions in <code>model.R</code>. When running the first one, <code>test_kernel_stoch()</code>, I noticed that the sample means and covariances for the parameters generated from the multivariate normal exactly match the input values. I had used the <code>empirical = TRUE</code> flag, as from the help for <code>mvrnorm</code> that seemed like the thing to do. But that forces this rescaling, which is not what I want. The function is from <strong>MASS</strong>, but Venables &amp; Ripley say nothing about it; I can only imagine it has value in preserving structure in some bootstrapping applications. At any rate, I need to take that out.</li>
+<li><del>When I try to run <code>make_Ler_sims</code> I get an Rcpp error thrown from deep within <code>rgengamma</code>. I don’t think it’s anything to do with my code; I’m sending in reasonable values. I hope that updating everything will fix this.</del></li>
+<li><del>There are some comprehensive (though undocumented) test routines that I had written in <code>tests.R</code>, that exercise the various functions in <code>model.R</code>. When running the first one, <code>test_kernel_stoch()</code>, I noticed that the sample means and covariances for the parameters generated from the multivariate normal exactly match the input values. I had used the <code>empirical = TRUE</code> flag, as from the help for <code>mvrnorm</code> that seemed like the thing to do. But that forces this rescaling, which is not what I want. The function is from <strong>MASS</strong>, but Venables &amp; Ripley say nothing about it; I can only imagine it has value in preserving structure in some bootstrapping applications. At any rate, I need to take that out.</del></li>
 </ul>
 </div>
+</div>
+<div id="a-bit-of-work" class="section level1">
+<h1>A bit of work</h1>
+<p>I updated R (to v. 4.2.1) and the libraries; everything seems to work (though I didn’t try rebuilding the data). As hoped for, it resolved the Rcpp error.</p>
+<p>There are some warnings when building the blog. Will need to deal with them.</p>
+<p>I’ve found that the -Inf error comes when there’s a runway that is completely extinct–it comes up whenever I use the <code>max(seq_along(y)[y&gt;0])</code> because <code>max</code> returns -Inf for an empty vector. I can fix this by max’ing the result with 1 (I think).</p>
 </div>
 
     </div>
