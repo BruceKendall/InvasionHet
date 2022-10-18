@@ -48,13 +48,13 @@ Ler_spread_stats <- data.frame(
   run = numeric()
 )
 for (DS in c(TRUE, FALSE)) {
-  expt_params$DS_seeds <- DS
+  sim_settings$DS_seeds <- DS
   for (ES in c(TRUE, FALSE)) {
-    expt_params$ES_seeds <- ES
+    sim_settings$ES_seeds <- ES
     for (KS in c(TRUE, FALSE)) {
-      expt_params$kernel_stoch <- KS
+      sim_settings$kernel_stoch <- KS
       for (SS in c(TRUE, FALSE)) {
-        expt_params$seed_sampling <- SS
+        sim_settings$seed_sampling <- SS
         for (i in 1:nruns) {
           ES_seed_time <- rnorm(6, 0, Ler_params$sigma_seed_time)
           for(gap_size in 0:3) {
