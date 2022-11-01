@@ -12,3 +12,4 @@ cache/*.hash
 !cache/Ler_spread_stats.hash
 reports/*/*.pdf
 reports/*/*_cache
+!cache/Ler_sim_maxd_1000.*
