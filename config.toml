@@ -4,7 +4,7 @@ title = "Project notebook for the Invasion Heterogeneity project"
 theme = "hugo-lithium-theme"
 googleAnalytics = ""
 disqusShortname = ""
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
 publishDir = "docs/"
 
 [permalinks]
@@ -49,3 +49,8 @@ publishDir = "docs/"
     height = 50
     alt = "Logo"
 
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

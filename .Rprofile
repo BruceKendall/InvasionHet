@@ -18,6 +18,7 @@ knitr::opts_knit$set(root.dir = project_root)
 #     ProjectTemplate overhead)
 options(blogdown.new_bundle = FALSE)
 options(blogdown.knit.on_save = FALSE)
+options(blogdown.hugo.version = "0.61.0")
 
 # Clean up
 rm(project_root)
