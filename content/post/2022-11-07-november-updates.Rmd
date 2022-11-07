@@ -1,0 +1,24 @@
+---
+title: November updates
+author: Bruce Kendall
+date: '2022-11-07'
+slug: november-updates
+categories: []
+tags: []
+---
+```{r setup2, echo=FALSE, message=FALSE, cache=TRUE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+#ProjectTemplate::load.project()
+```
+
+# November 7
+## Visualization
+I have updated and cleaned up `Ler_maxd_viz()` so that it shows violin plots for the simulations. In addition, the new simulations have a single MC replicate that has 10 replicate populations (mirroring the greenhouse); the mean and variance of spread is calculated among those 10 populations; and these stats collected across all of the MC replicates. Thus, we account for finite sample size (10 populations) in the empirical mean and variance.
+
