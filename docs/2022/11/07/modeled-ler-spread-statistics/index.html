@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.61.0" />
+
+
+<title>Modeled Ler spread statistics - Project notebook for the Invasion Heterogeneity project</title>
+<meta property="og:title" content="Modeled Ler spread statistics - Project notebook for the Invasion Heterogeneity project">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/InvasionHet/css/fonts.css" media="all">
+<link rel="stylesheet" href="/InvasionHet/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/InvasionHet/" class="nav-logo">
+    <img src="/InvasionHet/images/Runway.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/InvasionHet/about/">About</a></li>
+    
+    <li><a href="/InvasionHet/categories/">Categories</a></li>
+    
+    <li><a href="/InvasionHet/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/BruceKendall/InvasionHet/">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">1 min read</span>
+    
+
+    <h1 class="article-title">Modeled Ler spread statistics</h1>
+
+    
+    <span class="article-date">2022/11/07</span>
+    
+
+    <div class="article-content">
+      
+
+
+<pre><code>Warning in options(stringsAsFactors = config$as_factors):
+&#39;options(stringsAsFactors = TRUE)&#39; is deprecated and will be disabled</code></pre>
+<pre class="r"><code>Lss &lt;- Ler_maxd_summary(Ler_sim_maxd_1000)</code></pre>
+<pre class="r"><code>Ler_maxd_viz(0, Lss, &quot;Mean&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-1.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(0, Lss, &quot;Variance&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-2.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(1, Lss, &quot;Mean&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-3.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(1, Lss, &quot;Variance&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-4.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(2, Lss, &quot;Mean&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-5.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(2, Lss, &quot;Variance&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-6.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(3, Lss, &quot;Mean&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-7.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(3, Lss, &quot;Variance&quot;) </code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-8.png" width="672" /></p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/InvasionHet/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/InvasionHet/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/InvasionHet/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

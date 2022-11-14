@@ -23,4 +23,13 @@ tags: []
 I have updated and cleaned up `Ler_maxd_viz()` so that it shows violin plots for the simulations. In addition, the new simulations have a single MC replicate that has 10 replicate populations (mirroring the greenhouse); the mean and variance of spread is calculated among those 10 populations; and these stats collected across all of the MC replicates. Thus, we account for finite sample size (10 populations) in the empirical mean and variance.
 
 ## Blogdown
-It appears that, on my laptop at least, "Build website" doesn't actually process new Rmd files. Thus, I need to knit the individual post by hand.
+It appears that, on my laptop at least, "Build website" doesn't actually process new Rmd files. Thus, I need to knit the individual post by hand. This might be a function of turning off automatic knitting; 
+
+FWIW, here's the code for printing the time series from the experiment:
+```
+filter(popLer, Treatment=="C", Gap=="3p") %>% 
+ggplot(aes(x=Pot, y=Seedlings, group=Gen, color = Gen)) + 
+geom_line() + 
+facet_wrap(~Rep) + 
+scale_y_log10()
+```

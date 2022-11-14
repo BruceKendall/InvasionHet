@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Project notebook for the Invasion Heterogeneity project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 07 Nov 2022 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://brucekendall.github.io/InvasionHet/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,9 +14,18 @@
     <item>
       <title>dispersal</title>
       <link>https://brucekendall.github.io/InvasionHet/tags/dispersal/</link>
-      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 07 Nov 2022 00:00:00 +0000</pubDate>
       
       <guid>https://brucekendall.github.io/InvasionHet/tags/dispersal/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ler</title>
+      <link>https://brucekendall.github.io/InvasionHet/tags/ler/</link>
+      <pubDate>Mon, 07 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://brucekendall.github.io/InvasionHet/tags/ler/</guid>
       <description></description>
     </item>
     
@@ -26,15 +35,6 @@
       <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>https://brucekendall.github.io/InvasionHet/tags/ril/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Ler</title>
-      <link>https://brucekendall.github.io/InvasionHet/tags/ler/</link>
-      <pubDate>Wed, 23 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://brucekendall.github.io/InvasionHet/tags/ler/</guid>
       <description></description>
     </item>
     

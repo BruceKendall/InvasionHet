@@ -1,0 +1,63 @@
+---
+title: "Modeled Ler spread statistics"
+author: "Bruce Kendall"
+date: "2022-11-07"
+output: pdf_document
+---
+```{r setup2, echo=FALSE, message=FALSE, warning=FALSE}
+#######################################################################################
+### This chunk can be deleted from any entry that lacks R code                      ###
+### Set cache=FALSE during the day if you are changing the project environment;     ###
+###   set it back to TRUE at the end of the day to ensure that rebuilds don't do    ###
+###   unneccesary project loads.                                                    ###
+#######################################################################################
+
+# Load the project. For some reason it has to be in a separate chunck.
+ProjectTemplate::load.project()
+```
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Knitr options. Note that these mean:
+#   - All output will be cached. This is desireable in case code/data changes in the 
+#     future; but it means that all chunks should be labeled for reliable behavior. 
+#     DEPENDENCIES ACROSS CODE CHUNKS MAY BE AN ISSUE.
+#   - R code will run in the project root directory
+project_root <- normalizePath("./reports/Misc")
+knitr::opts_chunk$set(comment = '', cache = TRUE)
+knitr::opts_knit$set(root.dir = project_root)
+
+
+# Clean up
+rm(project_root)
+```
+
+Here are plots that show how the model (as of 7 Nov 2022) does at predicting the mean and variance of Ler spread after 6 generations.
+Each Monte Carlo replicate has simulations of 10 populations (to match the experimental design).
+Within each MC replicate, the mean and variance of maximum distance across the 10 populations is calculated.
+In the plots, the violin plots show the distribution of the statistics across 1000 MC replicates.
+This accounts for sampling uncertainty, given only 10 replicates in the experiment.
+The quartiles of the distribution are shown as horizontal lines within each distribution.
+The horizontal line across the entire plot is the value from the experimental data.
+
+Some observations:
+
+1. In all but the 3-pot gaps, all versions of the model substantially overestimate the mean spread distance
+2. In the 3-pot gaps, the models with kernel sampling get the mean spread distance right on; those without kernel sampling substantially underestimate the mean spread distance.
+3. In the continuous runway, all versions of the model substantially underestimate the spread variance.
+4. In the 1- and 2-pot gaps, the full model estimates the spread variance the best. In 1-pot gaps, all the models with both kernel sampling and seed sampling do reasonably well; the others underestimate the variance fairly substantially. In 2-pot gaps, all the models with kernel sampling do reasonably well; the others underestimate the variance to differing degrees. 
+5. In the 3-pot gaps, the models with kernel sampling estimate the spread variance well; the others greatly underestimate it.
+
+
+```{r make_summ, echo=FALSE, message=FALSE}
+Lss <- Ler_maxd_summary(Ler_sim_maxd_1000)
+```
+```{r make_graphs, echo=FALSE, warning=FALSE}
+Ler_maxd_viz(0, Lss, "Mean")
+Ler_maxd_viz(0, Lss, "Variance")
+Ler_maxd_viz(1, Lss, "Mean")
+Ler_maxd_viz(1, Lss, "Variance")
+Ler_maxd_viz(2, Lss, "Mean")
+Ler_maxd_viz(2, Lss, "Variance")
+Ler_maxd_viz(3, Lss, "Mean")
+Ler_maxd_viz(3, Lss, "Variance") 
+```

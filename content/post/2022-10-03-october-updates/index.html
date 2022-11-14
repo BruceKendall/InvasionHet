@@ -122,3 +122,79 @@ mbm &lt;- microbenchmark(aaply(obs, c(2,3), min), floop(obs), apply(obs, c(2,3),
 <p>At any rate, I finalize the code with apply and aperm.</p>
 </div>
 </div>
+<div id="oct-10" class="section level1">
+<h1>Oct 10</h1>
+<div id="efficiency-1" class="section level2">
+<h2>Efficiency</h2>
+<p>I just profiled <code>apply</code> vs <code>aaply</code> for the random number generation, and the former takes about half as long. So I’ll go with that.</p>
+<p>Next, I compared a single call to rgengamma with a long vector of parameters to the apply call. Even with for loops before and after to simulate preparing and parsing the data, there was more than a 10-fold speedup (see <code>test_rgengamma()</code>). So it seems worthwhile to pursue this.</p>
+<p>Haven’t quite gotten there, but here are some code snippets that point where I’m heading:</p>
+<pre class="r"><code>disp_seeds &lt;- matrix(c(5, 4, 0, 2, 10, 3), nrow = 2, byrow = TRUE)
+QQ &lt;- matrix(1:6, nrow = 2, byrow = TRUE)
+x &lt;- array(c(disp_seeds, QQ), dim = c(2,3,2))
+y &lt;- unlist(apply(x, c(2,1), function(x) rep(x[2], x[1]), simplify = FALSE))
+max_ds &lt;- max(disp_seeds) # to set the array dimension to pad to
+yy &lt;- array(0, dim = c(2,3,max_ds))</code></pre>
+<p>Then a double for loop to fill in appropriate parts of yy with appropriate parts of y. Note that the apply has the dimensions reversed to ensure that y comes out row-wise.</p>
+</div>
+</div>
+<div id="oct-11" class="section level1">
+<h1>Oct 11</h1>
+<div id="efficiency-2" class="section level2">
+<h2>Efficiency</h2>
+<p>OK, I’ve implemented the revised code. The savings aren’t as dramatic as microbenchmark had suggested (perhaps because of memory issues?); maybe a 2-fold speedup. But it’s something!</p>
+</div>
+</div>
+<div id="oct-13" class="section level1">
+<h1>Oct 13</h1>
+<div id="code-inconsistencies" class="section level2">
+<h2>Code inconsistencies</h2>
+<p>I’ve rationalized the way dispersal tails are handled by making <code>det_kernel</code> simply calculate out to the value of <code>controls$max_pots</code> and getting rid of the reflection in <code>seed_sampling</code>. We still need a rationalized value of maximum dispersal distance.</p>
+</div>
+<div id="conceptual-issues" class="section level2">
+<h2>Conceptual issues</h2>
+<p>I’ve added a value to pass into <code>iterate_genotype</code> to use for the temporal component of environmental stochasticity in seed production, with a sensible default. This then gets passed through to <code>ES_seeds</code>. This runs with both <code>test_iterate_genotype</code> and with an appropriately updated <code>make_Ler_sims</code></p>
+</div>
+</div>
+<div id="oct-14" class="section level1">
+<h1>Oct 14</h1>
+<div id="documentation" class="section level2">
+<h2>Documentation</h2>
+<ul>
+<li>Cleaned up comments</li>
+<li>Fixed equation derivation in <code>gompertz_seeds()</code></li>
+<li>Added documentation for missing input list values</li>
+</ul>
+</div>
+<div id="code-structure" class="section level2">
+<h2>Code structure</h2>
+<p>I have separated the model inputs into <code>plant_params</code>, <code>expt_params</code>, and <code>sim_settings</code>. Everything is appropriately propagated through <code>model.R</code>, and I have updated <code>test_iterate_genotype()</code> to work with the new structure. I’ll need to update some of the other test functions, as well as the simulation drivers.</p>
+<p>I did realize on doing this that I’m often passing the entire list through simply to get a single value; in those cases I should simplify things.</p>
+<ul>
+<li>I’ve pulled <code>n_pots</code> out of the control arrays, as it is only used internally and is updated dynamically.</li>
+<li>I’ve simplified the call to <code>gapify()</code></li>
+<li>Simplified call to <code>seed_sampling()</code></li>
+<li>Simplified call to <code>det_kernel()</code></li>
+<li>Simplified call to <code>kernel_stoch()</code></li>
+<li>Simplified call to <code>DS_seeds()</code></li>
+<li>Simplified call to <code>ES_seeds()</code>, and fixed mistake in application of ES_seed_time</li>
+<li>Simplified call to <code>Gompertz_seeds()</code></li>
+<li>That’s everything for eliminating unessential list-passing!</li>
+</ul>
+</div>
+<div id="new-bugs" class="section level2">
+<h2>New bugs</h2>
+<ul>
+<li>There seems to be an issue with <code>apply()</code> dropping an array dimension if there is only one replicate that hasn’t gone extinct.</li>
+</ul>
+</div>
+</div>
+<div id="oct-17" class="section level1">
+<h1>Oct 17</h1>
+<p>I updated make_Ler_sims to work with the updated version of the model. I also add a recording of the run number, so that we can get means and variances for each run.</p>
+<p>I have started a new library script, <code>viz.R</code>, with functions to provide visualizations. I have made a quick modification of the Ler plots to show violin plots of the multiple runs.</p>
+<div id="new-bugs-1" class="section level2">
+<h2>New bugs</h2>
+<p>In trying to run the visualization code, I was getting errors about on out-of-date grouping scheme for LerC_spread. I tried re-munging, but that threw an error in <code>04-Ler_dispersal_stats.R</code>. So apparently the package updated have left something non-functional in the munge code that I’ll need to update!</p>
+</div>
+</div>

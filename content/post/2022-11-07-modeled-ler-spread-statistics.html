@@ -1,0 +1,45 @@
+---
+title: Modeled Ler spread statistics
+author: Bruce Kendall
+date: '2022-11-07'
+slug: modeled-ler-spread-statistics
+categories: []
+tags:
+  - Ler
+  - dispersal
+---
+
+
+
+<p>Here are plots that show how the model (as of 7 Nov 2022) does at predicting the mean and variance of Ler spread after 6 generations.
+Each Monte Carlo replicate has simulations of 10 populations (to match the experimental design).
+Within each MC replicate, the mean and variance of maximum distance across the 10 populations is calculated.
+In the plots, the violin plots show the distribution of the statistics across 1000 MC replicates.
+This accounts for sampling uncertainty, given only 10 replicates in the experiment.
+The quartiles of the distribution are shown as horizontal lines within each distribution.
+The horizontal line across the entire plot is the value from the experimental data.</p>
+<pre class="r"><code>Lss &lt;- Ler_maxd_summary(Ler_sim_maxd_1000)</code></pre>
+<pre class="r"><code>Ler_maxd_viz(0, Lss, &quot;Mean&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-1.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(0, Lss, &quot;Variance&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-2.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(1, Lss, &quot;Mean&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-3.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(1, Lss, &quot;Variance&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-4.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(2, Lss, &quot;Mean&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-5.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(2, Lss, &quot;Variance&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-6.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(3, Lss, &quot;Mean&quot;)</code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-7.png" width="672" /></p>
+<pre class="r"><code>Ler_maxd_viz(3, Lss, &quot;Variance&quot;) </code></pre>
+<p><img src="/InvasionHet/post/2022-11-07-modeled-ler-spread-statistics_files/figure-html/make_graphs-8.png" width="672" /></p>
+<p>Some observations:</p>
+<ol style="list-style-type: decimal">
+<li>In all but the 3-pot gaps, all versions of the model substantially overestimate the mean spread distance</li>
+<li>In the 3-pot gaps, the models with kernel sampling get the mean spread distance right on; those without kernel sampling substantially underestimate the mean spread distance.</li>
+<li>In the continuous runway, all versions of the model substantially underestimate the spread variance.</li>
+<li>In the 1- and 2-pot gaps, the full model estimates the spread variance the best. In 1-pot gaps, all the models with both kernel sampling and seed sampling do reasonably well; the others underestimate the variance fairly substantially. In 2-pot gaps, all the models with kernel sampling do reasonably well; the others underestimate the variance to differing degrees.</li>
+<li>In the 3-pot gaps, the models with kernel sampling estimate the spread variance well; the others greatly underestimate it.</li>
+</ol>
